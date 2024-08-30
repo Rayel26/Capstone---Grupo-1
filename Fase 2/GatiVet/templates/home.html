@@ -33,14 +33,15 @@
 <!--Body-->
 <!--Banner-->
 <section
-  class="relative bg-[url(https://images.unsplash.com/photo-1604014237800-1c9102c219da?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80)] bg-cover bg-center bg-no-repeat mb-12 mx-6 sm:mx-8 lg:mx-12">
+  class="relative bg-cover bg-center bg-no-repeat mb-12 mx-6 sm:mx-8 lg:mx-12" 
+  style="background-image: url('{{ url_for('static', filename='img/banner.png') }}'); background-size: contain; background-color: rgb(129, 188, 209);">
   
   <div class="absolute inset-0 bg-gradient-to-r from-white/70 to-transparent"></div>
 
   <div class="relative mx-auto max-w-screen-xl px-6 py-24 sm:px-8 sm:py-28 lg:flex lg:h-auto lg:items-center lg:px-12">
     <div class="max-w-2xl text-center ltr:sm:text-left rtl:sm:text-right">
       <h1 class="text-3xl font-extrabold sm:text-5xl" style="color: #5f5f5f">
-        Dejanos darte
+        Déjanos darte
         <strong class="block font-extrabold" style="color: #18beaa;"> el mejor servicio. </strong>
       </h1>
 
@@ -58,6 +59,8 @@
     </div>
   </div>
 </section>
+
+
 
 
 
