@@ -6,63 +6,64 @@
     <title>Home</title>
     <link href="{{ url_for('static', filename='styles/output.css') }}" rel="stylesheet">
 </head>
+
+<!-- Header -->
 <body class="bg-gray-100 p-6">
     <header class="text-gray-600 body-font">
-        <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+        <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center"> 
             <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-            </svg>
-            </a>
+              <img src="{{ url_for('static', filename='img/Logo Gativet.png') }}" alt="Logo Gativet" class="w-12 h-12">
+            </a>                     
             <nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center">
-                <a class="mr-5 hover:text-gray-900">First Link</a>
-                <a class="mr-5 hover:text-gray-900">Second Link</a>
-                <a class="mr-5 hover:text-gray-900">Third Link</a>
-                <a class="mr-5 hover:text-gray-900">Fourth Link</a>
+              <a class="mr-5 hover:text-gray-900">Productos</a> 
+              <a class="mr-5 hover:text-gray-900">Ayudanos!</a>
+              <a class="mr-5 hover:text-gray-900">Contáctanos</a>                                
             </nav>
-            <a href="{{ url_for('login') }}" class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">Iniciar Sesión
+            <a href="{{ url_for('login') }}" class="inline-flex items-center bg-[#18beaa] hover:bg-[#18beaa]/80 text-white font-bold py-2 px-4 rounded-full focus:outline-none text-base mt-4 md:mt-0">
+              Iniciar Sesión
               <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
-                  <path d="M5 12h14M12 5l7 7-7 7"></path>
+                <path d="M5 12h14M12 5l7 7-7 7"></path>
               </svg>
-          </a>
-          
+            </a>
+                       
         </div>
     </header>
 </body>
 
-<section>
-    <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
-      <div class="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
-        <div class="relative h-64 overflow-hidden rounded-lg sm:h-80 lg:order-last lg:h-full">
-          <img
-            alt=""
-            src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-            class="absolute inset-0 h-full w-full object-cover"
-          />
-        </div>
+<!--Body-->
+<!--Banner-->
+<section
+  class="relative bg-[url(https://images.unsplash.com/photo-1604014237800-1c9102c219da?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80)] bg-cover bg-center bg-no-repeat mb-12 mx-6 sm:mx-8 lg:mx-12">
   
-        <div class="lg:py-24">
-          <h2 class="text-3xl font-bold sm:text-4xl">Grow your audience</h2>
-  
-          <p class="mt-4 text-gray-600">
-            <h1>Misión:</h1> 
-            Brindar un servicio veterinario a domicilio de excelencia, garantizando el bienestar y la salud de las mascotas.
-          </p>
-          <p class="mt-4 text-gray-600">
-            <h4>Visión:</h4> 
-            Ser la opción preferida de servicios veterinarios a domicilio en nuestra comunidad, reconocidos por nuestra calidad y compromiso con el cuidado animal.
-          </p>
-  
-          <a
-            href="#"
-            class="mt-8 inline-block rounded bg-indigo-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-yellow-400"
-          >
-            Get Started Today
-          </a>
-        </div>
+  <!-- Overlay to create a gradient effect from more to less pale -->
+  <div class="absolute inset-0 bg-gradient-to-r from-white/60 to-transparent"></div>
+
+  <div class="relative mx-auto max-w-screen-xl px-6 py-24 sm:px-8 sm:py-28 lg:flex lg:h-auto lg:items-center lg:px-12">
+    <div class="max-w-2xl text-center ltr:sm:text-left rtl:sm:text-right">
+      <h1 class="text-3xl font-extrabold sm:text-5xl">
+        Let us find your
+        <strong class="block font-extrabold text-rose-700"> Forever Home. </strong>
+      </h1>
+
+      <p class="mt-4 max-w-xl sm:text-xl">
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nesciunt illo tenetur fuga ducimus
+        numquam ea!
+      </p>
+
+      <div class="mt-8 flex flex-wrap gap-4 text-center">
+        <a href="#"
+          class="block w-full rounded bg-[#18beaa] px-12 py-4 text-sm font-medium text-white shadow hover:bg-[#18beaa]/80 focus:outline-none focus:ring active:bg-[#18beaa]/90 sm:w-auto">
+          Agenda tu Hora
+        </a>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
+
+
+
+
 
 <section class="text-gray-600 body-font">
     <div class="container px-5 py-24 mx-auto">

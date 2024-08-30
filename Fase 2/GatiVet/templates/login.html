@@ -1,9 +1,3 @@
-<!--
-  Heads up! 👋
-
-  Plugins:
-    - @tailwindcss/forms
--->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -59,8 +53,18 @@
                     <div class="text-right text-gray-400 hover:underline hover:text-gray-100">
                         <a href="#">Forgot your password?</a>
                     </div>
+                    <div class="text-right text-gray-400 hover:underline hover:text-gray-100">
+                        <a href="{{ url_for('registration') }}">Registrate</a>
+                    </div>
                     <div class="px-4 pb-2 pt-4">
-                        <button class="uppercase block w-full p-4 text-lg rounded-full bg-indigo-500 hover:bg-indigo-600 focus:outline-none">sign in</button>
+                        <a href="{{ url_for('profile') }}"><button class="uppercase block w-full p-4 text-lg rounded-full bg-indigo-500 hover:bg-indigo-600 focus:outline-none">Iniciar Sesión</button></a>
+                    </div>
+
+                    <div>
+                        <a href="{{ url_for('profile') }}" class="mr-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
+                            iniciar sesion
+                          </a>
+                          
                     </div>
 
                     <div class="p-4 text-center right-0 left-0 flex justify-center space-x-4 mt-16 lg:hidden ">
@@ -79,9 +83,3 @@
         </div>
     </section>
 </body>
-
-
-    <!-- support me by buying a coffee -->
-    <a href="https://www.buymeacoffee.com/danimai" target="_blank" class="bg-purple-600 p-2 rounded-lg text-white fixed right-0 bottom-0">
-        Support me
-    </a>
