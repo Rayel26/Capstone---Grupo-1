@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home</title>
   <link href="{{ url_for('static', filename='styles/output.css') }}" rel="stylesheet">
+  <!-- Import Swiper styles -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 </head>
 
 <!-- Header -->
@@ -17,13 +19,13 @@
         <img src="{{ url_for('static', filename='img/Logo Gativet.png') }}" alt="Logo Gativet" class="w-12 h-12">
       </a>
       <nav
-        class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center">
-        <a class="mr-5 hover:text-gray-900">Productos</a>
+        class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center ">
+        <a class="mr-5 hover:text-gray-900 ">Productos</a>
         <a class="mr-5 hover:text-gray-900">Ayudanos!</a>
         <a class="mr-5 hover:text-gray-900">Contáctanos</a>
       </nav>
       <a href="{{ url_for('login') }}"
-        class="inline-flex items-center bg-[#18beaa] hover:bg-[#18beaa]/80 text-white font-bold py-2 px-4 rounded-full focus:outline-none text-base mt-4 md:mt-0">
+        class="inline-flex items-center bg-[#18beaa] hover:bg-[#18beaa]/80 text-white font-bold py-2 px-4 rounded-full focus:outline-none text-base mt-4 md:mt-0 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg">
         Iniciar Sesión
         <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
           class="w-4 h-4 ml-1" viewBox="0 0 24 24">
@@ -58,7 +60,7 @@
 
       <div class="mt-8 flex flex-wrap gap-4 text-center">
         <a href="#"
-          class="block w-full rounded bg-[#18beaa] px-12 py-4 text-sm font-medium text-white shadow hover:bg-[#18beaa]/80 focus:outline-none focus:ring active:bg-[#18beaa]/90 sm:w-auto">
+          class="block w-full rounded bg-[#18beaa] px-12 py-4 text-sm font-medium text-white shadow hover:bg-[#18beaa]/80 focus:outline-none focus:ring active:bg-[#18beaa]/90 sm:w-auto transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg">
           Agenda tu Hora
         </a>
       </div>
@@ -68,8 +70,6 @@
 
 
 <!-- Servicios -->
-<!-- Import Swiper styles -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 <!-- Slider Container -->
 
 <section class="relative w-full container px-5 py-24 mx-auto ">
@@ -91,12 +91,12 @@
         <!-- Carta 1 -->
         <div class="py-4">
           <div
-            class="shadow-lg group container rounded-md bg-white max-w-sm flex justify-center items-center mx-auto content-div">
+            class="carta1 shadow-lg group container rounded-md bg-white max-w-sm flex justify-center items-center mx-auto content-div">
             <div>
               <div class="w-full image-cover rounded-t-md">
               </div>
               <div class="py-8 px-4 bg-white rounded-b-md fd-cl group-hover:opacity-25">
-                <span class="block text-lg text-gray-800 font-bold tracking-wide">Consulta General</span>
+                <span class="block text-lg text-gray-800 font-bold tracking-wide">Medicina General</span>
                 <span class="block text-gray-600 text-sm">Vivamus ac ligula sit amet erat luctus laoreet ac quis ligula.
                   Donec bibendum faucibus purus eget cursus. Proin enim ante, scelerisque vel sem sit amet, ultrices
                   mollis risus.</span>
@@ -104,7 +104,7 @@
             </div>
             <div class="absolute opacity-0 fd-sh group-hover:opacity-100">
               <div class="pt-8 text-center">
-                <button class="text-center rounded-lg p-4 bg-white text-gray-700 font-bold text-lg">Ver mas</button>
+                <button class="text-center rounded-lg p-4 bg-white text-gray-700 font-bold text-lg transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg">Ver mas</button>
               </div>
             </div>
           </div>
@@ -129,7 +129,7 @@
             </div>
             <div class="absolute opacity-0 fd-sh group-hover:opacity-100">
               <div class="pt-8 text-center">
-                <button class="text-center rounded-lg p-4 bg-white text-gray-700 font-bold text-lg">Ver mas</button>
+                <button class="text-center rounded-lg p-4 bg-white text-gray-700 font-bold text-lg transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg">Ver mas</button>
               </div>
             </div>
           </div>
@@ -154,7 +154,7 @@
             </div>
             <div class="absolute opacity-0 fd-sh group-hover:opacity-100">
               <div class="pt-8 text-center">
-                <button class="text-center rounded-lg p-4 bg-white text-gray-700 font-bold text-lg">Ver mas</button>
+                <button class="text-center rounded-lg p-4 bg-white text-gray-700 font-bold text-lg transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg">Ver mas</button>
               </div>
             </div>
           </div>
@@ -179,7 +179,7 @@
             </div>
             <div class="absolute opacity-0 fd-sh group-hover:opacity-100">
               <div class="pt-8 text-center">
-                <button class="text-center rounded-lg p-4 bg-white text-gray-700 font-bold text-lg">Ver mas</button>
+                <button class="text-center rounded-lg p-4 bg-white text-gray-700 font-bold text-lg transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg">Ver mas</button>
               </div>
             </div>
           </div>
@@ -204,7 +204,7 @@
             </div>
             <div class="absolute opacity-0 fd-sh group-hover:opacity-100">
               <div class="pt-8 text-center">
-                <button class="text-center rounded-lg p-4 bg-white text-gray-700 font-bold text-lg">Ver mas</button>
+                <button class="text-center rounded-lg p-4 bg-white text-gray-700 font-bold text-lg transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg">Ver mas</button>
               </div>
             </div>
           </div>
@@ -229,7 +229,7 @@
             </div>
             <div class="absolute opacity-0 fd-sh group-hover:opacity-100">
               <div class="pt-8 text-center">
-                <button class="text-center rounded-lg p-4 bg-white text-gray-700 font-bold text-lg">Ver mas</button>
+                <button class="text-center rounded-lg p-4 bg-white text-gray-700 font-bold text-lg transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg">Ver mas</button>
               </div>
             </div>
           </div>
@@ -275,17 +275,20 @@
   }
 
   .content-div {
-    background-image: url('https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=80');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
   }
 
+  .carta1 {
+  background-image: url('static/img/MedicinaGeneral.jpg');
+}
+
   .content-div:hover {
     background-image: linear-gradient(to right,
-        rgba(111, 189, 213, 0.801),
-        hsla(197, 64%, 43%, 0.801)),
-      url('https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=80');
+        rgba(24, 190, 171, 0.342),
+        hsla(174, 60%, 63%, 0.705)),
+        url('static/img/MedicinaGeneral.jpg');
   }
 
   .image-cover {
@@ -426,7 +429,7 @@
           '(min-width: 1024px)': {
             slides: {
               origin: 'auto',
-              perView: 2.5,
+              perView: 4,
               spacing: 32,
             },
           },
@@ -444,14 +447,18 @@
   });
 </script>
 
-<section class="bg-gray-50">
-  <div class="max-w-[1340px] mx-auto px-4 py-12 sm:px-6 lg:py-16 xl:py-24">
+<section class="bg-gray-50 container px-5 py-24 mx-auto">
+  <div class="flex flex-col">
+    <div class="h-1 bg-gray-200 rounded overflow-hidden">
+      <div class="w-24 h-full bg-blue-500"></div>
+    </div>
+    <div class="flex flex-wrap sm:flex-row flex-col py-2 mb-4">
+      <h1 class="sm:w-2/5 text-gray-900 font-medium title-font text-2xl mb-2 sm:mb-0">Nuestros Servicios</h1>
+    </div>
+  </div>
+  <div class="max-w-[1340px] mx-4 px-4 py-4 sm:px-6 lg:py-8 xl:py-12">
     <div class="flex items-end justify-between">
-      <h2 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-        Reseñas de nuestros clientes
-      </h2>
-
-      <div class="mt-8 flex gap-4 lg:mt-0">
+      <div class="mt-4 flex gap-4 lg:mt-0">
         <button aria-label="Previous slide" id="keen-slider-previous"
           class="rounded-full border border-[#18beaa] p-3 text-[#18beaa] transition hover:bg-[#18beaa] hover:text-white">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -470,96 +477,169 @@
       </div>
     </div>
 
-    <div class="mt-8">
+    <div class="mt-4">
       <div id="keen-slider" class="keen-slider">
+
         <!-- Slide 1 -->
         <div class="keen-slider__slide">
-          <blockquote class="flex h-full flex-col justify-between bg-white p-6 shadow-sm sm:p-8 lg:p-12">
+          <blockquote class="flex h-full flex-col justify-between bg-white p-3 shadow-sm max-w-xs">
+            <!-- Ancho máximo más pequeño y padding reducido -->
             <div>
               <div class="flex gap-0.5 text-green-500">
                 <!-- Star SVGs -->
-                <svg class="size-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Icono más pequeño -->
                   <path
                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
-                <!-- Add more stars if needed -->
+                <!-- Añadir más estrellas si es necesario -->
               </div>
 
-              <div class="mt-4">
-                <p class="text-2xl font-bold text-rose-600 sm:text-3xl">Stayin' Alive</p>
+              <div class="mt-2">
+                <p class="text-lg font-bold text-rose-600 sm:text-xl">Stayin' Alive</p>
+                <!-- Tamaño de fuente más pequeño -->
 
-                <p class="mt-4 leading-relaxed text-gray-700">
+                <p class="mt-2 leading-relaxed text-gray-700 text-sm">
                   No, Rose, they are not breathing. And they have no arms or legs … Where are they?
                   You know what? If we come across somebody with no arms or legs, do we bother
                   resuscitating them? I mean, what quality of life do we have there?
                 </p>
               </div>
+              <footer class="mt-4 text-sm font-medium text-gray-700 sm:mt-4">
+                &mdash; Jane Doe
+              </footer>
             </div>
-
-            <footer class="mt-4 text-sm font-medium text-gray-700 sm:mt-6">
-              &mdash; Michael Scott
-            </footer>
           </blockquote>
         </div>
 
         <!-- Slide 2 -->
         <div class="keen-slider__slide">
-          <blockquote class="flex h-full flex-col justify-between bg-white p-6 shadow-sm sm:p-8 lg:p-12">
+          <blockquote class="flex h-full flex-col justify-between bg-white p-3 shadow-sm max-w-xs">
+            <!-- Ancho máximo más pequeño y padding reducido -->
             <div>
               <div class="flex gap-0.5 text-green-500">
                 <!-- Star SVGs -->
-                <svg class="size-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Icono más pequeño -->
                   <path
                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
-                <!-- Add more stars if needed -->
+                <!-- Añadir más estrellas si es necesario -->
               </div>
 
-              <div class="mt-4">
-                <p class="text-2xl font-bold text-rose-600 sm:text-3xl">Fantastic Service</p>
+              <div class="mt-2">
+                <p class="text-lg font-bold text-rose-600 sm:text-xl">Stayin' Alive</p>
+                <!-- Tamaño de fuente más pequeño -->
 
-                <p class="mt-4 leading-relaxed text-gray-700">
-                  The service was exceptional. The team was very attentive and went above and beyond
-                  to meet my needs. Highly recommend this service for anyone looking for quality
-                  and reliability.
+                <p class="mt-2 leading-relaxed text-gray-700 text-sm">
+                  No, Rose, they are not breathing. And they have no arms or legs … Where are they?
+                  You know what? If we come across somebody with no arms or legs, do we bother
+                  resuscitating them? I mean, what quality of life do we have there?
                 </p>
               </div>
+              <footer class="mt-4 text-sm font-medium text-gray-700 sm:mt-4">
+                &mdash; Jane Doe
+              </footer>
             </div>
-
-            <footer class="mt-4 text-sm font-medium text-gray-700 sm:mt-6">
-              &mdash; Jane Doe
-            </footer>
           </blockquote>
         </div>
 
         <!-- Slide 3 -->
         <div class="keen-slider__slide">
-          <blockquote class="flex h-full flex-col justify-between bg-white p-6 shadow-sm sm:p-8 lg:p-12">
+          <blockquote class="flex h-full flex-col justify-between bg-white p-3 shadow-sm max-w-xs">
+            <!-- Ancho máximo más pequeño y padding reducido -->
             <div>
               <div class="flex gap-0.5 text-green-500">
                 <!-- Star SVGs -->
-                <svg class="size-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Icono más pequeño -->
                   <path
                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
-                <!-- Add more stars if needed -->
+                <!-- Añadir más estrellas si es necesario -->
               </div>
 
-              <div class="mt-4">
-                <p class="text-2xl font-bold text-rose-600 sm:text-3xl">Great Experience</p>
+              <div class="mt-2">
+                <p class="text-lg font-bold text-rose-600 sm:text-xl">Stayin' Alive</p>
+                <!-- Tamaño de fuente más pequeño -->
 
-                <p class="mt-4 leading-relaxed text-gray-700">
-                  I had a great experience with this service. The staff was professional and friendly,
-                  and the results exceeded my expectations. I will definitely be returning in the future.
+                <p class="mt-2 leading-relaxed text-gray-700 text-sm">
+                  No, Rose, they are not breathing. And they have no arms or legs … Where are they?
+                  You know what? If we come across somebody with no arms or legs, do we bother
+                  resuscitating them? I mean, what quality of life do we have there?
                 </p>
               </div>
+              <footer class="mt-4 text-sm font-medium text-gray-700 sm:mt-4">
+                &mdash; Jane Doe
+              </footer>
             </div>
-
-            <footer class="mt-4 text-sm font-medium text-gray-700 sm:mt-6">
-              &mdash; John Smith
-            </footer>
           </blockquote>
         </div>
+
+        <!-- Slide 3 -->
+        <div class="keen-slider__slide">
+          <blockquote class="flex h-full flex-col justify-between bg-white p-3 shadow-sm max-w-xs">
+            <!-- Ancho máximo más pequeño y padding reducido -->
+            <div>
+              <div class="flex gap-0.5 text-green-500">
+                <!-- Star SVGs -->
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Icono más pequeño -->
+                  <path
+                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <!-- Añadir más estrellas si es necesario -->
+              </div>
+
+              <div class="mt-2">
+                <p class="text-lg font-bold text-rose-600 sm:text-xl">Stayin' Alive</p>
+                <!-- Tamaño de fuente más pequeño -->
+
+                <p class="mt-2 leading-relaxed text-gray-700 text-sm">
+                  No, Rose, they are not breathing. And they have no arms or legs … Where are they?
+                  You know what? If we come across somebody with no arms or legs, do we bother
+                  resuscitating them? I mean, what quality of life do we have there?
+                </p>
+              </div>
+              <footer class="mt-4 text-sm font-medium text-gray-700 sm:mt-4">
+                &mdash; Jane Doe
+              </footer>
+            </div>
+          </blockquote>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="keen-slider__slide">
+          <blockquote class="flex h-full flex-col justify-between bg-white p-3 shadow-sm max-w-xs">
+            <!-- Ancho máximo más pequeño y padding reducido -->
+            <div>
+              <div class="flex gap-0.5 text-green-500">
+                <!-- Star SVGs -->
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Icono más pequeño -->
+                  <path
+                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <!-- Añadir más estrellas si es necesario -->
+              </div>
+
+              <div class="mt-2">
+                <p class="text-lg font-bold text-rose-600 sm:text-xl">Stayin' Alive</p>
+                <!-- Tamaño de fuente más pequeño -->
+
+                <p class="mt-2 leading-relaxed text-gray-700 text-sm">
+                  No, Rose, they are not breathing. And they have no arms or legs … Where are they?
+                  You know what? If we come across somebody with no arms or legs, do we bother
+                  resuscitating them? I mean, what quality of life do we have there?
+                </p>
+              </div>
+              <footer class="mt-4 text-sm font-medium text-gray-700 sm:mt-4">
+                &mdash; Jane Doe
+              </footer>
+            </div>
+          </blockquote>
+        </div>
+
       </div>
     </div>
   </div>
@@ -573,30 +653,9 @@
   <div class="container px-5 py-24 mx-auto">
     <div class="flex flex-wrap md:text-left text-center -mb-10 -mx-4">
       <div class="lg:w-1/6 md:w-1/2 w-full px-4">
-        <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">CATEGORIES</h2>
+        <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">Contáctanos</h2>
         <nav class="list-none mb-10">
-          <li>
-            <a class="text-gray-600 hover:text-gray-800">First Link</a>
-          </li>
-          <li>
-            <a class="text-gray-600 hover:text-gray-800">Second Link</a>
-          </li>
-          <li>
-            <a class="text-gray-600 hover:text-gray-800">Third Link</a>
-          </li>
-          <li>
-            <a class="text-gray-600 hover:text-gray-800">Fourth Link</a>
-          </li>
-        </nav>
-      </div>
-      <div class="lg:w-1/6 md:w-1/2 w-full px-4">
-        <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">CATEGORIES</h2>
-        <nav class="list-none mb-10">
-          <li>
-            <a class="text-gray-600 hover:text-gray-800">First Link</a>
-          </li>
-          <li>
-            <a class="text-gray-600 hover:text-gray-800">Second Link</a>
+            <a class="text-gray-600 hover:text-gray-800">Télefono: +5691212121212</a>
           </li>
           <li>
             <a class="text-gray-600 hover:text-gray-800">Third Link</a>
