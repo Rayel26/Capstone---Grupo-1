@@ -22,5 +22,10 @@ def registration():
 def profile():
     return render_template('profile.html')
 
+# Ruta para la página de producto
+@app.route('/products')
+def products():
+    return render_template('products.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
