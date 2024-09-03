@@ -1,258 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{{ url_for('static', filename='styles/output.css') }}" rel="stylesheet">
-    <title>Detalle</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="{{ url_for('static', filename='styles/output.css') }}" rel="stylesheet">
+  <title>Detalle</title>
 </head>
 
 <!-- Announcement -->
 <div class="bg-custom-teal px-4 py-3 text-white" style="background-color: #18beaa;">
-    <p class="text-center text-sm font-medium">
-        Dudas o consultas?
-        <a href="https://wa.me/+569121212" class="inline-block underline" target="_blank">Contáctanos por WhatsApp</a>
-    </p>
+  <p class="text-center text-sm font-medium">
+    Dudas o consultas?
+    <a href="https://wa.me/+569121212" class="inline-block underline" target="_blank">Contáctanos por WhatsApp</a>
+  </p>
 </div>
 
 <!-- Header -->
+
 <head>
-    <style>
-        .underline-animated {
-            position: relative;
-        }
+  <style>
+    .underline-animated {
+      position: relative;
+    }
 
-        .underline-animated::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -2px;
-            width: 0;
-            height: 2px;
-            background-color: #18beaa;
-            transition: width 0.3s ease-in-out;
-        }
+    .underline-animated::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 0;
+      height: 2px;
+      background-color: #18beaa;
+      transition: width 0.3s ease-in-out;
+    }
 
-        .underline-animated:hover::after {
-            width: 100%;
-        }
+    .underline-animated:hover::after {
+      width: 100%;
+    }
 
-        .background-image {
-        background-image: url('{{ url_for('static', filename='img/background.png') }}');
-        background-size: cover;
-        background-position: center;
-        background-repeat: repeat;
-        height: 100vh; /* Ajusta esto según el tamaño que desees para el fondo */
-        width: 100%;
-        }
-
-    </style>
+    .background-image {
+      background-image: url('{{ url_for(' static', filename=' img/background.png') }}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: repeat;
+      height: 100vh;
+      /* Ajusta esto según el tamaño que desees para el fondo */
+      width: 100%;
+    }
+  </style>
 </head>
 
 <body class="bg-gray-100 p-0 m-0 w-full background-image">
-    <header class="text-gray-600 body-font w-full">
-        <div class="flex flex-wrap p-5 flex-col md:flex-row items-center w-full">
-            <a
-                class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0 hover:text-gray-800 transition-colors duration-300 cursor-pointer">
-                <img src="{{ url_for('static', filename='img/Logo Gativet.png') }}" alt="Logo Gativet"
-                    class="w-12 h-12">
-            </a>
-            <nav
-                class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center">
-                <a href="{{ url_for('home') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Inicio</a>
-                <a href="{{ url_for('products') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer" >Productos</a>
-                <a class="mr-5 text-gray-900 underline-animated cursor-pointer">Ofertas</a>
-                <a class="mr-5 text-gray-900 underline-animated cursor-pointer">Ayudanos!</a>
-                <a class="mr-5 text-gray-900 underline-animated cursor-pointer">Contáctanos</a>
-                
-                <div class="justify-center items-center underline-animated cursor-pointer">
-                    <div class="relative py-2">
-                  <div class="t-0 absolute left-3">
-                    <p class="flex h-2 w-2 items-center justify-center rounded-full bg-red-500 p-3 text-xs text-white">3</p>
-                  </div>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="file: mt-4 h-6 w-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-                  </svg>
-                </div>
-                </div>
-                
-            </nav>
-            <a href="{{ url_for('login') }}"
-                class="inline-flex items-center bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 rounded-full focus:outline-none text-base mt-4 md:mt-0 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
-                Iniciar Sesión
-                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    class="w-4 h-4 ml-1" viewBox="0 0 24 24">
-                    <path d="M5 12h14M12 5l7 7-7 7"></path>
-                </svg>
-            </a>
-        </div>
-    </header>
-</body>
+  <header class="text-gray-600 body-font w-full">
+    <div class="flex flex-wrap p-5 flex-col md:flex-row items-center w-full">
+      <a
+        class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0 hover:text-gray-800 transition-colors duration-300 cursor-pointer">
+        <img src="{{ url_for('static', filename='img/Logo Gativet.png') }}" alt="Logo Gativet" class="w-12 h-12">
+      </a>
+      <nav
+        class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center">
+        <a href="{{ url_for('home') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Inicio</a>
+        <a href="{{ url_for('products') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Productos</a>
+        <a class="mr-5 text-gray-900 underline-animated cursor-pointer">Ofertas</a>
+        <a class="mr-5 text-gray-900 underline-animated cursor-pointer">Ayudanos!</a>
+        <a class="mr-5 text-gray-900 underline-animated cursor-pointer">Contáctanos</a>
 
-<!--Body-->>
-<body>
-
-    <div class="bg-gray-100 background-image">
-        <div class="container mx-auto px-4 py-8">
-          <div class="flex flex-wrap -mx-4">
-            <!-- Product Images -->
-            <div class="w-full md:w-1/2 px-4 mb-8">
-              <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxoZWFkcGhvbmV8ZW58MHwwfHx8MTcyMTMwMzY5MHww&ixlib=rb-4.0.3&q=80&w=1080" alt="Product"
-                          class="w-full h-auto rounded-lg shadow-md mb-4" id="mainImage">
-              <div class="flex gap-4 py-4 justify-center overflow-x-auto">
-                <img src="https://images.unsplash.com/photo-1505751171710-1f6d0ace5a85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxMnx8aGVhZHBob25lfGVufDB8MHx8fDE3MjEzMDM2OTB8MA&ixlib=rb-4.0.3&q=80&w=1080" alt="Thumbnail 1"
-                              class="size-16 sm:size-20 object-cover rounded-md cursor-pointer opacity-60 hover:opacity-100 transition duration-300"
-                              onclick="changeImage(this.src)">
-                <img src="https://images.unsplash.com/photo-1484704849700-f032a568e944?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw0fHxoZWFkcGhvbmV8ZW58MHwwfHx8MTcyMTMwMzY5MHww&ixlib=rb-4.0.3&q=80&w=1080" alt="Thumbnail 2"
-                              class="size-16 sm:size-20 object-cover rounded-md cursor-pointer opacity-60 hover:opacity-100 transition duration-300"
-                              onclick="changeImage(this.src)">
-                <img src="https://images.unsplash.com/photo-1496957961599-e35b69ef5d7c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw4fHxoZWFkcGhvbmV8ZW58MHwwfHx8MTcyMTMwMzY5MHww&ixlib=rb-4.0.3&q=80&w=1080" alt="Thumbnail 3"
-                              class="size-16 sm:size-20 object-cover rounded-md cursor-pointer opacity-60 hover:opacity-100 transition duration-300"
-                              onclick="changeImage(this.src)">
-                <img src="https://images.unsplash.com/photo-1528148343865-51218c4a13e6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwzfHxoZWFkcGhvbmV8ZW58MHwwfHx8MTcyMTMwMzY5MHww&ixlib=rb-4.0.3&q=80&w=1080" alt="Thumbnail 4"
-                              class="size-16 sm:size-20 object-cover rounded-md cursor-pointer opacity-60 hover:opacity-100 transition duration-300"
-                              onclick="changeImage(this.src)">
-              </div>
+        <div class="justify-center items-center underline-animated cursor-pointer">
+          <div class="relative py-2">
+            <div class="t-0 absolute left-3">
+              <p class="flex h-2 w-2 items-center justify-center rounded-full bg-red-500 p-3 text-xs text-white">3</p>
             </div>
-      
-            <!-- Product Details -->
-            <div class="w-full md:w-1/2 px-4">
-              <h2 class="text-3xl font-bold mb-2">Premium Wireless Headphones</h2>
-              <p class="text-gray-600 mb-4">SKU: WH1000XM4</p>
-              <div class="mb-4">
-                <span class="text-2xl font-bold mr-2">$349.99</span>
-                <span class="text-gray-500 line-through">$399.99</span>
-              </div>
-              <div class="flex items-center mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                  class="size-6 text-yellow-500">
-                  <path fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                    clip-rule="evenodd" />
-                </svg>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                  class="size-6 text-yellow-500">
-                  <path fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                    clip-rule="evenodd" />
-                </svg>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                  class="size-6 text-yellow-500">
-                  <path fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                    clip-rule="evenodd" />
-                </svg>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                  class="size-6 text-yellow-500">
-                  <path fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                    clip-rule="evenodd" />
-                </svg>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                  class="size-6 text-yellow-500">
-                  <path fill-rule="evenodd"
-                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                    clip-rule="evenodd" />
-                </svg>
-                <span class="ml-2 text-gray-600">4.5 (120 reviews)</span>
-              </div>
-              <p class="text-gray-700 mb-6">Experience premium sound quality and industry-leading noise cancellation
-                with
-                these wireless headphones. Perfect for music lovers and frequent travelers.</p>
-      
-              <div class="mb-6">
-                <h3 class="text-lg font-semibold mb-2">Color:</h3>
-                <div class="flex space-x-2">
-                  <button
-                                  class="w-8 h-8 bg-black rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"></button>
-                  <button
-                                  class="w-8 h-8 bg-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"></button>
-                  <button
-                                  class="w-8 h-8 bg-blue-500 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"></button>
-                </div>
-              </div>
-      
-              <div class="mb-6">
-                <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">Quantity:</label>
-                <input type="number" id="quantity" name="quantity" min="1" value="1"
-                              class="w-12 text-center rounded-md border-gray-300  shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-              </div>
-      
-              <div class="flex space-x-4 mb-6">
-                <button
-                              class="bg-indigo-600 flex gap-2 items-center text-white px-6 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                  stroke-width="1.5" stroke="currentColor" class="size-6">
-                                  <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-                              </svg>
-                              Add to Cart
-                          </button>
-                <button
-                              class="bg-gray-200 flex gap-2 items-center  text-gray-800 px-6 py-2 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                  stroke-width="1.5" stroke="currentColor" class="size-6">
-                                  <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                              </svg>
-                              Wishlist
-                          </button>
-              </div>
-      
-              <div>
-                <h3 class="text-lg font-semibold mb-2">Key Features:</h3>
-                <ul class="list-disc list-inside text-gray-700">
-                  <li>Industry-leading noise cancellation</li>
-                  <li>30-hour battery life</li>
-                  <li>Touch sensor controls</li>
-                  <li>Speak-to-chat technology</li>
-                </ul>
-              </div>
-            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="file: mt-4 h-6 w-6">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+            </svg>
           </div>
         </div>
-      
-        <script>
-          function changeImage(src) {
-                  document.getElementById('mainImage').src = src;
-              }
-        </script>
-      </div>
 
+      </nav>
+      <a href="{{ url_for('login') }}"
+        class="inline-flex items-center bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 rounded-full focus:outline-none text-base mt-4 md:mt-0 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+        Iniciar Sesión
+        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+          <path d="M5 12h14M12 5l7 7-7 7"></path>
+        </svg>
+      </a>
+    </div>
+  </header>
+</body>
+
+<body>
+  <div class="bg-gray-100 background-image">
+    <div class="container mx-auto px-4 py-8">
+      <div class="flex flex-wrap -mx-4">
+        <!-- Product Images -->
+        <div class="w-full md:w-1/2 px-4 mb-8">
+          <img
+            src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxoZWFkcGhvbmV8ZW58MHwwfHx8MTcyMTMwMzY5MHww&ixlib=rb-4.0.3&q=80&w=1080"
+            alt="Product" class="w-full h-auto rounded-lg shadow-md mb-4" id="mainImage">
+          <div class="flex gap-4 py-4 justify-center overflow-x-auto">
+            <img
+              src="https://images.unsplash.com/photo-1505751171710-1f6d0ace5a85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxMnx8aGVhZHBobmV8ZW58MHwwfHx8MTcyMTMwMzY5MHww&ixlib=rb-4.0.3&q=80&w=1080"
+              alt="Thumbnail 1"
+              class="w-16 sm:w-20 object-cover rounded-md cursor-pointer opacity-60 hover:opacity-100 transition duration-300"
+              onclick="changeImage(this.src)">
+            <img
+              src="https://images.unsplash.com/photo-1484704849700-f032a568e944?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw0fHxoZWFkcGhvbmV8ZW58MHwwfHx8MTcyMTMwMzY5MHww&ixlib=rb-4.0.3&q=80&w=1080"
+              alt="Thumbnail 2"
+              class="w-16 sm:w-20 object-cover rounded-md cursor-pointer opacity-60 hover:opacity-100 transition duration-300"
+              onclick="changeImage(this.src)">
+            <img
+              src="https://images.unsplash.com/photo-1496957961599-e35b69ef5d7c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw4fHxoZWFkcGhvbmV8ZW58MHwwfHx8MTcyMTMwMzY5MHww&ixlib=rb-4.0.3&q=80&w=1080"
+              alt="Thumbnail 3"
+              class="w-16 sm:w-20 object-cover rounded-md cursor-pointer opacity-60 hover:opacity-100 transition duration-300"
+              onclick="changeImage(this.src)">
+            <img
+              src="https://images.unsplash.com/photo-1528148343865-51218c4a13e6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwzfHxoZWFkcGhvbmV8ZW58MHwwfHx8MTcyMTMwMzY5MHww&ixlib=rb-4.0.3&q=80&w=1080"
+              alt="Thumbnail 4"
+              class="w-16 sm:w-20 object-cover rounded-md cursor-pointer opacity-60 hover:opacity-100 transition duration-300"
+              onclick="changeImage(this.src)">
+          </div>
+        </div>
+
+        <!-- Product Details -->
+        <div class="w-full md:w-1/2 px-4">
+          <h2 class="text-3xl font-bold mb-2">Premium Wireless Headphones</h2>
+          <p class="text-gray-600 mb-4">SKU: WH1000XM4</p>
+          <div class="mb-4">
+            <span class="text-2xl font-bold mr-2">$349.99</span>
+            <span class="text-gray-500 line-through">$399.99</span>
+          </div>
+          <div class="flex items-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+              class="size-6 text-yellow-500">
+              <path fill-rule="evenodd"
+                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                clip-rule="evenodd" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+              class="size-6 text-yellow-500">
+              <path fill-rule="evenodd"
+                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                clip-rule="evenodd" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+              class="size-6 text-yellow-500">
+              <path fill-rule="evenodd"
+                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                clip-rule="evenodd" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+              class="size-6 text-yellow-500">
+              <path fill-rule="evenodd"
+                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                clip-rule="evenodd" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+              class="size-6 text-yellow-500">
+              <path fill-rule="evenodd"
+                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
+                clip-rule="evenodd" />
+            </svg>
+            <span class="ml-2 text-gray-600">4.5 (120 reviews)</span>
+          </div>
+          <p class="text-gray-700 mb-6">Experience premium sound quality and industry-leading noise cancellation with
+            these wireless headphones. Perfect for music lovers and frequent travelers.</p>
+
+          <div class="mb-6">
+            <h3 class="text-lg font-semibold mb-2">Color:</h3>
+            <div class="flex space-x-2">
+              <button
+                class="w-8 h-8 bg-black rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"></button>
+              <button
+                class="w-8 h-8 bg-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"></button>
+              <button
+                class="w-8 h-8 bg-blue-500 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"></button>
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" min="1" value="1"
+              class="w-12 text-center rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+          </div>
+
+          <div class="flex space-x-4 mb-6">
+            <button
+              class="bg-indigo-600 flex gap-2 items-center text-white px-6 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+              </svg>
+              Add to Cart</button>
+            <button
+              class="bg-white flex gap-2 items-center text-gray-700 border border-gray-300 px-6 py-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 7.5v9m4.5-4.5h-9m8.25-8.25H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m6.75 0V6m0 0v6.75H6.75M12 6h1.5M9 3.75H6M9 3.75V6h6.75M9 6V3.75M9 3.75V6m-3 0h1.5M12 6h1.5" />
+              </svg>
+              Buy Now</button>
+          </div>
+        </div>
 </body>
 
 <!-- Footer -->
 <footer class="footer w-full" style="background-color: #18beaa;">
-    <div class="py-8 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
-        <nav class="-mx-5 -my-2 flex flex-wrap justify-center" aria-label="Footer">
-            <div class="px-5">
-                <a href="#" class="text-base text-white hover:text-gray-200">Términos de Servicio</a>
-            </div>
-  
-            <div class="px-5">
-                <a href="https://web.facebook.com/" class="text-base text-white hover:text-gray-200">Política de privacidad</a>
-            </div>
-        </nav>
-        <div class="mt-8 flex justify-center space-x-6">
-            <a href="#" class="text-white hover:text-gray-200">
-                <span class="sr-only">Facebook</span>
-                <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path fill-rule="evenodd"
-                        d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
-                        clip-rule="evenodd" />
-                </svg>
-            </a>
-  
-            <a href="https://www.instagram.com/" class="text-white hover:text-gray-200">
-                <span class="sr-only">Instagram</span>
-                <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path fill-rule="evenodd"
-                        d="M12 2.25c-3.094 0-3.452.012-4.662.068-1.206.056-2.05.243-2.8.509-.761.273-1.43.634-2.055 1.259-.623.623-.986 1.294-1.259 2.055-.266.75-.453 1.594-.51 2.8-.056 1.21-.068 1.568-.068 4.662s.012 3.452.068 4.662c.056 1.206.243 2.05.509 2.8.273.761.634 1.43 1.259 2.055.623.623 1.294.986 2.055 1.259.75.266 1.594.453 2.8.51 1.21.056 1.568.068 4.662.068s3.452-.012 4.662-.068c1.206-.056 2.05-.243 2.8-.51.761-.273 1.43-.634 2.055-1.259.623-.623.986-1.294 1.259-2.055.266-.75.453-1.594.51-2.8.056-1.21.068-1.568.068-4.662s-.012-3.452-.068-4.662c-.056-1.206-.243-2.05-.509-2.8-.273-.761-.634-1.43-1.259-2.055-.623-.623-1.294-.986-2.055-1.259-.75-.266-1.594-.453-2.8-.509-1.21-.056-1.568-.068-4.662-.068zm0-2c3.1 0 3.48.012 4.706.067 1.236.055 2.348.248 3.268.534.933.29 1.769.7 2.556 1.398.788.788 1.108 1.624 1.398 2.556.286.92.479 2.032.534 3.268.055 1.226.067 1.606.067 4.706s-.012 3.48-.067 4.706c-.055 1.236-.248 2.348-.534 3.268-.29.933-.7 1.769-1.398 2.556-.788.788-1.624 1.108-2.556 1.398-.92.286-2.032.479-3.268.534-1.226.055-1.606.067-4.706.067s-3.48-.012-4.706-.067c-1.236-.055-2.348-.248-3.268-.534-.933-.29-1.769-.7-2.556-1.398-.788-.788-1.108-1.624-1.398-2.556-.286-.92-.479-2.032-.534-3.268-.055-1.226-.067-1.606-.067-4.706s.012-3.48.067-4.706c.055-1.236.248-2.348.534-3.268.29-.933.7-1.769 1.398-2.556.788-.788 1.624-1.108 2.556-1.398.92-.286 2.032-.479 3.268-.534 1.226-.055 1.606-.067 4.706-.067zM12 5.75a6.25 6.25 0 100 12.5 6.25 6.25 0 000-12.5zm0 10.5a4.25 4.25 0 110-8.5 4.25 4.25 0 010 8.5zm6.75-10.75a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
-                        clip-rule="evenodd" />
-                </svg>
-            </a>
-        </div>
+  <div class="py-8 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
+    <nav class="-mx-5 -my-2 flex flex-wrap justify-center" aria-label="Footer">
+      <div class="px-5">
+        <a href="#" class="text-base text-white hover:text-gray-200">Términos de Servicio</a>
+      </div>
+
+      <div class="px-5">
+        <a href="https://web.facebook.com/" class="text-base text-white hover:text-gray-200">Política de privacidad</a>
+      </div>
+    </nav>
+    <div class="mt-8 flex justify-center space-x-6">
+      <a href="#" class="text-white hover:text-gray-200">
+        <span class="sr-only">Facebook</span>
+        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill-rule="evenodd"
+            d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+            clip-rule="evenodd" />
+        </svg>
+      </a>
+
+      <a href="https://www.instagram.com/" class="text-white hover:text-gray-200">
+        <span class="sr-only">Instagram</span>
+        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill-rule="evenodd"
+            d="M12 2.25c-3.094 0-3.452.012-4.662.068-1.206.056-2.05.243-2.8.509-.761.273-1.43.634-2.055 1.259-.623.623-.986 1.294-1.259 2.055-.266.75-.453 1.594-.51 2.8-.056 1.21-.068 1.568-.068 4.662s.012 3.452.068 4.662c.056 1.206.243 2.05.509 2.8.273.761.634 1.43 1.259 2.055.623.623 1.294.986 2.055 1.259.75.266 1.594.453 2.8.51 1.21.056 1.568.068 4.662.068s3.452-.012 4.662-.068c1.206-.056 2.05-.243 2.8-.51.761-.273 1.43-.634 2.055-1.259.623-.623.986-1.294 1.259-2.055.266-.75.453-1.594.51-2.8.056-1.21.068-1.568.068-4.662s-.012-3.452-.068-4.662c-.056-1.206-.243-2.05-.509-2.8-.273-.761-.634-1.43-1.259-2.055-.623-.623-1.294-.986-2.055-1.259-.75-.266-1.594-.453-2.8-.509-1.21-.056-1.568-.068-4.662-.068zm0-2c3.1 0 3.48.012 4.706.067 1.236.055 2.348.248 3.268.534.933.29 1.769.7 2.556 1.398.788.788 1.108 1.624 1.398 2.556.286.92.479 2.032.534 3.268.055 1.226.067 1.606.067 4.706s-.012 3.48-.067 4.706c-.055 1.236-.248 2.348-.534 3.268-.29.933-.7 1.769-1.398 2.556-.788.788-1.624 1.108-2.556 1.398-.92.286-2.032.479-3.268.534-1.226.055-1.606.067-4.706.067s-3.48-.012-4.706-.067c-1.236-.055-2.348-.248-3.268-.534-.933-.29-1.769-.7-2.556-1.398-.788-.788-1.108-1.624-1.398-2.556-.286-.92-.479-2.032-.534-3.268-.055-1.226-.067-1.606-.067-4.706s.012-3.48.067-4.706c.055-1.236.248-2.348.534-3.268.29-.933.7-1.769 1.398-2.556.788-.788 1.624-1.108 2.556-1.398.92-.286 2.032-.479 3.268-.534 1.226-.055 1.606-.067 4.706-.067zM12 5.75a6.25 6.25 0 100 12.5 6.25 6.25 0 000-12.5zm0 10.5a4.25 4.25 0 110-8.5 4.25 4.25 0 010 8.5zm6.75-10.75a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
+            clip-rule="evenodd" />
+        </svg>
+      </a>
     </div>
+  </div>
 </footer>
 
 

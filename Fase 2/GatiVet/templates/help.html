@@ -19,66 +19,62 @@
 <!-- Header -->
 <head>
     <style>
-        .underline-animated {
-            position: relative;
-        }
-
-        .underline-animated::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -2px;
-            width: 0;
-            height: 2px;
-            background-color: #18beaa;
-            transition: width 0.3s ease-in-out;
-        }
-
-        .underline-animated:hover::after {
-            width: 100%;
-        }
-
-        .background-image {
-        background-image: url('{{ url_for('static', filename='img/background.png') }}');
-        background-size: cover;
-        background-position: center;
-        background-repeat: repeat;
-        height: 100vh; /* Ajusta esto según el tamaño que desees para el fondo */
+      .underline-animated {
+        position: relative;
+      }
+  
+      .underline-animated::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -2px; /* Ajusta la posición vertical del subrayado */
+        width: 0;
+        height: 2px; /* Ajusta el grosor del subrayado */
+        background-color: #18beaa; /* Color del subrayado */
+        transition: width 0.3s ease-in-out;
+      }
+  
+      .underline-animated:hover::after {
         width: 100%;
-        }
-
+      }
+  
+      .background-image {
+          background-image: url('{{ url_for('static', filename='img/background.png') }}');
+          background-size: cover;
+          background-position: center;
+          background-repeat: repeat;
+          height: 100vh; /* Ajusta esto según el tamaño que desees para el fondo */
+          width: 100%;
+          }
     </style>
-</head>
+  </head>
 
-<body class="bg-gray-100 p-0 m-0 w-full background-image">
-    <header class="text-gray-600 body-font w-full">
-        <div class="flex flex-wrap p-5 flex-col md:flex-row items-center w-full">
-            <a
-                class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0 hover:text-gray-800 transition-colors duration-300 cursor-pointer">
-                <img src="{{ url_for('static', filename='img/Logo Gativet.png') }}" alt="Logo Gativet"
-                    class="w-12 h-12">
-            </a>
-            <nav
-                class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center">
-                <a href="{{ url_for('home') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Inicio</a>
-                <a href="{{ url_for('products') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer" >Productos</a>
-                <a class="mr-5 text-gray-900 underline-animated cursor-pointer">Ayudanos!</a>
-                <a class="mr-5 text-gray-900 underline-animated cursor-pointer">Contáctanos</a>
-            </nav>
-            <a href="{{ url_for('login') }}"
-                class="inline-flex items-center bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 rounded-full focus:outline-none text-base mt-4 md:mt-0 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
-                Iniciar Sesión
-                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    class="w-4 h-4 ml-1" viewBox="0 0 24 24">
-                    <path d="M5 12h14M12 5l7 7-7 7"></path>
-                </svg>
-            </a>
-        </div>
+  <body class="bg-gray-100 p-6 background-image">
+    <header class="text-gray-600 body-font">
+      <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+        <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0 hover:text-gray-800 transition-colors duration-300 cursor-pointer">
+          <img src="{{ url_for('static', filename='img/Logo Gativet.png') }}" alt="Logo Gativet" class="w-12 h-12">
+        </a>
+        <nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center">
+          <a href="{{ url_for('home') }}"class="mr-5 text-gray-900 underline-animated cursor-pointer">Inicio</a>  
+          <a href="{{ url_for('products') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer" >Productos</a>
+          <a href="{{ url_for('help') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Ayudanos!</a>
+          <a class="mr-5 text-gray-900 underline-animated cursor-pointer">Contáctanos</a>
+        </nav>
+        <a href="{{ url_for('login') }}"
+          class="inline-flex items-center bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 rounded-full focus:outline-none text-base mt-4 md:mt-0 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+          Iniciar Sesión
+          <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+            <path d="M5 12h14M12 5l7 7-7 7"></path>
+          </svg>
+        </a>
+      </div>
     </header>
-</body>
+  </body>
 
 <!-- Header 2-->
-<header class="border-b border-gray-200 bg-gray-50">
+<header>
     <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <div class="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
             <div>
@@ -128,7 +124,7 @@
     
 
             <div
-                class="hover:bg-gray-900 hover:text-white transition duration-300 max-w-sm rounded overflow-hidden shadow-lg">
+                class="hover:bg-[#18beaa] hover:bg-opacity-50 hover:text-white transition duration-300 max-w-sm rounded overflow-hidden shadow-lg">
                 <div class="py-4 px-8">
                     <a href="#">
                         <h4 class="text-lg mb-3 font-semibold">How to be effective at working remotely?</h4>
@@ -147,7 +143,7 @@
             </div>
 
             <div
-                class="hover:bg-gray-900 hover:text-white transition duration-300 max-w-sm rounded overflow-hidden shadow-lg">
+                class="hover:bg-[#18beaa] hover:bg-opacity-50 hover:text-white transition duration-300 max-w-sm rounded overflow-hidden shadow-lg">
                 <div class="py-4 px-8">
                     <a href="#">
                         <h4 class="text-lg mb-3 font-semibold">How to be effective at working remotely?</h4>
@@ -170,19 +166,18 @@
 </body>
 
 <!-- Footer -->
-<footer class="footer w-full" style="background-color: #18beaa;">
-    <div class="py-8 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
-        <nav class="-mx-5 -my-2 flex flex-wrap justify-center" aria-label="Footer">
+<footer class="footer" style="background-color: #18beaa;">
+    <div class="mx-auto max-w-7xl py-8 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
+        <nav class="-mx-5 -my-2 flex flex-wrap justify-center order-2" aria-label="Footer">
             <div class="px-5">
-                <a href="#" class="text-base text-white hover:text-gray-200">Términos de Servicio</a>
+                <a href="#" class="text-base text-white hover:text-gray-200">Terminos de Servicio</a>
             </div>
-
+  
             <div class="px-5">
-                <a href="https://web.facebook.com/" class="text-base text-white hover:text-gray-200">Política de
-                    privacidad</a>
+                <a href="https://web.facebook.com/" class="text-base text-white hover:text-gray-200">Politica de privacidad</a>
             </div>
         </nav>
-        <div class="mt-8 flex justify-center space-x-6">
+        <div class="mt-8 md:mb-8 flex justify-center space-x-6 md:order-3  ">
             <a href="#" class="text-white hover:text-gray-200">
                 <span class="sr-only">Facebook</span>
                 <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -191,17 +186,22 @@
                         clip-rule="evenodd" />
                 </svg>
             </a>
-
-            <a href="https://www.instagram.com/" class="text-white hover:text-gray-200">
-                <span class="sr-only">Instagram</span>
-                <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path fill-rule="evenodd"
-                        d="M12 2.25c-3.094 0-3.452.012-4.662.068-1.206.056-2.05.243-2.8.509-.761.273-1.43.634-2.055 1.259-.623.623-.986 1.294-1.259 2.055-.266.75-.453 1.594-.51 2.8-.056 1.21-.068 1.568-.068 4.662s.012 3.452.068 4.662c.056 1.206.243 2.05.509 2.8.273.761.634 1.43 1.259 2.055.623.623 1.294.986 2.055 1.259.75.266 1.594.453 2.8.51 1.21.056 1.568.068 4.662.068s3.452-.012 4.662-.068c1.206-.056 2.05-.243 2.8-.51.761-.273 1.43-.634 2.055-1.259.623-.623.986-1.294 1.259-2.055.266-.75.453-1.594.51-2.8.056-1.21.068-1.568.068-4.662s-.012-3.452-.068-4.662c-.056-1.206-.243-2.05-.509-2.8-.273-.761-.634-1.43-1.259-2.055-.623-.623-1.294-.986-2.055-1.259-.75-.266-1.594-.453-2.8-.509-1.21-.056-1.568-.068-4.662-.068zm0-2c3.1 0 3.48.012 4.706.067 1.236.055 2.348.248 3.268.534.933.29 1.769.7 2.556 1.398.788.788 1.108 1.624 1.398 2.556.286.92.479 2.032.534 3.268.055 1.226.067 1.606.067 4.706s-.012 3.48-.067 4.706c-.055 1.236-.248 2.348-.534 3.268-.29.933-.7 1.769-1.398 2.556-.788.788-1.624 1.108-2.556 1.398-.92.286-2.032.479-3.268.534-1.226.055-1.606.067-4.706.067s-3.48-.012-4.706-.067c-1.236-.055-2.348-.248-3.268-.534-.933-.29-1.769-.7-2.556-1.398-.788-.788-1.108-1.624-1.398-2.556-.286-.92-.479-2.032-.534-3.268-.055-1.226-.067-1.606-.067-4.706s.012-3.48.067-4.706c.055-1.236.248-2.348.534-3.268.29-.933.7-1.769 1.398-2.556.788-.788 1.624-1.108 2.556-1.398.92-.286 2.032-.479 3.268-.534 1.226-.055 1.606-.067 4.706-.067zM12 5.75a6.25 6.25 0 100 12.5 6.25 6.25 0 000-12.5zm0 10.5a4.25 4.25 0 110-8.5 4.25 4.25 0 010 8.5zm6.75-10.75a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
-                        clip-rule="evenodd" />
-                </svg>
+  
+            <a href="https://www.instagram.com/gativet/" class="text-white hover:text-gray-200">
+              <span class="sr-only">Instagram</span>
+              <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill-rule="evenodd"
+                  d="M12 2.25c-3.094 0-3.452.012-4.662.068-1.206.056-2.05.243-2.8.509-.761.273-1.43.634-2.055 1.259-.623.623-.986 1.294-1.259 2.055-.266.75-.453 1.594-.51 2.8-.056 1.21-.068 1.568-.068 4.662s.012 3.452.068 4.662c.056 1.206.243 2.05.509 2.8.273.761.634 1.43 1.259 2.055.623.623 1.294.986 2.055 1.259.75.266 1.594.453 2.8.51 1.21.056 1.568.068 4.662.068s3.452-.012 4.662-.068c1.206-.056 2.05-.243 2.8-.51.761-.273 1.43-.634 2.055-1.259.623-.623.986-1.294 1.259-2.055.266-.75.453-1.594.51-2.8.056-1.21.068-1.568.068-4.662s-.012-3.452-.068-4.662c-.056-1.206-.243-2.05-.509-2.8-.273-.761-.634-1.43-1.259-2.055-.623-.623-1.294-.986-2.055-1.259-.75-.266-1.594-.453-2.8-.509-1.21-.056-1.568-.068-4.662-.068zm0-2c3.1 0 3.48.012 4.706.067 1.236.055 2.348.248 3.268.534.933.29 1.769.7 2.556 1.398.788.788 1.108 1.624 1.398 2.556.286.92.479 2.032.534 3.268.055 1.226.067 1.606.067 4.706s-.012 3.48-.067 4.706c-.055 1.236-.248 2.348-.534 3.268-.29.933-.7 1.769-1.398 2.556-.788.788-1.624 1.108-2.556 1.398-.92.286-2.032.479-3.268.534-1.226.055-1.606.067-4.706.067s-3.48-.012-4.706-.067c-1.236-.055-2.348-.248-3.268-.534-.933-.29-1.769-.7-2.556-1.398-.788-.788-1.108-1.624-1.398-2.556-.286-.92-.479-2.032-.534-3.268-.055-1.226-.067-1.606-.067-4.706s.012-3.48.067-4.706c.055-1.236.248-2.348.534-3.268.29-.933.7-1.769 1.398-2.556.788-.788 1.624-1.108 2.556-1.398.92-.286 2.032-.479 3.268-.534 1.226-.055 1.606-.067 4.706-.067zm0 5.9a6.1 6.1 0 1 0 0 12.2 6.1 6.1 0 0 0 0-12.2zm0 10.2a4.1 4.1 0 1 1 0-8.2 4.1 4.1 0 0 1 0 8.2zm6.32-8.926a1.236 1.236 0 1 1-2.473 0 1.236 1.236 0 0 1 2.473 0z"
+                  clip-rule="evenodd" />
+              </svg>
             </a>
         </div>
+        <div class="mt-8  md:order-1 md:mt-0 ">
+            <p class="text-center text-base text-white">
+                &copy; FraFra & Asociados
+            </p>
+        </div>
     </div>
-</footer>
+  </footer>
 
 </html>
