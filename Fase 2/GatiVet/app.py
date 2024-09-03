@@ -32,5 +32,10 @@ def products():
 def item():
     return render_template('item.html')
 
+# Ruta para la página de help
+@app.route('/help')
+def help():
+    return render_template('help.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
