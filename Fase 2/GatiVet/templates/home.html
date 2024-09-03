@@ -42,10 +42,19 @@
     .underline-animated:hover::after {
       width: 100%;
     }
+
+    .background-image {
+        background-image: url('{{ url_for('static', filename='img/background.png') }}');
+        background-size: cover;
+        background-position: center;
+        background-repeat: repeat;
+        height: 100vh; /* Ajusta esto según el tamaño que desees para el fondo */
+        width: 100%;
+        }
   </style>
 </head>
 
-<body class="bg-gray-100 p-6">
+<body class="bg-gray-100 p-6 background-image">
   <header class="text-gray-600 body-font">
     <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
       <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0 hover:text-gray-800 transition-colors duration-300 cursor-pointer">
@@ -71,12 +80,12 @@
 
 <!--Body-->
 <!--Banner-->
-<section class="relative bg-cover bg-center bg-no-repeat mb-12 mx-6 sm:mx-8 lg:mx-12"
+<section class="relative bg-cover bg-center bg-no-repeat mb-12 mx-6 sm:mx-8 lg:mx-12 rounded-lg"
   style="background-image: url('{{ url_for('static', filename='img/banner.png') }}'); background-size: contain; background-color: rgb(129, 188, 209);">
 
   <div class="absolute inset-0 bg-gradient-to-r from-white/70 to-transparent"></div>
 
-  <div class="relative mx-auto max-w-screen-xl px-6 py-24 sm:px-8 sm:py-28 lg:flex lg:h-auto lg:items-center lg:px-12">
+  <div class="relative mx-auto max-w-screen-xl px-6 py-24 sm:px-8 sm:py-28 lg:flex lg:h-auto lg:items-center lg:px-12 ">
     <div class="max-w-2xl text-center ltr:sm:text-left rtl:sm:text-right">
       <h1 class="text-3xl font-extrabold sm:text-5xl" style="color: #5f5f5f">
         Déjanos darte
@@ -490,7 +499,7 @@
   });
 </script>
 
-<section class="bg-gray-50 container px-5 py-24 mx-auto">
+<section class="container px-5 py-24 mx-auto">
   <div class="flex flex-col">
     <div class="h-1 bg-gray-200 rounded overflow-hidden">
       <div class="w-24 h-full bg-blue-500"></div>
@@ -525,7 +534,7 @@
 
         <!-- Slide 1 -->
         <div class="keen-slider__slide">
-          <blockquote class="flex h-full flex-col justify-between bg-white p-3 shadow-sm max-w-xs">
+          <blockquote class="flex h-full flex-col justify-between bg-white p-3 shadow-sm max-w-xs rounded-lg">
             <!-- Ancho máximo más pequeño y padding reducido -->
             <div>
               <div class="flex gap-0.5 text-green-500">
@@ -557,7 +566,7 @@
 
         <!-- Slide 2 -->
         <div class="keen-slider__slide">
-          <blockquote class="flex h-full flex-col justify-between bg-white p-3 shadow-sm max-w-xs">
+          <blockquote class="flex h-full flex-col justify-between bg-white p-3 shadow-sm max-w-xs rounded-lg">
             <!-- Ancho máximo más pequeño y padding reducido -->
             <div>
               <div class="flex gap-0.5 text-green-500">
@@ -589,7 +598,7 @@
 
         <!-- Slide 3 -->
         <div class="keen-slider__slide">
-          <blockquote class="flex h-full flex-col justify-between bg-white p-3 shadow-sm max-w-xs">
+          <blockquote class="flex h-full flex-col justify-between bg-white p-3 shadow-sm max-w-xs rounded-lg">
             <!-- Ancho máximo más pequeño y padding reducido -->
             <div>
               <div class="flex gap-0.5 text-green-500">
@@ -621,7 +630,7 @@
 
         <!-- Slide 3 -->
         <div class="keen-slider__slide">
-          <blockquote class="flex h-full flex-col justify-between bg-white p-3 shadow-sm max-w-xs">
+          <blockquote class="flex h-full flex-col justify-between bg-white p-3 shadow-sm max-w-xs rounded-lg">
             <!-- Ancho máximo más pequeño y padding reducido -->
             <div>
               <div class="flex gap-0.5 text-green-500">
@@ -653,7 +662,7 @@
 
         <!-- Slide 4 -->
         <div class="keen-slider__slide">
-          <blockquote class="flex h-full flex-col justify-between bg-white p-3 shadow-sm max-w-xs">
+          <blockquote class="flex h-full flex-col justify-between bg-white p-3 shadow-sm max-w-xs rounded-lg">
             <!-- Ancho máximo más pequeño y padding reducido -->
             <div>
               <div class="flex gap-0.5 text-green-500">

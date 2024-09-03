@@ -27,5 +27,10 @@ def profile():
 def products():
     return render_template('products.html')
 
+# Ruta para la página de item
+@app.route('/item')
+def item():
+    return render_template('item.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
