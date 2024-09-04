@@ -37,5 +37,10 @@ def item():
 def help():
     return render_template('help.html')
 
+# Ruta para la página de contacto
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
