@@ -1,38 +1,79 @@
-{% extends "base.html" %}
-
-{% block title %}Contacto{% endblock %}
-
-{% block content %}
 <body>
     <div class="container my-12 mx-auto px-2 md:px-4">
         <section class="mb-32">
             <div class="flex justify-center">
                 <div class="text-center md:max-w-xl lg:max-w-3xl">
-                    <h2 class="mb-12 px-6 text-3xl font-bold">¡Contáctanos!</h2>
+                    <h2 class="mb-12 px-6 text-3xl font-bold">
+                        ¡Contactanos!
+                    </h2>
                 </div>
             </div>
             <div class="flex flex-wrap">
                 <form class="mb-12 w-full shrink-0 grow-0 basis-auto md:px-3 lg:mb-0 lg:w-5/12 lg:px-6">
                     <div class="mb-3 w-full">
-                        <label class="block font-medium mb-[2px] text-teal-700" for="nombre">Nombre</label>
-                        <input type="text" class="px-2 py-2 border w-full outline-none rounded-md" id="nombre" placeholder="Nombre" />
+                        <label class="block font-medium mb-[2px] text-teal-700" htmlFor="exampleInput90">
+                            Nombre
+                        </label>
+                        <input type="text" class="px-2 py-2 border w-full outline-none rounded-md" id="exampleInput90"
+                            placeholder="Nombre" />
                     </div>
                     <div class="mb-3 w-full">
-                        <label class="block font-medium mb-[2px] text-teal-700" for="correo">Correo</label>
-                        <input type="email" class="px-2 py-2 border w-full outline-none rounded-md" id="correo" placeholder="Ingresa tu correo electrónico" />
+                        <label class="block font-medium mb-[2px] text-teal-700" htmlFor="exampleInput90">
+                            Correo
+                        </label>
+                        <input type="email" class="px-2 py-2 border w-full outline-none rounded-md" id="exampleInput90"
+                            placeholder="Ingresa tu correo electronico" />
                     </div>
                     <div class="mb-3 w-full">
-                        <label class="block font-medium mb-[2px] text-teal-700" for="mensaje">Mensaje</label>
-                        <textarea class="px-2 py-2 border rounded-[5px] w-full outline-none" id="mensaje" placeholder="Escribe tu mensaje aquí"></textarea>
+                        <label class="block font-medium mb-[2px] text-teal-700" htmlFor="exampleInput90">
+                            Mensaje
+                        </label>
+                        <textarea class="px-2 py-2 border rounded-[5px] w-full outline-none" name="" id=""></textarea>
                     </div>
-                    <!-- Botón para abrir el primer modal -->
-                    <button data-modal-target="#confirm-modal" data-modal-toggle="#confirm-modal"
-                        class="mb-6 inline-block w-full rounded bg-teal-400 px-6 py-2.5 font-medium uppercase leading-normal text-white hover:shadow-md hover:bg-teal-500 focus:ring-4 focus:outline-none focus:ring-blue-300 text-center"
-                        type="button">
-                        Enviar
+                    <!-- Botón para abrir el modal -->
+                    <button data-modal-target="confirm-modal" data-modal-toggle="confirm-modal"
+                    class="mb-6 inline-block w-full rounded bg-teal-400 px-6 py-2.5 font-medium uppercase leading-normal text-white hover:shadow-md hover:bg-teal-500 focus:ring-4 focus:outline-none focus:ring-blue-300 text-center"
+                    type="button">
+                    Enviar
                     </button>
-                </form>
 
+                    <!-- Modal de confirmación -->
+                    <div id="confirm-modal" tabindex="-1"
+                    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                    <div class="relative p-4 w-full max-w-md max-h-full">
+                        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                            <!-- Botón para cerrar el modal -->
+                            <button type="button"
+                                class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                data-modal-hide="confirm-modal">
+                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 14 14">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                </svg>
+                                <span class="sr-only">Close modal</span>
+                            </button>
+                            <!-- Contenido del modal -->
+                            <div class="p-4 md:p-5 text-center">
+                                <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">¿Estás seguro de que deseas enviar
+                                    el mensaje?</h3>
+                                <button data-modal-hide="confirm-modal" type="button"
+                                    class="text-white bg-teal-600 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                                    Sí, enviar
+                                </button>
+                                <button data-modal-hide="confirm-modal" type="button"
+                                    class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                    No, cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
                 <div class="w-full shrink-0 grow-0 basis-auto lg:w-7/12">
                     <div class="flex flex-wrap">
                         <div class="mb-12 w-full shrink-0 grow-0 basis-auto md:w-6/12 md:px-3 lg:px-6">
@@ -132,91 +173,7 @@
                     </div>
                 </div>
 
-                <!-- Modal de confirmación -->
-                <div id="confirm-modal" class="fixed inset-0 flex items-center justify-center hidden bg-gray-900 bg-opacity-50 z-50">
-                    <div class="relative p-4 w-full max-w-md max-h-full bg-white rounded-lg shadow dark:bg-gray-700">
-                        <!-- Botón para cerrar el primer modal -->
-                        <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="#confirm-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                            </svg>
-                            <span class="sr-only">Cerrar modal</span>
-                        </button>
-                        <!-- Contenido del primer modal -->
-                        <div class="p-4 md:p-5 text-center">
-                            <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                            </svg>
-                            <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">¿Estás seguro de que deseas enviar el mensaje?</h3>
-                            <button type="button" class="text-white bg-teal-600 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center" data-modal-toggle="#success-modal" data-success-modal>
-                                Sí, enviar
-                            </button>
-                            <button type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" data-modal-hide="#confirm-modal">
-                                No, cancelar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Modal de éxito -->
-                <div id="success-modal" class="fixed inset-0 flex items-center justify-center hidden bg-gray-900 bg-opacity-50 z-50">
-                    <div class="relative p-4 w-full max-w-md max-h-full bg-white rounded-lg shadow dark:bg-gray-700">
-                        <!-- Botón para cerrar el modal de éxito -->
-                        <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="#success-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                            </svg>
-                            <span class="sr-only">Cerrar modal</span>
-                        </button>
-                        <!-- Contenido del modal de éxito -->
-                        <div class="p-4 md:p-5 text-center">
-                            <svg class="mx-auto mb-4 text-teal-600 w-12 h-12 dark:text-teal-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <h3 class="mb-5 text-lg font-medium text-teal-600 dark:text-teal-500">¡Mensaje enviado con éxito!</h3>
-                            <button type="button" class="text-white bg-teal-600 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center" data-modal-hide="#success-modal">
-                                Cerrar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                
-
             </div>
-            
         </section>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const modalToggleButtons = document.querySelectorAll('[data-modal-toggle]');
-            const modals = document.querySelectorAll('.modal');
-
-            modalToggleButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const targetModal = document.querySelector(button.getAttribute('data-modal-target'));
-                    targetModal.classList.remove('hidden');
-                });
-            });
-
-            document.querySelectorAll('[data-modal-hide]').forEach(button => {
-                button.addEventListener('click', () => {
-                    const targetModal = document.querySelector(button.getAttribute('data-modal-hide'));
-                    targetModal.classList.add('hidden');
-                });
-            });
-
-            // Add event listener for the "Sí, enviar" button to open the success modal and close the confirm modal
-            document.querySelector('[data-success-modal]').addEventListener('click', () => {
-                const confirmModal = document.querySelector('#confirm-modal');
-                const successModal = document.querySelector('#success-modal');
-                confirmModal.classList.add('hidden');
-                successModal.classList.remove('hidden');
-            });
-        });
-    </script>
 </body>
-
-  
-{% endblock %}
