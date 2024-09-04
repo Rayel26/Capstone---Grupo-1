@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link href="{{ url_for('static', filename='styles/output.css') }}" rel="stylesheet">
-</head>
+{% extends "base.html" %}
+
+{% block title %}Contacto{% endblock %}
+
+{% block content %}
 <div class="h-full bg-gray-400 dark:bg-gray-900">
 	<!-- Container -->
 	<div class="mx-auto">
@@ -106,3 +103,5 @@
 		</div>
 	</div>
 </div>
+  
+{% endblock %}
