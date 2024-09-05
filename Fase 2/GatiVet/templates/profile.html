@@ -6,16 +6,60 @@
     <link href="{{ url_for('static', filename='styles/output.css') }}" rel="stylesheet">
     <title>Profile</title>
 </head>
-<body>
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+<style>
+  /* Ensure that the body and html cover the full viewport height */
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
 
-    <div class="bg-gray-100">
-    
+  /* Flexbox to make the footer stick to the bottom */
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1;
+  }
+  .underline-animated {
+    position: relative;
+  }
+
+  .underline-animated::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px; /* Ajusta la posición vertical del subrayado */
+    width: 0;
+    height: 2px; /* Ajusta el grosor del subrayado */
+    background-color: #18beaa; /* Color del subrayado */
+    transition: width 0.3s ease-in-out;
+  }
+
+  .underline-animated:hover::after {
+    width: 100%;
+  }
+
+  .background-image {
+      background-image: url('{{ url_for('static', filename='img/background.png') }}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: repeat;
+      height: 100vh; /* Ajusta esto según el tamaño que desees para el fondo */
+      width: 100%;
+      }
+</style>
+<body class="background-image">
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <div>
       <div>
         <div x-data="{ open: false }" class="relative overflow-hidden bg-sky-700 pb-32">
           <nav
-            class="bg-transparent relative z-10 border-b border-teal-500 border-opacity-25 lg:border-none lg:bg-transparent"
-            x-state:on="Menu open" x-state:off="Menu closed" :class="{ 'bg-sky-900': open, 'bg-transparent': !(open) }">
+    class="relative z-10 border-b border-teal-500 border-opacity-25 lg:border-none lg:bg-transparent"
+    x-state:on="Menu open" x-state:off="Menu closed"
+    :class="{ 'bg-[#18beaa]': open, 'bg-transparent': !open }">
+
             <div class="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
               <div class="relative flex h-16 items-center justify-between lg:border-b lg:border-sky-800">
                 <div class="flex items-center px-2 lg:px-0">

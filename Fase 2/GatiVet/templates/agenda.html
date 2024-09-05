@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %}Contacto{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Reserva</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .step-icon {
+            transition: color 0.3s ease, transform 0.3s ease;
+            color: rgb(24, 190, 170); /* Color por defecto */
+            font-size: 2.5rem; /* Tamaño del ícono */
+        }
+        .step-icon.completed {
+            color: green; /* Color cuando el paso está completo */
+        }
+        .step-icon:hover {
+            color: rgb(24, 190, 170); /* Color al pasar el ratón */
+            transform: scale(1.1);
+        }
+        .step-icon-name {
+            transition: color 0.3s ease;
+            color: rgb(24, 190, 170); /* Color por defecto */
+            margin-top: 0.5rem; /* Espacio arriba del nombre */
+        }
+        .step-icon-name.completed {
+            color: green; /* Color cuando el paso está completo */
+        }
+        @media (max-width: 768px) {
+            .step-icon-name {
+                display: none;
+            }
+        }
+        .step-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .step-content {
+            width: 100%;
+            margin: 1rem 0;
+        }
+        .step-wrapper {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex: 1;
+        }
+        .step-wrapper > div {
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="max-w-4xl mx-auto my-10 p-6 bg-white shadow-md rounded-lg">
+        <!-- Progress Steps -->
+        <div class="step-container">
+            <div class="step-wrapper">
+                <div class="flex flex-col items-center">
+                    <i class="fas fa-search step-icon" id="search-icon"></i>
+                    <span class="step-icon-name text-sm" id="search-icon-name">Buscar</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <i class="fas fa-check step-icon" id="select-icon"></i>
+                    <span class="step-icon-name text-sm" id="select-icon-name">Seleccionar</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <i class="fas fa-id-card step-icon" id="id-icon"></i>
+                    <span class="step-icon-name text-sm" id="id-icon-name">Identificación</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <i class="fas fa-thumbs-up step-icon" id="success-icon"></i>
+                    <span class="step-icon-name text-sm" id="success-icon-name">Éxito</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Sections -->
+        <div id="form-steps">
+            <!-- Búsqueda -->
+            <div class="step-content" id="step-search">
+                <h2 class="text-2xl font-bold mb-4">Búsqueda</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Selección de Área -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">Seleccionar área:</h3>
+                        <select id="area-select" class="block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 mb-4">
+                            <option value="general">Consulta General</option>
+                            <option value="especialidad">Consulta Especialidad</option>
+                            <option value="telemedicina">Consulta Telemedicina</option>
+                        </select>
+                    </div>
+
+                    <!-- Buscar por -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">Buscar por:</h3>
+                        <div class="flex space-x-4 mb-4">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="search-type" value="servicio" class="form-radio text-blue-500">
+                                <span class="ml-2">Servicio</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="search-type" value="staff" class="form-radio text-blue-500">
+                                <span class="ml-2">Staff</span>
+                            </label>
+                        </div>
+
+                        <!-- Búsqueda por Servicio y Staff en columnas -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Búsqueda por Servicio -->
+                            <div id="service-search" class="hidden">
+                                <h3 class="text-xl font-semibold mb-2">Seleccione un servicio:</h3>
+                                <select id="service-select" class="block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 mb-4">
+                                    <option value="especialidad">Consulta Especialidad Online</option>
+                                    <!-- Añadir más opciones según sea necesario -->
+                                </select>
+                            </div>
+
+                            <!-- Búsqueda por Staff -->
+                            <div id="staff-search" class="hidden">
+                                <h3 class="text-xl font-semibold mb-2">Seleccionar Doctor:</h3>
+                                <select id="staff-select" class="block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 mb-4">
+                                    <option value="doctor1">Doctor 1</option>
+                                    <option value="doctor2">Doctor 2</option>
+                                    <option value="doctor3">Doctor 3</option>
+                                    <!-- Añadir más opciones según sea necesario -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botón principal "Pedir Hora" -->
+                <button onclick="searchForTime()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Pedir Hora</button>
+            </div>
+
+            <!-- Selección -->
+            <div class="step-content hidden" id="step-select">
+                <h2 class="text-2xl font-bold mb-4">Selección</h2>
+                <p>Aquí va el contenido para la selección.</p>
+                <button onclick="nextStep('step-select', 'step-id', 'select-icon')" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Siguiente</button>
+            </div>
+
+            <!-- Identificación -->
+            <div class="step-content hidden" id="step-id">
+                <h2 class="text-2xl font-bold mb-4">Identificación</h2>
+                <p>Aquí va el contenido para la identificación.</p>
+                <button onclick="nextStep('step-id', 'step-success', 'id-icon')" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Siguiente</button>
+            </div>
+
+            <!-- Reserva Exitosa -->
+            <div class="step-content hidden" id="step-success">
+                <h2 class="text-2xl font-bold mb-4">Reserva Exitosa</h2>
+                <p>¡Tu reserva ha sido realizada exitosamente!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para avanzar al siguiente paso
+        function nextStep(currentStepId, nextStepId, iconId) {
+            document.getElementById(currentStepId).classList.add('hidden');
+            document.getElementById(nextStepId).classList.remove('hidden');
+            document.getElementById(iconId).classList.add('completed');
+            document.querySelectorAll('.step-icon-name').forEach(name => {
+                if (name.id === iconId + '-name') {
+                    name.classList.add('completed');
+                } else {
+                    name.classList.remove('completed');
+                }
+            });
+        }
+
+        // Función para mostrar u ocultar la búsqueda por servicio o staff
+        document.querySelectorAll('input[name="search-type"]').forEach((radio) => {
+            radio.addEventListener('change', function() {
+                const serviceSearch = document.getElementById('service-search');
+                const staffSearch = document.getElementById('staff-search');
+                if (this.value === 'servicio') {
+                    serviceSearch.classList.remove('hidden');
+                    staffSearch.classList.add('hidden');
+                } else if (this.value === 'staff') {
+                    serviceSearch.classList.add('hidden');
+                    staffSearch.classList.remove('hidden');
+                }
+            });
+        });
+
+        // Función para "Pedir Hora"
+        function searchForTime() {
+            nextStep('step-search', 'step-select', 'search-icon');
+        }
+    </script>
+</body>
+</html>
+
+
+{% endblock %}

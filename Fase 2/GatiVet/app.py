@@ -42,5 +42,10 @@ def help():
 def contact():
     return render_template('contact.html')
 
+# Ruta para la página de agendar hora
+@app.route('/agenda')
+def agenda():
+    return render_template('agenda.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
