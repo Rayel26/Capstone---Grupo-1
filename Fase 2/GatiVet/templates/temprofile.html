@@ -22,6 +22,7 @@
             transition: width 0.3s ease;
             display: flex;
             flex-direction: column;
+            border-radius: 0.5rem; /* Esquinas redondeadas */
         }
 
         .step-sidebar.collapsed {
@@ -69,6 +70,13 @@
             background-color: #c1e1c1;
         }
 
+        /* Agrega esta clase a tu archivo CSS */
+        .edit-mode {
+            border: 2px solid #18beaa; /* Borde verde para indicar edición */
+            background-color: #f0f8f7; /* Fondo ligeramente diferente */
+        }
+
+
         /* Responsividad */
         @media (max-width: 768px) {
             .step-sidebar {
@@ -83,7 +91,7 @@
 </head>
 
 <body>
-    <!-- Container for Sidebar and Main Content -->
+    <!-- Container para Sidebar -->
     <div class="container flex">
         <!-- Sidebar -->
         <div id="sidebar" class="step-sidebar p-4 flex-none">
@@ -108,16 +116,64 @@
             </div>
         </div>
 
-        <!-- Main Content -->
+        <!-- Contenido Principal -->
         <div class="flex-1 p-4">
-            <!-- Aquí va el contenido principal -->
+            <!-- Aquí va el contenido principal de Datos -->
             <div id="profile" class="hidden step-content">
-                <h2 class="text-2xl font-bold mb-4">Perfil</h2>
-                <p>Nombre: Juan Pérez</p>
-                <p>Email: juan.perez@example.com</p>
-                <p>Teléfono: +56 9 1234 5678</p>
-                <button class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">Editar Perfil</button>
+                <form id="profile-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Columna 1 -->
+                    <div class="mb-4">
+                        <label for="first-name" class="text-sm font-medium text-gray-900 block mb-2">Nombre:</label>
+                        <input type="text" name="first-name" id="first-name" value="Juan" 
+                            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required readonly>
+                    </div>
+                    <div class="mb-4">
+                        <label for="last-name" class="text-sm font-medium text-gray-900 block mb-2">Apellido Paterno:</label>
+                        <input type="text" name="last-name" id="last-name" value="Pérez" 
+                            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required readonly>
+                    </div>
+                    <div class="mb-4">
+                        <label for="maternal-last-name" class="text-sm font-medium text-gray-900 block mb-2">Apellido Materno:</label>
+                        <input type="text" name="maternal-last-name" id="maternal-last-name" value="González" 
+                            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required readonly>
+                    </div>
+                    <div class="mb-4">
+                        <label for="rut" class="text-sm font-medium text-gray-900 block mb-2">RUT:</label>
+                        <input type="text" name="rut" id="rut" value="12.345.678-9" 
+                            pattern="[0-9+]*" title="Solo se permiten números y el signo +" 
+                            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required readonly>
+                    </div>
+            
+                    <!-- Columna 2 -->
+                    <div class="mb-4">
+                        <label for="address" class="text-sm font-medium text-gray-900 block mb-2">Dirección:</label>
+                        <input type="text" name="address" id="address" value="Av. Siempre Viva 123" 
+                            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required readonly>
+                    </div>
+                    <div class="mb-4">
+                        <label for="phone" class="text-sm font-medium text-gray-900 block mb-2">Teléfono:</label>
+                        <input type="text" name="phone" id="phone" value="+56 9 1234 5678" 
+                            pattern="[0-9+]*" title="Solo se permiten números y el signo +" 
+                            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required readonly>
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="text-sm font-medium text-gray-900 block mb-2">Correo:</label>
+                        <input type="email" name="email" id="email" value="juan.perez@example.com" 
+                            pattern=".+@.+" title="El correo debe contener al menos un @" 
+                            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5" required readonly>
+                    </div>
+                </form>
+                <div class="flex space-x-4 mt-4">
+                    <button type="button" id="edit-save-button" onclick="toggleEditSaveProfile()" 
+                        class="px-4 py-2 text-white rounded-md bg-[#18beaa] hover:bg-[#16a89a] transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">Editar</button>
+                </div>
             </div>
+            <!-- Final contenido principal de Datos -->
+            
+        
+            
+            
+            
 
             <div id="pets" class="hidden step-content">
                 <h2 class="text-2xl font-bold mb-4">Mis Mascotas</h2>
@@ -152,38 +208,7 @@
         </div>
     </div>
 
-    <script>
-        function showContent(sectionId) {
-            // Ocultar todos los contenidos
-            document.querySelectorAll('.step-content').forEach(div => {
-                div.classList.add('hidden');
-            });
-            // Mostrar el contenido seleccionado
-            document.getElementById(sectionId).classList.remove('hidden');
-
-            // Resaltar el botón activo
-            document.querySelectorAll('.step-sidebar button').forEach(btn => {
-                btn.classList.remove('active-step');
-                btn.querySelector('i').classList.remove('active-step');
-                btn.querySelector('span').classList.remove('active-step');
-            });
-            const activeButton = document.querySelector(`button[onclick="showContent('${sectionId}')"]`);
-            activeButton.classList.add('active-step');
-            activeButton.querySelector('i').classList.add('active-step');
-            activeButton.querySelector('span').classList.add('active-step');
-        }
-
-        // Mostrar la sección de perfil por defecto
-        showContent('profile');
-
-        // Toggle sidebar collapse on smaller screens
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('collapsed');
-        }
-
-        // Add event listener for a button to toggle sidebar (if needed)
-        // document.querySelector('#toggle-sidebar').addEventListener('click', toggleSidebar);
-    </script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 
 </html>
