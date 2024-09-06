@@ -1,5 +1,4 @@
 // Perfil
-
 function toggleEditSaveProfile() {
     var inputs = document.querySelectorAll('#profile-form input');
     var button = document.getElementById('edit-save-button');
