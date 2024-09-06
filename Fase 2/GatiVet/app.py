@@ -64,5 +64,10 @@ def contact():
 def agenda():
     return render_template('agenda.html')
 
+# Ruta para la página de agendar hora
+@app.route('/temprofile')
+def temprofile():
+    return render_template('temprofile.html')
+
 if __name__ == '__main__':
     app.run(debug=True)

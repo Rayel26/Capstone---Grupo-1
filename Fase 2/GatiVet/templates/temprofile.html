@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}Ayudanos{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Perfil de Mascotas</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Sidebar Styles */
+        .step-sidebar {
+            background-color: #f9fafb;
+            border-right: 1px solid #e5e7eb;
+            width: 250px; /* Ancho por defecto */
+            box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+            transition: width 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .step-sidebar.collapsed {
+            width: 80px; /* Ancho colapsado */
+        }
+
+        /* Iconos y texto */
+        .step-icon {
+            font-size: 1.5rem;
+            color: rgb(24, 190, 170);
+            transition: color 0.3s ease;
+        }
+
+        .step-icon.active {
+            color: #077064;
+        }
+
+        .step-text {
+            transition: opacity 0.3s ease;
+        }
+
+        .step-sidebar.collapsed .step-text {
+            opacity: 0; /* Oculta el texto en el estado colapsado */
+        }
+
+        /* Botones */
+        .step-sidebar button {
+            transition: background-color 0.3s ease;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .step-sidebar button:hover,
+        .step-sidebar button:focus {
+            background-color: #e2f0e8;
+        }
+
+        .step-sidebar button:active {
+            background-color: #c1e1c1;
+        }
+
+        /* Responsividad */
+        @media (max-width: 768px) {
+            .step-sidebar {
+                width: 80px; /* Ancho colapsado */
+            }
+
+            .step-sidebar .step-text {
+                opacity: 0; /* Oculta el texto en pantallas pequeñas */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Container for Sidebar and Main Content -->
+    <div class="container flex">
+        <!-- Sidebar -->
+        <div id="sidebar" class="step-sidebar p-4 flex-none">
+            <h2 class="text-xl font-bold mb-4 step-text">Mi cuenta</h2>
+            <div class="flex flex-col space-y-4">
+                <button onclick="showContent('profile')" class="flex items-center space-x-2">
+                    <i class="fas fa-user step-icon" id="profile-icon"></i>
+                    <span class="step-text" id="profile-text">Mis datos</span>
+                </button>
+                <button onclick="showContent('pets')" class="flex items-center space-x-2">
+                    <i class="fas fa-paw step-icon" id="pets-icon"></i>
+                    <span class="step-text" id="pets-text">Mis Mascotas</span>
+                </button>
+                <button onclick="showContent('carnet')" class="flex items-center space-x-2">
+                    <i class="fas fa-id-card step-icon" id="carnet-icon"></i>
+                    <span class="step-text" id="carnet-text">Carnet Digital</span>
+                </button>
+                <button onclick="showContent('certificates')" class="flex items-center space-x-2">
+                    <i class="fas fa-certificate step-icon" id="certificates-icon"></i>
+                    <span class="step-text" id="certificates-text">Solicitar Certificados</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-4">
+            <!-- Aquí va el contenido principal -->
+            <div id="profile" class="hidden step-content">
+                <h2 class="text-2xl font-bold mb-4">Perfil</h2>
+                <p>Nombre: Juan Pérez</p>
+                <p>Email: juan.perez@example.com</p>
+                <p>Teléfono: +56 9 1234 5678</p>
+                <button class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">Editar Perfil</button>
+            </div>
+
+            <div id="pets" class="hidden step-content">
+                <h2 class="text-2xl font-bold mb-4">Mis Mascotas</h2>
+                <select id="pet-select" class="block w-full border border-gray-300 rounded-md shadow-sm mb-4">
+                    <option value="pet1">Rex</option>
+                    <option value="pet2">Luna</option>
+                </select>
+                <div id="pet-details">
+                    <p>Nombre: Rex</p>
+                    <p>Edad: 3 años</p>
+                    <p>Especie: Perro</p>
+                    <button class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">Editar Mascota</button>
+                </div>
+            </div>
+
+            <div id="carnet" class="hidden step-content">
+                <h2 class="text-2xl font-bold mb-4">Carnet Digital</h2>
+                <p>Nombre: Rex</p>
+                <p>Historial Médico: [Enlace al historial]</p>
+                <p>Vacunas: [Lista de vacunas]</p>
+                <button class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">Editar Carnet</button>
+            </div>
+
+            <div id="certificates" class="hidden step-content">
+                <h2 class="text-2xl font-bold mb-4">Solicitar Certificados</h2>
+                <select id="certificate-select" class="block w-full border border-gray-300 rounded-md shadow-sm mb-4">
+                    <option value="certificate1">Certificado de Salud</option>
+                    <option value="certificate2">Certificado de Vacunas</option>
+                </select>
+                <button class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">Solicitar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showContent(sectionId) {
+            // Ocultar todos los contenidos
+            document.querySelectorAll('.step-content').forEach(div => {
+                div.classList.add('hidden');
+            });
+            // Mostrar el contenido seleccionado
+            document.getElementById(sectionId).classList.remove('hidden');
+
+            // Resaltar el botón activo
+            document.querySelectorAll('.step-sidebar button').forEach(btn => {
+                btn.classList.remove('active-step');
+                btn.querySelector('i').classList.remove('active-step');
+                btn.querySelector('span').classList.remove('active-step');
+            });
+            const activeButton = document.querySelector(`button[onclick="showContent('${sectionId}')"]`);
+            activeButton.classList.add('active-step');
+            activeButton.querySelector('i').classList.add('active-step');
+            activeButton.querySelector('span').classList.add('active-step');
+        }
+
+        // Mostrar la sección de perfil por defecto
+        showContent('profile');
+
+        // Toggle sidebar collapse on smaller screens
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        // Add event listener for a button to toggle sidebar (if needed)
+        // document.querySelector('#toggle-sidebar').addEventListener('click', toggleSidebar);
+    </script>
+</body>
+
+</html>
+
+{% endblock %}
