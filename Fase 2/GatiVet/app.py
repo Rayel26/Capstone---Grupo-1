@@ -34,11 +34,6 @@ def login():
 def registration():
     return render_template('registration.html')
 
-# Ruta para la página de registro
-@app.route('/profile')
-def profile():
-    return render_template('profile.html')
-
 # Ruta para la página de producto
 @app.route('/products')
 def products():
@@ -64,7 +59,7 @@ def contact():
 def agenda():
     return render_template('agenda.html')
 
-# Ruta para la página de agendar hora
+# Ruta para la página de perfil
 @app.route('/temprofile')
 def temprofile():
     return render_template('temprofile.html')
