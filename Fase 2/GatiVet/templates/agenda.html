@@ -18,7 +18,7 @@
             font-size: 2.5rem; /* Tamaño del ícono */
         }
         .step-icon.completed {
-            color: green; /* Color cuando el paso está completo */
+            color: #077064; /* Color cuando el paso está completo */
         }
         .step-icon:hover {
             color: rgb(24, 190, 170); /* Color al pasar el ratón */
@@ -30,7 +30,7 @@
             margin-top: 0.5rem; /* Espacio arriba del nombre */
         }
         .step-icon-name.completed {
-            color: green; /* Color cuando el paso está completo */
+            color: #077064; /* Color cuando el paso está completo */
         }
         @media (max-width: 768px) {
             .step-icon-name {
@@ -47,6 +47,11 @@
         .step-content {
             width: 100%;
             margin: 1rem 0;
+            transition: background-color 0.3s ease, border-left 0.3s ease;
+        }
+        .step-content.active {
+            background-color: #e6f9f0; /* Color de fondo para la sección activa (verde claro) */
+            border-left: 4px solid rgb(24, 190, 170); /* Línea de borde para la sección activa (verde) */
         }
         .step-wrapper {
             display: flex;
@@ -86,88 +91,121 @@
         <!-- Form Sections -->
         <div id="form-steps">
             <!-- Búsqueda -->
-            <div class="step-content" id="step-search">
-                <h2 class="text-2xl font-bold mb-4">Búsqueda</h2>
+            <div class="step-content p-6 bg-white shadow-md rounded-lg active" id="step-search">
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
                     <!-- Selección de Área -->
-                    <div class="mb-6">
-                        <h3 class="text-xl font-semibold mb-2">Seleccionar área:</h3>
-                        <select id="area-select" class="block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 mb-4">
+                    <div class="col-span-1 mb-6">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-3">Seleccionar área:</h3>
+                        <select id="area-select" class="block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                             <option value="general">Consulta General</option>
-                            <option value="especialidad">Consulta Especialidad</option>
+                            <option value="especialidad">Consulta Especialidad Felina</option>
                             <option value="telemedicina">Consulta Telemedicina</option>
                         </select>
                     </div>
 
-                    <!-- Buscar por -->
-                    <div class="mb-6">
-                        <h3 class="text-xl font-semibold mb-2">Buscar por:</h3>
-                        <div class="flex space-x-4 mb-4">
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="search-type" value="servicio" class="form-radio text-blue-500">
-                                <span class="ml-2">Servicio</span>
-                            </label>
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="search-type" value="staff" class="form-radio text-blue-500">
-                                <span class="ml-2">Staff</span>
-                            </label>
-                        </div>
+                    <!-- Contenedor para Divisor Vertical y Buscar por -->
+                    <div class="col-span-2 flex flex-col mb-6">
+                        <!-- Contenedor para Divisor Vertical y Buscar por -->
+                        <div class="flex items-start mb-6">
+                            <!-- Divisor Vertical -->
+                            <div class="hidden md:block w-px h-40 bg-gray-300 mr-6"></div>
 
-                        <!-- Búsqueda por Servicio y Staff en columnas -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Búsqueda por Servicio -->
-                            <div id="service-search" class="hidden">
-                                <h3 class="text-xl font-semibold mb-2">Seleccione un servicio:</h3>
-                                <select id="service-select" class="block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 mb-4">
-                                    <option value="especialidad">Consulta Especialidad Online</option>
-                                    <!-- Añadir más opciones según sea necesario -->
-                                </select>
-                            </div>
+                            <!-- Buscar por -->
+                            <div class="w-full">
+                                <h3 class="text-xl font-semibold text-gray-700 mb-3">Buscar por:</h3>
+                                <div class="flex space-x-4 mb-4">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="search-type" value="servicio" class="form-radio text-blue-500 border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                                        <span class="ml-2 text-gray-700">Servicio</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="search-type" value="staff" class="form-radio text-blue-500 border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                                        <span class="ml-2 text-gray-700">Staff</span>
+                                    </label>
+                                </div>
 
-                            <!-- Búsqueda por Staff -->
-                            <div id="staff-search" class="hidden">
-                                <h3 class="text-xl font-semibold mb-2">Seleccionar Doctor:</h3>
-                                <select id="staff-select" class="block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 mb-4">
-                                    <option value="doctor1">Doctor 1</option>
-                                    <option value="doctor2">Doctor 2</option>
-                                    <option value="doctor3">Doctor 3</option>
-                                    <!-- Añadir más opciones según sea necesario -->
-                                </select>
+                                <!-- Búsqueda por Servicio y Staff en una fila -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- Búsqueda por Servicio -->
+                                    <div id="service-search" class="hidden">
+                                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Seleccione un servicio:</h3>
+                                        <select id="service-select" class="block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                            <option value="especialidad">Consulta Especialidad Online</option>
+                                            <!-- Añadir más opciones según sea necesario -->
+                                        </select>
+                                    </div>
+
+                                    <!-- Búsqueda por Staff -->
+                                    <div id="staff-search" class="hidden">
+                                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Seleccionar Doctor:</h3>
+                                        <select id="staff-select" class="block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                            <option value="doctor1">Dr. Nicolás Villalba</option>
+                                            <option value="doctor2">Dra. Kirito Aravena</option>
+                                            <!-- Añadir más opciones según sea necesario -->
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Botón principal "Pedir Hora" -->
-                <button onclick="searchForTime()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Pedir Hora</button>
+                <div class="text-center mt-6">
+                    <button onclick="searchForTime()" class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">Pedir Hora</button>
+                </div>
             </div>
+            <!-- Fin búsqueda -->
 
             <!-- Selección -->
-            <div class="step-content hidden" id="step-select">
-                <h2 class="text-2xl font-bold mb-4">Selección</h2>
-                <p>Aquí va el contenido para la selección.</p>
-                <button onclick="nextStep('step-select', 'step-id', 'select-icon')" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Siguiente</button>
+            <div class="step-content hidden p-6 bg-white shadow-md rounded-lg" id="step-select">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Selección</h2>
+                <p class="text-gray-700 mb-4">Aquí va el contenido para la selección.</p>
+                <div class="text-center mt-6">
+                    <button onclick="nextStep('step-select', 'step-id', 'select-icon')" class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+                        Siguiente
+                    </button>
+                </div>
             </div>
 
             <!-- Identificación -->
-            <div class="step-content hidden" id="step-id">
-                <h2 class="text-2xl font-bold mb-4">Identificación</h2>
-                <p>Aquí va el contenido para la identificación.</p>
-                <button onclick="nextStep('step-id', 'step-success', 'id-icon')" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Siguiente</button>
+            <div class="step-content hidden p-6 bg-white shadow-md rounded-lg" id="step-id">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Identificación</h2>
+                <p class="text-gray-700 mb-4">Aquí va el contenido para la identificación.</p>
+                <div class="text-center mt-6">
+                    <button onclick="nextStep('step-id', 'step-success', 'id-icon')" class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+                        Siguiente
+                    </button>
+                </div>
             </div>
 
-            <!-- Reserva Exitosa -->
-            <div class="step-content hidden" id="step-success">
-                <h2 class="text-2xl font-bold mb-4">Reserva Exitosa</h2>
-                <p>¡Tu reserva ha sido realizada exitosamente!</p>
+            <!-- Éxito -->
+            <div class="step-content hidden p-6 bg-white shadow-md rounded-lg" id="step-success">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Éxito</h2>
+                <p class="text-gray-700 mb-4">Tu reserva ha sido realizada con éxito.</p>
+                <p class="text-gray-700 mb-4">Se ha enviado un correo con los datos de la cita.</p>
+                <div class="text-center mt-6">
+                    <a href="{{ url_for('home') }}" class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer inline-block text-center">
+                        Finalizar
+                    </a>                    
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Función para avanzar al siguiente paso
+        function searchForTime() {
+            // Cambiar a la siguiente sección
+            nextStep('step-search', 'step-select', 'search-icon');
+            // Mostrar la sección de búsqueda
+            document.getElementById('service-search').classList.remove('hidden');
+            document.getElementById('staff-search').classList.remove('hidden');
+        }
+
         function nextStep(currentStepId, nextStepId, iconId) {
+            document.getElementById(currentStepId).classList.remove('active');
+            document.getElementById(nextStepId).classList.add('active');
             document.getElementById(currentStepId).classList.add('hidden');
             document.getElementById(nextStepId).classList.remove('hidden');
             document.getElementById(iconId).classList.add('completed');
@@ -180,25 +218,17 @@
             });
         }
 
-        // Función para mostrar u ocultar la búsqueda por servicio o staff
-        document.querySelectorAll('input[name="search-type"]').forEach((radio) => {
-            radio.addEventListener('change', function() {
-                const serviceSearch = document.getElementById('service-search');
-                const staffSearch = document.getElementById('staff-search');
+        document.querySelectorAll('input[name="search-type"]').forEach(input => {
+            input.addEventListener('change', function() {
                 if (this.value === 'servicio') {
-                    serviceSearch.classList.remove('hidden');
-                    staffSearch.classList.add('hidden');
-                } else if (this.value === 'staff') {
-                    serviceSearch.classList.add('hidden');
-                    staffSearch.classList.remove('hidden');
+                    document.getElementById('service-search').classList.remove('hidden');
+                    document.getElementById('staff-search').classList.add('hidden');
+                } else {
+                    document.getElementById('service-search').classList.add('hidden');
+                    document.getElementById('staff-search').classList.remove('hidden');
                 }
             });
         });
-
-        // Función para "Pedir Hora"
-        function searchForTime() {
-            nextStep('step-search', 'step-select', 'search-icon');
-        }
     </script>
 </body>
 </html>
