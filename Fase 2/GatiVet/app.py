@@ -1,6 +1,23 @@
 from flask import Flask, render_template
+import carnet_mascota
 
 app = Flask(__name__)
+
+# Simulando información del perfil y la mascota
+user_profile = {
+    'nombre': 'Juan Pérez',
+    'email': 'juan.perez@example.com',
+    'telefono': '+56 9 1234 5678',
+    'direccion': 'Calle Falsa 123, Santiago'
+}
+
+mascota = {
+    'nombre': 'Firulais',
+    'especie': 'Perro',
+    'raza': 'Golden Retriever',
+    'edad': 3,
+    'carnet': carnet_mascota.generar_carnet('Firulais', 'Perro', 'Golden Retriever', 3)
+}
 
 # Ruta para la página de home
 @app.route('/')
