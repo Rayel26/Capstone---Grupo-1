@@ -64,9 +64,11 @@
         }
     </style>
 </head>
+
+ <!-- Body-->
 <body class="bg-gray-100">
     <div class="max-w-4xl mx-auto my-10 p-6 bg-white shadow-md rounded-lg">
-        <!-- Progress Steps -->
+        <!-- Pasos de progreso de -->
         <div class="step-container">
             <div class="step-wrapper">
                 <div class="flex flex-col items-center">
@@ -75,7 +77,7 @@
                 </div>
                 <div class="flex flex-col items-center">
                     <i class="fas fa-check step-icon" id="select-icon"></i>
-                    <span class="step-icon-name text-sm" id="select-icon-name">Seleccionar</span>
+                    <span class="step-icon-name text-sm" id="select-icon-name">Seleccionar Fecha y Hora</span>
                 </div>
                 <div class="flex flex-col items-center">
                     <i class="fas fa-id-card step-icon" id="id-icon"></i>
@@ -91,83 +93,168 @@
         <!-- Form Sections -->
         <div id="form-steps">
             <!-- Búsqueda -->
-            <div class="step-content p-6 bg-white shadow-md rounded-lg active" id="step-search">
+        <div class="step-content p-6 bg-white shadow-md rounded-lg active" id="step-search">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+                <!-- Selección de Área -->
+                <div class="col-span-1 mb-6">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-3">Seleccionar área:</h3>
+                    <select id="area-select" class="block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                        <option value="general">Consulta General</option>
+                        <option value="especialidad">Consulta Especialidad Felina</option>
+                        <option value="telemedicina">Consulta Telemedicina</option>
+                    </select>
+                </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-                    <!-- Selección de Área -->
-                    <div class="col-span-1 mb-6">
-                        <h3 class="text-xl font-semibold text-gray-700 mb-3">Seleccionar área:</h3>
-                        <select id="area-select" class="block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                            <option value="general">Consulta General</option>
-                            <option value="especialidad">Consulta Especialidad Felina</option>
-                            <option value="telemedicina">Consulta Telemedicina</option>
-                        </select>
-                    </div>
+                <!-- Contenedor para Divisor Vertical y Buscar por -->
+                <div class="col-span-2 flex flex-col mb-6">
+                    <div class="flex items-start mb-6">
+                        <!-- Divisor Vertical -->
+                        <div class="hidden md:block w-px h-40 bg-gray-300 mr-6"></div>
 
-                    <!-- Contenedor para Divisor Vertical y Buscar por -->
-                    <div class="col-span-2 flex flex-col mb-6">
-                        <!-- Contenedor para Divisor Vertical y Buscar por -->
-                        <div class="flex items-start mb-6">
-                            <!-- Divisor Vertical -->
-                            <div class="hidden md:block w-px h-40 bg-gray-300 mr-6"></div>
+                        <!-- Buscar por -->
+                        <div class="w-full">
+                            <h3 class="text-xl font-semibold text-gray-700 mb-3">Buscar por:</h3>
+                            <div class="flex space-x-4 mb-4">
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="search-type" value="servicio" class="form-radio text-blue-500 border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                                    <span class="ml-2 text-gray-700">Servicio</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="search-type" value="staff" class="form-radio text-blue-500 border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                                    <span class="ml-2 text-gray-700">Staff</span>
+                                </label>
+                            </div>
 
-                            <!-- Buscar por -->
-                            <div class="w-full">
-                                <h3 class="text-xl font-semibold text-gray-700 mb-3">Buscar por:</h3>
-                                <div class="flex space-x-4 mb-4">
-                                    <label class="inline-flex items-center">
-                                        <input type="radio" name="search-type" value="servicio" class="form-radio text-blue-500 border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-                                        <span class="ml-2 text-gray-700">Servicio</span>
-                                    </label>
-                                    <label class="inline-flex items-center">
-                                        <input type="radio" name="search-type" value="staff" class="form-radio text-blue-500 border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-                                        <span class="ml-2 text-gray-700">Staff</span>
-                                    </label>
+                            <!-- Búsqueda por Servicio y Staff en una fila -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Búsqueda por Servicio -->
+                                <div id="service-search" class="hidden">
+                                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Seleccione un servicio:</h3>
+                                    <select id="service-select" class="block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <option value="especialidad">Consulta Especialidad Online</option>
+                                        <!-- Añadir más opciones según sea necesario -->
+                                    </select>
                                 </div>
 
-                                <!-- Búsqueda por Servicio y Staff en una fila -->
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <!-- Búsqueda por Servicio -->
-                                    <div id="service-search" class="hidden">
-                                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Seleccione un servicio:</h3>
-                                        <select id="service-select" class="block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                                            <option value="especialidad">Consulta Especialidad Online</option>
-                                            <!-- Añadir más opciones según sea necesario -->
-                                        </select>
-                                    </div>
-
-                                    <!-- Búsqueda por Staff -->
-                                    <div id="staff-search" class="hidden">
-                                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Seleccionar Doctor:</h3>
-                                        <select id="staff-select" class="block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                                            <option value="doctor1">Dr. Nicolás Villalba</option>
-                                            <option value="doctor2">Dra. Kirito Aravena</option>
-                                            <!-- Añadir más opciones según sea necesario -->
-                                        </select>
-                                    </div>
+                               <!-- Búsqueda por Staff -->
+                                <div id="staff-search" class="hidden">
+                                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Seleccionar Doctor:</h3>
+                                    <select id="staff-select" class="block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" onchange="updateDoctorInfoFromSelection()">
+                                        <option value="doctor1" data-name="Dr. Nicolás Villalba" data-image="static/img/doctor1.jpg">Dr. Nicolás Villalba</option>
+                                        <option value="doctor2" data-name="Dra. Kirito Aravena" data-image="static/img/doctor2.jpg">Dra. Kirito Aravena</option>
+                                        <!-- Añadir más opciones según sea necesario -->
+                                    </select>
                                 </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Botón principal "Pedir Hora" -->
-                <div class="text-center mt-6">
-                    <button onclick="searchForTime()" class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">Pedir Hora</button>
+           <!-- Botón principal "Pedir Hora" -->
+            <div class="text-center mt-6">
+                <button onclick="nextStep('step-search', 'step-select', 'search-icon')" 
+                        class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+                    Pedir Hora
+                </button>
+            </div>
+
+        </div>
+        <!-- Fin búsqueda -->
+
+        <!-- Selección -->
+        <div class="step-content hidden p-6 bg-white shadow-md rounded-lg" id="step-select">
+            <p class="text-gray-700 mb-4">Seleccione la fecha y hora para su cita con el profesional seleccionado:</p>
+
+            <div class="flex items-start">
+                <!-- Imagen del Doctor Seleccionado -->
+                <div class="w-1/3 mr-6 text-center">
+                    <img id="doctor-image" src="static/img/Logo Gativet.png" alt="Imagen del Doctor" class="w-full h-auto rounded-lg shadow-md">
+                    <!-- Nombre del Doctor -->
+                    <p id="doctor-name" class="mt-2 text-gray-800 font-semibold">Nombre del Doctor</p>
+                </div>
+
+                <!-- Selección de Fecha y Horas Disponibles -->
+                <div class="w-2/3">
+                    <!-- Selección de Fecha -->
+                    <div class="mb-4">
+                        <label for="date-select" class="block text-gray-700 mb-2">Selecciona una fecha:</label>
+                        <input type="date" id="date-select" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400" onfocus="openDatePicker(this)" onchange="openDatePicker(this)">
+                    </div>
+
+                    <!-- Selección de Hora -->
+                    <div class="mb-4">
+                        <label for="time-select" class="block text-gray-700 mb-2">Horas disponibles:</label>
+                        <div class="flex flex-wrap gap-2">
+                            <!-- Botones de Horarios Disponibles -->
+                            <button class="px-4 py-2 bg-[#18beaa] hover:bg-[#16a89a] text-white rounded focus:outline-none focus:ring-2 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">08:30</button>
+                            <button class="px-4 py-2 bg-[#18beaa] hover:bg-[#16a89a] text-white rounded focus:outline-none focus:ring-2 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">09:30</button>
+                            <button class="px-4 py-2 bg-[#18beaa] hover:bg-[#16a89a] text-white rounded focus:outline-none focus:ring-2 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">10:30</button>
+                            <button class="px-4 py-2 bg-[#18beaa] hover:bg-[#16a89a] text-white rounded focus:outline-none focus:ring-2 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">11:30</button>
+                            <button class="px-4 py-2 bg-[#18beaa] hover:bg-[#16a89a] text-white rounded focus:outline-none focus:ring-2 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">12:30</button>
+                            <button class="px-4 py-2 bg-[#18beaa] hover:bg-[#16a89a] text-white rounded focus:outline-none focus:ring-2 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">13:30</button>
+                            <button class="px-4 py-2 bg-[#18beaa] hover:bg-[#16a89a] text-white rounded focus:outline-none focus:ring-2 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">14:30</button>
+                            <button class="px-4 py-2 bg-[#18beaa] hover:bg-[#16a89a] text-white rounded focus:outline-none focus:ring-2 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">15:30</button>
+                            <button class="px-4 py-2 bg-[#18beaa] hover:bg-[#16a89a] text-white rounded focus:outline-none focus:ring-2 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">16:30</button>
+                            <button class="px-4 py-2 bg-[#18beaa] hover:bg-[#16a89a] text-white rounded focus:outline-none focus:ring-2 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">17:30</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <!-- Fin búsqueda -->
 
-            <!-- Selección -->
-            <div class="step-content hidden p-6 bg-white shadow-md rounded-lg" id="step-select">
-                <h2 class="text-3xl font-bold text-gray-800 mb-6">Selección</h2>
-                <p class="text-gray-700 mb-4">Aquí va el contenido para la selección.</p>
-                <div class="text-center mt-6">
-                    <button onclick="nextStep('step-select', 'step-id', 'select-icon')" class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
-                        Siguiente
-                    </button>
-                </div>
+            <!-- Botón principal "Pedir Hora" -->
+            <div class="text-center mt-6">
+                <button onclick="nextStep('step-search', 'step-select', 'search-icon')" 
+                        class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+                    Pedir Hora
+                </button>
             </div>
+
+
+        </div>
+
+        <!-- Script -->
+        <script>
+            function updateDoctorInfoFromSelection() {
+                const select = document.getElementById('staff-select');
+                const selectedOption = select.options[select.selectedIndex];
+                
+                const name = selectedOption.getAttribute('data-name');
+                const imageUrl = selectedOption.getAttribute('data-image');
+                
+                updateDoctorInfo(name, imageUrl);
+            }
+        
+            function updateDoctorInfo(name, imageUrl) {
+                document.getElementById('doctor-name').textContent = name;
+                document.getElementById('doctor-image').src = imageUrl;
+            }
+        
+            function openDatePicker(input) {
+                input.focus(); // Fuerza el foco en el campo de fecha para abrir el calendario
+            }
+        
+            function searchForTime() {
+                // Cambiar de paso: ocultar el paso de búsqueda y mostrar el paso de selección
+                const stepSearch = document.getElementById('step-search');
+                const stepSelect = document.getElementById('step-select');
+        
+                // Asegúrate de que estos pasos existan y tienen las clases correctas
+                if (stepSearch && stepSelect) {
+                    stepSearch.classList.add('hidden');
+                    stepSelect.classList.remove('hidden');
+                } else {
+                    console.error('No se encontraron los elementos de los pasos.');
+                }
+            }
+            
+        </script>
+        
+    
+        <!-- Fin Seleccion -->
+
+
 
             <!-- Identificación -->
             <div class="step-content hidden p-6 bg-white shadow-md rounded-lg" id="step-id">
@@ -194,42 +281,46 @@
         </div>
     </div>
 
-    <script>
-        function searchForTime() {
-            // Cambiar a la siguiente sección
-            nextStep('step-search', 'step-select', 'search-icon');
-            // Mostrar la sección de búsqueda
+<script>
+    //Agenda:
+function searchForTime() {
+    // Cambiar a la siguiente sección
+    nextStep('step-search', 'step-select', 'search-icon');
+    // Mostrar la sección de búsqueda
+    document.getElementById('service-search').classList.remove('hidden');
+    document.getElementById('staff-search').classList.remove('hidden');
+}
+
+function nextStep(currentStepId, nextStepId, iconId) {
+    document.getElementById(currentStepId).classList.remove('active');
+    document.getElementById(nextStepId).classList.add('active');
+    document.getElementById(currentStepId).classList.add('hidden');
+    document.getElementById(nextStepId).classList.remove('hidden');
+    document.getElementById(iconId).classList.add('completed');
+    document.querySelectorAll('.step-icon-name').forEach(name => {
+        if (name.id === iconId + '-name') {
+            name.classList.add('completed');
+        } else {
+            name.classList.remove('completed');
+        }
+    });
+}
+
+document.querySelectorAll('input[name="search-type"]').forEach(input => {
+    input.addEventListener('change', function() {
+        if (this.value === 'servicio') {
             document.getElementById('service-search').classList.remove('hidden');
+            document.getElementById('staff-search').classList.add('hidden');
+        } else {
+            document.getElementById('service-search').classList.add('hidden');
             document.getElementById('staff-search').classList.remove('hidden');
         }
+    });
+});
 
-        function nextStep(currentStepId, nextStepId, iconId) {
-            document.getElementById(currentStepId).classList.remove('active');
-            document.getElementById(nextStepId).classList.add('active');
-            document.getElementById(currentStepId).classList.add('hidden');
-            document.getElementById(nextStepId).classList.remove('hidden');
-            document.getElementById(iconId).classList.add('completed');
-            document.querySelectorAll('.step-icon-name').forEach(name => {
-                if (name.id === iconId + '-name') {
-                    name.classList.add('completed');
-                } else {
-                    name.classList.remove('completed');
-                }
-            });
-        }
+//Fin Agenda
+</script>
 
-        document.querySelectorAll('input[name="search-type"]').forEach(input => {
-            input.addEventListener('change', function() {
-                if (this.value === 'servicio') {
-                    document.getElementById('service-search').classList.remove('hidden');
-                    document.getElementById('staff-search').classList.add('hidden');
-                } else {
-                    document.getElementById('service-search').classList.add('hidden');
-                    document.getElementById('staff-search').classList.remove('hidden');
-                }
-            });
-        });
-    </script>
 </body>
 </html>
 
