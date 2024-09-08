@@ -9,6 +9,79 @@
   <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/keen-slider@6.8.6/keen-slider.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .step-icon {
+            transition: color 0.3s ease, transform 0.3s ease;
+            color: rgb(24, 190, 170);
+            /* Color por defecto */
+            font-size: 2.5rem;
+            /* Tamaño del ícono */
+        }
+
+        .step-icon.completed {
+            color: #077064;
+            /* Color cuando el paso está completo */
+        }
+
+        .step-icon:hover {
+            color: rgb(24, 190, 170);
+            /* Color al pasar el ratón */
+            transform: scale(1.1);
+        }
+
+        .step-icon-name {
+            transition: color 0.3s ease;
+            color: rgb(24, 190, 170);
+            /* Color por defecto */
+            margin-top: 0.5rem;
+            /* Espacio arriba del nombre */
+        }
+
+        .step-icon-name.completed {
+            color: #077064;
+            /* Color cuando el paso está completo */
+        }
+
+        @media (max-width: 768px) {
+            .step-icon-name {
+                display: none;
+            }
+        }
+
+        .step-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .step-content {
+            width: 100%;
+            margin: 1rem 0;
+            transition: background-color 0.3s ease, border-left 0.3s ease;
+        }
+
+        .step-content.active {
+            background-color: #e6f9f0;
+            /* Color de fondo para la sección activa (verde claro) */
+            border-left: 4px solid rgb(24, 190, 170);
+            /* Línea de borde para la sección activa (verde) */
+        }
+
+        .step-wrapper {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex: 1;
+        }
+
+        .step-wrapper>div {
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100 p-6 background-image">
@@ -111,7 +184,7 @@
           </div>
       </nav>
       <div class="mt-8 md:mb-8 flex justify-center space-x-6 md:order-3  ">
-          <a href="#" class="text-white hover:text-gray-200">
+          <a href="https://web.facebook.com/" class="text-white hover:text-gray-200">
               <span class="sr-only">Facebook</span>
               <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path fill-rule="evenodd"
