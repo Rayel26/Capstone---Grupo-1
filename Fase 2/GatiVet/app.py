@@ -55,9 +55,9 @@ def contact():
     return render_template('contact.html')
 
 # Ruta para la página de agendar hora
-@app.route('/agenda')
-def agenda():
-    return render_template('agenda.html')
+@app.route('/schedule')
+def schedule():
+    return render_template('schedule.html')
 
 # Ruta para la página de perfil
 @app.route('/profile')
