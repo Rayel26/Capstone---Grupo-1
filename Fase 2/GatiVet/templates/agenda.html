@@ -76,6 +76,7 @@
                                         <select id="staff-select"
                                             class="block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                                             onchange="updateDoctorInfoFromSelection()">
+                                            <option value="none" selected>Seleccione un doctor</option>
                                             <option value="doctor1" data-name="Dr. Nicolás Villalba"
                                                 data-image="static/img/doctor1.jpg">Dr. Nicolás Villalba</option>
                                             <option value="doctor2" data-name="Dra. Kirito Aravena"
@@ -91,12 +92,24 @@
                 </div>
 
                 <!-- Botón principal "Pedir Hora" -->
+                <!-- Botón principal "Pedir Hora" -->
                 <div class="text-center mt-6">
-                    <button onclick="nextStep('step-search', 'step-select', 'search-icon')"
+                    <button onclick="
+                        // Validación para el paso de selección
+                        if (document.getElementById('step-search').classList.contains('active')) {
+                            const doctorSelected = document.getElementById('staff-select').value;
+                            if (!doctorSelected || doctorSelected === 'none') {
+                                alert('Por favor, seleccione un doctor.');
+                                return;
+                            }
+                        }
+                        nextStep('step-search', 'step-select', 'search-icon')
+                    "
                         class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
                         Pedir Hora
                     </button>
                 </div>
+
 
             </div>
             <!-- Fin búsqueda -->
@@ -188,25 +201,35 @@
         function nextStep(currentStepId, nextStepId, iconId) {
             // Validación para el paso de selección
             if (currentStepId === 'step-select') {
+                // Verifica si se ha seleccionado un doctor
                 const doctorSelected = document.getElementById('staff-select').value;
+                console.log('Doctor Selected:', doctorSelected); // Depuración
+    
                 if (!doctorSelected || doctorSelected === 'none') {
                     alert('Por favor, seleccione un doctor.');
                     return;
                 }
     
+                // Verifica si se ha seleccionado una fecha
                 const dateSelected = document.getElementById('date-select').value;
-                const timeSelected = document.querySelector('button.selected-time');
+                console.log('Date Selected:', dateSelected); // Depuración
+    
                 if (!dateSelected) {
                     alert('Por favor, seleccione una fecha.');
-                    return;
+                    return; // Detiene la ejecución para que no avance al siguiente paso
                 }
+    
+                // Verifica si se ha seleccionado una hora
+                const timeSelected = document.querySelector('#step-select button.selected-time');
+                console.log('Time Selected:', timeSelected ? timeSelected.textContent : 'None'); // Depuración
+    
                 if (!timeSelected) {
                     alert('Por favor, seleccione una hora.');
-                    return;
+                    return; // Detiene la ejecución para que no avance al siguiente paso
                 }
             }
     
-            // Cambio de pasos
+            // Si todas las validaciones son correctas, cambia de paso
             document.getElementById(currentStepId).classList.remove('active');
             document.getElementById(nextStepId).classList.add('active');
             document.getElementById(currentStepId).classList.add('hidden');
@@ -261,6 +284,8 @@
             button.classList.add('selected-time');
         }
     </script>
+    
+    
     {% endblock %}
     
 
