@@ -100,12 +100,16 @@
                 class="w-12 h-12">
         </a>
         <nav
-            class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center">
-            <a href="{{ url_for('home') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Inicio</a>
-            <a href="{{ url_for('products') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Productos</a>
-            <a href="{{ url_for('help') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Nuestro Refugio</a>
-            <a href="{{ url_for('contact') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Contáctanos</a>
-        </nav>
+          class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center">
+          <a href="{{ url_for('home') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Inicio</a>
+          <a href="{{ url_for('products') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Productos</a>
+          <a href="{{ url_for('help') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Nuestro Refugio</a>
+          <a href="{{ url_for('contact') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Contáctanos</a>
+          <a href="{{ url_for('cart') }}" class="mr-5 text-gray-600 underline-animated cursor-pointer">
+            <i class="fas fa-shopping-cart fa-lg"></i>
+          </a>
+      </nav>
+
         <a href="{{ url_for('login') }}"
             class="inline-flex items-center bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 rounded-full focus:outline-none text-base mt-4 md:mt-0 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
             Iniciar Sesión

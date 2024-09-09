@@ -52,5 +52,3 @@ function toggleSidebar() {
 }
 
 //fin perfil
-
-
