@@ -6,7 +6,7 @@
 
 <!-- Body-->
 <body class="bg-gray-100">
-    <div class="max-w-4xl mx-auto my-10 p-6 bg-white shadow-md rounded-lg">
+    <div class="max-w-5xl mx-auto my-10 p-6 bg-white shadow-md rounded-lg">
         <!-- Pasos de progreso -->
         <div class="step-container">
             <div class="step-wrapper">
@@ -23,7 +23,7 @@
                     <i class="fas fa-check step-icon" id="select-icon"></i>
                     <span class="step-icon-name text-sm" id="select-icon-name">Seleccionar Fecha y Hora</span>
                 </div>
-                <div class="flex flex-col items-center">
+                <div class="flex flex-col items-center"></div>
                     <i class="fas fa-paw step-icon" id="pet-icon"></i>
                     <span class="step-icon-name text-sm" id="pet-icon-name">Datos de Mascota</span>
                 </div>
@@ -58,7 +58,7 @@
                     </button>
                 </div>
             </div>
-            <!-- Fin identificación -->
+            <!-- Fin Identificación -->
 
             <!-- Búsqueda -->
             <div class="step-content hidden p-6 bg-white shadow-md rounded-lg" id="step-search">
@@ -152,7 +152,7 @@
                     <!-- Imagen del Doctor Seleccionado -->
                     <div class="w-1/3 mr-6 text-center">
                         <img id="doctor-image" src="static/img/Logo Gativet.png" alt="Imagen del Doctor"
-                            class="w-full h-auto rounded-lg shadow-md">
+                             class="w-full h-auto rounded-lg shadow-md">
                         <!-- Nombre del Doctor -->
                         <p id="doctor-name" class="mt-2 text-gray-800 font-semibold">Nombre del Doctor</p>
                     </div>
@@ -163,207 +163,169 @@
                         <div class="mb-4">
                             <label for="date-select" class="block text-gray-700 mb-2">Selecciona una fecha:</label>
                             <input type="date" id="date-select"
-                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400">
+                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400">
                         </div>
 
                         <!-- Selección de Hora -->
                         <div class="mb-4">
                             <label for="time-select" class="block text-gray-700 mb-2">Selecciona una hora:</label>
-                            <div id="time-select" class="flex flex-wrap gap-2">
-                                <!-- Botones de horas (ejemplo) -->
-                                <button type="button" class="px-4 py-2 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer" data-time="09:00">09:00</button>
-                                <button type="button" class="px-4 py-2 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer" data-time="10:00">10:00</button>
-                                <button type="button" class="px-4 py-2 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer" data-time="11:00">11:00</button>
-                            </div>
-                            <input type="hidden" id="selected-time"> <!-- Campo oculto para almacenar la hora seleccionada -->
+                            <select id="time-select"
+                                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400">
+                                <!-- Opciones de horas (ejemplo) -->
+                                <option value="09:00">09:00</option>
+                                <option value="10:00">10:00</option>
+                                <option value="11:00">11:00</option>
+                            </select>
                         </div>
                     </div>
-
                 </div>
 
-                <!-- Botón principal "Pedir Hora" -->
                 <div class="text-center mt-6">
-                    <button onclick="
-                            if (!validateDateTime()) return;
-                            nextStep('step-select', 'step-pet', 'select-icon');
-                            "
-                        class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
-                        Pedir Hora
+                    <button onclick="nextStep('step-select', 'step-pet', 'select-icon')"
+                    class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+                        Siguiente
                     </button>
-
                 </div>
             </div>
-            <!-- Fin selección -->
+            <!-- Fin Selección -->
 
             <!-- Datos de Mascota -->
-            <!-- Selección de Mascota -->
             <div class="step-content hidden p-6 bg-white shadow-md rounded-lg" id="step-pet">
-                <h4 class="text-3xl font-bold text-gray-800 mb-6">Seleccione su mascota:</h4>
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Datos de Mascota</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Nombre de la Mascota -->
+                    <div class="mb-6">
+                        <label for="pet-name" class="block text-gray-700 mb-2">Nombre de la Mascota:</label>
+                        <input type="text" id="pet-name" placeholder="Nombre de la Mascota"
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400">
+                    </div>
 
-                <!-- Selector de mascotas -->
-                <div class="mb-4">
-                    <label for="pet-select" class="block text-gray-700 mb-2">Seleccione una mascota:</label>
-                    <select id="pet-select"
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
-                        onchange="updatePetDetails()">
-                        <!-- Opciones de ejemplo, deben ser generadas dinámicamente con JavaScript -->
-                        <option value="">Seleccione una mascota</option>
-                        <option value="1" data-name="Firulais" data-age="5" data-breed="Labrador" data-image="path/to/image1.jpg">Firulais</option>
-                        <option value="2" data-name="Mittens" data-age="3" data-breed="Siamés" data-image="path/to/image2.jpg">Mittens</option>
-                        <!-- Añadir más opciones según sea necesario -->
-                    </select>
-                </div>
+                    <!-- Edad de la Mascota -->
+                    <div class="mb-6">
+                        <label for="pet-age" class="block text-gray-700 mb-2">Edad de la Mascota:</label>
+                        <input type="number" id="pet-age" placeholder="Edad de la Mascota"
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400">
+                    </div>
 
-                <!-- Tarjeta de detalles de la mascota -->
-                <div id="pet-card" class="hidden bg-gray-100 p-6 rounded-lg shadow-lg">
-                    <div class="flex items-center mb-4">
-                        <img id="pet-image" src="" alt="Imagen de la mascota" class="w-32 h-32 object-cover rounded-lg shadow-md">
-                        <div class="ml-6">
-                            <h5 id="pet-name" class="text-2xl font-semibold text-gray-800">Nombre de la mascota</h5>
-                            <p id="pet-age" class="text-gray-700">Edad: X años</p>
-                            <p id="pet-breed" class="text-gray-700">Raza: X raza</p>
-                        </div>
+                    <!-- Especie de la Mascota -->
+                    <div class="mb-6">
+                        <label for="pet-species" class="block text-gray-700 mb-2">Especie:</label>
+                        <select id="pet-species"
+                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400">
+                            <option value="dog">Perro</option>
+                            <option value="cat">Gato</option>
+                            <option value="other">Otro</option>
+                        </select>
+                    </div>
+
+                    <!-- Problema de Salud -->
+                    <div class="mb-6">
+                        <label for="health-issue" class="block text-gray-700 mb-2">Problema de Salud:</label>
+                        <textarea id="health-issue" rows="4" placeholder="Descripción del problema de salud"
+                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"></textarea>
                     </div>
                 </div>
-
-                <!-- Detalles de la cita -->
-                <div class="mb-4 mt-6">
-                    <label for="appointment-details" class="block text-gray-700 mb-2">Detalles de la cita:</label>
-                    <textarea id="appointment-details" rows="4"
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
-                        placeholder="Especifique qué le pasa a su mascota o lo que necesita para la cita."></textarea>
-                </div>
-
-                <!-- Botón para enviar -->
+                
+                <!-- Botón de Siguiente -->
                 <div class="text-center mt-6">
-                    <button onclick="
-                        const appointmentDetails = document.getElementById('appointment-details').value;
-                        if (!appointmentDetails) {
-                            alert('Por favor, complete los detalles de la cita.');
-                            return;
-                        }
-                        alert('Cita solicitada con éxito.');
-                    "
+                    <button onclick="nextStep('step-pet', 'step-success', 'pet-icon')"
                     class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
-                        Confirmar Cita
+                        Siguiente
                     </button>
                 </div>
             </div>
-            <!-- Fin datos de mascota -->
-
+            <!-- Fin Datos de Mascota -->
 
             <!-- Éxito -->
             <div class="step-content hidden p-6 bg-white shadow-md rounded-lg" id="step-success">
                 <h2 class="text-3xl font-bold text-gray-800 mb-6">¡Éxito!</h2>
-                <p class="text-gray-700 mb-4">Tu cita ha sido confirmada exitosamente.</p>
-                <p class="text-gray-600 mb-4">Te hemos enviado un correo electrónico con los detalles de la cita.</p>
-                <div class="text-center">
-                    <a href="/" class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+                <p class="text-gray-700 mb-4">Tu cita ha sido reservada exitosamente. Recibirás una confirmación por correo electrónico.</p>
+                <div class="text-center mt-6">
+                    <button onclick="window.location.href='/'"
+                    class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
                         Volver al Inicio
-                    </a>
+                    </button>
                 </div>
             </div>
-            <!-- Fin éxito -->
+            <!-- Fin Éxito -->
         </div>
     </div>
-
-    <!-- Scripts -->
-    <script>
-        // Función para cambiar de paso
-        function nextStep(currentStep, nextStep, currentIcon) {
-            document.getElementById(currentStep).classList.add('hidden');
-            document.getElementById(nextStep).classList.remove('hidden');
-            
-            const stepIcons = document.querySelectorAll('.step-icon');
-            stepIcons.forEach(icon => icon.classList.remove('step-icon-active'));
-            document.getElementById(currentIcon).classList.add('step-icon-active');
-        }
-    
-        // Validar RUT
-        function isValidRut(rut) {
-            const rutPattern = /^\d{1,2}\.\d{3}\.\d{3}-[\dKk]$/;
-            return rutPattern.test(rut);
-        }
-    
-        // Formatear RUT
-        function formatRut() {
-            const input = document.getElementById('rut-input');
-            let value = input.value.replace(/[^0-9kK]/g, ''); // Eliminar caracteres no válidos
-    
-            if (value.length > 8) {
-                value = value.slice(0, 2) + '.' + value.slice(2, 5) + '.' + value.slice(5, 8) + '-' + value.slice(8, 9); // Formatear
-            } else if (value.length > 5) {
-                value = value.slice(0, 2) + '.' + value.slice(2, 5) + '.' + value.slice(5); // Formatear
-            } else if (value.length > 2) {
-                value = value.slice(0, 2) + '.' + value.slice(2); // Formatear
-            }
-    
-            input.value = value;
-        }
-    
-        // Cambiar entre búsqueda por staff y servicio
-        function toggleSearch(searchType) {
-            document.getElementById('service-search').classList.add('hidden');
-            document.getElementById('staff-search').classList.add('hidden');
-    
-            if (searchType === 'staff') {
-                document.getElementById('staff-search').classList.remove('hidden');
-            } else if (searchType === 'service') {
-                document.getElementById('service-search').classList.remove('hidden');
-            }
-        }
-    
-        // Actualizar la información del doctor seleccionado
-        function updateDoctorInfoFromSelection() {
-            const selectedOption = document.querySelector('#staff-select option:checked');
-            const doctorName = selectedOption.getAttribute('data-name');
-            const doctorImage = selectedOption.getAttribute('data-image');
-    
-            if (doctorName) {
-                document.getElementById('doctor-name').innerText = doctorName;
-                document.getElementById('doctor-image').src = doctorImage;
-            }
-        }
-    
-        // Establecer la hora seleccionada
-        document.querySelectorAll('#time-select button').forEach(button => {
-            button.addEventListener('click', function() {
-                document.getElementById('selected-time').value = this.getAttribute('data-time');
-            });
-        });
-    
-        // Validar la selección de fecha y hora
-        function validateDateTime() {
-            const selectedDate = document.getElementById('date-select').value;
-            const selectedTime = document.getElementById('selected-time').value;
-            if (!selectedDate || !selectedTime) {
-                alert('Por favor, seleccione una fecha y hora.');
-                return false;
-            }
-            return true;
-        }
-
-        function updatePetDetails() {
-        const petSelect = document.getElementById('pet-select');
-        const selectedOption = petSelect.options[petSelect.selectedIndex];
-
-        const petName = selectedOption.getAttribute('data-name');
-        const petAge = selectedOption.getAttribute('data-age');
-        const petBreed = selectedOption.getAttribute('data-breed');
-        const petImage = selectedOption.getAttribute('data-image');
-
-        if (petName && petAge && petBreed && petImage) {
-            document.getElementById('pet-name').innerText = petName;
-            document.getElementById('pet-age').innerText = `Edad: ${petAge} años`;
-            document.getElementById('pet-breed').innerText = `Raza: ${petBreed}`;
-            document.getElementById('pet-image').src = petImage;
-            document.getElementById('pet-card').classList.remove('hidden');
-        } else {
-            document.getElementById('pet-card').classList.add('hidden');
-        }
-    }
-    </script>
-
-
 </body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+<script>
+// Función para avanzar al siguiente paso
+function nextStep(currentStepId, nextStepId, iconId) {
+    document.getElementById(currentStepId).classList.add('hidden');
+    document.getElementById(nextStepId).classList.remove('hidden');
+    document.getElementById(iconId).classList.add('text-green-500');
+}
+
+// Función para validar el RUT
+function isValidRut(rut) {
+    // Limpia el RUT de puntos y guion
+    rut = rut.replace(/[.\-]/g, '');
+
+    // Verifica la longitud mínima y máxima del RUT
+    if (rut.length < 8 || rut.length > 9) {
+        return false;
+    }
+
+    // Extrae el cuerpo y el dígito verificador
+    let body = rut.slice(0, -1);
+    let checkDigit = rut.slice(-1).toUpperCase();
+
+    // Calcula el dígito verificador
+    let sum = 0;
+    let multiplier = 2;
+
+    for (let i = body.length - 1; i >= 0; i--) {
+        sum += parseInt(body[i]) * multiplier;
+        multiplier = (multiplier % 7) + 1;
+    }
+
+    let calculatedDigit = 11 - (sum % 11);
+    if (calculatedDigit === 11) calculatedDigit = '0';
+    if (calculatedDigit === 10) calculatedDigit = 'K';
+
+    return calculatedDigit === checkDigit;
+}
+
+// Función para formatear el RUT (opcional)
+function formatRut() {
+    let rutInput = document.getElementById('rut-input');
+    let rut = rutInput.value.replace(/[.\-]/g, '');
+    
+    // Formatea el RUT en el formato xx.xxx.xxx-x
+    if (rut.length > 1) {
+        rut = rut.slice(0, -1) + '-' + rut.slice(-1);
+    }
+    if (rut.length > 6) {
+        rut = rut.slice(0, -4) + '.' + rut.slice(-4);
+    }
+    if (rut.length > 10) {
+        rut = rut.slice(0, -8) + '.' + rut.slice(-8);
+    }
+    
+    rutInput.value = rut;
+}
+
+// Función para mostrar/ocultar la búsqueda por servicio o staff
+function toggleSearch(type) {
+    document.getElementById('service-search').classList.toggle('hidden', type !== 'service');
+    document.getElementById('staff-search').classList.toggle('hidden', type !== 'staff');
+}
+
+// Función para actualizar la información del doctor seleccionado
+function updateDoctorInfoFromSelection() {
+    const selectElement = document.getElementById('staff-select');
+    const selectedOption = selectElement.options[selectElement.selectedIndex];
+    const doctorImage = document.getElementById('doctor-image');
+    const doctorName = document.getElementById('doctor-name');
+
+    doctorImage.src = selectedOption.getAttribute('data-image');
+    doctorName.textContent = selectedOption.getAttribute('data-name');
+}
+</script>
+
 {% endblock %}
