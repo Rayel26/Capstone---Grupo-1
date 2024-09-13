@@ -12,19 +12,19 @@
             <div class="step-wrapper">
                 <!-- Primer paso: Identificación -->
                 <div class="flex flex-col items-center">
-                    <i class="fas fa-id-card step-icon" id="id-icon"></i>
+                    <i class="fas fa-id-card step-icon" id="id-icon" onclick="goToStep('step-id', 'id-icon')"></i>
                     <span class="step-icon-name text-sm" id="id-icon-name">Identificación</span>
                 </div>
                 <div class="flex flex-col items-center">
-                    <i class="fas fa-search step-icon" id="search-icon"></i>
+                    <i class="fas fa-search step-icon" id="search-icon" onclick="goToStep('step-search', 'search-icon')"></i>
                     <span class="step-icon-name text-sm" id="search-icon-name">Buscar</span>
                 </div>
                 <div class="flex flex-col items-center">
-                    <i class="fas fa-check step-icon" id="select-icon"></i>
+                    <i class="fas fa-check step-icon" id="select-icon" onclick="goToStep('step-select', 'select-icon')"></i>
                     <span class="step-icon-name text-sm" id="select-icon-name">Seleccionar Fecha y Hora</span>
                 </div>
                 <div class="flex flex-col items-center">
-                    <i class="fas fa-paw step-icon" id="pet-icon"></i>
+                    <i class="fas fa-paw step-icon" id="pet-icon" onclick="goToStep('step-pet', 'pet-icon')"></i>
                     <span class="step-icon-name text-sm" id="pet-icon-name">Datos de Mascota</span>
                 </div>
                 <div class="flex flex-col items-center">
@@ -196,73 +196,82 @@
             <!-- Fin selección -->
 
             <!-- Datos de Mascota -->
-            <!-- Selección de Mascota -->
-            <div class="step-content hidden p-6 bg-white shadow-md rounded-lg" id="step-pet">
-                <h4 class="text-3xl font-bold text-gray-800 mb-6">Seleccione su mascota:</h4>
+    <!-- Selección de Mascota -->
+    <div class="step-content hidden p-6 bg-white shadow-md rounded-lg" id="step-pet">
+        <h4 class="text-3xl font-bold text-gray-800 mb-6">Seleccione su mascota:</h4>
 
-                <!-- Selector de mascotas -->
-                <div class="mb-4">
-                    <label for="pet-select" class="block text-gray-700 mb-2">Seleccione una mascota:</label>
-                    <select id="pet-select"
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
-                        onchange="updatePetDetails()">
-                        <!-- Opciones de ejemplo, deben ser generadas dinámicamente con JavaScript -->
-                        <option value="">Seleccione una mascota</option>
-                        <option value="1" data-name="Firulais" data-age="5" data-breed="Labrador" data-image="path/to/image1.jpg">Firulais</option>
-                        <option value="2" data-name="Mittens" data-age="3" data-breed="Siamés" data-image="path/to/image2.jpg">Mittens</option>
-                        <!-- Añadir más opciones según sea necesario -->
-                    </select>
-                </div>
+        <!-- Contenedor para Selector y Tarjeta -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Selector de mascotas -->
+            <div>
+                <label for="pet-select" class="block text-gray-700 mb-2">Seleccione una mascota:</label>
+                <select id="pet-select"
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+                    onchange="updatePetDetails()">
+                    <!-- Opciones de ejemplo, deben ser generadas dinámicamente con JavaScript -->
+                    <option value="">Seleccione una mascota</option>
+                    <option value="1" data-name="Firulais" data-age="5" data-breed="Labrador" data-image="https://media.tenor.com/ZJT4S4lpfpIAAAAM/perro-bailando.gif">Firulais</option>
+                    <option value="2" data-name="Mittens" data-age="3" data-breed="Siamés" data-image="https://i.pinimg.com/originals/30/29/51/3029517e824f67d07d86af9bf0b0d795.gif">Mittens</option>
+                    <!-- Añadir más opciones según sea necesario -->
+                </select>
+            </div>
 
-                <!-- Tarjeta de detalles de la mascota -->
-                <div id="pet-card" class="hidden bg-gray-100 p-6 rounded-lg shadow-lg">
-                    <div class="flex items-center mb-4">
-                        <img id="pet-image" src="" alt="Imagen de la mascota" class="w-32 h-32 object-cover rounded-lg shadow-md">
-                        <div class="ml-6">
-                            <h5 id="pet-name" class="text-2xl font-semibold text-gray-800">Nombre de la mascota</h5>
-                            <p id="pet-age" class="text-gray-700">Edad: X años</p>
-                            <p id="pet-breed" class="text-gray-700">Raza: X raza</p>
-                        </div>
+            <!-- Tarjeta de detalles de la mascota -->
+            <div id="pet-card" class="hidden p-6 rounded-lg shadow-lg bg-[#e6f9f0]">
+                <div class="flex flex-col md:flex-row items-center">
+                    <!-- Imagen de la mascota -->
+                    <img id="pet-image" src="" alt="Imagen de la mascota" class="w-32 h-32 object-cover rounded-lg mb-4 md:mb-0 md:mr-6">
+                    <!-- Detalles de la mascota -->
+                    <div>
+                        <h5 id="pet-name" class="text-2xl font-semibold text-gray-800 mb-2">Nombre de la mascota</h5>
+                        <p id="pet-age" class="text-gray-700">Edad: X años</p>
+                        <p id="pet-breed" class="text-gray-700">Raza: X raza</p>
                     </div>
                 </div>
-
-                <!-- Detalles de la cita -->
-                <div class="mb-4 mt-6">
-                    <label for="appointment-details" class="block text-gray-700 mb-2">Detalles de la cita:</label>
-                    <textarea id="appointment-details" rows="4"
-                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
-                        placeholder="Especifique qué le pasa a su mascota o lo que necesita para la cita."></textarea>
-                </div>
-
-                <!-- Botón para enviar -->
-                <div class="text-center mt-6">
-                    <button onclick="
-                        const appointmentDetails = document.getElementById('appointment-details').value;
-                        if (!appointmentDetails) {
-                            alert('Por favor, complete los detalles de la cita.');
-                            return;
-                        }
-                        alert('Cita solicitada con éxito.');
-                    "
-                    class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
-                        Confirmar Cita
-                    </button>
-                </div>
             </div>
-            <!-- Fin datos de mascota -->
+        </div>
 
+        <!-- Detalles de la cita -->
+        <div class="mb-4 mt-6">
+            <label for="appointment-details" class="block text-gray-700 mb-2">Detalles de la cita:</label>
+            <textarea id="appointment-details" rows="4"
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+                placeholder="Especifique qué le pasa a su mascota o lo que necesita para la cita."></textarea>
+        </div>
+
+        <!-- Botón para enviar -->
+        <div class="text-center mt-6">
+            <button onclick="confirmAppointment()"
+            class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+                Confirmar Cita
+            </button>
+        </div>
+    </div>
+        <!-- Fin datos de mascota -->
 
             <!-- Éxito -->
             <div class="step-content hidden p-6 bg-white shadow-md rounded-lg" id="step-success">
                 <h2 class="text-3xl font-bold text-gray-800 mb-6">¡Éxito!</h2>
                 <p class="text-gray-700 mb-4">Tu cita ha sido confirmada exitosamente.</p>
                 <p class="text-gray-600 mb-4">Te hemos enviado un correo electrónico con los detalles de la cita.</p>
-                <div class="text-center">
+
+                <!-- Tarjeta de Resumen de Cita -->
+                <div class="bg-[#f0f9f8] p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Resumen de la Cita</h3>
+                    <p id="summary-date" class="text-gray-700">Fecha: [Fecha]</p>
+                    <p id="summary-time" class="text-gray-700">Hora: [Hora]</p>
+                    <p id="summary-doctor" class="text-gray-700">Doctor: [Nombre del Doctor]</p>
+                    <p id="summary-pet" class="text-gray-700">Mascota: [Nombre de la Mascota]</p>
+                    <p id="summary-address" class="text-gray-700">Domicilio: [Dirección]</p>
+                </div>
+
+                <div class="text-center mt-6">
                     <a href="/" class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
                         Volver al Inicio
                     </a>
                 </div>
             </div>
+
             <!-- Fin éxito -->
         </div>
     </div>
@@ -342,27 +351,69 @@
             }
             return true;
         }
-
+    
         function updatePetDetails() {
-        const petSelect = document.getElementById('pet-select');
-        const selectedOption = petSelect.options[petSelect.selectedIndex];
-
-        const petName = selectedOption.getAttribute('data-name');
-        const petAge = selectedOption.getAttribute('data-age');
-        const petBreed = selectedOption.getAttribute('data-breed');
-        const petImage = selectedOption.getAttribute('data-image');
-
-        if (petName && petAge && petBreed && petImage) {
-            document.getElementById('pet-name').innerText = petName;
-            document.getElementById('pet-age').innerText = `Edad: ${petAge} años`;
-            document.getElementById('pet-breed').innerText = `Raza: ${petBreed}`;
-            document.getElementById('pet-image').src = petImage;
-            document.getElementById('pet-card').classList.remove('hidden');
-        } else {
-            document.getElementById('pet-card').classList.add('hidden');
+            const petSelect = document.getElementById('pet-select');
+            const selectedOption = petSelect.options[petSelect.selectedIndex];
+    
+            const petName = selectedOption.getAttribute('data-name');
+            const petAge = selectedOption.getAttribute('data-age');
+            const petBreed = selectedOption.getAttribute('data-breed');
+            const petImage = selectedOption.getAttribute('data-image');
+    
+            if (petName && petAge && petBreed && petImage) {
+                document.getElementById('pet-name').innerText = petName;
+                document.getElementById('pet-age').innerText = `Edad: ${petAge} años`;
+                document.getElementById('pet-breed').innerText = `Raza: ${petBreed}`;
+                document.getElementById('pet-image').src = petImage;
+                document.getElementById('pet-card').classList.remove('hidden');
+            } else {
+                document.getElementById('pet-card').classList.add('hidden');
+            }
         }
+    
+        function goToStep(stepId, iconId) {
+            // Add logic to return to the previous step
+            const currentStepId = document.querySelector('.step-content:not(.hidden)').id;
+            if (stepId !== currentStepId) {
+                document.getElementById(currentStepId).classList.add('hidden');
+                document.getElementById(stepId).classList.remove('hidden');
+                document.getElementById(iconId).classList.add('text-green-500');
+            }
+        }
+    
+        // Función para confirmar la cita y mostrar la fase de éxito
+        function confirmAppointment() {
+        const appointmentDetails = document.getElementById('appointment-details').value;
+        if (!appointmentDetails) {
+            alert('Por favor, complete los detalles de la cita.');
+            return;
+        }
+
+        // Obtener los detalles de la cita
+        const selectedDate = document.getElementById('date-select').value;
+        const selectedTime = document.getElementById('selected-time').value;
+        const doctorName = document.getElementById('doctor-name').innerText;
+        const petName = document.getElementById('pet-name').innerText;
+
+        console.log(`Fecha: ${selectedDate}`);
+        console.log(`Hora: ${selectedTime}`);
+        console.log(`Doctor: ${doctorName}`);
+        console.log(`Mascota: ${petName}`);
+
+        // Actualizar la tarjeta de resumen de cita
+        document.getElementById('summary-date').innerText = `Fecha: ${selectedDate}`;
+        document.getElementById('summary-time').innerText = `Hora: ${selectedTime}`;
+        document.getElementById('summary-doctor').innerText = `Doctor: ${doctorName}`;
+        document.getElementById('summary-pet').innerText = `Mascota: ${petName}`;
+        document.getElementById('summary-address').innerText = 'Domicilio: [Dirección del domicilio]'; // Puedes ajustar esto si es dinámico
+
+        // Actualiza la fase actual y muestra la fase de éxito
+        goToStep('step-success', 'success-icon');
     }
+
     </script>
+    
 
 
 </body>
