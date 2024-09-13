@@ -3,19 +3,20 @@
 {% block title %}Detalle{% endblock %}
 
 {% block content %}
-
-<body>
-  <div class="bg-gray-100 background-image">
+<body class="bg-gray-100 min-h-screen flex flex-col justify-between">
+  <!-- Main container -->
+  <div class="flex-grow">
     <div class="container mx-auto px-4 py-8">
-      <div class="flex flex-wrap -mx-4">
+      <!-- Flex container for images and details -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Product Images -->
-        <div class="w-full md:w-1/2 px-4 mb-8">
+        <div class="mb-8">
           <img
             src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxoZWFkcGhvbmV8ZW58MHwwfHx8MTcyMTMwMzY5MHww&ixlib=rb-4.0.3&q=80&w=1080"
             alt="Product" class="w-full h-auto rounded-lg shadow-md mb-4" id="mainImage">
           <div class="flex gap-4 py-4 justify-center overflow-x-auto">
             <img
-              src="https://images.unsplash.com/photo-1505751171710-1f6d0ace5a85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxMnx8aGVhZHBobmV8ZW58MHwwfHx8MTcyMTMwMzY5MHww&ixlib=rb-4.0.3&q=80&w=1080"
+              src="https://images.unsplash.com/photo-1505751171710-1f6d0ace5a85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxMnx8aGVhcGhvbmV8ZW58MHwwfHx8MTcyMTMwMzY5MHww&ixlib=rb-4.0.3&q=80&w=1080"
               alt="Thumbnail 1"
               class="w-16 sm:w-20 object-cover rounded-md cursor-pointer opacity-60 hover:opacity-100 transition duration-300"
               onclick="changeImage(this.src)">
@@ -38,7 +39,7 @@
         </div>
 
         <!-- Product Details -->
-        <div class="w-full md:w-1/2 px-4">
+        <div>
           <h2 class="text-3xl font-bold mb-2">Premium Wireless Headphones</h2>
           <p class="text-gray-600 mb-4">SKU: WH1000XM4</p>
           <div class="mb-4">
@@ -47,31 +48,13 @@
           </div>
           <div class="flex items-center mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-              class="size-6 text-yellow-500">
+              class="h-6 w-6 text-yellow-500">
               <path fill-rule="evenodd"
                 d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
                 clip-rule="evenodd" />
             </svg>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-              class="size-6 text-yellow-500">
-              <path fill-rule="evenodd"
-                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                clip-rule="evenodd" />
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-              class="size-6 text-yellow-500">
-              <path fill-rule="evenodd"
-                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                clip-rule="evenodd" />
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-              class="size-6 text-yellow-500">
-              <path fill-rule="evenodd"
-                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                clip-rule="evenodd" />
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-              class="size-6 text-yellow-500">
+              class="h-6 w-6 text-yellow-500">
               <path fill-rule="evenodd"
                 d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
                 clip-rule="evenodd" />
@@ -100,23 +83,74 @@
           </div>
 
           <div class="flex space-x-4 mb-6">
-            <button
+            <button id="addToCartBtn"
               class="bg-indigo-600 flex gap-2 items-center text-white px-6 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round"
                   d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
               </svg>
-              Add to Cart</button>
-            <button
-              class="bg-white flex gap-2 items-center text-gray-700 border border-gray-300 px-6 py-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M12 7.5v9m4.5-4.5h-9m8.25-8.25H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m6.75 0V6m0 0v6.75H6.75M12 6h1.5M9 3.75H6M9 3.75V6h6.75M9 6V3.75M9 3.75V6m-3 0h1.5M12 6h1.5" />
-              </svg>
-              Buy Now</button>
+              Add to Cart
+            </button>
+          </div>
+          
+          <!-- Modal -->
+          <div id="cartModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 hidden">
+            <div class="bg-white p-6 rounded-md shadow-md text-center">
+              <h2 class="text-lg font-semibold mb-4">Producto añadido al carrito</h2>
+              <p class="text-gray-700 mb-6">El producto se ha añadido correctamente a tu carrito.</p>
+              <button id="closeModalBtn"
+                class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none">Cerrar</button>
+            </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Función para cambiar la imagen principal
+    function changeImage(src) {
+        document.getElementById("mainImage").src = src;
+    }
+
+    // Función para manejar el clic en "Add to Cart"
+    document.getElementById('addToCartBtn').addEventListener('click', function () {
+        // Mostrar el modal
+        document.getElementById('cartModal').classList.remove('hidden');
+        document.getElementById('cartModal').classList.add('flex');
+        
+        // Obtener el conteo del carrito
+        let cartCountElement = document.getElementById('cartCount');
+        let quantityElement = document.getElementById('quantity');
+        let currentCount = parseInt(cartCountElement.textContent) || 0;
+        let quantity = parseInt(quantityElement.value) || 1;
+
+        // Incrementar el conteo con la cantidad seleccionada
+        cartCountElement.textContent = currentCount + quantity;
+
+        // Opcional: Actualizar el nombre del artículo en el modal
+        const itemName = 'Premium Wireless Headphones'; // Actualiza esto si es necesario
+        document.getElementById('modalItemName').textContent = itemName;
+    });
+
+    // Función para manejar el cierre del modal
+    document.getElementById('closeModalBtn').addEventListener('click', function () {
+        // Cerrar el modal
+        document.getElementById('cartModal').classList.add('hidden');
+        document.getElementById('cartModal').classList.remove('flex');
+    });
+
+    // Inicializar el conteo del carrito al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+        // Establecer el conteo en 0
+        let cartCountElement = document.getElementById('cartCount');
+        if (cartCountElement) {
+            cartCountElement.textContent = 0;
+        }
+    });
+</script>
+
+
 </body>
 {% endblock %}

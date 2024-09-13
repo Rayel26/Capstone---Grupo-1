@@ -325,12 +325,24 @@
                                     <span class="sr-only"> Precio normal </span>
                                     <span class="tracking-wider text-gray-900"> $7920 </span>
                                 </p>
+                                <!-- Botón de agregar al carrito -->
                                 <div class="mt-3 flex justify-center text-center mb-2">
                                     <a href="#"
-                                      class="block rounded-md bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 focus:outline-none text-sm transition-transform transform-gpu hover:-translate-y-1 hover:shadow-md cursor-pointer">
-                                      Agregar al carrito
+                                    id="addToCartBtn"
+                                    class="block rounded-md bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 focus:outline-none text-sm transition-transform transform-gpu hover:-translate-y-1 hover:shadow-md cursor-pointer">
+                                    Agregar al carrito
                                     </a>
-                                </div>                  
+                                </div>
+                                
+                                <!-- Modal -->
+                                <div id="cartModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 hidden">
+                                    <div class="bg-white p-6 rounded-md shadow-md text-center">
+                                    <h2 class="text-lg font-semibold mb-4">Producto añadido al carrito</h2>
+                                    <p class="text-gray-700 mb-6">El producto se ha añadido correctamente a tu carrito.</p>
+                                    <button id="closeModalBtn"
+                                        class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none">Cerrar</button>
+                                    </div>
+                                </div>          
                             </div>
                         </a>
                     </li>
@@ -344,6 +356,22 @@
         document.getElementById('filterButton').addEventListener('click', function () {
             var filterMenu = document.getElementById('filterMenu');
             filterMenu.classList.toggle('hidden');
+        });
+
+        document.getElementById('addToCartBtn').addEventListener('click', function () {
+            // Mostrar el modal
+            document.getElementById('cartModal').classList.remove('hidden');
+            document.getElementById('cartModal').classList.add('flex');
+
+            // Incrementar el número en el icono del carrito
+            let cartCountElement = document.getElementById('cartCount');
+            let currentCount = parseInt(cartCountElement.textContent) || 0;
+            cartCountElement.textContent = currentCount + 1;
+        });
+
+        document.getElementById('closeModalBtn').addEventListener('click', function () {
+            // Cerrar el modal
+            document.getElementById('cartModal').classList.add('hidden');
         });
     </script>
 </body>
