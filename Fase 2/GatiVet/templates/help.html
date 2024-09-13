@@ -5,94 +5,86 @@
 {% block content %}
 <!-- Style Carrusel-->
 <style>
-    .carousel-slide {
-        transition: transform 0.5s ease-in-out;
-    }
+/* Estilos para el carrusel */
+.carousel-slide {
+  display: flex;
+}
+
+.carousel-slide > div {
+  flex-shrink: 0;
+}
+
+button {
+  cursor: pointer;
+}
+
 </style>
 
 <!-- Header 2-->
+<!-- Header 2 -->
 <header>
-    <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-        <div class="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-                <h3 class="text-2xl font-bold text-gray-900 sm:text-1xl">🐾 ¡Ayuda a nuestros amigos felinos! 🐾</h3>
-
-                <p class="mt-1.5 text-sm text-gray-500">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iure, recusandae.
+    <div class="relative flex flex-col items-center max-w-screen-xl px-4 mx-auto md:flex-row sm:px-6 p-8">
+        <div class="flex items-center py-5 md:w-1/2 md:pb-20 md:pt-10 md:pr-10">
+            <div class="text-left">
+                <h2 class="text-3xl font-extrabold leading-10 tracking-tight text-gray-500 sm:text-5xl sm:leading-none md:text-6xl">
+                    ¡Ayuda a nuestros 
+                    <span class="font-bold" style="color: #18beaa;">amigos felinos!</span>
+                </h2>
+                <p class="max-w-md mx-auto mt-3 text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl text-justify">
+                    <strong>Cada aporte cuenta, grande o pequeño. Tu donación no solo ayuda a cubrir necesidades básicas,
+                        sino que también contribuye a ofrecer una segunda oportunidad a esos gatos que merecen una vida
+                        llena de amor y cuidado.
+                    </strong>
                 </p>
+                <div class="mt-5 sm:flex md:mt-8">
+                    <div class="rounded-md shadow">
+                        <a href=""
+                            class="flex items-center justify-center w-full px-8 py-3 text-base font-medium leading-6 text-white transition duration-150 ease-in-out border border-transparent rounded-md focus:outline-none md:py-4 md:text-lg md:px-10 bg-[#18beaa] hover:bg-[#18beaa]/80 focus:ring active:bg-[#18beaa]/90 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg">
+                            Haz tu Donación
+                        </a>
+                    </div>
+                </div>
             </div>
-
-            <div class="flex items-center gap-4">
-                <div class="mt-8 flex flex-wrap gap-4 text-center">
-                    <a href="#"
-                        class="block w-full rounded bg-[#18beaa] px-12 py-4 text-sm font-medium text-white shadow hover:bg-[#18beaa]/80 focus:outline-none focus:ring active:bg-[#18beaa]/90 sm:w-auto transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg">
-                        Haz tu Donación
-                    </a>
+        </div>
+        <div class="flex items-center py-5 md:w-1/2 md:pb-20 md:pt-10 md:pl-10">
+            <div class="relative w-full p-3 rounded md:p-8">
+                <div class="rounded-lg bg-white text-black w-full overflow-hidden">
+                    <!-- Carrusel -->
+                    <div class="relative overflow-hidden">
+                        <div class="carousel-slide flex transition-transform duration-700 ease-in-out">
+                            <div class="w-full flex-shrink-0">
+                                <img src="static/img/cathelp.jpg" alt="Imagen 1" class="w-full h-64 object-cover">
+                            </div>
+                            <div class="w-full flex-shrink-0">
+                                <img src="static/img/cathelp2.jpg" alt="Imagen 2" class="w-full h-64 object-cover">
+                            </div>
+                            <div class="w-full flex-shrink-0">
+                                <img src="static/img/cathelp3.jpg" alt="Imagen 3" class="w-full h-64 object-cover">
+                            </div>
+                        </div>
+                        <!-- Controles del carrusel -->
+                        <button class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md" id="prev">
+                            <svg class="w-6 h-6 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+                        <button class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md" id="next">
+                            <svg class="w-6 h-6 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!--Carrusel-->
-<div class="relative bg-cover bg-center bg-no-repeat mb-12 mx-6 sm:mx-8 lg:mx-12 rounded-lg">
-    <!-- Carrusel -->
-    <div class="relative overflow-hidden">
-        <div class="carousel-slide flex transition-transform duration-700 ease-in-out">
-            <div class="w-full flex-shrink-0">
-                <img src="https://via.placeholder.com/800x400?text=Imagen+1" alt="Imagen 1" class="w-full object-cover">
-            </div>
-            <div class="w-full flex-shrink-0">
-                <img src="https://via.placeholder.com/800x400?text=Imagen+2" alt="Imagen 2" class="w-full object-cover">
-            </div>
-            <div class="w-full flex-shrink-0">
-                <img src="https://via.placeholder.com/800x400?text=Imagen+3" alt="Imagen 3" class="w-full object-cover">
-            </div>
-        </div>
-        <!-- Controles del carrusel -->
-        <button class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md" id="prev">
-            <svg class="w-6 h-6 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-        </button>
-        <button class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md" id="next">
-            <svg class="w-6 h-6 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-        </button>
-    </div>
-</div>
 
 <!-- Body -->
 <body>
-    <div class="max-w-screen-xl mx-auto p-16">
-
         <div class="sm:grid lg:grid-cols-3 sm:grid-cols-2 gap-10">
             <div
-            class="hover:bg-[#18beaa] hover:bg-opacity-50 hover:text-white transition duration-300 max-w-sm rounded overflow-hidden shadow-lg">
-            <div class="py-4 px-8">
-                <a href="#">
-                    <h4 class="text-lg mb-3 font-semibold">How to be effective at working remotely?</h4>
-                </a>
-                <p class="mb-2 text-sm text-gray-600">Lorem Ipsum is simply dummy text of the printing and
-                    typesetting
-                    industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
-        
-                <img src="https://images.pexels.com/photos/461077/pexels-photo-461077.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;w=500"
-                    class="w-100">
-        
-                <hr class="mt-4">
-                <span class="text-xs">ARTICLE</span>
-                &nbsp;<span class="text-xs text-gray-500">PROCESS</span>
-            </div>
-        </div>
-
-       
-    
-        
-    
-
-            <div
                 class="hover:bg-[#18beaa] hover:bg-opacity-50 hover:text-white transition duration-300 max-w-sm rounded overflow-hidden shadow-lg">
                 <div class="py-4 px-8">
                     <a href="#">
@@ -130,39 +122,59 @@
                 </div>
             </div>
 
+            <div
+                class="hover:bg-[#18beaa] hover:bg-opacity-50 hover:text-white transition duration-300 max-w-sm rounded overflow-hidden shadow-lg">
+                <div class="py-4 px-8">
+                    <a href="#">
+                        <h4 class="text-lg mb-3 font-semibold">How to be effective at working remotely?</h4>
+                    </a>
+                    <p class="mb-2 text-sm text-gray-600">Lorem Ipsum is simply dummy text of the printing and
+                        typesetting
+                        industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
+
+                    <img src="https://images.pexels.com/photos/461077/pexels-photo-461077.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;w=500"
+                        class="w-100">
+
+                    <hr class="mt-4">
+                    <span class="text-xs">ARTICLE</span>
+                    &nbsp;<span class="text-xs text-gray-500">PROCESS</span>
+                </div>
+            </div>
         </div>
     </div>
 </body>
 
 <!--Script carrusel-->>
 <script>
-        // Script para el carrusel automático
-        let currentIndex = 0;
-        const slides = document.querySelector('.carousel-slide');
-        const totalSlides = slides.children.length;
-        const nextButton = document.getElementById('next');
-        const prevButton = document.getElementById('prev');
+document.addEventListener('DOMContentLoaded', () => {
+  const prevButton = document.getElementById('prev');
+  const nextButton = document.getElementById('next');
+  const slides = document.querySelector('.carousel-slide');
+  let currentIndex = 0;
+  const totalSlides = document.querySelectorAll('.carousel-slide > div').length;
 
-        function showSlide(index) {
-            const offset = -index * 100;
-            slides.style.transform = `translateX(${offset}%)`;
-        }
+  function updateSlide() {
+    slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+  }
 
-        nextButton.addEventListener('click', () => {
-            currentIndex = (currentIndex + 1) % totalSlides;
-            showSlide(currentIndex);
-        });
+  prevButton.addEventListener('click', () => {
+    currentIndex = (currentIndex > 0) ? currentIndex - 1 : totalSlides - 1;
+    updateSlide();
+  });
 
-        prevButton.addEventListener('click', () => {
-            currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-            showSlide(currentIndex);
-        });
+  nextButton.addEventListener('click', () => {
+    currentIndex = (currentIndex < totalSlides - 1) ? currentIndex + 1 : 0;
+    updateSlide();
+  });
 
-        // Carrusel automático
-        setInterval(() => {
-            currentIndex = (currentIndex + 1) % totalSlides;
-            showSlide(currentIndex);
-        }, 3000); // Cambia de imagen cada 3 segundos
+  // Optional: auto-slide
+  setInterval(() => {
+    nextButton.click();
+  }, 3000); // Change slide every 5 seconds
+});
+
+
+
 </script>
 
 {% endblock %}
