@@ -3,111 +3,239 @@
 {% block title %}Contacto{% endblock %}
 
 {% block content %}
-
-<div class="container mx-auto mt-10">
-    <div class="sm:flex shadow-md my-10">
-        <div class="  w-full  sm:w-3/4 bg-white px-10 py-10">
-            <div class="flex justify-between border-b pb-8">
-                <h1 class="font-semibold text-2xl">Carrito de compras</h1>
-                <h2 class="font-semibold text-2xl">3 Items</h2>
-            </div>
-            <div class="md:flex items-strech py-8 md:py-10 lg:py-8 border-t border-gray-50">
-                <div class="md:w-4/12 2xl:w-1/4 w-full">
-                    <img src="https://i.ibb.co/6gzWwSq/Rectangle-20-1.png" alt="Black Leather Purse"
-                        class="h-full object-center object-cover md:block hidden" />
-                    <img src="https://i.ibb.co/TTnzMTf/Rectangle-21.png" alt="Black Leather Purse"
-                        class="md:hidden w-full h-full object-center object-cover" />
-                </div>
-                <div class="md:pl-3 md:w-8/12 2xl:w-3/4 flex flex-col justify-center">
-                    <p class="text-xs leading-3 text-gray-800 md:pt-0 pt-4">RF293</p>
-                    <div class="flex items-center justify-between w-full">
-                        <p class="text-base font-black leading-none text-gray-800">Luxe card holder</p>
-                        <select aria-label="Select quantity"
-                            class="py-2 px-1 border border-gray-200 mr-6 focus:outline-none">
-                            <option>01</option>
-                            <option>02</option>
-                            <option>03</option>
-                        </select>
-                    </div>
-                    <p class="text-xs leading-3 text-gray-600 pt-2">Height: 10 inches</p>
-                    <p class="text-xs leading-3 text-gray-600 py-4">Color: Black</p>
-                    <p class="w-96 text-xs leading-3 text-gray-600">Composition: 100% calf leather</p>
-                    <div class="flex items-center justify-between pt-5">
-                        <div class="flex itemms-center">
-                            <p class="text-xs leading-3 underline text-gray-800 cursor-pointer">Add to favorites</p>
-                            <p class="text-xs leading-3 underline text-red-500 pl-5 cursor-pointer">Remove</p>
+<div class="font-[sans-serif]">
+    <div class="flex justify-center py-12">
+        <div class="max-w-6xl w-full h-max rounded-md px-6 py-8 bg-white shadow-lg">
+            <!-- Container with 3 columns -->
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Column 1: Cart items (Left) -->
+            <div class="bg-[#18beaa] lg:w-1/3 p-6 rounded-md h-[650px] overflow-y-auto">
+                <h2 class="text-lg font-semibold text-white mb-4 text-left">Tus productos</h2>
+                <div class="space-y-6" id="cart-items">
+                    <!-- Example Product 1 -->
+                    <div class="flex items-start gap-4">
+                        <div class="w-28 h-28 flex p-3 bg-gray-300 rounded-md">
+                            <img src='https://readymadeui.com/images/product10.webp'
+                                class="w-full object-contain" />
                         </div>
-                        <p class="text-base font-black leading-none text-gray-800">,000</p>
+                        <div class="text-white flex flex-col justify-start">
+                            <h3 class="text-lg font-semibold text-left">Zapatillas Split</h3>
+                            <ul class="text-sm text-white mt-2">
+                                <li class="flex items-center justify-between">
+                                    Cantidad 
+                                    <div class="flex items-center">
+                                        <button id="decrement-btn" class="flex justify-center items-center w-8 h-8 rounded-l-md text-white focus:outline-none bg-[#18beaa] hover:bg-[#16a597]">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                            </svg>
+                                        </button>
+                                        <input type="text" id="quantity-input" value="2" class="w-12 text-center py-1 border-0 outline-none text-black" readonly />
+                                        <button id="increment-btn" class="flex justify-center items-center w-8 h-8 rounded-r-md text-white focus:outline-none bg-[#18beaa] hover:bg-[#16a597]">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12M6 12h12"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </li>
+                                <li class="flex justify-between text-left">Precio Total <span>$40</span></li>
+                            </ul>
+                        </div>
                     </div>
+                </div>
+                <div class="mt-6 text-white">
+                    <h4 class="text-lg font-semibold text-left">Total <span id="cart-total">$84.00</span></h4>
                 </div>
             </div>
 
-            <div class="md:flex items-strech py-8 md:py-10 lg:py-8 border-t border-gray-50">
-                <div class="md:w-4/12 2xl:w-1/4 w-full">
-                    <img src="https://i.ibb.co/6gzWwSq/Rectangle-20-1.png" alt="Black Leather Purse"
-                        class="h-full object-center object-cover md:block hidden" />
-                    <img src="https://i.ibb.co/TTnzMTf/Rectangle-21.png" alt="Black Leather Purse"
-                        class="md:hidden w-full h-full object-center object-cover" />
-                </div>
-                <div class="md:pl-3 md:w-8/12 2xl:w-3/4 flex flex-col justify-center">
-                    <p class="text-xs leading-3 text-gray-800 md:pt-0 pt-4">RF293</p>
-                    <div class="flex items-center justify-between w-full">
-                        <p class="text-base font-black leading-none text-gray-800">Luxe card holder</p>
-                        <select aria-label="Select quantity"
-                            class="py-2 px-1 border border-gray-200 mr-6 focus:outline-none">
-                            <option>01</option>
-                            <option>02</option>
-                            <option>03</option>
-                        </select>
-                    </div>
-                    <p class="text-xs leading-3 text-gray-600 pt-2">Height: 10 inches</p>
-                    <p class="text-xs leading-3 text-gray-600 py-4">Color: Black</p>
-                    <p class="w-96 text-xs leading-3 text-gray-600">Composition: 100% calf leather</p>
-                    <div class="flex items-center justify-between pt-5">
-                        <div class="flex itemms-center">
-                            <p class="text-xs leading-3 underline text-gray-800 cursor-pointer">Add to favorites</p>
-                            <p class="text-xs leading-3 underline text-red-500 pl-5 cursor-pointer">Remove</p>
+
+                <!-- Column 2: Personal Details and Order Summary (Center) -->
+                <div class="lg:w-1/3 p-6 rounded-md bg-gray-50">
+                    <h2 class="text-2xl font-bold text-gray-800">Completa tu pedido</h2>
+                    <form class="mt-8 space-y-6">
+                        <!-- Personal Details -->
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Informacion personal</h3>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <input type="text" placeholder="Nombre"
+                                        class="px-4 py-3 bg-white text-gray-800 w-full rounded-md border focus:outline-blue-600" />
+                                </div>
+                                <div>
+                                    <input type="text" placeholder="Apellido"
+                                        class="px-4 py-3 bg-white text-gray-800 w-full rounded-md border focus:outline-blue-600" />
+                                </div>
+                                <div>
+                                    <input type="email" placeholder="Correo"
+                                        class="px-4 py-3 bg-white text-gray-800 w-full rounded-md border focus:outline-blue-600" />
+                                </div>
+                                <div>
+                                    <input type="number" placeholder="Número"
+                                        class="px-4 py-3 bg-white text-gray-800 w-full rounded-md border focus:outline-blue-600" />
+                                </div>
+                            </div>
                         </div>
-                        <p class="text-base font-black leading-none text-gray-800">,000</p>
+
+                        <!-- Order Summary -->
+                        <div class="mt-8">
+                            <h3 class="text-lg font-semibold text-gray-800">Resumen de pedido</h3>
+                            <ul class="mt-4 space-y-3">
+                                <li class="flex justify-between">
+                                    <p>Subtotal</p>
+                                    <p id="order-subtotal">$84</p>
+                                </li>
+                                <li class="flex justify-between">
+                                    <p>Envío estimado</p>
+                                    <p>$10</p>
+                                </li>
+                                <li class="flex justify-between">
+                                    <p>Impuesto estimado</p>
+                                    <p>$5</p>
+                                </li>
+                                <li class="flex justify-between text-lg font-bold">
+                                    <p>Total</p>
+                                    <p id="order-total">$99</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Column 3: Payment Method (Right) -->
+                <div class="lg:w-1/3 p-6 rounded-md bg-[#69d9cd]">
+                    <h2 class="text-2xl font-bold text-white">Método de Pago</h2>
+                    <div class="mt-8">
+                        <label class="block text-white mb-2">Número de Tarjeta</label>
+                        <input type="text" placeholder="Número de Tarjeta"
+                            maxlength="16"
+                            pattern="\d{16}"
+                            inputmode="numeric"
+                            class="px-4 py-3 w-full rounded-md bg-white text-gray-800 border border-gray-300 focus:outline-blue-600" />
                     </div>
+                    <div class="mt-4">
+                        <label for="card-expiration-input" class="block text-white mb-2">Fecha de Expiración*</label>
+                        <div class="relative">
+                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+                                <svg class="h-4 w-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M5 5a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1 2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a2 2 0 0 1 2-2ZM3 19v-7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Zm6.01-6a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm-10 4a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <input id="card-expiration-input" type="text" class="block w-full rounded-lg border border-gray-300 bg-gray-50 pl-10 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500" placeholder="MM/YY" required />
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-white mb-2">CVV</label>
+                        <input type="text" placeholder="CVV"
+                            maxlength="3"
+                            pattern="\d{3}"
+                            inputmode="numeric"
+                            class="px-4 py-3 w-full rounded-md bg-white text-gray-800 border border-gray-300 focus:outline-blue-600" />
+                    </div>
+                    <button id="payNowBtn" class="w-full mt-6 py-3 bg-[#18beaa] text-white rounded-md">Pagar Ahora</button>
+
                 </div>
-            </div>
-            <a href="{{ url_for('products') }}"  class="flex font-semibold text-indigo-600 text-sm mt-10">
-                <svg class="fill-current mr-2 text-indigo-600 w-4" viewBox="0 0 448 512">
-                    <path
-                        d="M134.059 296H436c6.627 0 12-5.373 12-12v-56c0-6.627-5.373-12-12-12H134.059v-46.059c0-21.382-25.851-32.09-40.971-16.971L7.029 239.029c-9.373 9.373-9.373 24.569 0 33.941l86.059 86.059c15.119 15.119 40.971 4.411 40.971-16.971V296z" />
-                </svg>
-                Continuar comprando
-            </a>
-        </div>
-        <div id="summary" class=" w-full   sm:w-1/4   md:w-1/2     px-8 py-10">
-            <h1 class="font-semibold text-2xl border-b pb-8">Order Summary</h1>
-            <div class="flex justify-between mt-10 mb-5">
-                <span class="font-semibold text-sm uppercase">Items 3</span>
-                <span class="font-semibold text-sm">590$</span>
-            </div>
-            <div class="py-10">
-                <label for="promo" class="font-semibold inline-block mb-3 text-sm uppercase">
-                    Código de promoción
-                </label>
-                <input type="text" id="promo" placeholder="Ingresa tu código" class="p-2 text-sm w-full" />
-            </div>
-            <button class="bg-red-500 hover:bg-red-600 px-5 py-2 text-sm text-white uppercase">
-                Aplicar
-            </button>
-            <div class="border-t mt-8">
-                <div class="flex font-semibold justify-between py-6 text-sm uppercase">
-                    <span>Total</span>
-                    <span>$600</span>
-                </div>
-                <div class="text-center mt-3">
-                    <a href="{{ url_for('checkout') }}" class="inline-block px-4 py-2 text-white bg-[#18beaa] border border-[#139b89] rounded-md hover:bg-[#139b89] focus:outline-none focus:ring-2 focus:ring-[#18beaa] focus:ring-opacity-50 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-xl">
-                        Checkout
-                    </a>
-                </div>
+
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
 
+<!-- Modal -->
+<div id="cartModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="relative p-4 w-full max-w-sm bg-white rounded-lg shadow-md text-center">
+        <!-- Botón para cerrar el modal -->
+        <button type="button" id="closeModalBtn" class="absolute top-3 right-3 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center">
+            <span class="sr-only">Cerrar modal</span>
+        </button>
+
+        <!-- Contenido del modal -->
+        <div class="p-4 md:p-5 text-center">
+            <svg class="mx-auto mb-4 text-teal-600 w-10 h-10" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <h2 class="text-lg font-semibold mb-4 text-teal-600">Compra completada con exito</h2>
+            <p class="text-gray-700 mb-6">¡Gracias por comprar, el resumen de tu pedido se ha enviado a tu correo!</p>
+            <button id="acceptModalBtn" class="text-white bg-teal-600 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm inline-flex items-center px-4 py-2 text-center">
+                Aceptar
+            </button>
+        </div>
+    </div>
+</div>
+
+
+  <!-- Include flatpickr JS -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  
+  <!-- Include flatpickr Spanish locale -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+
+<script>
+    document.getElementById('increment-btn').addEventListener('click', function() {
+        let quantityInput = document.getElementById('quantity-input');
+        let quantity = parseInt(quantityInput.value);
+        quantityInput.value = quantity + 1;
+
+        // Update the total price
+        updateTotalPrice();
+    });
+
+    document.getElementById('decrement-btn').addEventListener('click', function() {
+        let quantityInput = document.getElementById('quantity-input');
+        let quantity = parseInt(quantityInput.value);
+        if (quantity > 1) {
+            quantityInput.value = quantity - 1;
+
+            // Update the total price
+            updateTotalPrice();
+        }
+    });
+
+    function updateTotalPrice() {
+        let quantity = parseInt(document.getElementById('quantity-input').value);
+        let pricePerItem = 20; // Example price per item
+        let subtotal = quantity * pricePerItem;
+        let shipping = 10; // Example shipping cost
+        let tax = 5; // Example tax amount
+        let total = subtotal + shipping + tax;
+
+        document.getElementById('cart-total').textContent = `$${subtotal}`;
+        document.getElementById('order-subtotal').textContent = `$${subtotal}`;
+        document.getElementById('order-total').textContent = `$${total}`;
+    }
+
+    flatpickr("#card-expiration-input", {
+        dateFormat: "m/y", // Format for user input
+        altInput: true, // Use an alternate input for display
+        altFormat: "m/y", // Format for the alternate input
+        minDate: "today",
+        enableTime: false,
+        mode: "single",
+        defaultDate: "01/24",
+        locale: "es", // Apply Spanish locale
+        onChange: function(selectedDates, dateStr, instance) {
+            console.log(selectedDates, dateStr, instance);
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const payNowBtn = document.getElementById('payNowBtn');
+        const cartModal = document.getElementById('cartModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const acceptModalBtn = document.getElementById('acceptModalBtn');
+
+        // Función para mostrar el modal
+        payNowBtn.addEventListener('click', function() {
+            cartModal.classList.remove('hidden');
+        });
+
+        // Función para cerrar el modal
+        closeModalBtn.addEventListener('click', function() {
+            cartModal.classList.add('hidden');
+        });
+
+        // Función para aceptar y cerrar el modal
+        acceptModalBtn.addEventListener('click', function() {
+            cartModal.classList.add('hidden');
+        });
+    });
+</script>
+{% endblock %}
