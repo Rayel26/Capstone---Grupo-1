@@ -55,11 +55,6 @@ def profile():
 def cart():
     return render_template('cart.html')
 
-# Ruta para la página checkout
-@app.route('/checkout')
-def checkout():
-    return render_template('checkout.html')
-
 
 if __name__ == '__main__':
     app.run(debug=True)

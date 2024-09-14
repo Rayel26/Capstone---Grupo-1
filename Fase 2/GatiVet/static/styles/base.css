@@ -1,0 +1,69 @@
+.step-icon {
+    transition: color 0.3s ease, transform 0.3s ease;
+    color: rgb(24, 190, 170);
+    /* Color por defecto */
+    font-size: 2.5rem;
+    /* Tamaño del ícono */
+}
+
+.step-icon.completed {
+    color: #077064;
+    /* Color cuando el paso está completo */
+}
+
+.step-icon:hover {
+    color: rgb(24, 190, 170);
+    /* Color al pasar el ratón */
+    transform: scale(1.1);
+}
+
+.step-icon-name {
+    transition: color 0.3s ease;
+    color: rgb(24, 190, 170);
+    /* Color por defecto */
+    margin-top: 0.5rem;
+    /* Espacio arriba del nombre */
+}
+
+.step-icon-name.completed {
+    color: #077064;
+    /* Color cuando el paso está completo */
+}
+
+@media (max-width: 768px) {
+    .step-icon-name {
+        display: none;
+    }
+}
+
+.step-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.step-content {
+    width: 100%;
+    margin: 1rem 0;
+    transition: background-color 0.3s ease, border-left 0.3s ease;
+}
+
+.step-content.active {
+    background-color: #e6f9f0;
+    /* Color de fondo para la sección activa (verde claro) */
+    border-left: 4px solid rgb(24, 190, 170);
+    /* Línea de borde para la sección activa (verde) */
+}
+
+.step-wrapper {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex: 1;
+}
+
+.step-wrapper>div {
+    text-align: center;
+}

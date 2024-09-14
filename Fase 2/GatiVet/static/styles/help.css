@@ -1,0 +1,11 @@
+.carousel-slide {
+  display: flex;
+}
+
+.carousel-slide > div {
+  flex-shrink: 0;
+}
+
+button {
+  cursor: pointer;
+}

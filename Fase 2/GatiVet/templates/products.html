@@ -1,6 +1,6 @@
 {% extends "base_producto.html" %}
 
-{% block title %}Contacto{% endblock %}
+{% block title %}Productos{% endblock %}
 
 {% block content %}
 <!--Body-->
@@ -18,7 +18,6 @@
                 que necesitas para mantener a tu amigo peludo feliz, sano y lleno de energía.
             </p>
         </header>
-
         <div class="mt-8 flex flex-col lg:flex-row lg:items-start lg:gap-8">
             <!-- Filtros y Ordenar por para pantallas grandes -->
             <div class="hidden lg:block lg:w-1/4 space-y-4">
@@ -313,7 +312,7 @@
 
                     <!-- Carta de producto-->
                     <li>
-                        <a href="{{ url_for('item') }}" class="group block overflow-hidden">
+                        <a href="{{ url_for('item') }}" class="group block overflow-hidden mt-2 rounded">
                             <img src="https://www.tusmascotas.cl/wp-content/uploads/2020/10/Royal-Canin-Mini-adulto-25Kg.jpg.webp"
                                 alt=""
                                 class="h-[200px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[250px]" />
@@ -325,13 +324,13 @@
                                 
                                 <p class="mt-2">
                                     <span class="sr-only"> Precio normal </span>
-                                    <span class="tracking-wider text-gray-900"> $7920 </span>
+                                    <span class="tracking-wider text-green-500 font-bold"> $7920 </span>
                                 </p>
                                 <!-- Botón de agregar al carrito -->
                                 <div class="mt-3 flex justify-center text-center mb-2">
                                     <a href="#"
                                     id="addToCartBtn"
-                                    class="block rounded-md bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 focus:outline-none text-sm transition-transform transform-gpu hover:-translate-y-1 hover:shadow-md cursor-pointer">
+                                    class="block rounded-md mb-6 bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 focus:outline-none text-sm transition-transform transform-gpu hover:-translate-y-1 hover:shadow-md cursor-pointer">
                                     Agregar al carrito
                                     </a>
                                 </div>
@@ -374,37 +373,7 @@
     </div>
 
 <!-- Script para el botón de filtros en pantallas pequeñas -->
-<script>
-    document.getElementById('filterButton').addEventListener('click', function () {
-        var filterMenu = document.getElementById('filterMenu');
-        filterMenu.classList.toggle('hidden');
-    });
-
-    document.getElementById('addToCartBtn').addEventListener('click', function () {
-        // Mostrar el modal
-        document.getElementById('cartModal').classList.remove('hidden');
-        document.getElementById('cartModal').classList.add('flex');
-
-        // Incrementar el número en el icono del carrito
-        let cartCountElement = document.getElementById('cartCount');
-        let currentCount = parseInt(cartCountElement.textContent) || 0;
-        cartCountElement.textContent = currentCount + 1;
-    });
-
-    document.getElementById('acceptModalBtn').addEventListener('click', function () {
-        // Cerrar el modal
-        document.getElementById('cartModal').classList.add('hidden');
-        document.getElementById('cartModal').classList.remove('flex');
-    });
-
-    // Manejador para el botón de cerrar el modal (X)
-    document.getElementById('closeModalBtn').addEventListener('click', function () {
-        // Cerrar el modal
-        document.getElementById('cartModal').classList.add('hidden');
-        document.getElementById('cartModal').classList.remove('flex');
-    });
+<script src="{{ url_for('static', filename='js/products.js') }}">
 </script>
-
-
 </body>
 {% endblock %}

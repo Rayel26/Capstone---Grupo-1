@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Home{% endblock %}</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/Logo Gativet.png') }}">
   <link href="{{ url_for('static', filename='styles/output.css') }}" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/keen-slider@6.8.6/keen-slider.min.js"></script>
@@ -12,82 +12,11 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/keen-slider@6.8.6/keen-slider.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <!-- Include flatpickr CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <!-- Importa el archivo CSS específico para base -->
+  <link rel="stylesheet" href="static/styles/base.css">  
 
-
-    <style>
-        .step-icon {
-            transition: color 0.3s ease, transform 0.3s ease;
-            color: rgb(24, 190, 170);
-            /* Color por defecto */
-            font-size: 2.5rem;
-            /* Tamaño del ícono */
-        }
-
-        .step-icon.completed {
-            color: #077064;
-            /* Color cuando el paso está completo */
-        }
-
-        .step-icon:hover {
-            color: rgb(24, 190, 170);
-            /* Color al pasar el ratón */
-            transform: scale(1.1);
-        }
-
-        .step-icon-name {
-            transition: color 0.3s ease;
-            color: rgb(24, 190, 170);
-            /* Color por defecto */
-            margin-top: 0.5rem;
-            /* Espacio arriba del nombre */
-        }
-
-        .step-icon-name.completed {
-            color: #077064;
-            /* Color cuando el paso está completo */
-        }
-
-        @media (max-width: 768px) {
-            .step-icon-name {
-                display: none;
-            }
-        }
-
-        .step-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .step-content {
-            width: 100%;
-            margin: 1rem 0;
-            transition: background-color 0.3s ease, border-left 0.3s ease;
-        }
-
-        .step-content.active {
-            background-color: #e6f9f0;
-            /* Color de fondo para la sección activa (verde claro) */
-            border-left: 4px solid rgb(24, 190, 170);
-            /* Línea de borde para la sección activa (verde) */
-        }
-
-        .step-wrapper {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            flex: 1;
-        }
-
-        .step-wrapper>div {
-            text-align: center;
-        }
-    </style>
 </head>
 
 <body class="bg-gray-100 p-6 background-image">
@@ -111,14 +40,14 @@
           <a href="{{ url_for('products') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Productos</a>
           <a href="{{ url_for('help') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Nuestro Refugio</a>
           <a href="{{ url_for('contact') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Contáctanos</a>
-          <a href="{{ url_for('cart') }}" class="relative mr-5 text-gray-600 underline-animated cursor-pointer">
-            <i class="fas fa-shopping-cart fa-lg"></i>
-            <span id="cartCount"
-              class="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center">0</span>
-          </a>
+          
           
       </nav>
-
+      <a href="{{ url_for('cart') }}" class="relative mr-5 mt-2 text-gray-600 underline-animated cursor-pointer">
+        <i class="fas fa-shopping-cart fa-lg"></i>
+        <span id="cartCount"
+          class="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center">0</span>
+      </a>
         <a href="{{ url_for('login') }}"
             class="inline-flex items-center bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 rounded-full focus:outline-none text-base mt-4 md:mt-0 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
             Iniciar Sesión
@@ -171,7 +100,6 @@
             background-size: cover;
             background-position: center;
             background-repeat: repeat;
-            height: 100vh; /* Ajusta esto según el tamaño que desees para el fondo */
             width: 100%;
             }
       </style>

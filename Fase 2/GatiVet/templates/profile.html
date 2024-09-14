@@ -1,111 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}Ayudanos{% endblock %}
+{% block title %}Perfil{% endblock %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard de Perfil de Mascotas</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        /* Sidebar Styles */
-    .step-sidebar {
-        background-color: #ffffff; /* Fondo blanco */
-        border-right: 1px solid #e5e7eb;
-        width: 250px; /* Ancho por defecto */
-        box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
-        transition: width 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        border-radius: 0.5rem; /* Esquinas redondeadas */
-        height: calc(35vh - 2rem); /* Altura fija menos un margen */
-        overflow-y: auto; /* Scroll vertical si el contenido excede la altura */
-    }
-
-    .step-sidebar.collapsed {
-        width: 80px; /* Ancho colapsado */
-    }
-
-    /* Iconos y texto */
-    .step-icon {
-        font-size: 1.5rem;
-        color: rgb(24, 190, 170);
-        transition: color 0.3s ease;
-    }
-
-    .step-icon.active {
-        color: #077064;
-    }
-
-    .step-text {
-        transition: opacity 0.3s ease;
-    }
-
-    .step-sidebar.collapsed .step-text {
-        opacity: 0; /* Oculta el texto en el estado colapsado */
-    }
-
-    /* Botones */
-    .step-sidebar button {
-        transition: background-color 0.3s ease;
-        border: none;
-        padding: 0.5rem;
-        border-radius: 0.25rem;
-        cursor: pointer;
-        text-align: left;
-        display: flex;
-        align-items: center;
-        width: 100%;
-    }
-
-    .step-sidebar button:hover,
-    .step-sidebar button:focus {
-        background-color: #e2f0e8;
-    }
-
-    .step-sidebar button:active {
-        background-color: #c1e1c1;
-    }
-
-    /* Agrega esta clase a tu archivo CSS */
-    .edit-mode {
-        border: 2px solid #18beaa; /* Borde verde para indicar edición */
-        background-color: #f0f8f7; /* Fondo ligeramente diferente */
-    }
-
-    /* Responsividad */
-    @media (max-width: 768px) {
-        .step-sidebar {
-            width: 80px; /* Ancho colapsado */
-            height: 400px; /* Altura fija menos un margen */
-        }
-
-        .step-sidebar .step-text {
-            opacity: 0; /* Oculta el texto en pantallas pequeñas */
-        }
-    }
-
-    /* Ajuste para pantallas grandes */
-    @media (min-width: 1024px) {
-        .step-content input {
-            max-width: 100%; /* Ancho máximo del 50% en pantallas grandes */
-        }
-    }
-
-    /* Alinear el contenedor principal al lado izquierdo */
-    .container {
-        display: flex;
-        width: 100%;
-        margin: 0; /* Elimina cualquier margen por defecto */
-    }
-    </style>
+  <!-- Importa el archivo CSS específico para profile -->
+  <link rel="stylesheet" href="static/styles/profile.css?v=1.0">
 </head>
-
 <body>
     <!-- Container para Sidebar -->
     <div class="container flex">
@@ -224,7 +125,7 @@
         </div>
     </div>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
 
 </body>
 
