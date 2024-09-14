@@ -99,4 +99,39 @@ function closeFelineModal() {
 
 //Carrusel
 
+//Editar mascotas
+    function toggleEditSavePet() {
+        // Obtener los inputs de solo lectura y de edición
+        let readOnlyInputs = document.querySelectorAll('#pets input[type="text"]:not(.hidden)');
+        let editInputs = document.querySelectorAll('#pets input.hidden');
+        
+        // Alternar el estado de visibilidad entre los inputs
+        readOnlyInputs.forEach(input => {
+            input.classList.toggle('hidden');
+        });
+        
+        editInputs.forEach(input => {
+            input.classList.toggle('hidden');
+        });
+
+        // Cambiar el botón de "Editar" a "Guardar"
+        let editButton = document.getElementById('edit-save-button');
+        let saveButton = document.getElementById('save-changes-button');
+        editButton.classList.toggle('hidden');
+        saveButton.classList.toggle('hidden');
+    }
+
+    function savePetChanges() {
+        // Obtener los inputs de edición y transferir el valor a los inputs de solo lectura
+        let readOnlyInputs = document.querySelectorAll('#pets input[type="text"]:not(.hidden)');
+        let editInputs = document.querySelectorAll('#pets input.hidden');
+        
+        editInputs.forEach((input, index) => {
+            readOnlyInputs[index].value = input.value;
+        });
+        
+        // Alternar de nuevo al modo solo lectura
+        toggleEditSavePet();
+    }
+
    
