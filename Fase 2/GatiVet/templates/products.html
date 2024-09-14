@@ -34,6 +34,7 @@
                 <div>
                     <p class="block text-xs font-medium text-gray-700">Filtros</p>
                     <div class="mt-1 space-y-2">
+
                         <!-- Disponibilidad -->
                         <details class="overflow-hidden rounded border border-gray-300 [&_summary::-webkit-details-marker]:hidden">
                             <summary class="flex cursor-pointer items-center justify-between gap-2 p-4 bg-white text-gray-900 transition">
@@ -309,6 +310,7 @@
             <!-- Lista de productos -->
             <div class="lg:w-3/4">
                 <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
                     <!-- Carta de producto-->
                     <li>
                         <a href="{{ url_for('item') }}" class="group block overflow-hidden">
@@ -335,16 +337,34 @@
                                 </div>
                                 
                                 <!-- Modal -->
-                                <div id="cartModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 hidden">
-                                    <div class="bg-white p-6 rounded-md shadow-md text-center">
-                                    <h2 class="text-lg font-semibold mb-4">Producto añadido al carrito</h2>
-                                    <p class="text-gray-700 mb-6">El producto se ha añadido correctamente a tu carrito.</p>
-                                    <button id="closeModalBtn"
-                                    class="block mx-auto rounded bg-[#18beaa] px-12 py-4 text-sm font-medium text-white shadow hover:bg-[#18beaa]/80 focus:outline-none focus:ring active:bg-[#18beaa]/90 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg">
-                                    Aceptar
-                                  </button>
+                                <div id="cartModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 hidden">
+                                    <div class="relative p-4 w-full max-w-sm bg-white rounded-lg shadow-md text-center">
+                                        <!-- Botón para cerrar el modal -->
+                                        <button type="button" id="closeModalBtn" class="absolute top-3 right-3 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center">
+                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                            </svg>
+                                            <span class="sr-only">Cerrar modal</span>
+                                        </button>
+
+                                        <!-- Contenido del modal -->
+                                        <div class="p-4 md:p-5 text-center">
+                                            <svg class="mx-auto mb-4 text-teal-600 w-10 h-10" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            <h2 class="text-lg font-semibold mb-4 text-teal-600">Producto añadido al carrito</h2>
+                                            <p class="text-gray-700 mb-6">El producto se ha añadido correctamente a tu carrito.</p>
+                                            <button id="acceptModalBtn" class="text-white bg-teal-600 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm inline-flex items-center px-4 py-2 text-center">
+                                                Aceptar
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>          
+                                </div>
+
+                                
+
+
+         
                             </div>
                         </a>
                     </li>
@@ -353,28 +373,38 @@
         </div>
     </div>
 
-    <!-- Script para el botón de filtros en pantallas pequeñas -->
-    <script>
-        document.getElementById('filterButton').addEventListener('click', function () {
-            var filterMenu = document.getElementById('filterMenu');
-            filterMenu.classList.toggle('hidden');
-        });
+<!-- Script para el botón de filtros en pantallas pequeñas -->
+<script>
+    document.getElementById('filterButton').addEventListener('click', function () {
+        var filterMenu = document.getElementById('filterMenu');
+        filterMenu.classList.toggle('hidden');
+    });
 
-        document.getElementById('addToCartBtn').addEventListener('click', function () {
-            // Mostrar el modal
-            document.getElementById('cartModal').classList.remove('hidden');
-            document.getElementById('cartModal').classList.add('flex');
+    document.getElementById('addToCartBtn').addEventListener('click', function () {
+        // Mostrar el modal
+        document.getElementById('cartModal').classList.remove('hidden');
+        document.getElementById('cartModal').classList.add('flex');
 
-            // Incrementar el número en el icono del carrito
-            let cartCountElement = document.getElementById('cartCount');
-            let currentCount = parseInt(cartCountElement.textContent) || 0;
-            cartCountElement.textContent = currentCount + 1;
-        });
+        // Incrementar el número en el icono del carrito
+        let cartCountElement = document.getElementById('cartCount');
+        let currentCount = parseInt(cartCountElement.textContent) || 0;
+        cartCountElement.textContent = currentCount + 1;
+    });
 
-        document.getElementById('closeModalBtn').addEventListener('click', function () {
-            // Cerrar el modal
-            document.getElementById('cartModal').classList.add('hidden');
-        });
-    </script>
+    document.getElementById('acceptModalBtn').addEventListener('click', function () {
+        // Cerrar el modal
+        document.getElementById('cartModal').classList.add('hidden');
+        document.getElementById('cartModal').classList.remove('flex');
+    });
+
+    // Manejador para el botón de cerrar el modal (X)
+    document.getElementById('closeModalBtn').addEventListener('click', function () {
+        // Cerrar el modal
+        document.getElementById('cartModal').classList.add('hidden');
+        document.getElementById('cartModal').classList.remove('flex');
+    });
+</script>
+
+
 </body>
 {% endblock %}

@@ -100,10 +100,11 @@
                     <span>Total</span>
                     <span>$600</span>
                 </div>
-                <button
-                    class="bg-indigo-500 font-semibold hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full">
-                    Checkout
-                </button>
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('checkout') }}" class="inline-block px-4 py-2 text-white bg-[#18beaa] border border-[#139b89] rounded-md hover:bg-[#139b89] focus:outline-none focus:ring-2 focus:ring-[#18beaa] focus:ring-opacity-50 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-xl">
+                        Checkout
+                    </a>
+                </div>
             </div>
         </div>
     </div>
