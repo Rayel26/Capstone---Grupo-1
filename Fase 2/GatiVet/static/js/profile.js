@@ -234,3 +234,64 @@ function showContent(sectionId) {
     activeButton.querySelector('i').classList.add('active-step');
     activeButton.querySelector('span').classList.add('active-step');
 }
+
+////////////////////////////////////////////////////////////////
+//Mascotas
+
+document.getElementById('pet-select').addEventListener('change', function() {
+    var select = this;
+    var selectedOption = select.options[select.selectedIndex];
+    
+    var name = selectedOption.getAttribute('data-name');
+    var age = selectedOption.getAttribute('data-age');
+    var species = selectedOption.getAttribute('data-species');
+    var breed = selectedOption.getAttribute('data-breed');
+    var birthdate = selectedOption.getAttribute('data-birthdate');  // Obteniendo la fecha de nacimiento
+    
+    var petName = document.getElementById('pet-name');
+    var petAge = document.getElementById('pet-age');
+    var petSpecies = document.getElementById('pet-species');
+    var petBreed = document.getElementById('pet-breed');
+    var petBirthdate = document.getElementById('pet-birthdate');  // Campo para la fecha de nacimiento
+    var editButton = document.getElementById('edit-button');
+    
+    if (name) {
+        petName.value = name;
+        petAge.value = age;
+        petSpecies.value = species;
+        petBreed.value = breed;
+        petBirthdate.value = birthdate;  // Mostrar la fecha de nacimiento
+        editButton.disabled = false;
+    } else {
+        petName.value = 'Selecciona una mascota';
+        petAge.value = '';
+        petSpecies.value = '';
+        petBreed.value = '';
+        petBirthdate.value = '';  // Limpiar la fecha de nacimiento si no se selecciona ninguna mascota
+        editButton.disabled = true;
+    }
+});
+
+// Selección de la imagen y vista previa
+document.getElementById('edit-photo-button').addEventListener('click', function() {
+    document.getElementById('pet-photo').click();
+});
+
+document.getElementById('pet-photo').addEventListener('change', function(e) {
+    const preview = document.getElementById('photo-preview');
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    
+    reader.onloadend = function () {
+        preview.src = reader.result;
+        preview.classList.remove('hidden');
+    };
+    
+    if (file) {
+        reader.readAsDataURL(file);
+    } else {
+        preview.src = "";
+        preview.classList.add('hidden');
+    }
+});
+

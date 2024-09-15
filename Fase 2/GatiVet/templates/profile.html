@@ -39,148 +39,145 @@
 
             <!-- Contenido Principal -->
             <div class="flex-1">
-                <!-- Aquí va el contenido principal de Datos -->
+                <!-- Contenido principal de Datos -->
                 <div id="profile" class="hidden step-content">
                     
-<form id="profile-form" class="grid grid-cols-1 md:grid-cols-2 reduce-column-gap gap-4 form-background">
-    <!-- Columna 1 -->
-    <!-- Nombre -->
-    <div class="mb-4 relative">
-        <label for="first-name" class="text-sm font-medium text-gray-900 block mb-2">Nombre:</label>
-        <div class="relative flex items-center">
-            <input type="text" name="first-name" id="first-name" value="Juan" 
-                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" required readonly>
-            <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
-        </div>
-    </div>
+                    <form id="profile-form" class="grid grid-cols-1 md:grid-cols-2 reduce-column-gap gap-4 form-background">
+                        <!-- Columna 1 -->
+                        <!-- Nombre -->
+                        <div class="mb-4 relative">
+                            <label for="first-name" class="text-sm font-medium text-gray-900 block mb-2">Nombre:</label>
+                            <div class="relative flex items-center">
+                                <input type="text" name="first-name" id="first-name" value="Juan" 
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" required readonly>
+                                <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+                            </div>
+                        </div>
 
-    <!-- Apellido Paterno -->
-    <div class="mb-4 relative">
-        <label for="last-name" class="text-sm font-medium text-gray-900 block mb-2">Apellido Paterno:</label>
-        <div class="relative flex items-center">
-            <input type="text" name="last-name" id="last-name" value="Pérez" 
-                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" required readonly>
-            <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
-        </div>
-    </div>
+                        <!-- Apellido Paterno -->
+                        <div class="mb-4 relative">
+                            <label for="last-name" class="text-sm font-medium text-gray-900 block mb-2">Apellido Paterno:</label>
+                            <div class="relative flex items-center">
+                                <input type="text" name="last-name" id="last-name" value="Pérez" 
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" required readonly>
+                                <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+                            </div>
+                        </div>
 
-    <!-- Apellido Materno -->
-    <div class="mb-4 relative">
-        <label for="maternal-last-name" class="text-sm font-medium text-gray-900 block mb-2">Apellido Materno:</label>
-        <div class="relative flex items-center">
-            <input type="text" name="maternal-last-name" id="maternal-last-name" value="González" 
-                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" required readonly>
-            <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
-        </div>
-    </div>
+                        <!-- Apellido Materno -->
+                        <div class="mb-4 relative">
+                            <label for="maternal-last-name" class="text-sm font-medium text-gray-900 block mb-2">Apellido Materno:</label>
+                            <div class="relative flex items-center">
+                                <input type="text" name="maternal-last-name" id="maternal-last-name" value="González" 
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" required readonly>
+                                <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+                            </div>
+                        </div>
 
-    <!-- Rut -->
-    <div class="mb-4 relative">
-        <label for="rut" class="text-sm font-medium text-gray-900 block mb-2">RUT:</label>
-        <div class="relative flex items-center">
-            <input type="text" name="rut" id="rut" value="12.345.678-9" 
-                pattern="\d{2}\.\d{3}\.\d{3}-[\dkK]" 
-                title="Formato válido: xx.xxx.xxx-x o xx.xxx.xxx-k" 
-                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" 
-                required readonly>
-            <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
-            <span id="rut-error-message" class="text-red-500 text-xs hidden">El RUT debe tener el formato xx.xxx.xxx-x o xx.xxx.xxx-k.</span>
-        </div>
-    </div>
+                        <!-- Rut -->
+                        <div class="mb-4 relative">
+                            <label for="rut" class="text-sm font-medium text-gray-900 block mb-2">RUT:</label>
+                            <div class="relative flex items-center">
+                                <input type="text" name="rut" id="rut" value="12.345.678-9" 
+                                    pattern="\d{2}\.\d{3}\.\d{3}-[\dkK]" 
+                                    title="Formato válido: xx.xxx.xxx-x o xx.xxx.xxx-k" 
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" 
+                                    required readonly>
+                                <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+                                <span id="rut-error-message" class="text-red-500 text-xs hidden">El RUT debe tener el formato xx.xxx.xxx-x o xx.xxx.xxx-k.</span>
+                            </div>
+                        </div>
 
-    <!-- Dirección -->
-    <div class="mb-4 relative">
-        <label for="address" class="text-sm font-medium text-gray-900 block mb-2">Dirección:</label>
-        <div class="relative flex items-center">
-            <input type="text" name="address" id="address" value="Av. Siempre Viva 123" 
-                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" required readonly>
-            <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
-        </div>
-    </div>
+                        <!-- Dirección -->
+                        <div class="mb-4 relative">
+                            <label for="address" class="text-sm font-medium text-gray-900 block mb-2">Dirección:</label>
+                            <div class="relative flex items-center">
+                                <input type="text" name="address" id="address" value="Av. Siempre Viva 123" 
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" required readonly>
+                                <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+                            </div>
+                        </div>
 
-    <!-- Comuna -->
-    <div class="mb-4 relative">
-        <label for="commune" class="text-sm font-medium text-gray-900 block mb-2">Comuna:</label>
-        <div class="relative flex items-center">
-            <select name="commune" id="commune" class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" disabled required>
-                <option value="puente-alto" selected>Puente Alto</option>
-                <option value="santiago">Santiago</option>
-                <option value="la-florida">La Florida</option>
-                <option value="vitacura">Vitacura</option>
-                <!-- Agrega más opciones según sea necesario -->
-            </select>
-            <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
-        </div>
-    </div>
+                        <!-- Comuna -->
+                        <div class="mb-4 relative">
+                            <label for="commune" class="text-sm font-medium text-gray-900 block mb-2">Comuna:</label>
+                            <div class="relative flex items-center">
+                                <select name="commune" id="commune" class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" disabled required>
+                                    <option value="puente-alto" selected>Puente Alto</option>
+                                    <option value="santiago">Santiago</option>
+                                    <option value="la-florida">La Florida</option>
+                                    <option value="vitacura">Vitacura</option>
+                                    <!-- Agrega más opciones según sea necesario -->
+                                </select>
+                                <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+                            </div>
+                        </div>
 
-    <!-- Celular -->
-    <div class="mb-4 relative">
-        <label for="phone" class="text-sm font-medium text-gray-900 block mb-2">Celular:</label>
-        <div class="relative flex items-center">
-            <input 
-                type="text" 
-                name="phone" 
-                id="phone" 
-                value="+569 " 
-                pattern="\+569 \d{4} \d{4}" 
-                title="Ingrese 8 dígitos después del prefijo +569, separados en dos grupos de 4 dígitos." 
-                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background w-full pr-10"
-                readonly
-            />
-            <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
-        </div>
-        <span id="phone-error-message" class="text-red-500 text-xs hidden">El número de teléfono debe tener 8 dígitos después del prefijo</span>
-    </div>
-    <!-- Fin Celular -->
+                        <!-- Celular -->
+                        <div class="mb-4 relative">
+                            <label for="phone" class="text-sm font-medium text-gray-900 block mb-2">Celular:</label>
+                            <div class="relative flex items-center">
+                                <input 
+                                    type="text" 
+                                    name="phone" 
+                                    id="phone" 
+                                    value="+569 " 
+                                    pattern="\+569 \d{4} \d{4}" 
+                                    title="Ingrese 8 dígitos después del prefijo +569, separados en dos grupos de 4 dígitos." 
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background w-full pr-10"
+                                    readonly
+                                />
+                                <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+                            </div>
+                            <span id="phone-error-message" class="text-red-500 text-xs hidden">El número de teléfono debe tener 8 dígitos después del prefijo</span>
+                        </div>
+                        <!-- Fin Celular -->
 
-
-
-
-    <!-- Correo -->
-    <div class="mb-4 relative">
-        <label for="email" class="text-sm font-medium text-gray-900 block mb-2">Correo:</label>
-        <div class="relative flex items-center">
-            <input type="email" name="email" id="email" value="juan.perez@example.com" 
-                pattern=".+@.+" title="El correo debe contener al menos un @" 
-                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" required readonly>
-            <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
-            <!-- Mensaje de error oculto inicialmente -->
-            <span id="email-error-message" class="text-red-500 text-sm hidden">Formato de correo inválido. Por favor ingresa un correo válido.</span>
-        </div>
-    </div>
-    <!-- Fin Correo -->
+                        <!-- Correo -->
+                        <div class="mb-4 relative">
+                            <label for="email" class="text-sm font-medium text-gray-900 block mb-2">Correo:</label>
+                            <div class="relative flex items-center">
+                                <input type="email" name="email" id="email" value="juan.perez@example.com" 
+                                    pattern=".+@.+" title="El correo debe contener al menos un @" 
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" required readonly>
+                                <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+                                <!-- Mensaje de error oculto inicialmente -->
+                                <span id="email-error-message" class="text-red-500 text-sm hidden">Formato de correo inválido. Por favor ingresa un correo válido.</span>
+                            </div>
+                        </div>
+                        <!-- Fin Correo -->
 
 
-    <!-- Inicio Contraseña -->
-    <div class="mb-4 relative">
-        <label for="password" class="text-sm font-medium text-gray-900 block mb-2">Contraseña:</label>
-        <div class="relative flex items-center">
-            <input type="password" name="password" id="password" 
-                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" 
-                required readonly>
-            <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
-        </div>
-        <!-- Mensaje de error debajo del campo -->
-        <span id="password-error-message" class="text-red-500 text-xs mt-1 block hidden">La contraseña debe contener al menos una letra mayúscula y un número.</span>
-    </div>
-    <!-- Fin Contraseña -->
+                        <!-- Inicio Contraseña -->
+                        <div class="mb-4 relative">
+                            <label for="password" class="text-sm font-medium text-gray-900 block mb-2">Contraseña:</label>
+                            <div class="relative flex items-center">
+                                <input type="password" name="password" id="password" 
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" 
+                                    required readonly>
+                                <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+                            </div>
+                            <!-- Mensaje de error debajo del campo -->
+                            <span id="password-error-message" class="text-red-500 text-xs mt-1 block hidden">La contraseña debe contener al menos una letra mayúscula y un número.</span>
+                        </div>
+                        <!-- Fin Contraseña -->
 
 
-    <!-- Region -->
-    <div class="mb-4 relative">
-        <label for="region" class="text-sm font-medium text-gray-900 block mb-2">Región:</label>
-        <div class="relative flex items-center">
-            <select name="region" id="region" class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" disabled required>
-                <option value="region-metropolitana" selected>Región Metropolitana</option>
-                <!-- Agrega más opciones según sea necesario -->
-            </select>
-            <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
-        </div>
-    </div>
-    <!-- Fin Region -->
+                        <!-- Region -->
+                        <div class="mb-4 relative">
+                            <label for="region" class="text-sm font-medium text-gray-900 block mb-2">Región:</label>
+                            <div class="relative flex items-center">
+                                <select name="region" id="region" class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" disabled required>
+                                    <option value="region-metropolitana" selected>Región Metropolitana</option>
+                                    <!-- Agrega más opciones según sea necesario -->
+                                </select>
+                                <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+                            </div>
+                        </div>
+                        <!-- Fin Region -->
 
 
-</form>
+                    </form>
                     <!-- Botón de editar/guardar -->
                     <div class="flex space-x-4 mt-4">
                         <button type="button" id="edit-save-button" onclick="toggleEditSaveProfile()" 
@@ -212,21 +209,90 @@
 
                 </div>
                 <!-- Final contenido principal de Datos -->
-                <!-- Mis mascotas -->
-                <div id="pets" class="hidden step-content">
-                    <h2 class="text-2xl font-bold mb-4">Mis Mascotas</h2>
-                    <select id="pet-select" class="block w-full border border-gray-300 rounded-md shadow-sm mb-4">
-                        <option value="pet1">Rex</option>
-                        <option value="pet2">Luna</option>
-                    </select>
-                    <div id="pet-details">
-                        <p>Nombre: Rex</p>
-                        <p>Edad: 3 años</p>
-                        <p>Especie: Perro</p>
-                        <button class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">Editar Mascota</button>
-                    </div>
+                
+<!-- Mis mascotas -->
+<div id="pets" class="hidden step-content">
+    <h2 class="text-2xl font-bold mb-4">Mis Mascotas</h2>
+    
+    <!-- Contenedor del formulario en columnas -->
+    <div class="grid grid-cols-2 gap-4">
+        <!-- Columna 1: Selección de mascota -->
+        <div class="relative mb-4">
+            <label for="pet-select" class="text-sm font-medium text-gray-900 block mb-2">Selecciona una mascota:</label>
+            <div class="relative flex items-center">
+                <select id="pet-select" class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-cyan-600 focus:border-cyan-600 text-gray-900 sm:text-sm p-2.5 pr-10 input-short input-background">
+                    <option value="">Selecciona...</option>
+                    <option value="pet1" data-name="Rex" data-age="3 años" data-species="Perro" data-breed="Pastor Alemán" data-birthdate="2021-05-14">Rex</option>
+                    <option value="pet2" data-name="Luna" data-age="2 años" data-species="Gato" data-breed="DPC" data-birthdate="2022-08-09">Luna</option>
+                </select>
+            </div>
+
+            <!-- Detalles de la mascota -->
+            <div class="grid grid-cols-2 gap-4 mt-4">
+                <!-- Nombre de la mascota -->
+                <div class="relative mb-4">
+                    <label for="pet-name" class="text-sm font-medium text-gray-900 block mb-2">Nombre:</label>
+                    <input type="text" name="pet-name" id="pet-name" value="Selecciona una mascota" 
+                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" required readonly>
                 </div>
-                <!-- Fin Mis mascotas -->
+                <!-- Edad de la mascota -->
+                <div class="relative mb-4">
+                    <label for="pet-age" class="text-sm font-medium text-gray-900 block mb-2">Edad:</label>
+                    <input type="text" name="pet-age" id="pet-age" value="" 
+                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" required readonly>
+                </div>
+                <!-- Especie de la mascota -->
+                <div class="relative mb-4">
+                    <label for="pet-species" class="text-sm font-medium text-gray-900 block mb-2">Especie:</label>
+                    <input type="text" name="pet-species" id="pet-species" value="" 
+                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" required readonly>
+                </div>
+                <!-- Raza de la mascota -->
+                <div class="relative mb-4">
+                    <label for="pet-breed" class="text-sm font-medium text-gray-900 block mb-2">Raza:</label>
+                    <input type="text" name="pet-breed" id="pet-breed" value="" 
+                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" required readonly>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna 2: Subir foto de la mascota y vista previa -->
+        <div class="relative mb-4">
+            <label for="pet-photo" class="text-sm font-medium text-gray-900 block mb-2">Foto de la Mascota:</label>
+            <div class="flex justify-center items-center relative">
+                <!-- Contenedor de la foto con lápiz -->
+                <div class="relative w-40 h-40 bg-gray-100 border border-gray-300 rounded-lg overflow-hidden shadow-md flex items-center justify-center">
+                    <img id="photo-preview" src="#" alt="Vista previa de la foto" class="w-full h-full object-cover hidden">
+                    <!-- Ícono de lápiz para editar la foto -->
+                    <button id="edit-photo-button" class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-gray-700">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 3.487a2.5 2.5 0 113.535 3.535l-10.61 10.61a4 4 0 01-1.414.943l-3.36 1.343a1 1 0 01-1.261-1.261l1.343-3.36a4 4 0 01.943-1.414l10.61-10.61z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 6.5L17.5 8.5" />
+                        </svg>
+                    </button>
+                </div>
+                <!-- Input oculto para seleccionar la imagen -->
+                <input type="file" name="pet-photo" id="pet-photo" accept="image/*" class="hidden">
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón de editar -->
+    <div class="col-span-2">
+        <button id="edit-button" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 mt-4" disabled>Editar Mascota</button>
+    </div>
+</div>
+<!-- Fin Mis mascotas -->
+
+
+
+
+
+
+
+
+
+
 
                 <!-- Carnet digital -->
                 <div id="carnet" class="hidden step-content">
