@@ -154,6 +154,35 @@
     display: none;
 }
 
-
-
 /* fin css celular*/
+
+/* Ajusta el espacio entre columnas */
+.reduce-column-gap {
+    grid-column-gap: 0.5rem; /* Ajusta el espacio entre columnas según sea necesario */
+}
+/* Ajusta el tamaño de los inputs */
+.input-short {
+    width: 80%; /* Ajusta el ancho de los inputs a un tamaño corto */
+}
+/* Fondo blanco para el formulario y los campos de entrada */
+.form-background {
+    background-color: #ffffff; /* Color de fondo blanco */
+    padding: 1rem; /* Añade un poco de relleno alrededor del formulario */
+    border-radius: 0.5rem; /* Bordes redondeados */
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1); /* Sombra ligera para profundidad */
+}
+.input-background {
+    background-color: #ffffff; /* Fondo blanco para los inputs */
+}
+
+/* Asegúrate de que el contenedor principal esté alineado correctamente */
+.step-content {
+    margin-top: 0; /* Ajusta el margen superior según sea necesario */
+}
+
+.form-background {
+    background-color: #ffffff; /* Fondo blanco */
+    padding: 16px; /* Ajusta el padding según sea necesario */
+    border-radius: 8px; /* Bordes redondeados para una apariencia más suave */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil para el formulario */
+}
