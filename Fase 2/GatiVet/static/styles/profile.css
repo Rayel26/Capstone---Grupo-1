@@ -102,3 +102,58 @@
     margin: 0;
     /* Elimina cualquier margen por defecto */
 }
+
+/* icono lapiz modo edición */
+.edit-icon {
+    font-size: 1rem; /* Tamaño del ícono */
+    color: #18beaa; /* Color del ícono */
+    transition: opacity 0.3s ease;
+    pointer-events: none; /* Desactiva la interacción del mouse */
+}
+
+.edit-icon.hidden {
+    opacity: 0;
+    display: none; /* Oculta completamente el elemento */
+}
+
+.edit-mode .edit-icon {
+    opacity: 1;
+}
+
+.edit-icon.disabled {
+    opacity: 0.5; /* Opcional: cambia la opacidad para indicar que está deshabilitado */
+}
+.hidden {
+    display: none; /* Oculta completamente el elemento */
+}
+
+
+/* Fin icono lapiz modo edición */
+
+/*css celular*/
+
+.phone-input-container {
+    display: flex;
+    align-items: center;
+}
+
+.phone-prefix {
+    font-size: 1rem;
+    margin-right: 0.5rem;
+    color: #18beaa; /* Color del prefijo */
+}
+
+#phone {
+    flex: 1; /* Toma el espacio restante */
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.hidden {
+    display: none;
+}
+
+
+
+/* fin css celular*/
