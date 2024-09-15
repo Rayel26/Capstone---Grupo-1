@@ -4,9 +4,9 @@
 
 {% block content %}
 <head>
-  <!-- Importa el archivo CSS específico para profile -->
-  <link rel="stylesheet" href="static/styles/profile.css?v=1.0">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<!-- Importa el archivo CSS específico para profile -->
+<link rel="stylesheet" href="static/styles/profile.css?v=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 </head>
 <body>
@@ -15,7 +15,7 @@
         <!-- Container para Sidebar y contenido principal -->
         <div class="flex">
             <!-- Sidebar -->
-            <div id="sidebar" class="step-sidebar p-4 flex-none w-64">
+            <div id="sidebar" class="step-sidebar p-4 mr-2 flex-none w-64">
                 <h2 class="text-xl font-bold mb-4 step-text">Mi cuenta</h2>
                 <div class="flex flex-col space-y-4">
                     <button onclick="showContent('profile')" class="flex items-center space-x-2">
@@ -38,119 +38,149 @@
             </div>
 
             <!-- Contenido Principal -->
-            <div class="flex-1 p-4">
+            <div class="flex-1">
                 <!-- Aquí va el contenido principal de Datos -->
                 <div id="profile" class="hidden step-content">
                     
-                    <form id="profile-form" class="grid grid-cols-1 md:grid-cols-2 reduce-column-gap gap-4 form-background">
+<form id="profile-form" class="grid grid-cols-1 md:grid-cols-2 reduce-column-gap gap-4 form-background">
     <!-- Columna 1 -->
+    <!-- Nombre -->
     <div class="mb-4 relative">
         <label for="first-name" class="text-sm font-medium text-gray-900 block mb-2">Nombre:</label>
-        <div class="relative">
+        <div class="relative flex items-center">
             <input type="text" name="first-name" id="first-name" value="Juan" 
-                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" required readonly>
-            <i class="edit-icon fa fa-pencil absolute top-1/2 right-2 transform -translate-y-1/2 cursor-pointer hidden"></i>
+                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" required readonly>
+            <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
         </div>
     </div>
+
+    <!-- Apellido Paterno -->
     <div class="mb-4 relative">
         <label for="last-name" class="text-sm font-medium text-gray-900 block mb-2">Apellido Paterno:</label>
-        <div class="relative">
+        <div class="relative flex items-center">
             <input type="text" name="last-name" id="last-name" value="Pérez" 
-                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" required readonly>
-            <i class="edit-icon fa fa-pencil absolute top-1/2 right-2 transform -translate-y-1/2 cursor-pointer hidden"></i>
+                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" required readonly>
+            <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
         </div>
     </div>
+
+    <!-- Apellido Materno -->
     <div class="mb-4 relative">
         <label for="maternal-last-name" class="text-sm font-medium text-gray-900 block mb-2">Apellido Materno:</label>
-        <div class="relative">
+        <div class="relative flex items-center">
             <input type="text" name="maternal-last-name" id="maternal-last-name" value="González" 
-                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" required readonly>
-            <i class="edit-icon fa fa-pencil absolute top-1/2 right-2 transform -translate-y-1/2 cursor-pointer hidden"></i>
+                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" required readonly>
+            <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
         </div>
     </div>
+
     <!-- Rut -->
     <div class="mb-4 relative">
         <label for="rut" class="text-sm font-medium text-gray-900 block mb-2">RUT:</label>
-        <div class="relative">
+        <div class="relative flex items-center">
             <input type="text" name="rut" id="rut" value="12.345.678-9" 
                 pattern="\d{2}\.\d{3}\.\d{3}-[\dkK]" 
                 title="Formato válido: xx.xxx.xxx-x o xx.xxx.xxx-k" 
-                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" 
+                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" 
                 required readonly>
-            <i class="edit-icon fa fa-pencil absolute top-1/2 right-2 transform -translate-y-1/2 cursor-pointer hidden"></i>
+            <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
             <span id="rut-error-message" class="text-red-500 text-xs hidden">El RUT debe tener el formato xx.xxx.xxx-x o xx.xxx.xxx-k.</span>
         </div>
     </div>
-    <!-- Fin Rut -->
 
-    <!-- Columna 2 -->
+    <!-- Dirección -->
     <div class="mb-4 relative">
         <label for="address" class="text-sm font-medium text-gray-900 block mb-2">Dirección:</label>
-        <div class="relative">
+        <div class="relative flex items-center">
             <input type="text" name="address" id="address" value="Av. Siempre Viva 123" 
-                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" required readonly>
-            <i class="edit-icon fa fa-pencil absolute top-1/2 right-2 transform -translate-y-1/2 cursor-pointer hidden"></i>
+                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" required readonly>
+            <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
         </div>
     </div>
 
     <!-- Comuna -->
     <div class="mb-4 relative">
         <label for="commune" class="text-sm font-medium text-gray-900 block mb-2">Comuna:</label>
-        <div class="relative">
-            <select name="commune" id="commune" class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" disabled required>
+        <div class="relative flex items-center">
+            <select name="commune" id="commune" class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" disabled required>
                 <option value="puente-alto" selected>Puente Alto</option>
                 <option value="santiago">Santiago</option>
                 <option value="la-florida">La Florida</option>
                 <option value="vitacura">Vitacura</option>
                 <!-- Agrega más opciones según sea necesario -->
             </select>
-            <i class="edit-icon fa fa-pencil absolute top-1/2 right-2 transform -translate-y-1/2 cursor-pointer hidden"></i>
+            <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
         </div>
     </div>
-    <!-- Fin Comuna -->
 
     <!-- Celular -->
     <div class="mb-4 relative">
         <label for="phone" class="text-sm font-medium text-gray-900 block mb-2">Celular:</label>
-        <div class="relative">
-            <div class="flex items-center">
-                <span class="phone-prefix border border-gray-300 text-gray-900 text-sm p-2.5 rounded-l-lg">+569</span>
-                <input 
-                    type="text" 
-                    name="phone" 
-                    id="phone" 
-                    placeholder="1234 5678" 
-                    pattern="[0-9]{8}" 
-                    title="Ingrese 8 dígitos después del prefijo +569" 
-                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-r-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" 
-                    required
-                    readonly
-                />
-            </div>
-            <i class="edit-icon fa fa-pencil absolute top-1/2 right-2 transform -translate-y-1/2 cursor-pointer hidden"></i>
-            <span id="phone-error-message" class="text-red-500 text-xs hidden">El número de teléfono debe tener exactamente 8 dígitos.</span>
+        <div class="relative flex items-center">
+            <input 
+                type="text" 
+                name="phone" 
+                id="phone" 
+                value="+569 " 
+                pattern="\+569 \d{4} \d{4}" 
+                title="Ingrese 8 dígitos después del prefijo +569, separados en dos grupos de 4 dígitos." 
+                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background w-full pr-10"
+                readonly
+            />
+            <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
         </div>
+        <span id="phone-error-message" class="text-red-500 text-xs hidden">El número de teléfono debe tener 8 dígitos después del prefijo</span>
     </div>
     <!-- Fin Celular -->
+
+
+
 
     <!-- Correo -->
     <div class="mb-4 relative">
         <label for="email" class="text-sm font-medium text-gray-900 block mb-2">Correo:</label>
-        <div class="relative">
+        <div class="relative flex items-center">
             <input type="email" name="email" id="email" value="juan.perez@example.com" 
                 pattern=".+@.+" title="El correo debe contener al menos un @" 
-                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" required readonly>
-            <i class="edit-icon fa fa-pencil absolute top-1/2 right-2 transform -translate-y-1/2 cursor-pointer hidden"></i>
+                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" required readonly>
+            <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
             <!-- Mensaje de error oculto inicialmente -->
             <span id="email-error-message" class="text-red-500 text-sm hidden">Formato de correo inválido. Por favor ingresa un correo válido.</span>
         </div>
     </div>
     <!-- Fin Correo -->
 
+
+    <!-- Inicio Contraseña -->
+    <div class="mb-4 relative">
+        <label for="password" class="text-sm font-medium text-gray-900 block mb-2">Contraseña:</label>
+        <div class="relative flex items-center">
+            <input type="password" name="password" id="password" 
+                class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" 
+                required readonly>
+            <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+        </div>
+        <!-- Mensaje de error debajo del campo -->
+        <span id="password-error-message" class="text-red-500 text-xs mt-1 block hidden">La contraseña debe contener al menos una letra mayúscula y un número.</span>
+    </div>
+    <!-- Fin Contraseña -->
+
+
+    <!-- Region -->
+    <div class="mb-4 relative">
+        <label for="region" class="text-sm font-medium text-gray-900 block mb-2">Región:</label>
+        <div class="relative flex items-center">
+            <select name="region" id="region" class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" disabled required>
+                <option value="region-metropolitana" selected>Región Metropolitana</option>
+                <!-- Agrega más opciones según sea necesario -->
+            </select>
+            <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+        </div>
+    </div>
+    <!-- Fin Region -->
+
+
 </form>
-                    
-                    
- 
                     <!-- Botón de editar/guardar -->
                     <div class="flex space-x-4 mt-4">
                         <button type="button" id="edit-save-button" onclick="toggleEditSaveProfile()" 
@@ -182,7 +212,6 @@
 
                 </div>
                 <!-- Final contenido principal de Datos -->
-       
                 <!-- Mis mascotas -->
                 <div id="pets" class="hidden step-content">
                     <h2 class="text-2xl font-bold mb-4">Mis Mascotas</h2>

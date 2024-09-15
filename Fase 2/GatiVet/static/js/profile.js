@@ -6,6 +6,8 @@ function toggleEditSaveProfile() {
     const phoneInput = document.getElementById('phone');
     const communeSelect = document.getElementById('commune'); 
     const editIcons = document.querySelectorAll('.edit-icon');
+    const passwordInput = document.getElementById('password'); // Campo de contraseña
+    const passwordErrorMessage = document.getElementById('password-error-message'); // Mensaje de error de contraseña
 
     if (isEditing) {
         // Verifica si el correo tiene un formato válido
@@ -17,6 +19,18 @@ function toggleEditSaveProfile() {
         } else {
             // Oculta el mensaje de error si el correo es válido
             emailErrorMessage.classList.add('hidden');
+        }
+
+        // Validar la contraseña
+        const password = passwordInput.value;
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasNumber = /\d/.test(password);
+
+        if (!hasUpperCase || !hasNumber) {
+            passwordErrorMessage.classList.remove('hidden');
+            return; // Detiene el guardado si la contraseña no es válida
+        } else {
+            passwordErrorMessage.classList.add('hidden');
         }
 
         // Guardar cambios y deshabilitar campos
@@ -74,20 +88,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const rutInput = document.getElementById('rut'); // RUT input
     const rutErrorMessage = document.getElementById('rut-error-message'); // RUT error message
 
+    // Validar y formatear el campo de teléfono
     phoneInput.addEventListener('input', () => {
-        // Elimina cualquier carácter que no sea un número
-        phoneInput.value = phoneInput.value.replace(/\D/g, '');
-        
-        // Limita la longitud a 8 dígitos
-        if (phoneInput.value.length > 8) {
-            phoneInput.value = phoneInput.value.slice(0, 8);
+        // Verifica si el valor comienza con el prefijo +569
+        if (!phoneInput.value.startsWith('+569 ')) {
+            phoneInput.value.replace(/\D/g, '');
+        }
+
+        // Elimina cualquier carácter que no sea un número después del prefijo
+        const numericPart = phoneInput.value.slice(5).replace(/\D/g, '');
+
+        // Limita la longitud a 8 dígitos y actualiza el valor del input
+        if (numericPart.length > 8) {
+            phoneInput.value = '+569 ' + numericPart.slice(0, 8);
+        } else {
+            phoneInput.value = '+569 ' + numericPart;
         }
 
         // Muestra/oculta el mensaje de error basado en la longitud del número
-        if (phoneInput.value.length !== 8) {
-            phoneErrorMessage.classList.remove('hidden');
-        } else {
+        if (numericPart.length === 8) {
             phoneErrorMessage.classList.add('hidden');
+        } else {
+            phoneErrorMessage.classList.remove('hidden');
         }
     });
 
@@ -104,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Función para validar el formato del RUT
 function validateRut(rut) {
-    const rutPattern = /^\d{1,2}\.\d{3}\.\d{3}-[\dkK]$/;
+    const rutPattern = /^\d{1,2}\.\d{3}\.\d{3}-[\dKk]$/; // Permite dígitos o K/k al final
     return rutPattern.test(rut) && rut.replace(/\D/g, '').length === 9; // Incluye la longitud de 9 dígitos
 }
 
@@ -124,6 +146,64 @@ function formatRut(value) {
     }
     return value;
 }
+
+//Función para formatear el teléfono automáticamente
+document.addEventListener('DOMContentLoaded', () => {
+    const phoneInput = document.getElementById('phone');
+    const phoneErrorMessage = document.getElementById('phone-error-message');
+
+    // Función para validar el formato del teléfono
+    function validatePhone(phone) {
+        const phonePattern = /^\+569 \d{4} \d{4}$/;
+        return phonePattern.test(phone);
+    }
+
+    // Función para formatear el teléfono automáticamente mientras se escribe
+    function formatPhone(value) {
+        // Eliminar cualquier carácter que no sea un número
+        let numericValue = value.replace(/\D/g, '');
+
+        // Limitar a 8 dígitos
+        if (numericValue.length > 8) {
+            numericValue = numericValue.slice(0, 8);
+        }
+
+        // Aplicar el formato +569 xxxx yyyy si hay dígitos
+        let formattedValue = '+569 ';
+        if (numericValue.length > 0) {
+            if (numericValue.length > 4) {
+                formattedValue += numericValue.slice(0, 4) + ' ' + numericValue.slice(4);
+            } else {
+                formattedValue += numericValue;
+            }
+        }
+
+        return formattedValue;
+    }
+
+    phoneInput.addEventListener('input', () => {
+        // Obtener el valor actual del input
+        let rawValue = phoneInput.value;
+
+        // Verificar si el prefijo +569 ya está en el valor
+        if (rawValue.startsWith('+569 ')) {
+            // Eliminar el prefijo para procesar solo los dígitos
+            rawValue = rawValue.slice(5);
+        }
+
+        // Formatear el valor actual
+        phoneInput.value = formatPhone(rawValue);
+
+        // Validar el valor del input
+        if (validatePhone(phoneInput.value)) {
+            phoneErrorMessage.classList.add('hidden');
+        } else {
+            phoneErrorMessage.classList.remove('hidden');
+        }
+    });
+});
+
+
 
 // Mostrar la sección de perfil por defecto
 showContent('profile');

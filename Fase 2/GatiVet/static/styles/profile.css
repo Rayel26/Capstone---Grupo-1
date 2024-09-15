@@ -144,7 +144,6 @@
 }
 
 #phone {
-    flex: 1; /* Toma el espacio restante */
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 4px;
