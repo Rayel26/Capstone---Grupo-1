@@ -179,9 +179,21 @@
     margin-top: 0; /* Ajusta el margen superior según sea necesario */
 }
 
-.form-background {
-    background-color: #ffffff; /* Fondo blanco */
-    padding: 16px; /* Ajusta el padding según sea necesario */
-    border-radius: 8px; /* Bordes redondeados para una apariencia más suave */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil para el formulario */
+/**modal*/
+#add-pet-modal.hidden {
+    display: none;
 }
+
+#add-pet-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Asegúrate de que el modal no esté oculto por otras reglas */
+    z-index: 1000; /* Asegura que el modal esté encima de otros elementos */
+}
+
+
+

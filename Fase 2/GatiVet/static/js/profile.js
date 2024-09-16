@@ -236,8 +236,7 @@ function showContent(sectionId) {
 }
 
 ////////////////////////////////////////////////////////////////
-//Mascotas
-
+// Mascotas
 document.getElementById('pet-select').addEventListener('change', function() {
     var select = this;
     var selectedOption = select.options[select.selectedIndex];
@@ -246,13 +245,13 @@ document.getElementById('pet-select').addEventListener('change', function() {
     var age = selectedOption.getAttribute('data-age');
     var species = selectedOption.getAttribute('data-species');
     var breed = selectedOption.getAttribute('data-breed');
-    var birthdate = selectedOption.getAttribute('data-birthdate');  // Obteniendo la fecha de nacimiento
+    var birthdate = selectedOption.getAttribute('data-birthdate');
     
     var petName = document.getElementById('pet-name');
     var petAge = document.getElementById('pet-age');
     var petSpecies = document.getElementById('pet-species');
     var petBreed = document.getElementById('pet-breed');
-    var petBirthdate = document.getElementById('pet-birthdate');  // Campo para la fecha de nacimiento
+    var petBirthdate = document.getElementById('pet-birthdate');
     var editButton = document.getElementById('edit-button');
     
     if (name) {
@@ -260,14 +259,14 @@ document.getElementById('pet-select').addEventListener('change', function() {
         petAge.value = age;
         petSpecies.value = species;
         petBreed.value = breed;
-        petBirthdate.value = birthdate;  // Mostrar la fecha de nacimiento
+        petBirthdate.value = birthdate;
         editButton.disabled = false;
     } else {
         petName.value = 'Selecciona una mascota';
         petAge.value = '';
         petSpecies.value = '';
         petBreed.value = '';
-        petBirthdate.value = '';  // Limpiar la fecha de nacimiento si no se selecciona ninguna mascota
+        petBirthdate.value = '';
         editButton.disabled = true;
     }
 });
@@ -295,3 +294,80 @@ document.getElementById('pet-photo').addEventListener('change', function(e) {
     }
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    // Abre el modal al hacer clic en el ícono "+"
+    document.getElementById('add-pet-icon').addEventListener('click', function() {
+        document.getElementById('add-pet-modal').classList.remove('hidden');
+    });
+
+    // Cierra el modal al hacer clic en el botón "Cancelar"
+    document.getElementById('close-modal').addEventListener('click', function() {
+        document.getElementById('add-pet-modal').classList.add('hidden');
+    });
+
+    // Maneja el envío del formulario del modal
+    document.getElementById('add-pet-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        // Obtener valores del formulario
+        var name = document.getElementById('new-pet-name').value;
+        var age = document.getElementById('new-pet-age').value;
+        var species = document.getElementById('new-pet-species').value;
+        var breed = document.getElementById('new-pet-breed').value;
+        var birthdate = document.getElementById('new-pet-birthdate').value;
+        
+        console.log('Nombre:', name);
+        console.log('Edad:', age);
+        console.log('Especie:', species);
+        console.log('Raza:', breed);
+        console.log('Fecha de Nacimiento:', birthdate);
+        
+        // Crear una nueva opción en el select
+        var select = document.getElementById('pet-select');
+        var newOption = document.createElement('option');
+        newOption.value = name.toLowerCase().replace(/\s+/g, '_'); // Genera un valor único para la opción
+        newOption.textContent = name;
+        newOption.setAttribute('data-name', name);
+        newOption.setAttribute('data-age', age);
+        newOption.setAttribute('data-species', species);
+        newOption.setAttribute('data-breed', breed);
+        newOption.setAttribute('data-birthdate', birthdate);
+        
+        // Agregar la nueva opción al final del <select>
+        select.appendChild(newOption);
+        select.value = newOption.value; // Seleccionar la nueva mascota automáticamente
+
+        // Limpiar el formulario y ocultar el modal
+        document.getElementById('add-pet-form').reset();
+        document.getElementById('add-pet-modal').classList.add('hidden');
+        
+        // Actualizar campos de detalles de la mascota
+        document.getElementById('pet-name').value = name;
+        document.getElementById('pet-age').value = age;
+        document.getElementById('pet-species').value = species;
+        document.getElementById('pet-breed').value = breed;
+        document.getElementById('pet-birthdate').value = birthdate;
+
+        // Habilitar el botón de editar
+        document.getElementById('edit-button').disabled = false;
+    });
+});
+
+
+// Razas
+document.getElementById('new-pet-species').addEventListener('change', function() {
+    var species = this.value;
+    var dogBreeds = document.getElementById('dog-breeds');
+    var catBreeds = document.getElementById('cat-breeds');
+    
+    if (species === 'perro') {
+        dogBreeds.style.display = 'block';
+        catBreeds.style.display = 'none';
+    } else if (species === 'gato') {
+        catBreeds.style.display = 'block';
+        dogBreeds.style.display = 'none';
+    } else {
+        dogBreeds.style.display = 'none';
+        catBreeds.style.display = 'none';
+    }
+});
