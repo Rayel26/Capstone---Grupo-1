@@ -1355,6 +1355,10 @@ video {
   width: 0.75rem;
 }
 
+.w-3\/4 {
+  width: 75%;
+}
+
 .w-32 {
   width: 8rem;
 }
@@ -1426,6 +1430,10 @@ video {
 
 .min-w-44 {
   min-width: 11rem;
+}
+
+.min-w-full {
+  min-width: 100%;
 }
 
 .max-w-2xl {
@@ -3436,6 +3444,11 @@ video {
 .hover\:bg-green-600:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(22 163 74 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-red-600:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(220 38 38 / var(--tw-bg-opacity));
 }
 
 .hover\:bg-teal-500:hover {

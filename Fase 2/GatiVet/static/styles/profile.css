@@ -203,3 +203,76 @@
 
 /*carnet digital*/
 
+/* Agregar efecto hover en las filas de la tabla */
+table tbody tr:hover {
+    background-color: #82f1e6 !important; /* Color de fondo cuando se pasa el ratón */
+}
+
+/* Estilos para la paginación */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    margin: 0 2px;
+    cursor: pointer;
+}
+
+.pagination button.active {
+    background-color: #69d9cd;
+    color: white;
+    border: none;
+}
+
+/* Estilo para los botones de las pestañas */
+.tab-button {
+    background-color: #69d9cd; /* Color de fondo de los botones */
+    color: white; /* Color del texto */
+    cursor: pointer; /* Cursor de mano */
+}
+
+.tab-button:hover {
+    background-color: #18beaa; /* Color de fondo al pasar el ratón */
+}
+
+/* Estilo para la pestaña activa (opcional) */
+.tab-button.active {
+    background-color: #18beaa; /* Color de fondo de la pestaña activa */
+}
+
+.truncate {
+    display: block; /* Asegúrate de que el elemento esté en un bloque */
+    overflow: hidden; /* Oculta el texto que se desborda */
+    white-space: nowrap; /* Evita el salto de línea */
+    text-overflow: ellipsis; /* Muestra "..." al final del texto que se desborda */
+}
+
+
+/* Contenedor de la fecha y el logo */
+#carnet .absolute {
+    top: 0.5rem; /* Ajusta la distancia desde el borde superior del contenedor */
+    right: 0.5rem; /* Ajusta la distancia desde el borde derecho del contenedor */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Alinea el contenido a la derecha */
+    z-index: 10; /* Asegúrate de que esté sobre otros elementos */
+}
+
+/* Estilo para la fecha de emisión */
+#carnet .absolute p {
+    margin: 0; /* Elimina el margen por defecto */
+    font-size: 0.875rem; /* Tamaño de fuente para la fecha */
+    font-weight: 500; /* Peso de la fuente */
+    color: #6e6e6e; /* Color del texto */
+}
+
+/* Estilo para el logo */
+#carnet .absolute img {
+    width: 430px; /* Ajusta el tamaño del logo */
+    height: 10rem; /* Ajusta el tamaño del logo */
+    object-fit: contain; /* Asegura que el logo no se deforme */
+}
