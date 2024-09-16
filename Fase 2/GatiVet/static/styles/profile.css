@@ -179,6 +179,8 @@
     margin-top: 0; /* Ajusta el margen superior según sea necesario */
 }
 
+
+/*css mascotas*/
 /**modal*/
 #add-pet-modal.hidden {
     display: none;
@@ -195,5 +197,9 @@
     z-index: 1000; /* Asegura que el modal esté encima de otros elementos */
 }
 
+.no-outline:focus {
+    outline: none;
+}
 
+/*carnet digital*/
 

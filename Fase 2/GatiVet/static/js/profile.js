@@ -380,3 +380,27 @@ document.getElementById('new-pet-species').addEventListener('change', function()
         catBreeds.style.display = 'none';
     }
 });
+
+////////////////////////////////////////////////////////////////
+//carnet digital
+function showTab(tabId) {
+    // Ocultar todas las secciones
+    document.querySelectorAll('.tab-content').forEach(function(tab) {
+        tab.classList.add('hidden');
+    });
+    // Mostrar la sección seleccionada
+    document.getElementById(tabId).classList.remove('hidden');
+}
+const descriptions = {
+    'descripcion1': 'Revisión completa de salud. Chequeo de peso, temperatura y estado general. Se verificó la condición física general, se realizaron pruebas de diagnóstico para detectar posibles problemas y se ofrecieron recomendaciones para el cuidado continuo. Este control es fundamental para asegurar que la mascota se mantenga en óptimas condiciones de salud a lo largo del tiempo.',
+    'descripcion2': 'Limpieza dental y revisión de encías. Se realizó una limpieza exhaustiva de los dientes y se examinaron las encías para detectar signos de enfermedades dentales. El veterinario también proporcionó consejos sobre cómo mantener una buena higiene dental en el hogar. La salud dental es crucial para prevenir problemas futuros y mantener la boca de la mascota en buen estado.'
+};
+
+function openModal(descriptionKey) {
+    document.getElementById('modal-description').textContent = descriptions[descriptionKey];
+    document.getElementById('modal').classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('modal').classList.add('hidden');
+}

@@ -359,90 +359,213 @@
                     </div>
                 </div>
                 <!-- Fin Mis mascotas -->
-
+                
                 <!-- Modal para agregar una nueva mascota -->
-                <div id="add-pet-modal"
-                    class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
-                    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-                        <h2 class="text-2xl font-semibold mb-4 text-gray-800">Agregar Nueva Mascota</h2>
-                        <form id="add-pet-form">
-                            <div class="mb-4">
-                                <label for="new-pet-name"
-                                    class="block text-sm font-medium text-gray-600">Nombre:</label>
-                                <input type="text" id="new-pet-name" name="new-pet-name"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-                                    required>
-                            </div>
-                            <div class="mb-4">
-                                <label for="new-pet-age" class="block text-sm font-medium text-gray-600">Edad:</label>
-                                <input type="text" id="new-pet-age" name="new-pet-age"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-                                    required>
-                            </div>
-                            <div class="mb-4">
-                                <label for="new-pet-species"
-                                    class="block text-sm font-medium text-gray-600">Especie:</label>
-                                <select id="new-pet-species" name="new-pet-species"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-                                    required>
-                                    <option value="">Selecciona una especie</option>
-                                    <option value="perro">Perro</option>
-                                    <option value="gato">Gato</option>
-                                </select>
-                            </div>
-                            <div class="mb-4" id="dog-breeds" style="display: none;">
-                                <label for="new-pet-breed-dog" class="block text-sm font-medium text-gray-600">Raza
-                                    (Perro):</label>
-                                <select id="new-pet-breed-dog" name="new-pet-breed"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
-                                    <option value="">Selecciona una raza</option>
-                                    <option value="labrador">Labrador</option>
-                                    <option value="beagle">Beagle</option>
-                                    <option value="pastor_aleman">Pastor Alemán</option>
-                                    <!-- Agrega más razas de perros aquí -->
-                                </select>
-                            </div>
-                            <div class="mb-4" id="cat-breeds" style="display: none;">
-                                <label for="new-pet-breed-cat" class="block text-sm font-medium text-gray-600">Raza
-                                    (Gato):</label>
-                                <select id="new-pet-breed-cat" name="new-pet-breed"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
-                                    <option value="">Selecciona una raza</option>
-                                    <option value="persa">Persa</option>
-                                    <option value="siamés">Siamés</option>
-                                    <option value="maine_coon">Maine Coon</option>
-                                    <!-- Agrega más razas de gatos aquí -->
-                                </select>
-                            </div>
-                            <div class="mb-4">
-                                <label for="new-pet-birthdate" class="block text-sm font-medium text-gray-600">Fecha de
-                                    Nacimiento:</label>
-                                <input type="date" id="new-pet-birthdate" name="new-pet-birthdate"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-                                    required>
-                            </div>
-                            <div class="flex justify-end space-x-2">
-                                <button type="button" id="close-modal"
-                                    class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition duration-300">Cancelar</button>
-                                <button type="submit"
-                                    class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300">Agregar</button>
-                            </div>
-                        </form>
+                <div id="add-pet-modal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden z-50">
+                    <div class="relative p-6 w-full max-w-md bg-white rounded-lg shadow-lg dark:bg-gray-800">
+                        <!-- Botón para cerrar el modal -->
+                        <button type="button" id="close-modal" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                            </svg>
+                            <span class="sr-only">Cerrar modal</span>
+                        </button>
+                        <!-- Contenido del modal -->
+                        <div class="p-4 md:p-5 text-center">
+                            <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Agregar Nueva Mascota</h2>
+                            <form id="add-pet-form">
+                                <!-- Distribución en dos columnas -->
+                                <div class="grid grid-cols-2 gap-4">
+                                    <!-- Input para el nombre de la mascota -->
+                                    <div class="mb-4">
+                                        <label for="new-pet-name" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Nombre:</label>
+                                        <input type="text" id="new-pet-name" name="new-pet-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline" required>
+                                    </div>
+                                    <!-- Input para la edad de la mascota -->
+                                    <div class="mb-4">
+                                        <label for="new-pet-age" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Edad:</label>
+                                        <input type="text" id="new-pet-age" name="new-pet-age" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline" required>
+                                    </div>
+                                    <!-- Selección de especie -->
+                                    <div class="mb-4">
+                                        <label for="new-pet-species" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Especie:</label>
+                                        <select id="new-pet-species" name="new-pet-species" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline" required>
+                                            <option value="">Selecciona una especie</option>
+                                            <option value="perro">Perro</option>
+                                            <option value="gato">Gato</option>
+                                        </select>
+                                    </div>
+                                    <!-- Input para razas de perros (se oculta según selección) -->
+                                    <div class="mb-4" id="dog-breeds" style="display: none;">
+                                        <label for="new-pet-breed-dog" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Raza (Perro):</label>
+                                        <select id="new-pet-breed-dog" name="new-pet-breed" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline">
+                                            <option value="">Selecciona una raza</option>
+                                            <option value="labrador">Labrador</option>
+                                            <option value="beagle">Beagle</option>
+                                            <option value="pastor_aleman">Pastor Alemán</option>
+                                        </select>
+                                    </div>
+                                    <!-- Input para razas de gatos (se oculta según selección) -->
+                                    <div class="mb-4" id="cat-breeds" style="display: none;">
+                                        <label for="new-pet-breed-cat" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Raza (Gato):</label>
+                                        <select id="new-pet-breed-cat" name="new-pet-breed" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline">
+                                            <option value="">Selecciona una raza</option>
+                                            <option value="persa">Persa</option>
+                                            <option value="siamés">Siamés</option>
+                                            <option value="maine_coon">Maine Coon</option>
+                                        </select>
+                                    </div>
+                                    <!-- Input para la fecha de nacimiento -->
+                                    <div class="mb-4 col-span-2">
+                                        <label for="new-pet-birthdate" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Fecha de Nacimiento:</label>
+                                        <input type="date" id="new-pet-birthdate" name="new-pet-birthdate" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline" required>
+                                    </div>
+                                </div>
+                                <!-- Botón para agregar la mascota -->
+                                <div class="flex justify-end space-x-2">
+                                    <button type="submit" class="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition duration-300 focus:ring-4 focus:ring-teal-300 dark:focus:ring-teal-800 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">Agregar</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Fin Modal para agregar mascota -->
-
+                <!-- Fin Mis mascotas -->
+                
                 <!-- Carnet digital -->
-                <div id="carnet" class="hidden step-content">
+                <div id="carnet" class="hidden step-content bg-white p-4 rounded-lg shadow-md">
                     <h2 class="text-2xl font-bold mb-4">Carnet Digital</h2>
-                    <p>Nombre: Rex</p>
-                    <p>Historial Médico: [Enlace al historial]</p>
-                    <p>Vacunas: [Lista de vacunas]</p>
-                    <button class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">Editar
-                        Carnet</button>
-                </div>
-                <!-- Fin Carnet digital -->
+                    
+                    <!-- Selector de mascota -->
+                    <div class="mb-4">
+                        <label for="mascota" class="block text-lg font-medium mb-2">Selecciona una mascota:</label>
+                        <select id="mascota" name="mascota" class="w-64 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <option value="rex">Rex</option>
+                            <option value="milo">Milo</option>
+                            <option value="luna">Luna</option>
+                            <!-- Agrega más opciones según tus necesidades -->
+                        </select>
+                    </div>
+
+                    <!-- Tabs para navegación entre secciones -->
+                    <div class="mb-4">
+                        <ul class="flex border-b border-gray-300">
+                            <li class="mr-1">
+                                <button onclick="showTab('vacunas')" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-t-lg hover:bg-gray-300">Vacunas</button>
+                            </li>
+                            <li class="mr-1">
+                                <button onclick="showTab('desparasitaciones')" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-t-lg hover:bg-gray-300">Desparasitaciones</button>
+                            </li>
+                            <li class="mr-1">
+                                <button onclick="showTab('controles')" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-t-lg hover:bg-gray-300">Controles</button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Sección de Vacunas -->
+                    <div id="vacunas" class="tab-content hidden">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre de Vacuna</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha de Administración</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Próxima Fecha de Administración</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Veterinario</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">Triple Felina</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">15/01/2024</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">15/01/2025</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">Dr. Pérez</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">Anti-rábica</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">15/07/2024</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">15/07/2025</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">Dr. Soto</td>
+                                </tr>
+                                <!-- Agrega más filas según sea necesario -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Sección de Desparasitaciones -->
+                    <div id="desparasitaciones" class="tab-content hidden">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre del Desparasitante</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha de Administración</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Próxima Fecha de Administración</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Veterinario</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">Desparasitante Interno</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">20/02/2024</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">20/02/2025</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">Dr. Gómez</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">Desparasitante Externo</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">20/08/2024</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">20/08/2025</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">Dr. López</td>
+                                </tr>
+                                <!-- Agrega más filas según sea necesario -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Sección de Controles -->
+                        <div id="controles" class="tab-content hidden">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead>
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo de Control</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha del Control</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Veterinario</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripción</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">Control General</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">01/03/2024</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">Dr. Ruiz</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="truncate w-48 cursor-pointer" onclick="openModal('descripcion1')">Revisión completa de salud. Chequeo de peso, temperatura y estado general.</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">Control Dental</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">01/09/2024</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">Dr. Martínez</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="truncate w-48 cursor-pointer" onclick="openModal('descripcion2')">Limpieza dental y revisión de encías.</span>
+                                        </td>
+                                    </tr>
+                                    <!-- Agrega más filas según sea necesario -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Modal para Descripción Completa -->
+                        <div id="modal" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center hidden">
+                            <div class="bg-white p-6 rounded-lg shadow-lg w-3/4 md:w-1/2 lg:w-1/3">
+                                <h3 class="text-xl font-semibold mb-4" id="modal-title">Descripción Completa</h3>
+                                <p id="modal-description">Aquí va la descripción completa...</p>
+                                <button onclick="closeModal()" class="mt-4 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
 
                 <!-- certificados -->
                 <div id="certificates" class="hidden step-content">
