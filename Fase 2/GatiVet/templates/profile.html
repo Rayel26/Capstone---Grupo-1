@@ -3,12 +3,14 @@
 {% block title %}Perfil{% endblock %}
 
 {% block content %}
+
 <head>
-<!-- Importa el archivo CSS específico para profile -->
-<link rel="stylesheet" href="static/styles/profile.css?v=1.0">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Importa el archivo CSS específico para profile -->
+    <link rel="stylesheet" href="static/styles/profile.css?v=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 </head>
+
 <body>
     <!-- Contenedor principal para centralizar el contenido -->
     <div class="max-w-6xl mx-auto p-4">
@@ -41,35 +43,41 @@
             <div class="flex-1">
                 <!-- Contenido principal de Datos -->
                 <div id="profile" class="hidden step-content">
-                    
-                    <form id="profile-form" class="grid grid-cols-1 md:grid-cols-2 reduce-column-gap gap-4 form-background">
+
+                    <form id="profile-form"
+                        class="grid grid-cols-1 md:grid-cols-2 reduce-column-gap gap-4 form-background">
                         <!-- Columna 1 -->
                         <!-- Nombre -->
                         <div class="mb-4 relative">
                             <label for="first-name" class="text-sm font-medium text-gray-900 block mb-2">Nombre:</label>
                             <div class="relative flex items-center">
-                                <input type="text" name="first-name" id="first-name" value="Juan" 
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" required readonly>
+                                <input type="text" name="first-name" id="first-name" value="Juan"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background"
+                                    required readonly>
                                 <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
                             </div>
                         </div>
 
                         <!-- Apellido Paterno -->
                         <div class="mb-4 relative">
-                            <label for="last-name" class="text-sm font-medium text-gray-900 block mb-2">Apellido Paterno:</label>
+                            <label for="last-name" class="text-sm font-medium text-gray-900 block mb-2">Apellido
+                                Paterno:</label>
                             <div class="relative flex items-center">
-                                <input type="text" name="last-name" id="last-name" value="Pérez" 
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" required readonly>
+                                <input type="text" name="last-name" id="last-name" value="Pérez"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background"
+                                    required readonly>
                                 <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
                             </div>
                         </div>
 
                         <!-- Apellido Materno -->
                         <div class="mb-4 relative">
-                            <label for="maternal-last-name" class="text-sm font-medium text-gray-900 block mb-2">Apellido Materno:</label>
+                            <label for="maternal-last-name"
+                                class="text-sm font-medium text-gray-900 block mb-2">Apellido Materno:</label>
                             <div class="relative flex items-center">
-                                <input type="text" name="maternal-last-name" id="maternal-last-name" value="González" 
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" required readonly>
+                                <input type="text" name="maternal-last-name" id="maternal-last-name" value="González"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background"
+                                    required readonly>
                                 <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
                             </div>
                         </div>
@@ -78,13 +86,14 @@
                         <div class="mb-4 relative">
                             <label for="rut" class="text-sm font-medium text-gray-900 block mb-2">RUT:</label>
                             <div class="relative flex items-center">
-                                <input type="text" name="rut" id="rut" value="12.345.678-9" 
-                                    pattern="\d{2}\.\d{3}\.\d{3}-[\dkK]" 
-                                    title="Formato válido: xx.xxx.xxx-x o xx.xxx.xxx-k" 
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" 
+                                <input type="text" name="rut" id="rut" value="12.345.678-9"
+                                    pattern="\d{2}\.\d{3}\.\d{3}-[\dkK]"
+                                    title="Formato válido: xx.xxx.xxx-x o xx.xxx.xxx-k"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background"
                                     required readonly>
                                 <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
-                                <span id="rut-error-message" class="text-red-500 text-xs hidden">El RUT debe tener el formato xx.xxx.xxx-x o xx.xxx.xxx-k.</span>
+                                <span id="rut-error-message" class="text-red-500 text-xs hidden">El RUT debe tener el
+                                    formato xx.xxx.xxx-x o xx.xxx.xxx-k.</span>
                             </div>
                         </div>
 
@@ -92,8 +101,9 @@
                         <div class="mb-4 relative">
                             <label for="address" class="text-sm font-medium text-gray-900 block mb-2">Dirección:</label>
                             <div class="relative flex items-center">
-                                <input type="text" name="address" id="address" value="Av. Siempre Viva 123" 
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" required readonly>
+                                <input type="text" name="address" id="address" value="Av. Siempre Viva 123"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background"
+                                    required readonly>
                                 <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
                             </div>
                         </div>
@@ -102,7 +112,9 @@
                         <div class="mb-4 relative">
                             <label for="commune" class="text-sm font-medium text-gray-900 block mb-2">Comuna:</label>
                             <div class="relative flex items-center">
-                                <select name="commune" id="commune" class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" disabled required>
+                                <select name="commune" id="commune"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background"
+                                    disabled required>
                                     <option value="puente-alto" selected>Puente Alto</option>
                                     <option value="santiago">Santiago</option>
                                     <option value="la-florida">La Florida</option>
@@ -117,19 +129,14 @@
                         <div class="mb-4 relative">
                             <label for="phone" class="text-sm font-medium text-gray-900 block mb-2">Celular:</label>
                             <div class="relative flex items-center">
-                                <input 
-                                    type="text" 
-                                    name="phone" 
-                                    id="phone" 
-                                    value="+569 " 
-                                    pattern="\+569 \d{4} \d{4}" 
-                                    title="Ingrese 8 dígitos después del prefijo +569, separados en dos grupos de 4 dígitos." 
+                                <input type="text" name="phone" id="phone" value="+569 " pattern="\+569 \d{4} \d{4}"
+                                    title="Ingrese 8 dígitos después del prefijo +569, separados en dos grupos de 4 dígitos."
                                     class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background w-full pr-10"
-                                    readonly
-                                />
+                                    readonly />
                                 <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
                             </div>
-                            <span id="phone-error-message" class="text-red-500 text-xs hidden">El número de teléfono debe tener 8 dígitos después del prefijo</span>
+                            <span id="phone-error-message" class="text-red-500 text-xs hidden">El número de teléfono
+                                debe tener 8 dígitos después del prefijo</span>
                         </div>
                         <!-- Fin Celular -->
 
@@ -137,12 +144,14 @@
                         <div class="mb-4 relative">
                             <label for="email" class="text-sm font-medium text-gray-900 block mb-2">Correo:</label>
                             <div class="relative flex items-center">
-                                <input type="email" name="email" id="email" value="juan.perez@example.com" 
-                                    pattern=".+@.+" title="El correo debe contener al menos un @" 
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" required readonly>
+                                <input type="email" name="email" id="email" value="juan.perez@example.com"
+                                    pattern=".+@.+" title="El correo debe contener al menos un @"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background"
+                                    required readonly>
                                 <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
                                 <!-- Mensaje de error oculto inicialmente -->
-                                <span id="email-error-message" class="text-red-500 text-sm hidden">Formato de correo inválido. Por favor ingresa un correo válido.</span>
+                                <span id="email-error-message" class="text-red-500 text-sm hidden">Formato de correo
+                                    inválido. Por favor ingresa un correo válido.</span>
                             </div>
                         </div>
                         <!-- Fin Correo -->
@@ -150,15 +159,17 @@
 
                         <!-- Inicio Contraseña -->
                         <div class="mb-4 relative">
-                            <label for="password" class="text-sm font-medium text-gray-900 block mb-2">Contraseña:</label>
+                            <label for="password"
+                                class="text-sm font-medium text-gray-900 block mb-2">Contraseña:</label>
                             <div class="relative flex items-center">
-                                <input type="password" name="password" id="password" 
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background" 
+                                <input type="password" name="password" id="password"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background"
                                     required readonly>
                                 <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
                             </div>
                             <!-- Mensaje de error debajo del campo -->
-                            <span id="password-error-message" class="text-red-500 text-xs mt-1 block hidden">La contraseña debe contener al menos una letra mayúscula y un número.</span>
+                            <span id="password-error-message" class="text-red-500 text-xs mt-1 block hidden">La
+                                contraseña debe contener al menos una letra mayúscula y un número.</span>
                         </div>
                         <!-- Fin Contraseña -->
 
@@ -167,7 +178,9 @@
                         <div class="mb-4 relative">
                             <label for="region" class="text-sm font-medium text-gray-900 block mb-2">Región:</label>
                             <div class="relative flex items-center">
-                                <select name="region" id="region" class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" disabled required>
+                                <select name="region" id="region"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
+                                    disabled required>
                                     <option value="region-metropolitana" selected>Región Metropolitana</option>
                                     <!-- Agrega más opciones según sea necesario -->
                                 </select>
@@ -180,27 +193,38 @@
                     </form>
                     <!-- Botón de editar/guardar -->
                     <div class="flex space-x-4 mt-4">
-                        <button type="button" id="edit-save-button" onclick="toggleEditSaveProfile()" 
+                        <button type="button" id="edit-save-button" onclick="toggleEditSaveProfile()"
                             class="px-4 py-2 text-white rounded-md bg-[#18beaa] hover:bg-[#16a89a] transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">Editar</button>
                     </div>
 
                     <!-- Modal de éxito -->
-                    <div id="success-modal" class="fixed inset-0 flex items-center justify-center hidden bg-gray-900 bg-opacity-50 z-50">
-                        <div class="relative p-4 w-full max-w-md max-h-full bg-white rounded-lg shadow dark:bg-gray-700">
+                    <div id="success-modal"
+                        class="fixed inset-0 flex items-center justify-center hidden bg-gray-900 bg-opacity-50 z-50">
+                        <div
+                            class="relative p-4 w-full max-w-md max-h-full bg-white rounded-lg shadow dark:bg-gray-700">
                             <!-- Botón para cerrar el modal de éxito -->
-                            <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onclick="hideModal()">
-                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            <button type="button"
+                                class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                onclick="hideModal()">
+                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 14 14">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                 </svg>
                                 <span class="sr-only">Cerrar modal</span>
                             </button>
                             <!-- Contenido del modal de éxito -->
                             <div class="p-4 md:p-5 text-center">
-                                <svg class="mx-auto mb-4 text-teal-600 w-12 h-12 dark:text-teal-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                <svg class="mx-auto mb-4 text-teal-600 w-12 h-12 dark:text-teal-500" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
-                                <h3 class="mb-5 text-lg font-medium text-teal-600 dark:text-teal-500">¡Datos guardados con éxito!</h3>
-                                <button type="button" class="text-white bg-teal-600 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center" onclick="hideModal()">
+                                <h3 class="mb-5 text-lg font-medium text-teal-600 dark:text-teal-500">¡Datos guardados
+                                    con éxito!</h3>
+                                <button type="button"
+                                    class="text-white bg-teal-600 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
+                                    onclick="hideModal()">
                                     Cerrar
                                 </button>
                             </div>
@@ -209,184 +233,205 @@
 
                 </div>
                 <!-- Final contenido principal de Datos -->
-                
-            <!-- Mis mascotas -->
-            <div id="pets" class="hidden step-content bg-white p-4 rounded-lg shadow-md">
-                <h2 class="text-2xl font-bold mb-4">Mis Mascotas</h2>
-                
-                <!-- Contenedor del formulario en columnas -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    
-                    <!-- Columna 1: Selección de mascota -->
-                    <div class="relative mb-4">
-                        <label for="pet-select" class="text-sm font-medium text-gray-900 block mb-2">Selecciona una mascota:</label>
-                        <div class="relative flex items-center">
-                            <select id="pet-select" class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-cyan-600 focus:border-cyan-600 text-gray-900 sm:text-sm p-2.5 pr-10 input-short input-background">
-                                <option value="">Selecciona...</option>
-                                <option value="pet1" data-name="Rex" data-age="3 años" data-species="Perro" data-breed="Pastor Alemán" data-birthdate="2021-05-14">Rex</option>
-                                <option value="pet2" data-name="Luna" data-age="2 años" data-species="Gato" data-breed="DPC" data-birthdate="2022-08-09">Luna</option>
-                            </select>
 
-                            <!-- Contenedor para el ícono "Agregar mascota" con tooltip -->
-                            <div class="ml-2 relative group flex items-center">
-                                <!-- Ícono para agregar nueva mascota -->
-                                <button id="add-pet-icon" class="flex items-center p-1 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                    </svg>
-                                </button>
-                                <!-- Tooltip -->
-                                <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 whitespace-no-wrap">
-                                    Agregar mascota
+                <!-- Mis mascotas -->
+                <div id="pets" class="hidden step-content bg-white p-4 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-bold mb-4">Mis Mascotas</h2>
+
+                    <!-- Contenedor del formulario en columnas -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        <!-- Columna 1: Selección de mascota -->
+                        <div class="relative mb-4">
+                            <label for="pet-select" class="text-sm font-medium text-gray-900 block mb-2">Selecciona una
+                                mascota:</label>
+                            <div class="relative flex items-center">
+                                <select id="pet-select"
+                                    class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-cyan-600 focus:border-cyan-600 text-gray-900 sm:text-sm p-2.5 pr-10 input-short input-background">
+                                    <option value="">Selecciona...</option>
+                                    <option value="pet1" data-name="Rex" data-age="3 años" data-species="Perro"
+                                        data-breed="Pastor Alemán" data-birthdate="2021-05-14">Rex</option>
+                                    <option value="pet2" data-name="Luna" data-age="2 años" data-species="Gato"
+                                        data-breed="DPC" data-birthdate="2022-08-09">Luna</option>
+                                </select>
+
+                                <!-- Contenedor para el ícono "Agregar mascota" con tooltip -->
+                                <div class="ml-2 relative group flex items-center">
+                                    <!-- Ícono para agregar nueva mascota -->
+                                    <button id="add-pet-icon"
+                                        class="flex items-center p-1 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 4v16m8-8H4" />
+                                        </svg>
+                                    </button>
+                                    <!-- Tooltip -->
+                                    <div
+                                        class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 whitespace-no-wrap">
+                                        Agregar mascota
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Detalles de la mascota -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <!-- Nombre de la mascota -->
+                                <div class="relative mb-4">
+                                    <label for="pet-name"
+                                        class="text-sm font-medium text-gray-900 block mb-2">Nombre:</label>
+                                    <input type="text" name="pet-name" id="pet-name" value="Selecciona una mascota"
+                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
+                                        required readonly>
+                                </div>
+                                <!-- Edad de la mascota -->
+                                <div class="relative mb-4">
+                                    <label for="pet-age"
+                                        class="text-sm font-medium text-gray-900 block mb-2">Edad:</label>
+                                    <input type="text" name="pet-age" id="pet-age" value=""
+                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
+                                        required readonly>
+                                </div>
+                                <!-- Fecha de nacimiento -->
+                                <div class="relative mb-4">
+                                    <label for="pet-birthdate"
+                                        class="text-sm font-medium text-gray-900 block mb-2">Fecha de
+                                        nacimiento:</label>
+                                    <input type="date" id="pet-birthdate" name="pet-birthdate"
+                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
+                                        required>
+                                </div>
+
+                                <!-- Especie de la mascota -->
+                                <div class="relative mb-4">
+                                    <label for="pet-species"
+                                        class="text-sm font-medium text-gray-900 block mb-2">Especie:</label>
+                                    <input type="text" name="pet-species" id="pet-species" value=""
+                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
+                                        required readonly>
+                                </div>
+                                <!-- Raza de la mascota -->
+                                <div class="relative mb-4">
+                                    <label for="pet-breed"
+                                        class="text-sm font-medium text-gray-900 block mb-2">Raza:</label>
+                                    <input type="text" name="pet-breed" id="pet-breed" value=""
+                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
+                                        required readonly>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Detalles de la mascota -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                            <!-- Nombre de la mascota -->
-                            <div class="relative mb-4">
-                                <label for="pet-name" class="text-sm font-medium text-gray-900 block mb-2">Nombre:</label>
-                                <input type="text" name="pet-name" id="pet-name" value="Selecciona una mascota" 
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" required readonly>
-                            </div>
-                            <!-- Edad de la mascota -->
-                            <div class="relative mb-4">
-                                <label for="pet-age" class="text-sm font-medium text-gray-900 block mb-2">Edad:</label>
-                                <input type="text" name="pet-age" id="pet-age" value="" 
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" required readonly>
-                            </div>
-                            <!-- Fecha de nacimiento -->
-                            <div class="relative mb-4">
-                                <label for="pet-birthdate" class="text-sm font-medium text-gray-900 block mb-2">Fecha de nacimiento:</label>
-                                <input type="date" id="pet-birthdate" name="pet-birthdate" 
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" required>
-                            </div>
-
-                            <!-- Especie de la mascota -->
-                            <div class="relative mb-4">
-                                <label for="pet-species" class="text-sm font-medium text-gray-900 block mb-2">Especie:</label>
-                                <input type="text" name="pet-species" id="pet-species" value="" 
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" required readonly>
-                            </div>
-                            <!-- Raza de la mascota -->
-                            <div class="relative mb-4">
-                                <label for="pet-breed" class="text-sm font-medium text-gray-900 block mb-2">Raza:</label>
-                                <input type="text" name="pet-breed" id="pet-breed" value="" 
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" required readonly>
+                        <!-- Columna 2: Subir foto de la mascota y vista previa -->
+                        <div class="relative mb-4">
+                            <!-- Contenedor de la foto con lápiz y texto -->
+                            <div class="flex flex-col items-center">
+                                <!-- Contenedor de la foto con lápiz -->
+                                <div
+                                    class="relative w-40 h-40 bg-white border border-gray-300 rounded-lg overflow-hidden shadow-md flex items-center justify-center mb-2">
+                                    <img id="photo-preview" src="#" alt="Vista previa de la foto"
+                                        class="w-full h-full object-cover hidden">
+                                    <!-- Ícono de lápiz para editar la foto -->
+                                    <button id="edit-photo-button"
+                                        class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-200">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="2" stroke="currentColor" class="w-5 h-5 text-gray-700">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M16.862 3.487a2.5 2.5 0 113.535 3.535l-10.61 10.61a4 4 0 01-1.414.943l-3.36 1.343a1 1 0 01-1.261-1.261l1.343-3.36a4 4 0 01.943-1.414l10.61-10.61z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M19.5 6.5L17.5 8.5" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <!-- Texto debajo de la foto -->
+                                <label for="pet-photo" class="text-sm font-medium text-gray-900 block mb-2">Foto de la
+                                    Mascota:</label>
+                                <!-- Input oculto para seleccionar la imagen -->
+                                <input type="file" name="pet-photo" id="pet-photo" accept="image/*" class="hidden">
                             </div>
                         </div>
                     </div>
 
-                    <!-- Columna 2: Subir foto de la mascota y vista previa -->
-                    <div class="relative mb-4">
-                        <!-- Contenedor de la foto con lápiz y texto -->
-                        <div class="flex flex-col items-center">
-                            <!-- Contenedor de la foto con lápiz -->
-                            <div class="relative w-40 h-40 bg-white border border-gray-300 rounded-lg overflow-hidden shadow-md flex items-center justify-center mb-2">
-                                <img id="photo-preview" src="#" alt="Vista previa de la foto" class="w-full h-full object-cover hidden">
-                                <!-- Ícono de lápiz para editar la foto -->
-                                <button id="edit-photo-button" class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-200">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-gray-700">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 3.487a2.5 2.5 0 113.535 3.535l-10.61 10.61a4 4 0 01-1.414.943l-3.36 1.343a1 1 0 01-1.261-1.261l1.343-3.36a4 4 0 01.943-1.414l10.61-10.61z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 6.5L17.5 8.5" />
-                                    </svg>
-                                </button>
+                    <!-- Botón de editar -->
+                    <div class="col-span-2">
+                        <button id="edit-button"
+                            class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 mt-4" disabled>Editar
+                            Mascota</button>
+                    </div>
+                </div>
+                <!-- Fin Mis mascotas -->
+
+                <!-- Modal para agregar una nueva mascota -->
+                <div id="add-pet-modal"
+                    class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+                    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+                        <h2 class="text-2xl font-semibold mb-4 text-gray-800">Agregar Nueva Mascota</h2>
+                        <form id="add-pet-form">
+                            <div class="mb-4">
+                                <label for="new-pet-name"
+                                    class="block text-sm font-medium text-gray-600">Nombre:</label>
+                                <input type="text" id="new-pet-name" name="new-pet-name"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                                    required>
                             </div>
-                            <!-- Texto debajo de la foto -->
-                            <label for="pet-photo" class="text-sm font-medium text-gray-900 block mb-2">Foto de la Mascota:</label>
-                            <!-- Input oculto para seleccionar la imagen -->
-                            <input type="file" name="pet-photo" id="pet-photo" accept="image/*" class="hidden">
-                        </div>
+                            <div class="mb-4">
+                                <label for="new-pet-age" class="block text-sm font-medium text-gray-600">Edad:</label>
+                                <input type="text" id="new-pet-age" name="new-pet-age"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                                    required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="new-pet-species"
+                                    class="block text-sm font-medium text-gray-600">Especie:</label>
+                                <select id="new-pet-species" name="new-pet-species"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                                    required>
+                                    <option value="">Selecciona una especie</option>
+                                    <option value="perro">Perro</option>
+                                    <option value="gato">Gato</option>
+                                </select>
+                            </div>
+                            <div class="mb-4" id="dog-breeds" style="display: none;">
+                                <label for="new-pet-breed-dog" class="block text-sm font-medium text-gray-600">Raza
+                                    (Perro):</label>
+                                <select id="new-pet-breed-dog" name="new-pet-breed"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+                                    <option value="">Selecciona una raza</option>
+                                    <option value="labrador">Labrador</option>
+                                    <option value="beagle">Beagle</option>
+                                    <option value="pastor_aleman">Pastor Alemán</option>
+                                    <!-- Agrega más razas de perros aquí -->
+                                </select>
+                            </div>
+                            <div class="mb-4" id="cat-breeds" style="display: none;">
+                                <label for="new-pet-breed-cat" class="block text-sm font-medium text-gray-600">Raza
+                                    (Gato):</label>
+                                <select id="new-pet-breed-cat" name="new-pet-breed"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
+                                    <option value="">Selecciona una raza</option>
+                                    <option value="persa">Persa</option>
+                                    <option value="siamés">Siamés</option>
+                                    <option value="maine_coon">Maine Coon</option>
+                                    <!-- Agrega más razas de gatos aquí -->
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label for="new-pet-birthdate" class="block text-sm font-medium text-gray-600">Fecha de
+                                    Nacimiento:</label>
+                                <input type="date" id="new-pet-birthdate" name="new-pet-birthdate"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                                    required>
+                            </div>
+                            <div class="flex justify-end space-x-2">
+                                <button type="button" id="close-modal"
+                                    class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition duration-300">Cancelar</button>
+                                <button type="submit"
+                                    class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300">Agregar</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
-                <!-- Botón de editar -->
-                <div class="col-span-2">
-                    <button id="edit-button" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 mt-4" disabled>Editar Mascota</button>
-                </div>
-            </div>
-            <!-- Fin Mis mascotas -->
-
-            <!-- Modal para agregar una nueva mascota -->
-            <div id="add-pet-modal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
-                <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-                    <h2 class="text-2xl font-semibold mb-4 text-gray-800">Agregar Nueva Mascota</h2>
-                    <form id="add-pet-form">
-                        <div class="mb-4">
-                            <label for="new-pet-name" class="block text-sm font-medium text-gray-600">Nombre:</label>
-                            <input type="text" id="new-pet-name" name="new-pet-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="new-pet-age" class="block text-sm font-medium text-gray-600">Edad:</label>
-                            <input type="text" id="new-pet-age" name="new-pet-age" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="new-pet-species" class="block text-sm font-medium text-gray-600">Especie:</label>
-                            <select id="new-pet-species" name="new-pet-species" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" required>
-                                <option value="">Selecciona una especie</option>
-                                <option value="perro">Perro</option>
-                                <option value="gato">Gato</option>
-                            </select>
-                        </div>
-                        <div class="mb-4" id="dog-breeds" style="display: none;">
-                            <label for="new-pet-breed-dog" class="block text-sm font-medium text-gray-600">Raza (Perro):</label>
-                            <select id="new-pet-breed-dog" name="new-pet-breed" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
-                                <option value="">Selecciona una raza</option>
-                                <option value="labrador">Labrador</option>
-                                <option value="beagle">Beagle</option>
-                                <option value="pastor_aleman">Pastor Alemán</option>
-                                <!-- Agrega más razas de perros aquí -->
-                            </select>
-                        </div>
-                        <div class="mb-4" id="cat-breeds" style="display: none;">
-                            <label for="new-pet-breed-cat" class="block text-sm font-medium text-gray-600">Raza (Gato):</label>
-                            <select id="new-pet-breed-cat" name="new-pet-breed" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
-                                <option value="">Selecciona una raza</option>
-                                <option value="persa">Persa</option>
-                                <option value="siamés">Siamés</option>
-                                <option value="maine_coon">Maine Coon</option>
-                                <!-- Agrega más razas de gatos aquí -->
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label for="new-pet-birthdate" class="block text-sm font-medium text-gray-600">Fecha de Nacimiento:</label>
-                            <input type="date" id="new-pet-birthdate" name="new-pet-birthdate" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" required>
-                        </div>
-                        <div class="flex justify-end space-x-2">
-                            <button type="button" id="close-modal" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition duration-300">Cancelar</button>
-                            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300">Agregar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-
-
-
-            <!-- Fin Modal para agregar mascota -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                <!-- Fin Modal para agregar mascota -->
 
                 <!-- Carnet digital -->
                 <div id="carnet" class="hidden step-content">
@@ -394,14 +439,16 @@
                     <p>Nombre: Rex</p>
                     <p>Historial Médico: [Enlace al historial]</p>
                     <p>Vacunas: [Lista de vacunas]</p>
-                    <button class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">Editar Carnet</button>
+                    <button class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">Editar
+                        Carnet</button>
                 </div>
                 <!-- Fin Carnet digital -->
 
                 <!-- certificados -->
                 <div id="certificates" class="hidden step-content">
                     <h2 class="text-2xl font-bold mb-4">Solicitar Certificados</h2>
-                    <select id="certificate-select" class="block w-full border border-gray-300 rounded-md shadow-sm mb-4">
+                    <select id="certificate-select"
+                        class="block w-full border border-gray-300 rounded-md shadow-sm mb-4">
                         <option value="certificate1">Certificado de Salud</option>
                         <option value="certificate2">Certificado de Vacunas</option>
                     </select>

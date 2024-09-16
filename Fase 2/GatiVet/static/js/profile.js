@@ -313,7 +313,17 @@ document.addEventListener('DOMContentLoaded', function() {
         var name = document.getElementById('new-pet-name').value;
         var age = document.getElementById('new-pet-age').value;
         var species = document.getElementById('new-pet-species').value;
-        var breed = document.getElementById('new-pet-breed').value;
+
+        // Seleccionar la raza correcta dependiendo de la especie
+        var breed;
+        if (species === 'perro') {
+            breed = document.getElementById('new-pet-breed-dog').value;
+        } else if (species === 'gato') {
+            breed = document.getElementById('new-pet-breed-cat').value;
+        } else {
+            breed = ''; // En caso de otra especie
+        }
+
         var birthdate = document.getElementById('new-pet-birthdate').value;
         
         console.log('Nombre:', name);
@@ -352,7 +362,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('edit-button').disabled = false;
     });
 });
-
 
 // Razas
 document.getElementById('new-pet-species').addEventListener('change', function() {
