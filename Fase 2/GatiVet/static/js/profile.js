@@ -602,3 +602,60 @@ document.addEventListener('DOMContentLoaded', () => {
     paginateTable('desparasitaciones', rowsPerPage);
     paginateTable('controles', rowsPerPage);
 });
+
+////////////////////////////////////////////////////////////////
+////certificafos
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Obtener elementos del DOM
+    const submitBtn = document.getElementById('submit-btn');
+    const notificationModal = document.getElementById('notification-modal');
+    const modalClose = document.getElementById('modal-close');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    const certificateSelect = document.getElementById('certificate-select');
+    const petSelect = document.getElementById('pet-select');
+
+    // Función para mostrar el modal
+    function showModal() {
+        notificationModal.classList.remove('hidden');
+    }
+
+    // Función para ocultar el modal
+    function hideModal() {
+        notificationModal.classList.add('hidden');
+    }
+
+    // Mostrar el modal si ambos campos están seleccionados
+    submitBtn.addEventListener('click', () => {
+        const selectedCertificate = certificateSelect.value;
+        const selectedPet = petSelect.value;
+
+        // Debugging: Verificar valores seleccionados
+        console.log('Selected Certificate:', selectedCertificate);
+        console.log('Selected Pet:', selectedPet);
+
+        // Verificar si el valor del select para mascotas es correcto
+        if (selectedPet === "" || selectedPet === null) {
+            console.log('Error: No se seleccionó ninguna mascota.');
+        } else {
+            console.log('Mascota seleccionada:', selectedPet);
+        }
+
+        if (selectedCertificate && selectedPet) {
+            showModal();
+        } else {
+            alert('Por favor, seleccione un certificado y una mascota.');
+        }
+    });
+
+    // Cerrar el modal al hacer clic en el botón de cerrar (fuera del modal)
+    modalClose.addEventListener('click', () => {
+        hideModal();
+    });
+
+    // Cerrar el modal al hacer clic en el botón de cerrar dentro del modal
+    modalCloseBtn.addEventListener('click', () => {
+        hideModal();
+    });
+});
+

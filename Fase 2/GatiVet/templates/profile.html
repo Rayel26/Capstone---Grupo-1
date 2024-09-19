@@ -496,8 +496,6 @@
                         </div>
                     </div>
                 </div>
-
-
                 <!-- Fin Mis mascotas -->
                 
                 <!-- Carnet digital -->
@@ -643,25 +641,74 @@
                         </div>
                     </div>
                 </div>
+                <!-- Fin Carnet digital -->
 
-
-
-
-
-
-
-
-                <!-- certificados -->
-                <div id="certificates" class="hidden step-content">
+                <!-- Certificados -->
+                <div id="certificates" class="hidden step-content bg-white p-4 rounded-lg shadow-md relative">
                     <h2 class="text-2xl font-bold mb-4">Solicitar Certificados</h2>
-                    <select id="certificate-select"
-                        class="block w-full border border-gray-300 rounded-md shadow-sm mb-4">
-                        <option value="certificate1">Certificado de Salud</option>
-                        <option value="certificate2">Certificado de Vacunas</option>
-                    </select>
-                    <button class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">Solicitar</button>
+                    <p class="text-gray-600 mb-4">Seleccione el certificado que desea solicitar y la mascota a la que aplicará. Los certificados solicitados tienen un tiempo de procesamiento de entre 5 a 10 días hábiles y serán enviados al correo registrado.</p>
+
+                    <div class="flex flex-wrap -mx-2">
+                        <!-- Columna de Certificados -->
+                        <div class="w-full md:w-1/2 px-2 mb-4">
+                            <label for="certificate-select" class="block mb-2 font-semibold">Seleccione el certificado:</label>
+                            <select id="certificate-select" class="block w-full border border-gray-300 rounded-md shadow-sm">
+                                <option value="" disabled selected>-- Seleccione un certificado --</option>
+                                <option value="certificate1">Certificado de Salud</option>
+                                <option value="certificate2">Certificado de Vacunación</option>
+                                <option value="certificate3">Certificado de Desparasitación</option>
+                                <option value="certificate4">Certificado para Viajes Internacionales</option>
+                                <option value="certificate5">Certificado de Esterilización o Castración</option>
+                                <option value="certificate6">Certificado de Muerte o Eutanasia</option>
+                                <option value="certificate7">Certificado de Identificación</option>
+                            </select>
+                        </div>
+
+                        <!-- Columna de Mascotas -->
+                        <div class="w-full md:w-1/2 px-2 mb-4">
+                            <label for="pet-select" class="block mb-2 font-semibold">Seleccione la mascota:</label>
+                            <select id="pet-select" class="block w-full border border-gray-300 rounded-md shadow-sm">
+                                <option value="" disabled selected>-- Seleccione una mascota --</option>
+                                <option value="pet1">Firulais</option>
+                                <option value="pet2">Michi</option>
+                                <option value="pet3">Rocky</option>
+                                <option value="pet4">Bobby</option>
+                                <option value="pet5">Luna</option>
+                            </select>
+                            
+                            
+                        </div>
+                    </div>
+
+                    <button id="submit-btn" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">Solicitar</button>
                 </div>
-                <!-- certificados -->
+
+                <!-- Modal de éxito -->
+                <div id="notification-modal" class="fixed inset-0 flex items-center justify-center hidden bg-gray-900 bg-opacity-50 z-50">
+                    <div class="relative p-4 w-full max-w-md max-h-full bg-white rounded-lg shadow dark:bg-gray-700">
+                        <!-- Botón para cerrar el modal de éxito -->
+                        <button id="modal-close" type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Cerrar modal</span>
+                        </button>
+                        <!-- Contenido del modal de éxito -->
+                        <div class="p-4 md:p-5 text-center">
+                            <svg class="mx-auto mb-4 text-teal-600 w-12 h-12 dark:text-teal-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <h3 class="mb-5 text-lg font-medium text-teal-600 dark:text-teal-500">¡Solicitud enviada con éxito!</h3>
+                            <button id="modal-close-btn" type="button" class="text-white bg-teal-600 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                                Cerrar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
             </div>
         </div>
     </div>
