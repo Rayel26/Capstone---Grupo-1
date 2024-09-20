@@ -276,3 +276,38 @@ table tbody tr:hover {
     height: 10rem; /* Ajusta el tamaño del logo */
     object-fit: contain; /* Asegura que el logo no se deforme */
 }
+
+/*css certificados*/
+
+input[type="checkbox"] {
+    appearance: none;
+    background-color: #fff;
+    margin-right: 0.75rem;
+    font: inherit;
+    width: 1.5em;
+    height: 1.5em;
+    border: 1.5px solid #d1d5db; /* Tailwind gray-300 */
+    border-radius: 0.375rem; /* rounded-md */
+    display: grid;
+    place-content: center;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+input[type="checkbox"]:hover {
+    border-color: #10b981; /* Tailwind green-500 */
+}
+
+input[type="checkbox"]:checked {
+    background-color: #10b981; /* Tailwind green-500 */
+    border-color: #10b981;
+}
+
+input[type="checkbox"]:checked::before {
+    content: "✓";
+    font-size: 1rem;
+    color: white;
+}
+
+    /*estilo modal*/
+
+    

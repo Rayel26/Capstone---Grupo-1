@@ -604,58 +604,74 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 ////////////////////////////////////////////////////////////////
-////certificafos
-
+////certificados
 document.addEventListener('DOMContentLoaded', () => {
-    // Obtener elementos del DOM
     const submitBtn = document.getElementById('submit-btn');
     const notificationModal = document.getElementById('notification-modal');
     const modalClose = document.getElementById('modal-close');
     const modalCloseBtn = document.getElementById('modal-close-btn');
-    const certificateSelect = document.getElementById('certificate-select');
-    const petSelect = document.getElementById('pet-select');
+    const confirmationModal = document.getElementById('confirmation-modal');
+    const confirmationCloseBtn = document.getElementById('confirmation-close-btn');
+    const petSelect = document.getElementById('mascota-select');
+    const modalPet = document.getElementById('modal-pet');
+    const modalCertificates = document.getElementById('modal-certificates');
 
-    // Función para mostrar el modal
-    function showModal() {
-        notificationModal.classList.remove('hidden');
+    function showModal(modal) {
+        modal.classList.remove('hidden');
     }
 
-    // Función para ocultar el modal
-    function hideModal() {
-        notificationModal.classList.add('hidden');
+    function hideModal(modal) {
+        modal.classList.add('hidden');
     }
 
-    // Mostrar el modal si ambos campos están seleccionados
+    function clearCheckboxes() {
+        document.querySelectorAll('input[name="certificates"]:checked').forEach((checkbox) => {
+            checkbox.checked = false;
+        });
+    }
+
+    function showCertificatesConfirmation() {
+        const selectedCertificates = [];
+        document.querySelectorAll('input[name="certificates"]:checked').forEach((checkbox) => {
+            selectedCertificates.push(checkbox.nextSibling.textContent.trim());
+        });
+
+        if (selectedCertificates.length === 0) {
+            alert("Por favor, seleccione al menos un certificado.");
+            return;
+        }
+
+        modalCertificates.innerHTML = `<strong>Certificados seleccionados:</strong> ${selectedCertificates.join(', ')}`;
+        showModal(notificationModal);
+    }
+
+    function showConfirmation() {
+        const selectedPet = petSelect.options[petSelect.selectedIndex].text;
+
+        if (selectedPet === "-- Seleccione una mascota --") {
+            alert("Por favor, seleccione una mascota.");
+            return;
+        }
+
+        modalPet.innerHTML = `<strong>Mascota seleccionada:</strong> ${selectedPet}`;
+        showCertificatesConfirmation();
+    }
+
     submitBtn.addEventListener('click', () => {
-        const selectedCertificate = certificateSelect.value;
-        const selectedPet = petSelect.value;
-
-        // Debugging: Verificar valores seleccionados
-        console.log('Selected Certificate:', selectedCertificate);
-        console.log('Selected Pet:', selectedPet);
-
-        // Verificar si el valor del select para mascotas es correcto
-        if (selectedPet === "" || selectedPet === null) {
-            console.log('Error: No se seleccionó ninguna mascota.');
-        } else {
-            console.log('Mascota seleccionada:', selectedPet);
-        }
-
-        if (selectedCertificate && selectedPet) {
-            showModal();
-        } else {
-            alert('Por favor, seleccione un certificado y una mascota.');
-        }
+        showConfirmation();
     });
 
-    // Cerrar el modal al hacer clic en el botón de cerrar (fuera del modal)
     modalClose.addEventListener('click', () => {
-        hideModal();
+        hideModal(notificationModal);
     });
 
-    // Cerrar el modal al hacer clic en el botón de cerrar dentro del modal
     modalCloseBtn.addEventListener('click', () => {
-        hideModal();
+        hideModal(notificationModal);
+        showModal(confirmationModal); // Mostrar el segundo modal al aceptar
+    });
+
+    confirmationCloseBtn.addEventListener('click', () => {
+        hideModal(confirmationModal);
+        clearCheckboxes(); // Limpiar los checkboxes al cerrar el modal
     });
 });
-
