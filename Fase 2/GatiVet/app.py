@@ -50,6 +50,11 @@ def schedule():
 def profile():
     return render_template('profile.html')
 
+# Ruta para la página de perfil veterinario
+@app.route('/profile_vet')
+def profile_vet():
+    return render_template('profile_vet.html')
+
 # Ruta para la página de carrito
 @app.route('/cart')
 def cart():
