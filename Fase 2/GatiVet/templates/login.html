@@ -11,15 +11,12 @@
 </head>
 <body>
     <section class="min-h-screen flex items-stretch text-white relative">
-        <!-- Botón de navegación a Home -->
-        <a href="{{ url_for('home') }}"
-        class="absolute top-4 left-4 bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 rounded z-20 rounded-full focus:outline-none transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer inline-flex items-center">
-        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            class="w-4 h-4 mr-2" viewBox="0 0 24 24">
-            <path d="M19 12H5m7-7l-7 7 7 7"></path>
-        </svg>
-        Inicio
-    </a>
+        <a href="{{ url_for('home') }}" class="absolute top-4 left-4 bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 rounded z-20 rounded-full focus:outline-none transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer inline-flex items-center">
+            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 mr-2" viewBox="0 0 24 24">
+                <path d="M19 12H5m7-7l-7 7 7 7"></path>
+            </svg>
+            Inicio
+        </a>
         <div class="lg:flex w-1/2 hidden bg-gray-500 bg-no-repeat bg-cover relative items-center" style="background-image: url('static/img/login.jpg'); background-size: cover; background-position: center;">
             <div class="absolute bg-black opacity-60 inset-0 z-0"></div>
             <div class="w-full px-24 z-10">
@@ -35,72 +32,42 @@
                 <a class="flex items-center justify-center text-gray-900 mb-4 md:mb-0 hover:text-gray-800 transition-colors duration-300 cursor-pointer">
                     <img src="{{ url_for('static', filename='img/Logo Gativet.png') }}" alt="Logo Gativet" style="width: 200px; height: 200px;">
                 </a>
-                            
+
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class="bg-red-500 text-white p-4 rounded">
+                            {% for message in messages %}
+                                <p>{{ message }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+
                 <div class="py-6 space-x-2">
                     <span class="w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white">G+</span>
                 </div>
                 <p class="text-gray-600">
                     Usa tu correo o alguna cuenta
                 </p>
-                <form action="" class="sm:w-2/3 w-full px-4 lg:px-0 mx-auto">
-                    <!-- Campo de correo para iniciar sesión -->
+                <form action="{{ url_for('login') }}" method="POST" class="sm:w-2/3 w-full px-4 lg:px-0 mx-auto">
                     <div class="pb-2 pt-4">
-                        <input type="email" name="email" id="login-email" placeholder="Email" class="block w-full p-4 text-lg rounded-sm bg-white text-black border border-gray-300">
+                        <input type="email" name="email" id="login-email" placeholder="Email" class="block w-full p-4 text-lg rounded-sm bg-white text-black border border-gray-300" required>
                     </div>
                     <div class="pb-2 pt-4">
-                        <input type="password" name="password" id="password" placeholder="Password" class="block w-full p-4 text-lg rounded-sm bg-white text-black border border-gray-300">
+                        <input type="password" name="password" id="password" placeholder="Password" class="block w-full p-4 text-lg rounded-sm bg-white text-black border border-gray-300" required>
                     </div>
-
-                    <!-- Enlace para abrir el primer modal -->
-                    <div class="text-right text-gray-400 hover:underline hover:text-gray-900 transition-colors duration-300 ">
+                    
+                    <div class="text-right text-gray-400 hover:underline hover:text-gray-900 transition-colors duration-300">
                         <a href="#" id="forgot-password-link">¿Olvidaste tu contraseña?</a>
-                    </div>
-                    
-                    <!-- Primer modal: Contenido genérico con campo de correo -->
-                    <div id="forgot-password-modal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
-                        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative">
-                            <h2 class="text-xl font-semibold mb-4 text-black">Recuperar Contraseña</h2>
-                            <p class="mb-4 text-black">Por favor, ingresa tu correo electrónico para recibir un enlace de recuperación de contraseña.</p>
-                            <!-- Campo de entrada de correo -->
-                            <input type="email" id="user-email" placeholder="Correo electrónico" class="block w-full p-2 border border-gray-300 rounded mb-4 text-black">
-                            <button id="close-modal"
-                                class="absolute top-2 right-2 text-gray-400 hover:text-gray-900 transition-colors duration-300">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                            </button>
-                            <!-- Botón para enviar el formulario -->
-                            <button id="submit-email" 
-                                    class="w-full bg-[#18beaa] hover:bg-[#16a89a]  text-white py-2 px-4 rounded-md transition-colors duration-300 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
-                                Enviar
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- Segundo modal: Confirmación -->
-                    <div id="confirmation-modal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
-                        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative">
-                            <h2 class="text-xl font-semibold mb-4 text-black">Correo enviado</h2>
-                            <p class="mb-4 text-black">Hemos enviado un enlace a tu correo electrónico. Por favor, sigue las instrucciones para restablecer tu contraseña.</p>
-                            <button id="close-confirmation-modal"
-                                class="w-full bg-[#18beaa] hover:bg-[#16a89a] text-white py-2 px-4 rounded-md transition-colors duration-300">Cerrar</button>
-                        </div>
                     </div>
                     
                     <div class="text-right text-gray-400 hover:underline hover:text-gray-900 transition-colors duration-300">
                         <a href="{{ url_for('registration') }}">Registrate</a>
                     </div>
-                    
-                    <a href="{{ url_for('profile') }}" 
-                    class="block w-full p-4 text-lg rounded-full bg-[#18beaa] hover:bg-[#16a89a] focus:outline-none text-white transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
-                            Iniciar Sesión
-                    </a> 
 
-                    <a href="{{ url_for('profile_vet') }}" 
-                    class="block w-full p-4 text-lg rounded-full bg-[#18beaa] hover:bg-[#16a89a] focus:outline-none text-white transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
-                            Iniciar Sesión Veterinario
-                    </a> 
+                    <button type="submit" class="block w-full p-4 text-lg rounded-full bg-[#18beaa] hover:bg-[#16a89a] focus:outline-none text-white transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+                        Iniciar Sesión
+                    </button>  
                 </form>
             </div>
         </div>

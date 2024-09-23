@@ -1,0 +1,8 @@
+#rut-error-message {
+    display: block; /* Asegura que se muestre en un bloque */
+}
+
+#rut-error-message {
+    display: block;
+    text-align: center; /* Centra el texto del mensaje */
+}

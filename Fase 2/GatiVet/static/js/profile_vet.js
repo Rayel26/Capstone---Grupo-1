@@ -171,17 +171,21 @@ const owners = [
 
 // Función para buscar el dueño por RUT
 function searchOwner() {
-    const rut = document.getElementById('rut').value;
+    const rutInput = document.getElementById('rut');
+    const rut = rutInput.value;
 
     // Comprobar si el RUT es válido
     const cleanRut = rut.replace(/\D/g, ''); // Elimina caracteres no numéricos
+    const rutErrorMessage = document.getElementById('rut-error-message');
+
     if (cleanRut.length !== 9) { // Asegúrate de que el RUT completo (8 dígitos + dígito verificador) se ha ingresado
-        const rutErrorMessage = document.getElementById('rut-error-message');
         rutErrorMessage.textContent = 'Por favor, ingrese un RUT completo y válido.';
         rutErrorMessage.classList.remove('hidden'); // Muestra el mensaje
+        rutInput.classList.add('border-red-500'); // Cambia el borde a rojo para indicar error
         return; // Salir de la función si el RUT no es válido
     } else {
-        document.getElementById('rut-error-message').classList.add('hidden'); // Oculta el mensaje si el formato es válido
+        rutErrorMessage.classList.add('hidden'); // Oculta el mensaje si el formato es válido
+        rutInput.classList.remove('border-red-500'); // Restablece el borde
     }
 
     const ownerData = owners[Math.floor(Math.random() * owners.length)];
