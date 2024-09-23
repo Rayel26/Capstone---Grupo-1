@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-
+from functools import wraps
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'  # Clave para las sesiones
@@ -11,13 +11,34 @@ users = {
     "admin@example.com": {"password": "adminpass", "role": "admin"}
 }
 
+# Decorador para verificar si el usuario está logueado
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('is_logged_in'):
+            flash('Debes iniciar sesión para acceder a esta página.', 'error')
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
 
-# Ruta para la página de home
+# Decorador para verificar el rol del usuario
+def role_required(role):
+    def wrapper(f):
+        @wraps(f)
+        def wrapped(*args, **kwargs):
+            if session.get('role') != role:
+                flash('No tienes permiso para acceder a esta página.', 'error')
+                return redirect(url_for('login'))
+            return f(*args, **kwargs)
+        return wrapped
+    return wrapper
+
+# Ruta para la página de inicio
 @app.route('/')
 def home():
     return render_template('home.html')
 
-# Ruta para la página de login, permite GET y POST
+# Ruta para la página de login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -29,101 +50,76 @@ def login():
         if user and user['password'] == password:
             session['email'] = email
             session['role'] = user['role']
-            session['is_logged_in'] = True  # Agrega esto
+            session['is_logged_in'] = True  # Marca que el usuario ha iniciado sesión
             
+            # Redirigir al perfil según el rol
             if user['role'] == 'user':
                 return redirect(url_for('profile'))
             elif user['role'] == 'vet':
                 return redirect(url_for('profile_vet'))
             elif user['role'] == 'admin':
-                return redirect(url_for('admin_dashboard'))  # Ruta ejemplo para admin
+                return redirect(url_for('admin_dashboard'))
         else:
             flash('Usuario o contraseña incorrectos', 'error')
     
     return render_template('login.html')
 
-# Ruta para la página de registro
-@app.route('/registration', methods=['GET', 'POST'])
-def registration():
-    if request.method == 'POST':
-        # Aquí agregarías lógica para registrar un nuevo usuario
-        pass
-    return render_template('registration.html')
-
-# Ruta para el perfil del usuario
-@app.route('/profile')
-def profile():
-    if 'email' not in session or session.get('role') != 'user':
-        flash('Debes iniciar sesión como usuario para acceder a esta página.', 'error')
-        return redirect(url_for('login'))
-    return render_template('profile.html')
-
-# Ruta para el perfil del veterinario
-@app.route('/profile_vet')
-def profile_vet():
-    if 'email' not in session or session.get('role') != 'vet':
-        flash('Debes iniciar sesión como veterinario para acceder a esta página.', 'error')
-        return redirect(url_for('login'))
-    return render_template('profile_vet.html')
-
 # Ruta para cerrar sesión
 @app.route('/logout')
 def logout():
-    session.pop('email', None)
-    session.pop('role', None)
-    session.pop('is_logged_in', None)
+    session.clear()  # Elimina toda la información de la sesión
     flash('Has cerrado sesión.', 'info')
     return redirect(url_for('login'))
 
-# Ruta ejemplo para admin (opcional)
+# Ruta para el perfil de usuario
+@app.route('/profile')
+@login_required
+@role_required('user')
+def profile():
+    return render_template('profile.html')
+
+# Ruta para el perfil de veterinario
+@app.route('/profile_vet')
+@login_required
+@role_required('vet')
+def profile_vet():
+    return render_template('profile_vet.html')
+
+# Ruta para el panel de administrador
 @app.route('/admin_dashboard')
+@login_required
+@role_required('admin')
 def admin_dashboard():
-    if 'email' not in session or session.get('role') != 'admin':
-        flash('Debes iniciar sesión como administrador para acceder a esta página.', 'error')
-        return redirect(url_for('login'))
     return render_template('admin_dashboard.html')
 
-
-# Ruta para la página de producto
+# Otras rutas de la aplicación
 @app.route('/products')
 def products():
     return render_template('products.html')
 
-# Ruta para la página de item
 @app.route('/item')
 def item():
     return render_template('item.html')
 
-# Ruta para la página de help
 @app.route('/help')
 def help():
     return render_template('help.html')
 
-# Ruta para la página de contacto
 @app.route('/contact')
 def contact():
     return render_template('contact.html')
 
-# Ruta para la página de agendar hora
 @app.route('/schedule')
 def schedule():
     return render_template('schedule.html')
 
-# Ruta para la página de perfil
-#@app.route('/profile')
-#def profile():
-#    return render_template('profile.html')
-
-# Ruta para la página de perfil veterinario
-#@app.route('/profile_vet')
-#def profile_vet():
-#    return render_template('profile_vet.html')
-
-# Ruta para la página de carrito
 @app.route('/cart')
 def cart():
     return render_template('cart.html')
 
+@app.route('/registration')
+def registration():
+    return render_template('registration.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

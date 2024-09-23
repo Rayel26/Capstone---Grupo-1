@@ -30,11 +30,34 @@
     /* Color cuando el paso está completo */
 }
 
-@media (max-width: 768px) {
-    .step-icon-name {
-        display: none;
-    }
+.profile-link:hover .profile-text {
+    opacity: 1; /* Muestra el tooltip al pasar el cursor */
 }
+
+.profile-text {
+    visibility: hidden; /* Oculta el tooltip por defecto */
+    width: 60px; /* Ancho de la burbuja más pequeño */
+    background-color: rgb(24, 190, 170); /* Color de fondo */
+    color: white; /* Color del texto */
+    text-align: center; /* Centra el texto */
+    border-radius: 20px; /* Bordes más redondeados */
+    padding: 2px; /* Espaciado interno reducido */
+    position: absolute;
+    z-index: 1;
+    bottom: 100%; /* Posiciona el tooltip encima del ícono */
+    left: 50%;
+    transform: translateX(-50%); /* Centra el tooltip */
+    margin-bottom: 5px; /* Espacio entre el ícono y el tooltip */
+    opacity: 0; /* Oculta el tooltip */
+    transition: opacity 0.3s; /* Transición suave */
+    font-size: 12px; /* Tamaño de fuente más pequeño */
+}
+
+.profile-link:hover .profile-text {
+    visibility: visible; /* Muestra el tooltip al pasar el cursor */
+    opacity: 1; /* Cambia la opacidad para hacerlo visible */
+}
+
 
 .step-container {
     display: flex;

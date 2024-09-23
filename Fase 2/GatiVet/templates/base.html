@@ -77,21 +77,47 @@
           <span id="cartCount" class="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center">0</span>
         </a>
         {% if session.get('is_logged_in') %}
-          <a href="{{ url_for('logout') }}" class="inline-flex items-center bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 rounded-full focus:outline-none text-base mt-4 md:mt-0 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
-            Cerrar Sesión
-            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
-                <path d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
-          </a>
-        {% else %}
-          <a href="{{ url_for('login') }}" class="inline-flex items-center bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 rounded-full focus:outline-none text-base mt-4 md:mt-0 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
-            Iniciar Sesión
-            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
-                <path d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
-          </a>
-          
+        {% if session.get('role') == 'user' %}
+        <a href="{{ url_for('profile') }}"
+          class="profile-link items-center relative mr-5 mt-2 text-gray-600 underline-animated cursor-pointer">
+          <i class="fa-solid fa-user fa-lg mr-2"></i>
+          <span class="profile-text absolute left-1/2 transform -translate-x-1/2 bottom-full mb-1 opacity-0 transition-opacity duration-300">Mi Perfil</span>
+        </a>
+        {% elif session.get('role') == 'vet' %}
+        <a href="{{ url_for('profile_vet') }}"
+          class="profile-link items-center relative mr-5 mt-2 text-gray-600 underline-animated cursor-pointer">
+          <i class="fa-solid fa-user-doctor fa-lg mr-2"></i>
+          <span class="profile-text absolute left-1/2 transform -translate-x-1/2 bottom-full mb-1 opacity-0 transition-opacity duration-300">Mi Perfil</span>
+        </a>
+        {% elif session.get('role') == 'admin' %}
+        <a href="{{ url_for('admin_dashboard') }}"
+          class="profile-link relative inline-flex items-center text-gray-900 hover:text-gray-600 transition-colors duration-300 cursor-pointer">
+          <i class="fas fa-user-circle fa-lg mr-2"></i>
+          <span class="profile-text absolute left-1/2 transform -translate-x-1/2 bottom-full mb-1 opacity-0 transition-opacity duration-300">Mi Perfil</span>
+        </a>
         {% endif %}
+        <a href="{{ url_for('logout') }}"
+          class="inline-flex items-center bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 rounded-full focus:outline-none text-base mt-4 md:mt-0 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+          Cerrar Sesión
+          <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+            <path d="M5 12h14M12 5l7 7-7 7"></path>
+          </svg>
+        </a>
+    {% else %}
+        <a href="{{ url_for('login') }}"
+          class="inline-flex items-center bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 rounded-full focus:outline-none text-base mt-4 md:mt-0 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+          Iniciar Sesión
+          <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+            <path d="M5 12h14M12 5l7 7-7 7"></path>
+          </svg>
+        </a>
+    {% endif %}
+
+
+
+
     </div>
   </header>
 
