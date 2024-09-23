@@ -25,7 +25,7 @@
                     </button>
                 </div>
             </div>
-
+    
             <!-- Contenido Principal -->
             <div id="main-content" class="flex-grow p-4 bg-white rounded-lg shadow-md relative">
                 <!-- Sección de búsqueda por RUT -->
@@ -36,84 +36,77 @@
                         <div class="flex items-center">
                             <input type="text" id="rut" name="rut" class="border rounded p-1 w-32" placeholder="Ej: 12.345.678-9" oninput="this.value = formatRut(this.value)">
                             <button type="button" id="search-owner-btn" class="ml-2 bg-blue-500 text-white p-2 rounded" onclick="searchOwner()">Buscar</button>
-
-                            <!-- Select de selección de mascota, ajustado a la derecha y con ancho más largo -->
-                            <label for="rut" class="block mb-2"><strong>Seleccione mascota:</strong></label>
-                            <select id="pet-selection" class="border rounded p-2 w-48 ml-auto" onchange="showPetDetails()">
-                                <!-- Las opciones de mascotas serán cargadas dinámicamente -->
-                            </select>
                         </div>
                     </div>
+                    <!-- Label y Select de selección de mascota -->
+                    <label for="mascota" class="block mb-2 mt-4"><strong>Seleccione mascota:</strong></label>
+                    <select id="pet-selection" class="border rounded p-2 w-48" onchange="showPetDetails()">
+                        <!-- Las opciones de mascotas serán cargadas dinámicamente -->
+                    </select>
                 </form>
-                
+    
                 <div class="flex space-x-4 mt-6" id="owner-profile">
                     <!-- Columna de datos del dueño con tarjeta -->
                     <div class="w-1/2 min-h-full">
-                        <h3 class="text-xl font-bold">Datos del Dueño:</h3>
+                        <h4 class="font-bold">Datos del Dueño:</h4>
                         <div class="bg-white overflow-hidden shadow rounded-lg border">
-                            <div class="px-4 py-5 sm:px-6">
-                                <h3 class="text-lg leading-6 font-medium text-gray-900">Detalles del Dueño</h3>
-                                <p class="mt-1 max-w-2xl text-sm text-gray-500">Aquí tienes la información sobre el dueño.</p>
-                            </div>
                             <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
-                                <dl class="sm:divide-y sm:divide-gray-200">
-                                    <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                        <dt class="text-sm font-medium text-gray-500">Nombre</dt>
-                                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2" id="owner-name"></dd>
+                                <dl class="sm:divide-y sm:divide-gray-200 grid grid-cols-2 ml-4">
+                                    <div class="py-3 flex items-center">
+                                        <dt class="text-sm font-extrabold text-gray-500">Nombre</dt>
+                                        <dd class="text-sm text-gray-900 ml-2" id="owner-name"></dd>
                                     </div>
-                                    <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                        <dt class="text-sm font-medium text-gray-500">Edad</dt>
-                                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2" id="owner-age"></dd>
+                                    <div class="py-3 flex items-center">
+                                        <dt class="text-sm font-extrabold text-gray-500">Edad</dt>
+                                        <dd class="text-sm text-gray-900 ml-2" id="owner-age"></dd>
                                     </div>
-                                    <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                        <dt class="text-sm font-medium text-gray-500">Dirección</dt>
-                                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2" id="owner-address"></dd>
+                                    <div class="py-3 flex items-center">
+                                        <dt class="text-sm font-extrabold text-gray-500">Dirección</dt>
+                                        <dd class="text-sm text-gray-900 ml-2" id="owner-address"></dd>
                                     </div>
                                 </dl>
                             </div>
                         </div>
                     </div>
 
+    
                     <!-- Columna de selección de mascota y datos -->
                     <div class="w-1/2 min-h-full">
-                        <h3 class="text-xl font-bold">Datos de la Mascota:</h3>
+                        <h4 class="font-bold">Datos de la Mascota:</h4>
                         <div id="pet-details" class="tab-content hidden">
                             <div class="bg-white overflow-hidden shadow rounded-lg border min-h-full">
-                                <div class="px-4 py-5 sm:px-6">
-                                    <h3 class="text-lg leading-6 font-medium text-gray-900">Detalles de la Mascota</h3>
-                                    <p class="mt-1 max-w-2xl text-sm text-gray-500">Aquí tienes la información sobre la mascota seleccionada.</p>
-                                </div>
                                 <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
-                                    <dl class="sm:divide-y sm:divide-gray-200">
-                                        <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                            <dt class="text-sm font-medium text-gray-500">Nombre</dt>
-                                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2" id="pet-name"></dd>
+                                    <dl class="sm:divide-y sm:divide-gray-200 grid grid-cols-2 ml-4">
+                                        <div class="py-3 flex items-center">
+                                            <dt class="text-sm font-extrabold text-gray-500">Nombre</dt>
+                                            <dd class="text-sm text-gray-900 ml-2" id="pet-name"></dd>
                                         </div>
-                                        <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                            <dt class="text-sm font-medium text-gray-500">Raza</dt>
-                                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2" id="pet-breed"></dd>
+                                        <div class="py-3 flex items-center">
+                                            <dt class="text-sm font-extrabold text-gray-500">Raza</dt>
+                                            <dd class="text-sm text-gray-900 ml-2" id="pet-breed"></dd>
                                         </div>
-                                        <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                            <dt class="text-sm font-medium text-gray-500">Edad</dt>
-                                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2" id="pet-age"></dd>
+                                        <div class="py-3 flex items-center">
+                                            <dt class="text-sm font-extrabold text-gray-500">Edad</dt>
+                                            <dd class="text-sm text-gray-900 ml-2" id="pet-age"></dd>
                                         </div>
-                                        <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                            <dt class="text-sm font-medium text-gray-500">Esterilizado</dt>
-                                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2" id="pet-sterilized"></dd>
+                                        <div class="py-3 flex items-center">
+                                            <dt class="text-sm font-extrabold text-gray-500">Esterilizado</dt>
+                                            <dd class="text-sm text-gray-900 ml-2" id="pet-sterilized"></dd>
                                         </div>
-                                        <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                            <dt class="text-sm font-medium text-gray-500">Chip</dt>
-                                            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2" id="pet-chip"></dd>
+                                        <div class="py-3 flex items-center">
+                                            <dt class="text-sm font-extrabold text-gray-500">Chip</dt>
+                                            <dd class="text-sm text-gray-900 ml-2" id="pet-chip"></dd>
                                         </div>
                                     </dl>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                
-                
+
+
+                </div>
+    
                 <!-- Historial de Procedimientos -->
                 <div>
                     <h3 class="text-2xl font-bold mt-4">Historial de Procedimientos</h3>
@@ -136,6 +129,8 @@
             </div>
         </div>
     </div>
+    
+    
 
     <!-- Modal -->
     <div id="modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
