@@ -146,7 +146,7 @@
 
             <!-- Selección -->
             <div class="step-content hidden p-6 bg-white shadow-md rounded-lg active" id="step-select">
-                <p class="text-gray-700 mb-4">Seleccione la fecha y hora para su cita con el profesional seleccionado:</p>
+                <p class="text-gray-700 mb-4"><Strong>Seleccione la fecha y hora para su cita con el profesional seleccionado:</Strong></p>
 
                 <div class="flex items-start">
                     <!-- Imagen del Doctor Seleccionado -->
@@ -163,8 +163,11 @@
                         <div class="mb-4">
                             <label for="date-select" class="block text-gray-700 mb-2">Selecciona una fecha:</label>
                             <input type="date" id="date-select"
-                                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400">
+                                class="w-1/2 mx-auto px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+                                onclick="this.showPicker()" 
+                                min="" /> <!-- Se dejará que el atributo min se configure con JavaScript -->
                         </div>
+
 
                         <!-- Selección de Hora -->
                         <div class="mb-4">
@@ -198,42 +201,44 @@
             <!-- Datos de Mascota -->
             <!-- Selección de Mascota -->
             <div class="step-content hidden p-6 bg-white shadow-md rounded-lg active" id="step-pet">
-                <h4 class="text-3xl font-bold text-gray-800 mb-6">Seleccione su mascota:</h4>
-
+                
                 <!-- Contenedor para Selector y Tarjeta -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Selector de mascotas -->
-                    <div>
-                        <label for="pet-select" class="block text-gray-700 mb-2">Seleccione una mascota:</label>
-                        <select id="pet-select"
-                            class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
-                            onchange="updatePetDetails()">
-                            <!-- Opciones de ejemplo, deben ser generadas dinámicamente con JavaScript -->
-                            <option value="">Seleccione una mascota</option>
-                            <option value="1" data-name="Firulais" data-age="5" data-breed="Labrador" data-image="https://media.tenor.com/ZJT4S4lpfpIAAAAM/perro-bailando.gif">Firulais</option>
-                            <option value="2" data-name="Mittens" data-age="3" data-breed="Siamés" data-image="https://i.pinimg.com/originals/30/29/51/3029517e824f67d07d86af9bf0b0d795.gif">Mittens</option>
-                            <!-- Añadir más opciones según sea necesario -->
-                        </select>
-                    </div>
+                <!-- Selector de mascotas -->
+                <div>
+                    <label for="pet-select" class="block text-gray-700 mb-2"><strong>Seleccione una mascota:</strong></label>
+                    <select id="pet-select"
+                        class="w-48 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+                        onchange="updatePetDetails()">
+                        <!-- Opciones de ejemplo, deben ser generadas dinámicamente con JavaScript -->
+                        <option value="">Seleccione una mascota</option>
+                        <option value="1" data-name="Firulais" data-age="5" data-breed="Labrador" data-image="https://media.tenor.com/ZJT4S4lpfpIAAAAM/perro-bailando.gif">Firulais</option>
+                        <option value="2" data-name="Mittens" data-age="3" data-breed="Siamés" data-image="https://i.pinimg.com/originals/30/29/51/3029517e824f67d07d86af9bf0b0d795.gif">Mittens</option>
+                        <!-- Añadir más opciones según sea necesario -->
+                    </select>
+                </div>
 
-                    <!-- Tarjeta de detalles de la mascota -->
-                    <div id="pet-card" class="hidden p-6 rounded-lg shadow-lg bg-[#e6f9f0]">
-                        <div class="flex flex-col md:flex-row items-center">
-                            <!-- Imagen de la mascota -->
-                            <img id="pet-image" src="" alt="Imagen de la mascota" class="w-32 h-32 object-cover rounded-lg mb-4 md:mb-0 md:mr-6">
-                            <!-- Detalles de la mascota -->
-                            <div>
-                                <h5 id="pet-name" class="text-2xl font-semibold text-gray-800 mb-2">Nombre de la mascota</h5>
-                                <p id="pet-age" class="text-gray-700">Edad: X años</p>
-                                <p id="pet-breed" class="text-gray-700">Raza: X raza</p>
-                            </div>
+                <!-- Tarjeta de detalles de la mascota -->
+                <div id="pet-card" class="hidden p-6 rounded-lg shadow-lg bg-[#e6f9f0] max-w-sm mx-auto transition-transform transform hover:scale-105 duration-300">
+                    <div class="flex flex-col md:flex-row items-center">
+                        <!-- Imagen de la mascota -->
+                        <img id="pet-image" src="" alt="Imagen de la mascota" class="w-32 h-32 object-cover rounded-lg mb-4 md:mb-0 md:mr-6 shadow-md border-2 border-[#18beaa]">
+                        <!-- Detalles de la mascota -->
+                        <div class="text-center md:text-left">
+                            <h5 id="pet-name" class="text-3xl font-semibold text-[#18beaa] mb-2">Nombre de la mascota</h5>
+                            <p id="pet-age" class="text-gray-800 font-medium"><strong>Edad:</strong> <span class="text-[#18beaa]">X años</span></p>
+                            <p id="pet-breed" class="text-gray-800 font-medium"><strong>Raza:</strong> <span class="text-[#18beaa]">X raza</span></p>
                         </div>
                     </div>
                 </div>
 
+
+
+                </div>
+
                 <!-- Detalles de la cita -->
                 <div class="mb-4 mt-6">
-                    <label for="appointment-details" class="block text-gray-700 mb-2">Detalles de la cita:</label>
+                    <label for="appointment-details" class="block text-gray-700 mb-2"><strong>Detalles de la cita:</strong></label>
                     <textarea id="appointment-details" rows="4"
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
                         placeholder="Especifique qué le pasa a su mascota o lo que necesita para la cita."></textarea>
@@ -252,18 +257,21 @@
             <!-- Éxito -->
             <div class="step-content hidden p-6 bg-white shadow-md rounded-lg active" id="step-success">
                 <h2 class="text-3xl font-bold text-gray-800 mb-6">¡Éxito!</h2>
-                <p class="text-gray-700 mb-4">Tu cita ha sido confirmada exitosamente.</p>
+                <p class="text-gray-700 mb-4"><strong>Tu cita ha sido confirmada exitosamente.</strong></p>
                 <p class="text-gray-600 mb-4">Te hemos enviado un correo electrónico con los detalles de la cita.</p>
 
                 <!-- Tarjeta de Resumen de Cita -->
-                <div class="bg-[#f0f9f8] p-6 rounded-lg shadow-lg">
-                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Resumen de la Cita</h3>
-                    <p id="summary-date" class="text-gray-700">Fecha: [Fecha]</p>
-                    <p id="summary-time" class="text-gray-700">Hora: [Hora]</p>
-                    <p id="summary-doctor" class="text-gray-700">Doctor: [Nombre del Doctor]</p>
-                    <p id="summary-pet" class="text-gray-700">Mascota: [Nombre de la Mascota]</p>
-                    <p id="summary-address" class="text-gray-700">Domicilio: [Dirección]</p>
+                <div class="bg-[#e6f9f0] p-6 rounded-lg shadow-lg max-w-lg mx-auto">
+                    <h3 class="text-3xl font-semibold text-[#18beaa] mb-4 text-center">Resumen de la Cita</h3>
+                    <div class="space-y-2">
+                        <p id="summary-date" class="text-gray-800 font-medium"><strong>Fecha:</strong> <span class="text-gray-700">[Fecha]</span></p>
+                        <p id="summary-time" class="text-gray-800 font-medium"><strong>Hora:</strong> <span class="text-gray-700">[Hora]</span></p>
+                        <p id="summary-doctor" class="text-gray-800 font-medium"><strong>Doctor:</strong> <span class="text-gray-700">[Nombre del Doctor]</span></p>
+                        <p id="summary-pet" class="text-gray-800 font-medium"><strong>Mascota:</strong> <span class="text-gray-700">[Nombre de la Mascota]</span></p>
+                        <p id="summary-address" class="text-gray-800 font-medium"><strong>Domicilio:</strong> <span class="text-gray-700">[Dirección]</span></p>
+                    </div>
                 </div>
+
 
                 <div class="text-center mt-6">
                     <a href="/" class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">

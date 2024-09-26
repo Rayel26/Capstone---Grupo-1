@@ -61,6 +61,15 @@ document.querySelectorAll('#time-select button').forEach(button => {
     });
 });
 
+// Obtener la fecha de hoy en el formato adecuado (YYYY-MM-DD)
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); // Los meses son indexados desde 0
+    const dd = String(today.getDate()).padStart(2, '0');
+
+    // Establecer el atributo min del input de fecha
+    document.getElementById('date-select').min = `${yyyy}-${mm}-${dd}`;
+
 // Validar la selección de fecha y hora
 function validateDateTime() {
     const selectedDate = document.getElementById('date-select').value;

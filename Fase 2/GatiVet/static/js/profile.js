@@ -66,20 +66,29 @@ function toggleEditSaveProfile() {
     }
 }
 
-// Función para mostrar el modal
-function showModal() {
-    document.getElementById('success-modal').classList.remove('hidden');
+// Función para mostrar el modal de eliminación
+function showDeleteModal() {
+    document.getElementById('delete-modal').classList.remove('hidden');
 }
 
-// Función para ocultar el modal
-function hideModal() {
-    document.getElementById('success-modal').classList.add('hidden');
+// Función para ocultar el modal de eliminación
+function hideDeleteModal() {
+    document.getElementById('delete-modal').classList.add('hidden');
 }
 
-// Event listener para el botón de cerrar el modal
-document.querySelector('#success-modal button').addEventListener('click', () => {
-    hideModal();
+// Event listener para el botón de cerrar el modal de eliminación
+document.querySelector('#delete-modal button').addEventListener('click', () => {
+    hideDeleteModal();
 });
+
+// Función para confirmar la eliminación de la cuenta
+function confirmDeleteAccount() {
+    // Lógica para eliminar la cuenta
+    hideDeleteModal();
+    // Aquí puedes agregar una alerta o un mensaje que indique que la cuenta ha sido eliminada
+    alert("Tu cuenta ha sido eliminada.");
+}
+
 
 // Validar y formatear el campo de teléfono y RUT
 document.addEventListener('DOMContentLoaded', () => {
@@ -235,6 +244,20 @@ function showContent(sectionId) {
     activeButton.querySelector('span').classList.add('active-step');
 }
 
+function openDeleteModal() {
+    document.getElementById('delete-modal').classList.remove('hidden');
+}
+
+function closeDeleteModal() {
+    document.getElementById('delete-modal').classList.add('hidden');
+}
+
+function confirmDeleteAccount() {
+    // Aquí puedes agregar la lógica para eliminar la cuenta
+    alert("Cuenta eliminada."); // Mensaje temporal
+    closeDeleteModal(); // Cierra el modal después de la acción
+}
+
 ////////////////////////////////////////////////////////////////
 // Mascotas
 document.addEventListener('DOMContentLoaded', function() {
@@ -363,7 +386,7 @@ document.addEventListener('DOMContentLoaded', function() {
         editButton.disabled = false;
     });
 
-    // Abre el modal para editar la mascota
+    /// ** Abre el modal para editar la mascota
     editButton.addEventListener('click', function() {
         const selectedOption = petSelect.options[petSelect.selectedIndex];
         const name = selectedOption.getAttribute('data-name');
@@ -376,10 +399,26 @@ document.addEventListener('DOMContentLoaded', function() {
             // Rellenar el formulario de edición con los datos de la mascota seleccionada
             editPetName.value = name;
             editPetAge.value = age;
-            editPetSpecies.value = species;
-            editPetSpecies.disabled = false; // Hacer el campo de especie editable para pruebas
-            editPetBreedDog.value = species === 'perro' ? breed : '';
-            editPetBreedCat.value = species === 'gato' ? breed : '';
+
+            // Mostrar especie y raza como texto
+            editPetSpecies.value = species; // Establece la especie en el formulario
+            // Mantener el campo de especie habilitado, pero puedes estilizarlo para que se vea diferente
+            editPetSpecies.classList.add('read-only'); // Ejemplo de clase para estilos
+
+            // Mostrar la raza correspondiente según la especie
+            if (species === 'perro') {
+                editPetBreedDog.value = breed; // Cargar raza si es perro
+                editPetBreedCat.value = ''; // Limpiar raza de gato
+                editDogBreedsDiv.style.display = 'block'; // Mostrar div de razas de perros
+                editCatBreedsDiv.style.display = 'none'; // Ocultar div de razas de gatos
+            } else if (species === 'gato') {
+                editPetBreedCat.value = breed; // Cargar raza si es gato
+                editPetBreedDog.value = ''; // Limpiar raza de perro
+                editDogBreedsDiv.style.display = 'none'; // Ocultar div de razas de perros
+                editCatBreedsDiv.style.display = 'block'; // Mostrar div de razas de gatos
+            }
+            
+            // Mostrar el birthdate
             editPetBirthdate.value = birthdate;
 
             // Mostrar el modal
@@ -389,26 +428,32 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Cierra el modal de edición
-    closeEditModal.addEventListener('click', function() {
-        editPetModal.classList.add('hidden');
-    });
+    // Obtén el botón de cerrar el modal usando el nuevo ID
+    const closeEditModalButton = document.getElementById('close-edit-modal');
 
-    // Maneja el envío del formulario del modal de edición
+    // Función para cerrar el modal
+    function closeEditPetModal() {
+        editPetModal.classList.add('hidden');
+    }
+
+    // Evento para cerrar el modal al hacer clic en el botón de cerrar
+    closeEditModalButton.addEventListener('click', closeEditPetModal);
+
+    // Evento para manejar el envío del formulario de edición
     editPetForm.addEventListener('submit', function(event) {
         event.preventDefault();
         
         // Obtener valores del formulario de edición
         const name = editPetName.value;
         const age = editPetAge.value;
-        const species = editPetSpecies.value;
+        const species = editPetSpecies.value; // La especie no se puede editar, se usa el valor original
 
         // Seleccionar la raza correcta dependiendo de la especie
         let breed;
         if (species === 'perro') {
-            breed = editPetBreedDog.value;
+            breed = editPetBreedDog.value; // Raza para perros
         } else if (species === 'gato') {
-            breed = editPetBreedCat.value;
+            breed = editPetBreedCat.value; // Raza para gatos
         } else {
             breed = ''; // En caso de otra especie
         }
@@ -420,8 +465,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedOption = select.options[select.selectedIndex];
         selectedOption.setAttribute('data-name', name);
         selectedOption.setAttribute('data-age', age);
-        selectedOption.setAttribute('data-species', species);
-        selectedOption.setAttribute('data-breed', breed);
+        selectedOption.setAttribute('data-species', species); // La especie no cambia
+        selectedOption.setAttribute('data-breed', breed); // La raza no cambia
         selectedOption.setAttribute('data-birthdate', birthdate);
 
         // Actualizar los valores visibles en el select
@@ -434,26 +479,37 @@ document.addEventListener('DOMContentLoaded', function() {
         // Actualizar campos de detalles de la mascota
         petName.value = name;
         petAge.value = age;
-        petSpecies.value = species;
-        petBreed.value = breed;
+        petSpecies.value = species; // La especie se mantiene
+        petBreed.value = breed; // La raza no cambia
         petBirthdate.value = birthdate;
 
         // Habilitar el botón de editar
         editButton.disabled = false;
     });
+    // Fin modal editar mascota
+
+
+
 
     // Maneja la carga de foto
-    editPhotoButton.addEventListener('change', function(event) {
-        const file = event.target.files[0];
+    // Escucha el evento 'click' para abrir el selector de archivos
+    document.getElementById('edit-photo-button').addEventListener('click', function () {
+        document.getElementById('pet-photo').click();
+    });
+
+    // Escucha el cambio del input cuando se selecciona un archivo
+    document.getElementById('pet-photo').addEventListener('change', function (event) {
+        const file = event.target.files[0]; // Obtiene el archivo seleccionado
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(e) {
-                photoPreview.src = e.target.result;
-                petPhoto.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+            reader.onload = function (e) {
+                document.getElementById('photo-preview').src = e.target.result; // Muestra la imagen seleccionada
+            }
+            reader.readAsDataURL(file); // Lee el archivo como una URL de datos
         }
     });
+
+
     
     // Función para actualizar las razas en función de la especie seleccionada en el formulario de edición
     editPetSpecies.addEventListener('change', function() {
