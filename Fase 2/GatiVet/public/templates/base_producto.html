@@ -5,10 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Home{% endblock %}</title>
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/Logo Gativet.png') }}">
+  <link rel="icon" type="image/png" href="img/Logo Gativet.png">
   
   <!-- Cambiar rutas de CSS -->
-  <link href="/static/styles/output.css" rel="stylesheet">
   
   <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/keen-slider@6.8.6/keen-slider.min.js"></script>
@@ -19,7 +18,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   
   <!-- Importar archivo CSS específico para base -->
-  <link rel="stylesheet" href="/static/styles/base.css">  
+  <link rel="stylesheet" href="styles/base.css">  
+  <link href="styles/output.css" rel="stylesheet">
 </head>
 
 
