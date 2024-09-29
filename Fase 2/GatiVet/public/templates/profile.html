@@ -1,0 +1,758 @@
+{% extends "base_producto.html" %}
+
+{% block title %}Perfil{% endblock %}
+
+{% block content %}
+
+<head>
+    <!-- Importa el archivo CSS específico para profile -->
+    <link rel="stylesheet" href="static/styles/profile.css?v=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+
+<body>
+
+    <!-- Contenedor principal para centralizar el contenido -->
+    <div class="max-w-6xl mx-auto p-4">
+        <!-- Container para Sidebar y contenido principal -->
+        <div class="flex " >
+            <!-- Sidebar -->
+            <div id="sidebar" class="step-sidebar p-4 mr-2 flex-none w-64 ">
+                <h2 class="text-xl font-bold mb-4 step-text">Mi cuenta</h2>
+                <div class="flex flex-col space-y-4">
+                    <button onclick="showContent('profile')" class="flex items-center space-x-2">
+                        <i class="fas fa-user step-icon" id="profile-icon"></i>
+                        <span class="step-text" id="profile-text">Mis datos</span>
+                    </button>
+                    <button onclick="showContent('pets')" class="flex items-center space-x-2">
+                        <i class="fas fa-paw step-icon" id="pets-icon"></i>
+                        <span class="step-text" id="pets-text">Mis Mascotas</span>
+                    </button>
+                    <button onclick="showContent('carnet')" class="flex items-center space-x-2">
+                        <i class="fas fa-id-card step-icon" id="carnet-icon"></i>
+                        <span class="step-text" id="carnet-text">Carnet Digital</span>
+                    </button>
+                    <button onclick="showContent('certificates')" class="flex items-center space-x-2">
+                        <i class="fas fa-certificate step-icon" id="certificates-icon"></i>
+                        <span class="step-text" id="certificates-text">Solicitar Certificados</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Contenido Principal -->
+            <div class="flex-1">
+                <!-- Contenido principal de Datos -->
+                <div id="profile" class="hidden step-content p-6 bg-white shadow-md rounded-lg active">
+
+                    <form id="profile-form" class="grid grid-cols-1 md:grid-cols-2 reduce-column-gap gap-4">
+                        <!-- Columna 1 -->
+                        <!-- Nombre -->
+                        <div class="mb-4 relative">
+                            <label for="first-name" class="text-sm font-medium text-gray-900 block mb-2">Nombre:</label>
+                            <div class="relative flex items-center">
+                                <input type="text" name="first-name" id="first-name" value="Juan"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background"
+                                    required readonly>
+                                <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+                            </div>
+                        </div>
+
+                        <!-- Apellido Paterno -->
+                        <div class="mb-4 relative">
+                            <label for="last-name" class="text-sm font-medium text-gray-900 block mb-2">Apellido Paterno:</label>
+                            <div class="relative flex items-center">
+                                <input type="text" name="last-name" id="last-name" value="Pérez"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background"
+                                    required readonly>
+                                <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+                            </div>
+                        </div>
+
+                        <!-- Apellido Materno -->
+                        <div class="mb-4 relative">
+                            <label for="maternal-last-name" class="text-sm font-medium text-gray-900 block mb-2">Apellido Materno:</label>
+                            <div class="relative flex items-center">
+                                <input type="text" name="maternal-last-name" id="maternal-last-name" value="González"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background"
+                                    required readonly>
+                                <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+                            </div>
+                        </div>
+
+                        <!-- Rut -->
+                        <div class="mb-4 relative">
+                            <label for="rut" class="text-sm font-medium text-gray-900 block mb-2">RUT:</label>
+                            <div class="relative flex items-center">
+                                <input type="text" name="rut" id="rut" value="12.345.678-9"
+                                    pattern="\d{2}\.\d{3}\.\d{3}-[\dkK]"
+                                    title="Formato válido: xx.xxx.xxx-x o xx.xxx.xxx-k"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background"
+                                    required readonly>
+                                <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+                                <span id="rut-error-message" class="text-red-500 text-xs hidden">El RUT debe tener el
+                                    formato xx.xxx.xxx-x o xx.xxx.xxx-k.</span>
+                            </div>
+                        </div>
+
+                        <!-- Dirección -->
+                        <div class="mb-4 relative">
+                            <label for="address" class="text-sm font-medium text-gray-900 block mb-2">Dirección:</label>
+                            <div class="relative flex items-center">
+                                <input type="text" name="address" id="address" value="Av. Siempre Viva 123"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background"
+                                    required readonly>
+                                <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+                            </div>
+                        </div>
+
+                        <!-- Comuna -->
+                        <div class="mb-4 relative">
+                            <label for="commune" class="text-sm font-medium text-gray-900 block mb-2">Comuna:</label>
+                            <div class="relative flex items-center">
+                                <select name="commune" id="commune"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background"
+                                    disabled required>
+                                    <option value="puente-alto" selected>Puente Alto</option>
+                                    <option value="santiago">Santiago</option>
+                                    <option value="la-florida">La Florida</option>
+                                    <option value="vitacura">Vitacura</option>
+                                    <!-- Agrega más opciones según sea necesario -->
+                                </select>
+                                <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+                            </div>
+                        </div>
+
+                        <!-- Celular -->
+                        <div class="mb-4 relative">
+                            <label for="phone" class="text-sm font-medium text-gray-900 block mb-2">Celular:</label>
+                            <div class="relative flex items-center">
+                                <input type="text" name="phone" id="phone" value="+569 " pattern="\+569 \d{4} \d{4}"
+                                    title="Ingrese 8 dígitos después del prefijo +569, separados en dos grupos de 4 dígitos."
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background w-full pr-10"
+                                    readonly />
+                                <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+                            </div>
+                            <span id="phone-error-message" class="text-red-500 text-xs hidden">El número de teléfono
+                                debe tener 8 dígitos después del prefijo</span>
+                        </div>
+                        <!-- Fin Celular -->
+
+                        <!-- Correo -->
+                        <div class="mb-4 relative">
+                            <label for="email" class="text-sm font-medium text-gray-900 block mb-2">Correo:</label>
+                            <div class="relative flex items-center">
+                                <input type="email" name="email" id="email" value="juan.perez@example.com"
+                                    pattern=".+@.+" title="El correo debe contener al menos un @"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background"
+                                    required readonly>
+                                <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+                                <!-- Mensaje de error oculto inicialmente -->
+                                <span id="email-error-message" class="text-red-500 text-sm hidden">Formato de correo
+                                    inválido. Por favor ingresa un correo válido.</span>
+                            </div>
+                        </div>
+                        <!-- Fin Correo -->
+
+                        <!-- Inicio Contraseña -->
+                        <div class="mb-4 relative">
+                            <label for="password" class="text-sm font-medium text-gray-900 block mb-2">Contraseña:</label>
+                            <div class="relative flex items-center">
+                                <input type="password" name="password" id="password"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 pr-10 input-short input-background"
+                                    required readonly>
+                                <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+                            </div>
+                            <!-- Mensaje de error debajo del campo -->
+                            <span id="password-error-message" class="text-red-500 text-xs mt-1 block hidden">La
+                                contraseña debe contener al menos una letra mayúscula y un número.</span>
+                        </div>
+                        <!-- Fin Contraseña -->
+
+                        <!-- Region -->
+                        <div class="mb-4 relative">
+                            <label for="region" class="text-sm font-medium text-gray-900 block mb-2">Región:</label>
+                            <div class="relative flex items-center">
+                                <select name="region" id="region"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
+                                    disabled required>
+                                    <option value="region-metropolitana" selected>Región Metropolitana</option>
+                                    <!-- Agrega más opciones según sea necesario -->
+                                </select>
+                                <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
+                            </div>
+                        </div>
+                        <!-- Fin Region -->
+
+                    </form>
+                    <!-- Contenedor para los botones de editar y eliminar -->
+                    <div class="flex justify-between items-center mt-4">
+                        <button type="button" id="edit-save-button" onclick="toggleEditSaveProfile()"
+                            class="px-4 py-2 text-white rounded-md bg-[#18beaa] hover:bg-[#16a89a] transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">Editar</button>
+                        
+                        <!-- Botón "Eliminar Cuenta" que abre el modal -->
+                        <button type="button" id="delete-account-button" onclick="openDeleteModal()"
+                            class="px-4 py-2 text-white rounded-md bg-[#e53e3e] hover:bg-[#c53030] transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">Eliminar Cuenta</button>
+                    </div>
+                </div>
+
+                <!-- Modal de Precaución -->
+                <div id="delete-modal" class="fixed inset-0 flex items-center justify-center hidden bg-gray-900 bg-opacity-50 z-50">
+                    <div class="relative p-4 w-full max-w-md max-h-full bg-white rounded-lg shadow dark:bg-gray-700">
+                        <!-- Botón para cerrar el modal de eliminación -->
+                        <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onclick="closeDeleteModal()">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                            <span class="sr-only">Cerrar modal</span>
+                        </button>
+                        
+                        <!-- Contenido del modal de precaución -->
+                        <div class="p-4 md:p-5 text-center">
+                            <svg class="mx-auto mb-4 text-red-600 w-12 h-12 dark:text-red-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12c0-4.418-3.582-8-8-8s-8 3.582-8 8 3.582 8 8 8 8-3.582 8-8z" />
+                            </svg>
+                            <h3 class="mb-5 text-lg font-medium text-red-600 dark:text-red-500">¿Estás seguro de que deseas eliminar tu cuenta?</h3>
+                            <p class="mb-5 text-gray-500 dark:text-gray-400">Esta acción es irreversible y no podrás recuperar tu cuenta.</p>
+                            <div class="flex justify-center">
+                                <button type="button" class="text-white font-medium rounded-lg text-sm inline-flex items-center px-4 py-2.5 mr-2 rounded-md bg-[#18beaa] hover:bg-[#16a89a] transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer" onclick="closeDeleteModal()">
+                                    Cancelar
+                                </button>
+                                <button type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-4 py-2.5 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer" onclick="confirmDeleteAccount()">
+                                    Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fin Contenido principal de Datos -->
+
+                <!-- Mis mascotas -->
+                <div id="pets" class="hidden step-content bg-white p-4 p-6 bg-white shadow-md rounded-lg active">
+                    <h2 class="text-2xl font-bold mb-4">Mis Mascotas</h2>
+                
+                    <!-- Contenedor del formulario en columnas -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                        <!-- Columna 1: Selección de mascota -->
+                        <div class="relative mb-4">
+                            <label for="pet-select" class="text-sm font-medium text-gray-900 block mb-2">Selecciona una
+                                mascota:</label>
+                            <div class="relative flex items-center">
+                                <select id="pet-select"
+                                    class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-cyan-600 focus:border-cyan-600 text-gray-900 sm:text-sm p-2.5 pr-10 input-short input-background">
+                                    <option value="">Selecciona...</option>
+                                    <option value="pet1" data-name="Rex" data-age="3 años" data-species="Perro"
+                                        data-breed="Pastor Alemán" data-birthdate="2021-05-14">Rex</option>
+                                    <option value="pet2" data-name="Luna" data-age="2 años" data-species="Gato"
+                                        data-breed="DPC" data-birthdate="2022-08-09">Luna</option>
+                                </select>
+                
+                                <!-- Contenedor para el ícono "Agregar mascota" con tooltip -->
+                                <div class="ml-2 relative group flex items-center">
+                                    <!-- Ícono para agregar nueva mascota -->
+                                    <button id="add-pet-icon"
+                                        class="flex items-center p-1 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 4v16m8-8H4" />
+                                        </svg>
+                                    </button>
+                                    <!-- Tooltip -->
+                                    <div
+                                        class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 whitespace-no-wrap">
+                                        Agregar mascota
+                                    </div>
+                                </div>
+                            </div>
+                
+                            <!-- Detalles de la mascota -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <!-- Nombre de la mascota -->
+                                <div class="relative mb-4">
+                                    <label for="pet-name"
+                                        class="text-sm font-medium text-gray-900 block mb-2" disabled>Nombre:</label>
+                                    <input type="text" name="pet-name" id="pet-name" value="Selecciona una mascota"
+                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
+                                        required readonly>
+                                </div>
+                                <!-- Edad de la mascota -->
+                                <div class="relative mb-4">
+                                    <label for="pet-age"
+                                        class="text-sm font-medium text-gray-900 block mb-2" disabled>Edad:</label>
+                                    <input type="text" name="pet-age" id="pet-age" value=""
+                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
+                                        required readonly>
+                                </div>
+                                <!-- Fecha de nacimiento -->
+                                <div class="relative mb-4">
+                                    <label for="pet-birthdate"
+                                        class="text-sm font-medium text-gray-900 block mb-2" disabled>Fecha de
+                                        nacimiento:</label>
+                                    <input type="date" id="pet-birthdate" name="pet-birthdate"
+                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
+                                        required>
+                                </div>
+                
+                                <!-- Especie de la mascota -->
+                                <div class="relative mb-4">
+                                    <label for="pet-species"
+                                        class="text-sm font-medium text-gray-900 block mb-2" disabled>Especie:</label>
+                                    <input type="text" name="pet-species" id="pet-species" value=""
+                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
+                                        required readonly>
+                                </div>
+                                <!-- Raza de la mascota -->
+                                <div class="relative mb-4">
+                                    <label for="pet-breed"
+                                        class="text-sm font-medium text-gray-900 block mb-2" disabled>Raza:</label>
+                                    <input type="text" name="pet-breed" id="pet-breed" value=""
+                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
+                                        required readonly>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <!-- Columna 2: Subir foto de la mascota y vista previa -->
+                        <div class="relative mb-4">
+                            <div class="flex flex-col items-center">
+                                <!-- Ajustes de tamaño responsivo -->
+                                <div class="relative w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 bg-white border border-gray-300 rounded-lg overflow-hidden shadow-md flex items-center justify-center mb-2">
+                                    <img id="photo-preview" src="#" class="w-full h-full object-cover">
+                                    <button id="edit-photo-button" class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-200">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-gray-700">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 3.487a2.5 2.5 0 113.535 3.535l-10.61 10.61a4 4 0 01-1.414.943l-3.36 1.343a1 1 0 01-1.261-1.261l1.343-3.36a4 4 0 01.943-1.414l10.61-10.61z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 6.5L17.5 8.5" />
+                                        </svg>
+                                    </button>
+                                    <input type="file" name="pet-photo" id="pet-photo" accept="image/*" class="hidden">
+                                </div>
+                                <label for="pet-photo" class="text-sm font-medium text-gray-900 block mb-2">Foto de la Mascota:</label>
+                            </div>
+                        </div>
+                        <!-- Botón de editar -->
+                        <div class="col-span-2">
+                            <button id="edit-button" class="px-4 py-2 text-white rounded-md bg-[#18beaa] hover:bg-[#16a89a] transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">Editar Mascota</button>
+                        </div>
+                    </div>
+                    <!-- Fin Mis mascotas -->
+                </div>
+
+                <!-- Modal para agregar una nueva mascota -->
+                <div id="add-pet-modal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden z-50">
+                    <div class="relative p-6 w-full max-w-md bg-white rounded-lg shadow-lg dark:bg-gray-800">
+                        <button type="button" id="close-modal" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                            </svg>
+                            <span class="sr-only">Cerrar modal</span>
+                        </button>
+                        <div class="p-4 md:p-5 text-center">
+                            <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Agregar Nueva Mascota</h2>
+                            <form id="add-pet-form">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="mb-4">
+                                        <label for="new-pet-name" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Nombre:</label>
+                                        <input type="text" id="new-pet-name" name="new-pet-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline" required>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="new-pet-age" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Edad:</label>
+                                        <input type="text" id="new-pet-age" name="new-pet-age" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline" required>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="new-pet-species" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Especie:</label>
+                                        <select id="new-pet-species" name="new-pet-species" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline" required>
+                                            <option value="">Selecciona una especie</option>
+                                            <option value="perro">Perro</option>
+                                            <option value="gato">Gato</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-4" id="dog-breeds" style="display: none;">
+                                        <label for="new-pet-breed-dog" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Raza (Perro):</label>
+                                        <select id="new-pet-breed-dog" name="new-pet-breed" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline">
+                                            <option value="">Selecciona una raza</option>
+                                            <option value="labrador">Labrador</option>
+                                            <option value="beagle">Beagle</option>
+                                            <option value="pastor_aleman">Pastor Alemán</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-4" id="cat-breeds" style="display: none;">
+                                        <label for="new-pet-breed-cat" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Raza (Gato):</label>
+                                        <select id="new-pet-breed-cat" name="new-pet-breed" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline">
+                                            <option value="">Selecciona una raza</option>
+                                            <option value="persa">Persa</option>
+                                            <option value="siamés">Siamés</option>
+                                            <option value="maine_coon">Maine Coon</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-4 col-span-2">
+                                        <label for="new-pet-birthdate" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Fecha de Nacimiento:</label>
+                                        <input type="date" id="new-pet-birthdate" name="new-pet-birthdate" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline" required>
+                                    </div>
+                                </div>
+                                <div class="flex justify-end space-x-2">
+                                    <button type="submit" class="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition duration-300 focus:ring-4 focus:ring-teal-300 dark:focus:ring-teal-800 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">Agregar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Modal para editar la mascota -->
+                <div id="edit-pet-modal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden z-50">
+                    <div class="relative p-6 w-full max-w-md bg-white rounded-lg shadow-lg dark:bg-gray-800">
+                        <!-- Botón para cerrar el modal -->
+                        <button type="button" id="close-edit-modal" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                            </svg>
+                            <span class="sr-only">Cerrar modal</span>
+                        </button>
+                        <!-- Contenido del modal -->
+                        <div class="p-4 md:p-5">
+                            <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Editar Mascota</h2>
+                            <form id="edit-pet-form">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <!-- Input para el nombre de la mascota -->
+                                    <div class="mb-4">
+                                        <label for="edit-pet-name" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Nombre:</label>
+                                        <input type="text" id="edit-pet-name" name="edit-pet-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline" required>
+                                    </div>
+                                    <!-- Input para la edad de la mascota -->
+                                    <div class="mb-4">
+                                        <label for="edit-pet-age" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Edad:</label>
+                                        <input type="text" id="edit-pet-age" name="edit-pet-age" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline" required>
+                                    </div>
+                                    <!-- Selección de especie -->
+                                    <div class="mb-4">
+                                        <label for="edit-pet-species" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Especie:</label>
+                                        <select id="edit-pet-species" name="edit-pet-species" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline" disabled required>
+                                            <option value="perro">Perro</option>
+                                            <option value="gato">Gato</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Input para razas de perros (se oculta según selección) -->
+                                    <div class="mb-4" id="edit-dog-breeds" style="display: none;">
+                                        <label for="edit-pet-breed-dog" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Raza (Perro):</label>
+                                        <select id="edit-pet-breed-dog" name="edit-pet-breed" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline">
+                                            <option value="">Selecciona una raza</option>
+                                            <option value="labrador">Labrador</option>
+                                            <option value="beagle">Beagle</option>
+                                            <option value="pastor_aleman">Pastor Alemán</option>
+                                        </select>
+                                    </div>
+                                    <!-- Input para razas de gatos (se oculta según selección) -->
+                                    <div class="mb-4" id="edit-cat-breeds" style="display: none;">
+                                        <label for="edit-pet-breed-cat" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Raza (Gato):</label>
+                                        <select id="edit-pet-breed-cat" name="edit-pet-breed" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline">
+                                            <option value="">Selecciona una raza</option>
+                                            <option value="persa">Persa</option>
+                                            <option value="siamés">Siamés</option>
+                                            <option value="maine_coon">Maine Coon</option>
+                                        </select>
+                                    </div>
+                                    <!-- Input para la fecha de nacimiento -->
+                                    <div class="mb-4 col-span-2">
+                                        <label for="edit-pet-birthdate" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Fecha de Nacimiento:</label>
+                                        <input type="date" id="edit-pet-birthdate" name="edit-pet-birthdate" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline" required>
+                                    </div>
+                                </div>
+                                <!-- Apartado para la causa de muerte -->
+                                <div class="mt-4">
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" id="pet-deceased-checkbox" class="form-checkbox h-5 w-5 text-teal-600">
+                                        <span class="ml-2 text-sm text-gray-600 dark:text-gray-300">La mascota ha fallecido</span>
+                                    </label>
+                                </div>
+                                <div id="cause-of-death-section" class="hidden mt-4 grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="cause-of-death" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Causa de Muerte:</label>
+                                        <select id="cause-of-death" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline">
+                                            <option value="">Selecciona una causa</option>
+                                            <option value="enfermedad">Enfermedad</option>
+                                            <option value="accidente">Accidente</option>
+                                            <option value="viejo">Viejo</option>
+                                            <option value="otros">Otros</option>
+                                        </select>
+                                    </div>
+                                    <div id="other-cause-container" class="hidden">
+                                        <label for="other-cause" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Especificar:</label>
+                                        <input type="text" id="other-cause" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline">
+                                    </div>
+                                </div>
+                                <!-- Botón para guardar los cambios -->
+                                <div class="flex justify-end space-x-2 mt-4"> <!-- Agregado margin-top -->
+                                    <button type="submit" class="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition duration-300 focus:ring-4 focus:ring-teal-300 dark:focus:ring-teal-800 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">Guardar Cambios</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Fin Mis mascotas -->
+                
+                
+                <!-- Carnet digital -->
+                <div id="carnet" class="hidden step-content p-4 rounded-lg shadow-md relative p-6 bg-white shadow-md rounded-lg active">
+                    <!-- Contenedor para fecha de emisión y logo -->
+                    <div class="absolute top-4 right-4 flex flex-col items-center">
+                        <p class="text-sm font-medium mb-2">Fecha de emisión: 15-09-2024</p> <!-- Fecha de emisión -->
+                        <img src="{{ url_for('static', filename='img/Logo Gativet.png') }}" alt="Logo Gativet"
+                            class="w-100 h-100"> <!-- Logo -->
+                    </div>
+
+                    <h2 class="text-2xl font-bold mb-4">Carnet Digital</h2>
+
+                    <!-- Selector de mascota -->
+                    <div class="mb-4">
+                        <label for="mascota" class="block text-lg font-medium mb-2">Selecciona una mascota:</label>
+                        <select id="mascota" name="mascota" class="w-64 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <option value="rex">Rex</option>
+                            <option value="milo">Milo</option>
+                            <option value="luna">Luna</option>
+                            <!-- Agrega más opciones según tus necesidades -->
+                        </select>
+                    </div>
+
+                    <!-- Tabs para navegación entre secciones -->
+                    <div class="mb-4">
+                        <ul class="flex border-b border-gray-300">
+                            <li class="mr-1">
+                                <button onclick="showTab('vacunas')" class="tab-button px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-t-lg hover:bg-gray-300">Vacunas</button>
+                            </li>
+                            <li class="mr-1">
+                                <button onclick="showTab('desparasitaciones')" class="tab-button px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-t-lg hover:bg-gray-300">Desparasitaciones</button>
+                            </li>
+                            <li class="mr-1">
+                                <button onclick="showTab('controles')" class="tab-button px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-t-lg hover:bg-gray-300">Controles</button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Sección de Vacunas -->
+                    <div id="vacunas" class="tab-content hidden">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre de Vacuna</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha de Administración</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Próxima Fecha de Administración</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Veterinario</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">Triple Felina</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">15/01/2024</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">15/01/2025</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">Dr. Pérez</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">Anti-rábica</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">15/07/2024</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">15/07/2025</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">Dr. Soto</td>
+                                </tr>
+                                <!-- Agrega más filas según sea necesario -->
+                            </tbody>
+                        </table>
+                        <!-- Paginación para Vacunas -->
+                        <div id="vacunas-pagination" class="pagination"></div>
+                    </div>
+
+                    <!-- Sección de Desparasitaciones -->
+                    <div id="desparasitaciones" class="tab-content hidden">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre del Desparasitante</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha de Administración</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Próxima Fecha de Administración</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Veterinario</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">Desparasitante Interno</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">20/02/2024</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">20/02/2025</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">Dr. Gómez</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">Desparasitante Externo</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">20/08/2024</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">20/08/2025</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">Dr. López</td>
+                                </tr>
+                                <!-- Agrega más filas según sea necesario -->
+                            </tbody>
+                        </table>
+                        <!-- Paginación para Desparasitaciones -->
+                        <div id="desparasitaciones-pagination" class="pagination"></div>
+                    </div>
+
+                    <!-- Sección de Controles -->
+                    <div id="controles" class="tab-content hidden">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo de Control</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha del Control</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Veterinario</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripción</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">Control General</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">01/03/2024</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">Dr. Ruiz</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="truncate w-48 cursor-pointer" onclick="openModal('descripcion1')">Revisión completa de salud. Chequeo de peso, temperatura y estado general.</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">Control Dental</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">01/09/2024</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">Dr. Martínez</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="truncate w-48 cursor-pointer" onclick="openModal('descripcion2')">Limpieza dental y revisión de encías.</span>
+                                    </td>
+                                </tr>
+                                <!-- Agrega más filas según sea necesario -->
+                            </tbody>
+                        </table>
+                        <!-- Paginación para Controles -->
+                        <div id="controles-pagination" class="pagination"></div>
+                    </div>
+
+                    <!-- Modal para Descripción Completa -->
+                    <div id="modal" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center hidden">
+                        <div class="bg-white p-6 rounded-lg shadow-lg w-3/4 md:w-1/2 lg:w-1/3">
+                            <h3 class="text-xl font-semibold mb-4">Descripción</h3>
+                            <p id="modal-description" class="text-gray-700"></p>
+                            <button class="mt-4 px-4 py-2 bg-green-500 text-white rounded-md" onclick="closeModal()">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fin Carnet digital -->
+
+
+                <!-- Certificados -->
+                <div id="certificates" class="hidden step-content p-4 rounded-lg shadow-md relative p-6 bg-white shadow-md rounded-lg active">
+                    <h2 class="text-2xl font-bold mb-4">Solicitar Certificados</h2>
+                    <p class="text-gray-600 mb-4">Seleccione los certificados que desea solicitar y la mascota a la que aplicará. Los certificados solicitados tienen un tiempo de procesamiento de entre 5 a 10 días hábiles y serán enviados al correo registrado.</p>
+
+                    <div class="flex flex-wrap -mx-2">
+                        <!-- Columna de Certificados -->
+                        <div class="w-full md:w-1/2 px-2 mb-4">
+                            <label class="block mb-2 font-semibold">Seleccione los certificados:</label>
+                            <div class="block w-full border border-gray-300 rounded-md shadow-sm p-4 bg-white">
+
+                                <label class="flex items-center mb-2 hover:bg-gray-100 p-2 rounded-md transition">
+                                    <input type="checkbox" name="certificates" value="certificate1">
+                                    Certificado de Salud
+                                </label>
+                                <label class="flex items-center mb-2 hover:bg-gray-100 p-2 rounded-md transition">
+                                    <input type="checkbox" name="certificates" value="certificate2">
+                                    Certificado de Vacunación
+                                </label>
+                                <label class="flex items-center mb-2 hover:bg-gray-100 p-2 rounded-md transition">
+                                    <input type="checkbox" name="certificates" value="certificate3">
+                                    Certificado de Desparasitación
+                                </label>
+                                <label class="flex items-center mb-2 hover:bg-gray-100 p-2 rounded-md transition">
+                                    <input type="checkbox" name="certificates" value="certificate4">
+                                    Certificado para Viajes Internacionales
+                                </label>
+                                <label class="flex items-center mb-2 hover:bg-gray-100 p-2 rounded-md transition">
+                                    <input type="checkbox" name="certificates" value="certificate5">
+                                    Certificado de Esterilización o Castración
+                                </label>
+                                <label class="flex items-center mb-2 hover:bg-gray-100 p-2 rounded-md transition">
+                                    <input type="checkbox" name="certificates" value="certificate6">
+                                    Certificado de Muerte o Eutanasia
+                                </label>
+                                <label class="flex items-center mb-2 hover:bg-gray-100 p-2 rounded-md transition">
+                                    <input type="checkbox" name="certificates" value="certificate7">
+                                    Certificado de Identificación
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Columna de Mascotas -->
+                        <div class="w-full md:w-1/2 px-2 mb-4">
+                            <label for="mascota-select" class="block mb-2 font-semibold">Seleccione la mascota:</label>
+                            <select id="mascota-select" class="block w-full border border-gray-300 rounded-md shadow-sm">
+                                <option value="" disabled selected>-- Seleccione una mascota --</option>
+                                <option value="pet1">Firulais</option>
+                                <option value="pet2">Michi</option>
+                                <option value="pet3">Rocky</option>
+                                <option value="pet4">Bobby</option>
+                                <option value="pet5">Luna</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button id="submit-btn" class="px-4 py-2 bg-[#18beaa] hover:bg-[#16a89a] text-white rounded-md transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">Solicitar</button>
+
+                    <!-- Modal de confirmación -->
+                    <div id="notification-modal" class="fixed inset-0 flex items-center justify-center hidden bg-gray-900 bg-opacity-50 z-50">
+                        <div class="relative p-4 w-full max-w-md max-h-full bg-white rounded-lg shadow-lg">
+                            <!-- Botón para cerrar el modal -->
+                            <button id="modal-close" type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center">
+                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"></path>
+                                </svg>
+                                <span class="sr-only">Cerrar modal</span>
+                            </button>
+                            <!-- Contenido del modal -->
+                            <div class="p-4 md:p-5 text-center">
+                                <svg class="mx-auto mb-4 text-teal-600 w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <h3 class="mb-5 text-lg font-medium text-teal-600">Confirmación de Solicitud</h3>
+                                <p id="modal-pet" class="mb-3 text-gray-700"></p>
+                                <p id="modal-certificates" class="mb-3 text-gray-700"></p>
+                                <button id="modal-close-btn" type="button" class="text-white bg-teal-600 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5">
+                                    Aceptar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal de confirmación de envío -->
+                    <div id="confirmation-modal" class="fixed inset-0 flex items-center justify-center hidden bg-gray-900 bg-opacity-50 z-50">
+                        <div class="relative p-4 w-full max-w-md max-h-full bg-white rounded-lg shadow-lg">
+                            <div class="p-4 md:p-5 text-center">
+                                <svg class="mx-auto mb-4 text-teal-600 w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <h3 class="mb-5 text-lg font-medium text-teal-600">Solicitud Enviada</h3>
+                                <p class="mb-3 text-gray-700">Tu solicitud ha sido enviada con éxito.</p>
+                                <button id="confirmation-close-btn" type="button" class="text-white bg-teal-600 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5">
+                                    Cerrar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Fin Modal de éxito -->
+                </div>
+                <!-- Fin Certificados -->
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+
+</body>
+
+</html>
+
+{% endblock %}

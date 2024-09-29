@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Home{% endblock %}</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/Logo Gativet.png') }}">
+  
+  <!-- Cambiar rutas de CSS -->
+  <link href="/static/styles/output.css" rel="stylesheet">
+  
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/keen-slider@6.8.6/keen-slider.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/keen-slider@6.8.6/keen-slider.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  
+  <!-- Importar archivo CSS específico para base -->
+  <link rel="stylesheet" href="/static/styles/base.css">  
+</head>
+
+
+
+<body class="bg-gray-100 p-6 background-image">
+  <!-- Announcement -->
+  <div class="bg-custom-teal px-4 py-3 text-white" style="background-color: #18beaa;">
+    <p class="text-center text-sm font-medium">Atención de Lunes a Viernes de 08:30 a 17:30 hrs - 
+      Dudas o consultas?
+      <a href="https://wa.me/+569121212" class="inline-block underline" target="_blank">Contáctenos por WhatsApp</a>
+    </p>
+  </div>
+
+  <header class="text-gray-600 body-font w-full">
+    <div class="flex flex-wrap p-5 flex-col md:flex-row items-center w-full relative">
+        <a href="{{ url_for('home') }}" class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0 hover:text-gray-800 transition-colors duration-300 cursor-pointer">
+            <img src="{{ url_for('static', filename='img/Logo Gativet.png') }}" alt="Logo Gativet" class="w-12 h-12">
+        </a>
+        <nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center">
+            <a href="{{ url_for('home') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Inicio</a>
+            <a href="{{ url_for('products') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Productos</a>
+            <a href="{{ url_for('help') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Nuestro Refugio</a>
+            <a href="{{ url_for('contact') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Contáctenos</a>
+            
+
+            {% if show_search %}
+            <!-- Barra de búsqueda responsiva -->
+            <form action="#" method="get" class="mb-4 items-center relative text-gray-600 w-full md:w-auto mt-2 md:mt-0 md:ml-auto">
+                <input type="search" name="query" placeholder="Buscar productos..." 
+                    class="bg-white h-10 px-5 pr-10 rounded-full text-sm focus:outline-none border border-gray-300 w-full md:w-64">
+                <button type="submit" class="absolute right-2 top-0 mt-2 mr-4">
+                    <i class="fas fa-search text-gray-600"></i>
+                </button>
+            </form>
+            {% endif %}
+        
+        </nav>
+
+        <!-- Ícono de carrito -->
+        <a href="{{ url_for('cart') }}" class="relative mr-5 mt-2 text-gray-600 underline-animated cursor-pointer">
+          <i class="fas fa-shopping-cart fa-lg"></i>
+          <span id="cartCount" class="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-red-500 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center">0</span>
+        </a>
+
+        {% if session.get('is_logged_in') %}
+        {% if session.get('role') == 'user' %}
+        <a href="{{ url_for('profile') }}"
+          class="profile-link items-center relative mr-5 mt-2 text-gray-600 underline-animated cursor-pointer">
+          <i class="fa-solid fa-user fa-lg mr-2"></i>
+          <span class="profile-text absolute left-1/2 transform -translate-x-1/2 bottom-full mb-1 opacity-0 transition-opacity duration-300">Mi Perfil</span>
+        </a>
+        {% elif session.get('role') == 'vet' %}
+        <a href="{{ url_for('profile_vet') }}"
+          class="profile-link items-center relative mr-5 mt-2 text-gray-600 underline-animated cursor-pointer">
+          <i class="fa-solid fa-user-doctor fa-lg mr-2"></i>
+          <span class="profile-text absolute left-1/2 transform -translate-x-1/2 bottom-full mb-1 opacity-0 transition-opacity duration-300">Mi Perfil</span>
+        </a>
+        {% elif session.get('role') == 'admin' %}
+        <a href="{{ url_for('admin_dashboard') }}"
+          class="profile-link relative inline-flex items-center text-gray-900 hover:text-gray-600 transition-colors duration-300 cursor-pointer">
+          <i class="fas fa-user-circle fa-lg mr-2"></i>
+          <span class="profile-text absolute left-1/2 transform -translate-x-1/2 bottom-full mb-1 opacity-0 transition-opacity duration-300">Mi Perfil</span>
+        </a>
+        {% endif %}
+        <a href="{{ url_for('logout') }}"
+          class="inline-flex items-center bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 rounded-full focus:outline-none text-base mt-4 md:mt-0 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+          Cerrar Sesión
+          <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+            <path d="M5 12h14M12 5l7 7-7 7"></path>
+          </svg>
+        </a>
+    {% else %}
+        <a href="{{ url_for('login') }}"
+          class="inline-flex items-center bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 rounded-full focus:outline-none text-base mt-4 md:mt-0 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+          Iniciar Sesión
+          <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+            <path d="M5 12h14M12 5l7 7-7 7"></path>
+          </svg>
+        </a>
+    {% endif %}
+
+
+        </div>
+</header>
+
+
+<head>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+    main {
+      flex: 1;
+    }
+    .underline-animated {
+      position: relative;
+    }
+    .underline-animated::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -2px; 
+      width: 0;
+      height: 2px; 
+      background-color: #18beaa; 
+      transition: width 0.3s ease-in-out;
+    }
+    .underline-animated:hover::after {
+      width: 100%;
+    }
+    .background-image {
+      background-image: url('{{ url_for('static', filename='img/background.png') }}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: repeat;
+      width: 100%;
+    }
+  </style>
+</head>
+
+  <!-- Main Content -->
+  <main>
+    {% block content %}
+    <!-- Content will be injected here -->
+    {% endblock %}
+  </main>
+
+<!-- Footer -->
+<footer class="footer" style="background-color: #18beaa;">
+  <div class="mx-auto max-w-7xl py-8 px-4 sm:px-6 md:flex md:items-center md:justify-between">
+      <nav class="-mx-5 -my-2 flex flex-wrap justify-center order-2" aria-label="Footer">
+          <div class="px-5">
+              <a href="#" class="text-base text-white hover:text-gray-200">Términos de Servicio</a>
+          </div>
+
+          <div class="px-5">
+              <a href="https://web.facebook.com/" class="text-base text-white hover:text-gray-200">Política de privacidad</a>
+          </div>
+      </nav>
+      <div class="mt-8 md:mb-8 flex justify-center space-x-6 md:order-3  ">
+          <a href="#" class="text-white hover:text-gray-200">
+              <span class="sr-only">Facebook</span>
+              <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill-rule="evenodd"
+                      d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+                      clip-rule="evenodd" />
+              </svg>
+          </a>
+
+          <a href="https://www.instagram.com/gativet/" class="text-white hover:text-gray-200">
+            <span class="sr-only">Instagram</span>
+            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill-rule="evenodd"
+                d="M12 2.25c-3.094 0-3.452.012-4.662.068-1.206.056-2.05.243-2.8.509-.761.273-1.43.634-2.055 1.259-.623.623-.986 1.294-1.259 2.055-.266.75-.453 1.594-.51 2.8-.056 1.21-.068 1.568-.068 4.662s.012 3.452.068 4.662c.056 1.206.243 2.05.509 2.8.273.761.634 1.43 1.259 2.055.623.623 1.294.986 2.055 1.259.75.266 1.594.453 2.8.51 1.21.056 1.568.068 4.662.068s3.452-.012 4.662-.068c1.206-.056 2.05-.243 2.8-.51.761-.273 1.43-.634 2.055-1.259.623-.623.986-1.294 1.259-2.055.266-.75.453-1.594.51-2.8.056-1.21.068-1.568.068-4.662s-.012-3.452-.068-4.662c-.056-1.206-.243-2.05-.509-2.8-.273-.761-.634-1.43-1.259-2.055-.623-.623-1.294-.986-2.055-1.259-.75-.266-1.594-.453-2.8-.509-1.21-.056-1.568-.068-4.662-.068zm0-2c3.1 0 3.48.012 4.706.067 1.236.055 2.348.248 3.268.534.933.29 1.769.7 2.556 1.398.788.788 1.108 1.624 1.398 2.556.286.92.479 2.032.534 3.268.055 1.226.067 1.606.067 4.706s-.012 3.48-.067 4.706c-.055 1.236-.248 2.348-.534 3.268-.29.933-.7 1.769-1.398 2.556-.788.788-1.624 1.108-2.556 1.398-.92.286-2.032.479-3.268.534-1.226.055-1.606.067-4.706.067s-3.48-.012-4.706-.067c-1.236-.055-2.348-.248-3.268-.534-.933-.29-1.769-.7-2.556-1.398-.788-.788-1.108-1.624-1.398-2.556-.286-.92-.479-2.032-.534-3.268-.055-1.226-.067-1.606-.067-4.706s.012-3.48.067-4.706c.055-1.236.248-2.348.534-3.268.29-.933.7-1.769 1.398-2.556.788-.788 1.624-1.108 2.556-1.398.92-.286 2.032-.479 3.268-.534 1.226-.055 1.606-.067 4.706-.067zm0 5.9a6.1 6.1 0 1 0 0 12.2 6.1 6.1 0 0 0 0-12.2zm0 10.2a4.1 4.1 0 1 1 0-8.2 4.1 4.1 0 0 1 0 8.2zm6.32-8.926a1.236 1.236 0 1 1-2.473 0 1.236 1.236 0 0 1 2.473 0z"
+                clip-rule="evenodd" />
+            </svg>
+          </a>
+      </div>
+      <div class="mt-8  md:order-1 md:mt-0 ">
+          <p class="text-center text-base text-white">
+              &copy; FraFra & Asociados
+          </p>
+      </div>
+  </div>
+</footer>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script>
+    flatpickr("#date", {
+      enableTime: true,
+      dateFormat: "Y-m-d H:i",
+      minDate: "today",
+      // Otras opciones según necesites
+    });
+
+    // Inicializar el contador del carrito al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+        let cartCountElement = document.getElementById('cartCount');
+        let storedCount = localStorage.getItem('cartCount');
+        
+        // Si hay un conteo almacenado en localStorage, mostrarlo
+        if (storedCount) {
+            cartCountElement.textContent = storedCount; // Establecer el conteo en el elemento
+        } else {
+            cartCountElement.textContent = 0; // Si no hay conteo, establecer en 0
+        }
+    });
+
+    // Función para manejar el clic en "Add to Cart"
+    function addToCart(quantity) {
+        let cartCountElement = document.getElementById('cartCount');
+        let currentCount = parseInt(cartCountElement.textContent) || 0;
+        let newCount = currentCount + quantity;
+
+        // Actualizar el conteo en el elemento
+        cartCountElement.textContent = newCount;
+
+        // Almacenar el nuevo conteo en localStorage
+        localStorage.setItem('cartCount', newCount);
+    }
+
+    // Ejemplo de cómo llamar a addToCart desde un botón
+    document.querySelectorAll('.addToCartBtn').forEach(button => {
+        button.addEventListener('click', function() {
+            let quantity = parseInt(document.getElementById('quantity').value) || 1;
+            addToCart(quantity);
+            // Abre el modal, etc.
+        });
+    });
+  </script>
+
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyBQ9fDRM4j4kXcY63hOvIgZ8HSdaic8bcA",
+      authDomain: "gativet-c2b07.firebaseapp.com",
+      projectId: "gativet-c2b07",
+      storageBucket: "gativet-c2b07.appspot.com",
+      messagingSenderId: "743290238138",
+      appId: "1:743290238138:web:575ea8cfb2c8a95d7e7e83",
+      measurementId: "G-TP2Z4Q465K"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
+</body>
+</html>

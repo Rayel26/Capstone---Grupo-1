@@ -1,14 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from functools import wraps
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='public', static_url_path='')
 app.secret_key = 'supersecretkey'  # Clave para las sesiones
 
 # Datos simulados para usuarios
 users = {
     "user@example.com": {"password": "userpass", "role": "user"},
     "vet@example.com": {"password": "vetpass", "role": "vet"},
-    "admin@example.com": {"password": "adminpass", "role": "admin"}
+    "admin@example.com": {"password": "adminpass", "role": "admin"}     
 }
 
 # Decorador para verificar si el usuario está logueado
@@ -36,7 +36,7 @@ def role_required(role):
 # Ruta para la página de inicio
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('index.html')
 
 # Ruta para la página de login
 @app.route('/login', methods=['GET', 'POST'])
@@ -95,7 +95,7 @@ def admin_dashboard():
 # Otras rutas de la aplicación
 @app.route('/products')
 def products():
-    return render_template('products.html')
+    return render_template('products.html', show_search=True)
 
 @app.route('/item')
 def item():
