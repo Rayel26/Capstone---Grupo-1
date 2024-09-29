@@ -1,9 +1,3 @@
-{% extends "base_producto.html" %}
-
-{% block title %}Productos{% endblock %}
-
-{% block content %}
-
 <head>
     <!-- Importa el archivo CSS específico para profile -->
     <link rel="stylesheet" href="static/styles/products.css?v=1.0">
@@ -252,5 +246,12 @@
 
     <script src="{{ url_for('static', filename='js/products.js') }}">
     </script>
+        <script>
+            fetch('base_producto.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('content').innerHTML = data;
+                })
+                .catch(error => console.error('Error al cargar base_producto.html:', error));
+        </script>
 </body>
-{% endblock %}
