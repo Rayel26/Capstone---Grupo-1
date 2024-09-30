@@ -14,24 +14,8 @@
     ],
     "rewrites": [
       {
-        "source": "/products",
-        "destination": "/productos.html"
-      },
-      {
-        "source": "/base-products",
-        "destination": "/base_producto.html"
-      },
-      {
-        "source": "/help",
-        "destination": "/help.html"
-      },
-      {
-        "source": "/contact",
-        "destination": "/contact.html"
-      },
-      {
-        "source": "/login",
-        "destination": "/login.html"
+        "source": "**",
+        "destination": "/index.html"
       }
     ]
   }
