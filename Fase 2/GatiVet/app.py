@@ -95,7 +95,7 @@ def admin_dashboard():
 # Otras rutas de la aplicación
 @app.route('/products')
 def products():
-    return render_template('products.html')
+    return render_template('products.html', show_search=True)
 
 @app.route('/item')
 def item():
