@@ -7,7 +7,7 @@
 <head>
     <!-- Importa el archivo CSS específico para profile -->
     <link rel="stylesheet" href="static/styles/products.css?v=1.0">
-    <link href="styles/output.css" rel="stylesheet">
+    <link href="styles/output.css" rel="stylesheet">  
 </head>
 
 <body>
@@ -73,13 +73,13 @@
                                 <li>
                                     <label for="FilterBrandA" class="inline-flex items-center gap-2">
                                         <input type="checkbox" id="FilterBrandA" class="rounded border-gray-300" />
-                                        <span class="text-xs font-medium text-gray-700">Marca A</span>
+                                        <span class="text-xs font-medium text-gray-700">Royal Canin</span>
                                     </label>
                                 </li>
                                 <li>
                                     <label for="FilterBrandB" class="inline-flex items-center gap-2">
                                         <input type="checkbox" id="FilterBrandB" class="rounded border-gray-300" />
-                                        <span class="text-xs font-medium text-gray-700">Marca B</span>
+                                        <span class="text-xs font-medium text-gray-700">Fit Formula</span>
                                     </label>
                                 </li>
                             </ul>
@@ -106,13 +106,13 @@
                                 <li>
                                     <label for="FilterType1" class="inline-flex items-center gap-2">
                                         <input type="checkbox" id="FilterType1" class="rounded border-gray-300" />
-                                        <span class="text-xs font-medium text-gray-700">Tipo 1</span>
+                                        <span class="text-xs font-medium text-gray-700">Alimento para perro</span>
                                     </label>
                                 </li>
                                 <li>
                                     <label for="FilterType2" class="inline-flex items-center gap-2">
                                         <input type="checkbox" id="FilterType2" class="rounded border-gray-300" />
-                                        <span class="text-xs font-medium text-gray-700">Tipo 2</span>
+                                        <span class="text-xs font-medium text-gray-700">Alimento seco para Gato</span>
                                     </label>
                                 </li>
                             </ul>
@@ -155,7 +155,7 @@
             <div class="lg:w-3/4">
                 <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
                     <!-- Carta de producto -->
-                    <li>
+                    <li class="product">
                         <a href="{{ url_for('item') }}" class="group block overflow-hidden mt-2 rounded">
                             <img src="https://www.tusmascotas.cl/wp-content/uploads/2020/10/Royal-Canin-Mini-adulto-25Kg.jpg.webp"
                                 alt=""
@@ -183,25 +183,25 @@
                             </div>
                         </a>
                     </li>
-            
+
                     <!-- Carta de producto -->
-                    <li>
+                    <li class="product">
                         <a href="{{ url_for('item') }}" class="group block overflow-hidden mt-2 rounded">
                             <img src="https://www.tusmascotas.cl/wp-content/uploads/2020/10/Royal-Canin-Mini-adulto-25Kg.jpg.webp"
                                 alt=""
                                 class="h-[200px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[250px]" />
                             <div class="relative bg-white pt-3 pl-4">
-                                <h3 id="tipoProducto" class="text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
+                                <h3 class="tipoProducto text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
                                     Alimento seco para Gato
                                 </h3>
-                                <h3 id="nombreProducto" class="text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
+                                <h3 class="nombreProducto text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
                                     Fit Formula Gato 10 Kg
                                 </h3>
-                                <p id="precioProducto" class="mt-2">
+                                <p class="precioProducto mt-2">
                                     <span class="sr-only">Precio normal</span>
                                     <span class="tracking-wider text-green-500 font-bold">$720</span>
                                 </p>
-                                <h3 id="marcaProducto" class="text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
+                                <h3 class="marcaProducto text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
                                     Fit Formula
                                 </h3>
                                 <!-- Botón de agregar al carrito -->
