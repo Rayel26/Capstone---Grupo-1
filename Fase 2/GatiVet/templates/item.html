@@ -3,6 +3,7 @@
 {% block title %}Detalle{% endblock %}
 
 {% block content %}
+
 <body class="bg-gray-100 min-h-screen flex flex-col justify-between">
   <!-- Main container -->
   <div class="flex-grow">
@@ -38,12 +39,11 @@
           </div>
         </div>
 
-        <!-- Product Details -->
         <div>
-          <h2 class="text-3xl font-bold mb-2">Premium Wireless Headphones</h2>
+          <h2 class="text-3xl font-bold mb-2">Fit Formula Gato 10 Kg</h2> <!-- Nombre del producto -->
           <div class="mb-4">
-            <span class="text-2xl font-bold mr-2">$349.99</span>
-            <span class="text-gray-500 line-through">$399.99</span>
+            <span class="text-2xl font-bold mr-2">$720</span> <!-- Precio -->
+            <span class="text-gray-500 line-through">$800</span> <!-- Precio original, puedes ajustarlo -->
           </div>
           <div class="flex items-center mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -59,10 +59,10 @@
                 clip-rule="evenodd" />
             </svg>
             <span class="ml-2 text-gray-600">4.5 (120 reviews)</span>
+            <!-- Puedes añadir o ajustar la calificación si es necesario -->
           </div>
-          <p class="text-gray-700 mb-6">Experience premium sound quality and industry-leading noise cancellation with
-            these wireless headphones. Perfect for music lovers and frequent travelers.</p>
-
+          <p class="text-gray-700 mb-6">Alimento seco para gato de alta calidad, ideal para gatos adultos.</p>
+          <!-- Descripción -->
 
           <div class="mb-6">
             <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">Cantidad:</label>
@@ -81,9 +81,10 @@
               Añadir al carrito
             </button>
           </div>
-          
+
           <!-- Modal -->
-          <div id="cartModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 hidden">
+          <div id="cartModal"
+            class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 hidden">
             <div class="bg-white p-6 rounded-md shadow-md text-center">
               <h2 class="text-lg font-semibold mb-4">Producto añadido al carrito</h2>
               <p class="text-gray-700 mb-6">El producto se ha añadido correctamente a tu carrito.</p>
@@ -92,7 +93,7 @@
                 Aceptar
               </button>
             </div>
-            
+
           </div>
         </div>
       </div>

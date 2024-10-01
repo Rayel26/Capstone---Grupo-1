@@ -1,18 +1,19 @@
-.product {
-    display: flex; /* Asegúrate de que los elementos hijos estén alineados correctamente */
-    flex: 0 1 calc(33.333% - 16px); /* Cambia el porcentaje según cuántos productos deseas mostrar por fila */
-    margin: 10px; /* Ajusta los márgenes según sea necesario */
-    padding: 20px; /* Agrega un poco de espacio interno */
-    border-radius: 5px; /* Suaviza los bordes */
-    width: calc(100% / 3 - 20px); /* Ajusta el ancho según el diseño */
-    box-sizing: border-box; /* Asegura que padding y border se incluyan en el ancho */
-    
-}
-
 #productContainer {
     display: flex;
-    flex-wrap: wrap; /* Esto permite que los productos se envuelvan a la siguiente línea si no hay suficiente espacio */
-    gap: 16px; /* Espacio entre los productos (ajusta según sea necesario) */
+    flex-wrap: wrap; /* Permite que los productos se envuelvan a la siguiente línea si no hay suficiente espacio */
+    gap: 16px; /* Espacio entre los productos */
+    justify-content: center; /* Centra los productos horizontalmente */
+}
+
+.product {
+    display: flex; /* Asegúrate de que los elementos hijos estén alineados correctamente */
+    box-sizing: border-box; /* Asegura que padding y border se incluyan en el ancho */
+}
+
+@media (max-width: 1024px) {
+    .product {
+        width: calc(100% / 3 - 20px); /* Dos columnas en pantallas medianas */
+    }
 }
 
 @media (max-width: 768px) {
@@ -22,49 +23,87 @@
 }
 
 @media (max-width: 480px) {
+    #productContainer {
+        display: flex; /* Usamos flexbox para manejar las columnas */
+        flex-wrap: wrap; /* Permitir que las tarjetas se muevan a la siguiente fila */
+        justify-content: center; /* Centrar las tarjetas en el contenedor */
+        gap: 10px; /* Espacio entre las tarjetas */
+    }
+
     .product {
-        width: 100%; /* Una columna en pantallas muy pequeñas */
+        width: calc(50% - 10px); /* Dos columnas, ajustando el ancho para el margen */
+        padding: 10px; /* Ajustar el espacio alrededor del producto */
+        box-sizing: border-box; /* Asegura que el padding no afecte el width */
+    }
+
+    .product img {
+        height: 150px; /* Ajustar la altura de la imagen */
+        object-fit: cover; /* Asegurarse de que la imagen se recorte correctamente */
+    }
+
+    .tipoProducto,
+    .nombreProducto,
+    .marcaProducto {
+        font-size: 0.8rem; /* Reducir el tamaño de la fuente */
+    }
+
+    .precioProducto {
+        font-size: 0.9rem; /* Reducir el tamaño del precio */
+    }
+
+    .addToCartBtn {
+        font-size: 0.7rem; /* Reducir el tamaño del texto del botón */
+        padding: 6px 10px; /* Ajustar el padding del botón */
+        margin: 10px auto; /* Añadir margen arriba y abajo, centrar el botón */
     }
 }
 
-/* Estilo para el menú de hamburguesa */
-#hamburgerMenu {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: white;
-    border: 1px solid #ccc;
-    z-index: 100;
-}
-
-#hamburgerMenu .menuItem {
-    padding: 10px;
-    cursor: pointer;
-    border-bottom: 1px solid #ccc;
-}
-
-#hamburgerMenu .menuItem:hover {
-    background: #f0f0f0;
-}
-
-/* Ocultar el menú de filtros y ordenamiento en pantallas pequeñas */
-#filtersAndSort {
-    display: none; /* Ocultamos el menú por defecto */
-}
-
-/* Mostrar el menú de filtros y ordenamiento en pantallas grandes */
-#desktopFiltersAndSort {
-    display: flex; /* O cualquier otra propiedad que desees */
-}
-
-/* Media query para dispositivos pequeños */
-@media (max-width: 768px) {
-    #desktopFiltersAndSort {
-        display: none; /* Ocultamos el menú en pantallas pequeñas */
+@media (max-width: 360px) {
+    #productContainer {
+        display: flex; /* Usamos flexbox para manejar las columnas */
+        flex-wrap: wrap; /* Permitir que las tarjetas se muevan a la siguiente fila */
+        justify-content: center; /* Centrar las tarjetas en el contenedor */
+        gap: 5px; /* Espacio entre las tarjetas */
     }
 
-    #filtersAndSort {
-        display: block; /* Mostramos el menú en pantallas pequeñas */
+    .product {
+        width: calc(50% - 5px); /* Dos columnas, ajustando el ancho para el margen */
+        padding: 8px; /* Ajustar el espacio alrededor del producto */
+        box-sizing: border-box; /* Asegura que el padding no afecte el width */
+    }
+
+    .product img {
+        height: 140px; /* Ajustar la altura de la imagen */
+        object-fit: cover; /* Asegurarse de que la imagen se recorte correctamente */
+    }
+
+    .tipoProducto,
+    .nombreProducto,
+    .marcaProducto {
+        font-size: 0.6rem; /* Reducir el tamaño de la fuente aún más */
+    }
+
+    .precioProducto {
+        font-size: 0.7rem; /* Reducir el tamaño del precio */
+    }
+
+    .addToCartBtn {
+        font-size: 0.6rem; /* Reducir el tamaño de la fuente del botón */
+        padding: 4px 8px; /* Ajustar el padding del botón */
+        margin: 4px 10px; /* Añadir margen arriba y abajo, y a los lados */
+        min-width: 60px; /* Ajustar el ancho mínimo del botón */
+        border-radius: 4px; /* Redondear los bordes del botón */
+        background-color: #18beaa; /* Color de fondo del botón */
+        color: white; /* Color del texto */
+        transition: background-color 0.3s; /* Efecto de transición para hover */
+        display: block; /* Asegura que el botón se comporta como un bloque */
+        width: calc(100% - 20px); /* Asegura que el botón tiene espacio para márgenes */
+    }
+
+    .addToCartBtn:hover {
+        background-color: #16a89a; /* Color de fondo en hover */
     }
 }
+
+
+

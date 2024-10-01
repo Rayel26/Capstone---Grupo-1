@@ -23,8 +23,9 @@ block content %}
             </p>
         </header>
         <div class="mt-8 flex flex-col lg:flex-row lg:items-start lg:gap-8">
+
             <!-- Filtros y Ordenar por (Responsivo) -->
-            <div class="w-full lg:w-1/6 space-y-4 p-4 bg-gray-50 rounded-lg shadow-md">
+            <div class="w-full md:w-1/4 lg:w-1/6 space-y-4 p-4 bg-gray-50 rounded-lg shadow-md">
                 <!-- Botón para mostrar el menú de Ordenar por -->
                 <div>
                     <button id="sortMenuButton"
@@ -55,15 +56,15 @@ block content %}
                     class="hidden mt-1 rounded-lg border border-gray-300 bg-white shadow-lg p-2 transition-all duration-300 ease-in-out">
                     <!-- Filtro de Marca -->
                     <header class="flex items-center justify-between p-2">
-                        <span class="text-xs text-gray-700"id="selectedFiltersText">Sin filtros seleccionados</span>
+                        <span class="text-xs text-gray-700" id="selectedFiltersText">Sin filtros seleccionados</span>
                     </header>
                     <details class="overflow-hidden rounded border border-gray-300">
                         <button type="button"
-                        class="text-xs text-blue-600 underline underline-offset-4 hover:text-blue-800 transition duration-150 mb-3 ml-2"
-                        id="resetFiltersTipo">
-                        Reiniciar
-                    
-                    </button>
+                            class="text-xs text-blue-600 underline underline-offset-4 hover:text-blue-800 transition duration-150 mb-3 ml-2"
+                            id="resetFiltersTipo">
+                            Reiniciar
+
+                        </button>
                         <summary
                             class="flex cursor-pointer items-center justify-between gap-2 p-1 bg-blue-100 text-gray-900 transition hover:bg-blue-200 text-sm">
                             <span class="text-xs font-medium">Marca</span>
@@ -145,65 +146,30 @@ block content %}
             <!-- Fin Filtros y Ordenar por (Responsivo) -->
 
             <!-- Lista de productos -->
-            <div class="lg:w-3/4" id="productContainer">
-                <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+            <div class="w-full lg:w-3/4 mx-auto" id="productContainer">
+                <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                     <!-- Carta de producto -->
                     <li class="product">
                         <a href="{{ url_for('item') }}" class="group block overflow-hidden mt-2 rounded">
                             <img src="https://www.tusmascotas.cl/wp-content/uploads/2020/10/Royal-Canin-Mini-adulto-25Kg.jpg.webp"
                                 alt=""
-                                class="h-[200px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[250px]"
+                                class="h-[200px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[200px]"
                                 loading="lazy" />
-                            <div class="relative bg-white pt-3 pl-4">
+                            <div class="relative bg-white pt-3">
                                 <h3
-                                    class="tipoProducto text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
-                                    Alimento para perro
-                                </h3>
-                                <h3
-                                    class="nombreProducto text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
-                                    Royal Canin Mini Adulto Perro 1 Kg
-                                </h3>
-                                <p class="precioProducto mt-2">
-                                    <span class="sr-only">Precio normal</span>
-                                    <span class="tracking-wider text-green-500 font-bold">$7920</span>
-                                </p>
-                                <h3
-                                    class="marcaProducto text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
-                                    Royal Canin
-                                </h3>
-                                <!-- Botón de agregar al carrito -->
-                                <div class="mt-3 flex justify-center text-center mb-2">
-                                    <button
-                                        class="block rounded-md mb-6 bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 focus:outline-none text-sm transition-transform transform-gpu hover:-translate-y-1 hover:shadow-md cursor-pointer addToCartBtn">
-                                        Agregar al carrito
-                                    </button>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-
-                    <!-- Carta de producto -->
-                    <li class="product">
-                        <a href="{{ url_for('item') }}" class="group block overflow-hidden mt-2 rounded">
-                            <img src="https://www.tusmascotas.cl/wp-content/uploads/2020/10/Royal-Canin-Mini-adulto-25Kg.jpg.webp"
-                                alt=""
-                                class="h-[200px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[250px]"
-                                loading="lazy" />
-                            <div class="relative bg-white pt-3 pl-4">
-                                <h3
-                                    class="tipoProducto text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
+                                    class="tipoProducto text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4 hidden">
                                     Alimento seco para Gato
                                 </h3>
                                 <h3
-                                    class="nombreProducto text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
+                                    class="nombreProducto text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4 ml-4">
                                     Fit Formula Gato 10 Kg
                                 </h3>
-                                <p class="precioProducto mt-2">
+                                <p class="precioProducto mt-2 ml-4">
                                     <span class="sr-only">Precio normal</span>
                                     <span class="tracking-wider text-green-500 font-bold">$720</span>
                                 </p>
                                 <h3
-                                    class="marcaProducto text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
+                                    class="marcaProducto text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4 hidden">
                                     Fit Formula
                                 </h3>
                                 <!-- Botón de agregar al carrito -->

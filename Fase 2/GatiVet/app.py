@@ -121,5 +121,13 @@ def cart():
 def registration():
     return render_template('registration.html')
 
+@app.route('/donation')
+def donation():
+    return render_template('donation.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
+
+from flask import Flask, render_template, request
+app = Flask(__name__)
+
