@@ -142,22 +142,28 @@ function toggleSearch(searchType) {
     }
 }
 
-// Muestra precio x servicio
+// Muestra precio por servicio
 function updateServiceValue() {
     const serviceSelect = document.getElementById('service-select');
     const serviceValueDisplay = document.getElementById('service-value-display');
 
-    // Obtener el valor de la opción seleccionada
+    // Obtener la opción seleccionada
     const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
-    const price = selectedOption.getAttribute('data-price');
 
-    if (serviceSelect.value) {
+    // Verificar si hay un valor seleccionado
+    if (selectedOption && selectedOption.getAttribute('data-price')) {
+        const price = selectedOption.getAttribute('data-price');
         serviceValueDisplay.textContent = "Precio: $" + formatCurrency(price) + " CLP";
     } else {
         serviceValueDisplay.textContent = "Seleccione un servicio para ver el precio.";
-
     }
 }
+
+// Función auxiliar para formatear números como moneda
+function formatCurrency(value) {
+    return parseInt(value).toLocaleString('es-CL');
+}
+
 
 
 // Actualizar la información del doctor seleccionado
