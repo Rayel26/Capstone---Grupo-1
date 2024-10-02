@@ -307,3 +307,7 @@ input[type="checkbox"]:checked::before {
     font-size: 1rem;
     color: white;
 }
+
+.text-gray-500 {
+    color: #a0aec0; /* Un tono gris */
+}

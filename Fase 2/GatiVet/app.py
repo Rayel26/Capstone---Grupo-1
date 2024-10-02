@@ -62,7 +62,7 @@ def login():
         else:
             flash('Usuario o contraseña incorrectos', 'error')
     
-    return render_template('index.html')
+    return render_template('login.html')
 
 # Ruta para cerrar sesión
 @app.route('/logout')

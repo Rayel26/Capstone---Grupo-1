@@ -270,42 +270,36 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                                 <!-- Nombre de la mascota -->
                                 <div class="relative mb-4">
-                                    <label for="pet-name"
-                                        class="text-sm font-medium text-gray-900 block mb-2" disabled>Nombre:</label>
+                                    <label for="pet-name" class="text-sm font-medium text-gray-900 block mb-2" disabled>Nombre:</label>
                                     <input type="text" name="pet-name" id="pet-name" value="Selecciona una mascota"
                                         class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
                                         required readonly>
                                 </div>
                                 <!-- Edad de la mascota -->
                                 <div class="relative mb-4">
-                                    <label for="pet-age"
-                                        class="text-sm font-medium text-gray-900 block mb-2" disabled>Edad:</label>
+                                    <label for="pet-age" class="text-sm font-medium text-gray-900 block mb-2" disabled>Edad:</label>
                                     <input type="text" name="pet-age" id="pet-age" value=""
                                         class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
                                         required readonly>
                                 </div>
                                 <!-- Fecha de nacimiento -->
                                 <div class="relative mb-4">
-                                    <label for="pet-birthdate"
-                                        class="text-sm font-medium text-gray-900 block mb-2" disabled>Fecha de
-                                        nacimiento:</label>
+                                    <label for="pet-birthdate" class="text-sm font-medium text-gray-900 block mb-2" disabled>Fecha de nacimiento:</label>
                                     <input type="date" id="pet-birthdate" name="pet-birthdate"
                                         class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
                                         required>
                                 </div>
-                
+
                                 <!-- Especie de la mascota -->
                                 <div class="relative mb-4">
-                                    <label for="pet-species"
-                                        class="text-sm font-medium text-gray-900 block mb-2" disabled>Especie:</label>
+                                    <label for="pet-species" class="text-sm font-medium text-gray-900 block mb-2" disabled>Especie:</label>
                                     <input type="text" name="pet-species" id="pet-species" value=""
                                         class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
                                         required readonly>
                                 </div>
                                 <!-- Raza de la mascota -->
                                 <div class="relative mb-4">
-                                    <label for="pet-breed"
-                                        class="text-sm font-medium text-gray-900 block mb-2" disabled>Raza:</label>
+                                    <label for="pet-breed" class="text-sm font-medium text-gray-900 block mb-2" disabled>Raza:</label>
                                     <input type="text" name="pet-breed" id="pet-breed" value=""
                                         class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
                                         required readonly>
@@ -354,10 +348,6 @@
                                     <div class="mb-4">
                                         <label for="new-pet-name" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Nombre:</label>
                                         <input type="text" id="new-pet-name" name="new-pet-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline" required>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label for="new-pet-age" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Edad:</label>
-                                        <input type="text" id="new-pet-age" name="new-pet-age" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline" required>
                                     </div>
                                     <div class="mb-4">
                                         <label for="new-pet-species" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Especie:</label>
@@ -422,12 +412,12 @@
                                     <!-- Input para la edad de la mascota -->
                                     <div class="mb-4">
                                         <label for="edit-pet-age" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Edad:</label>
-                                        <input type="text" id="edit-pet-age" name="edit-pet-age" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline" required>
+                                        <input type="text" id="edit-pet-age" name="edit-pet-age" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline" hidden required>
                                     </div>
                                     <!-- Selección de especie -->
                                     <div class="mb-4">
                                         <label for="edit-pet-species" class="block text-sm font-medium text-gray-600 dark:text-gray-300">Especie:</label>
-                                        <select id="edit-pet-species" name="edit-pet-species" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline" disabled required>
+                                        <select id="edit-pet-species" name="edit-pet-species" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white no-outline" required>
                                             <option value="perro">Perro</option>
                                             <option value="gato">Gato</option>
                                         </select>
@@ -491,6 +481,53 @@
                     </div>
                 </div>
 
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                    const deceasedCheckbox = document.getElementById('pet-deceased-checkbox');
+                    const causeOfDeathSection = document.getElementById('cause-of-death-section');
+                    const causeOfDeathSelect = document.getElementById('cause-of-death');
+                    const otherCauseContainer = document.getElementById('other-cause-container');
+                    
+                    // Elementos de detalles de la mascota
+                    const petNameInput = document.getElementById('pet-name');
+                    const petAgeInput = document.getElementById('pet-age');
+                    const petSpeciesInput = document.getElementById('pet-species');
+                    const petBreedInput = document.getElementById('pet-breed');
+
+                    // Mostrar/ocultar la sección de causa de muerte al marcar/desmarcar el checkbox
+                    deceasedCheckbox.addEventListener('change', function () {
+                        if (deceasedCheckbox.checked) {
+                            causeOfDeathSection.classList.remove('hidden');
+
+                            // Aplicar estilo para indicar que la mascota ha fallecido (color gris)
+                            petNameInput.classList.add('text-gray-500'); // Cambia a gris
+                            petAgeInput.classList.add('text-gray-500');
+                            petSpeciesInput.classList.add('text-gray-500');
+                            petBreedInput.classList.add('text-gray-500');
+                        } else {
+                            causeOfDeathSection.classList.add('hidden');
+                            causeOfDeathSelect.value = ""; // Reiniciar selección
+                            otherCauseContainer.classList.add('hidden'); // Ocultar el campo de otros
+
+                            // Remover estilo
+                            petNameInput.classList.remove('text-gray-500');
+                            petAgeInput.classList.remove('text-gray-500');
+                            petSpeciesInput.classList.remove('text-gray-500');
+                            petBreedInput.classList.remove('text-gray-500');
+                        }
+                    });
+
+                    // Mostrar el campo para especificar otro motivo
+                    causeOfDeathSelect.addEventListener('change', function () {
+                        if (causeOfDeathSelect.value === 'otros') {
+                            otherCauseContainer.classList.remove('hidden');
+                        } else {
+                            otherCauseContainer.classList.add('hidden');
+                        }
+                    });
+                });
+                </script>
+                
 
                 <!-- Fin Mis mascotas -->
                 

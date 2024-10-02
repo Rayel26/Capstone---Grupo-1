@@ -288,6 +288,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const newPetSpecies = document.getElementById('new-pet-species');
     const newPetBreedDog = document.getElementById('new-pet-breed-dog');
     const newPetBreedCat = document.getElementById('new-pet-breed-cat');
+    const editDogBreedsDiv = document.getElementById('edit-dog-breeds');
+    const editCatBreedsDiv = document.getElementById('edit-cat-breeds');
+    
+
+
+
 
     if (!petSelect || !petName || !petAge || !petSpecies || !petBreed || !petBirthdate || !editButton ||
         !addPetIcon || !closeModal || !addPetForm || !addPetModal || !editPetModal || !closeEditModal ||
@@ -295,6 +301,20 @@ document.addEventListener('DOMContentLoaded', function() {
         !editPetBirthdate || !editPhotoButton || !petPhoto || !photoPreview || !newPetSpecies || !newPetBreedDog || !newPetBreedCat) {
         console.error('Uno o más elementos necesarios no se encontraron en el DOM.');
         return;
+    }
+
+    // Calcular la edad de la mascota a partir de su fecha de nacimiento
+
+    function calculatePetAge(birthdate) {
+        const birthDateObj = new Date(birthdate);
+        const today = new Date();
+        let age = today.getFullYear() - birthDateObj.getFullYear();
+        const monthDiff = today.getMonth() - birthDateObj.getMonth();
+        // Ajusta la edad si la fecha de cumpleaños no ha ocurrido este año
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+            age--;
+        }
+        return age;
     }
 
     // Mostrar detalles de la mascota seleccionada
@@ -310,7 +330,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (name) {
             petName.value = name;
-            petAge.value = age;
+            petAge.value = calculatePetAge(birthdate); // Calcular edad aquí
             petSpecies.value = species;
             petBreed.value = breed;
             petBirthdate.value = birthdate;
@@ -341,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Obtener valores del formulario
         const name = document.getElementById('new-pet-name').value;
-        const age = document.getElementById('new-pet-age').value;
+        const age = document.getElementById('new-pet-birthdate').value
         const species = document.getElementById('new-pet-species').value;
 
         // Seleccionar la raza correcta dependiendo de la especie
@@ -362,7 +382,7 @@ document.addEventListener('DOMContentLoaded', function() {
         newOption.value = name.toLowerCase().replace(/\s+/g, '_'); // Genera un valor único para la opción
         newOption.textContent = name;
         newOption.setAttribute('data-name', name);
-        newOption.setAttribute('data-age', age);
+        newOption.setAttribute('data-age', calculatePetAge(birthdate)); // Calcular edad aquí
         newOption.setAttribute('data-species', species);
         newOption.setAttribute('data-breed', breed);
         newOption.setAttribute('data-birthdate', birthdate);
@@ -377,7 +397,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Actualizar campos de detalles de la mascota
         petName.value = name;
-        petAge.value = age;
+        petAge.value = calculatePetAge(birthdate); // Calcular edad aquí
         petSpecies.value = species;
         petBreed.value = breed;
         petBirthdate.value = birthdate;
@@ -398,7 +418,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (name) {
             // Rellenar el formulario de edición con los datos de la mascota seleccionada
             editPetName.value = name;
-            editPetAge.value = age;
+            editPetAge.value = calculatePetAge(birthdate); // Calcular edad aquí
 
             // Mostrar especie y raza como texto
             editPetSpecies.value = species; // Establece la especie en el formulario
@@ -406,17 +426,22 @@ document.addEventListener('DOMContentLoaded', function() {
             editPetSpecies.classList.add('read-only'); // Ejemplo de clase para estilos
 
             // Mostrar la raza correspondiente según la especie
-            if (species === 'perro') {
-                editPetBreedDog.value = breed; // Cargar raza si es perro
-                editPetBreedCat.value = ''; // Limpiar raza de gato
-                editDogBreedsDiv.style.display = 'block'; // Mostrar div de razas de perros
-                editCatBreedsDiv.style.display = 'none'; // Ocultar div de razas de gatos
-            } else if (species === 'gato') {
-                editPetBreedCat.value = breed; // Cargar raza si es gato
-                editPetBreedDog.value = ''; // Limpiar raza de perro
-                editDogBreedsDiv.style.display = 'none'; // Ocultar div de razas de perros
-                editCatBreedsDiv.style.display = 'block'; // Mostrar div de razas de gatos
+            if (editDogBreedsDiv && editCatBreedsDiv) {
+                if (species === 'perro') {
+                    editPetBreedDog.value = breed; // Cargar raza si es perro
+                    editPetBreedCat.value = ''; // Limpiar raza de gato
+                    editDogBreedsDiv.style.display = 'block'; // Mostrar div de razas de perros
+                    editCatBreedsDiv.style.display = 'none'; // Ocultar div de razas de gatos
+                } else if (species === 'gato') {
+                    editPetBreedCat.value = breed; // Cargar raza si es gato
+                    editPetBreedDog.value = ''; // Limpiar raza de perro
+                    editDogBreedsDiv.style.display = 'none'; // Ocultar div de razas de perros 
+                    editCatBreedsDiv.style.display = 'block'; // Mostrar div de razas de gatos
+                }
+            } else {
+                console.error('Los elementos de razas no están disponibles.');
             }
+            
             
             // Mostrar el birthdate
             editPetBirthdate.value = birthdate;
@@ -445,7 +470,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Obtener valores del formulario de edición
         const name = editPetName.value;
-        const age = editPetAge.value;
+        const updatedBirthdate = editPetBirthdate.value; // Asegúrate de que esta línea esté aquí
         const species = editPetSpecies.value; // La especie no se puede editar, se usa el valor original
 
         // Seleccionar la raza correcta dependiendo de la especie
@@ -464,7 +489,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const select = petSelect;
         const selectedOption = select.options[select.selectedIndex];
         selectedOption.setAttribute('data-name', name);
-        selectedOption.setAttribute('data-age', age);
+        selectedOption.setAttribute('data-birthdate', updatedBirthdate); // Actualizar fecha de nacimiento
         selectedOption.setAttribute('data-species', species); // La especie no cambia
         selectedOption.setAttribute('data-breed', breed); // La raza no cambia
         selectedOption.setAttribute('data-birthdate', birthdate);
@@ -478,7 +503,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Actualizar campos de detalles de la mascota
         petName.value = name;
-        petAge.value = age;
+        petAge.value = calculatePetAge(updatedBirthdate); // Calcular edad aquí
         petSpecies.value = species; // La especie se mantiene
         petBreed.value = breed; // La raza no cambia
         petBirthdate.value = birthdate;
@@ -487,9 +512,6 @@ document.addEventListener('DOMContentLoaded', function() {
         editButton.disabled = false;
     });
     // Fin modal editar mascota
-
-
-
 
     // Maneja la carga de foto
     // Escucha el evento 'click' para abrir el selector de archivos
@@ -509,8 +531,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-
-    
     // Función para actualizar las razas en función de la especie seleccionada en el formulario de edición
     editPetSpecies.addEventListener('change', function() {
         const species = editPetSpecies.value;

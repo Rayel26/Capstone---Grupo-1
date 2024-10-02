@@ -181,13 +181,16 @@
                 <!-- Botón principal "Pedir Hora" -->
                 <div class="text-center mt-6">
                     <button onclick="
-            const doctorSelected = document.getElementById('staff-select').value;
-            if (doctorSelected === 'none') {
-                alert('Por favor, seleccione un doctor.');
-                return;
-            }
-            nextStep('step-search', 'step-select', 'search-icon');
-        " class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+                            const serviceSelected = document.getElementById('service-select').value;
+                            const areaSelected = document.getElementById('area-select').value;
+                            const doctorSelected = document.getElementById('staff-select').value;
+                            if (areaSelected === '' || doctorSelected === '' || serviceSelected === '') {
+                                alert('Por favor, complete todos los campos antes de continuar.');
+                                return;
+                            }
+                            nextStep('step-search', 'step-select', 'search-icon');
+                        "
+                        class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
                         Pedir Hora
                     </button>
                 </div>
@@ -242,14 +245,15 @@
                 <!-- Botón principal "Pedir Hora" -->
                 <div class="text-center mt-6">
                     <button onclick="
-            if (!validateDateTime()) return;
-            nextStep('step-select', 'step-pet', 'select-icon');
-        " class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+                            if (!validateDateTime()) return;
+                            nextStep('step-select', 'step-pet', 'select-icon');
+                        "
+                        class="px-6 py-3 bg-[#18beaa] hover:bg-[#16a89a] text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition duration-300 ease-in-out transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
                         Pedir Hora
                     </button>
                 </div>
             </div>
-            <!-- Fin selección -->
+                <!-- Fin selección -->
 
 
             <!-- Datos de Mascota -->
@@ -295,9 +299,6 @@
                             </div>
                         </div>
                     </div>
-
-
-
                 </div>
 
                 <!-- Detalles de la cita -->

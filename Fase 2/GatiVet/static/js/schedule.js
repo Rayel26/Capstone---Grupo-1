@@ -33,8 +33,41 @@ function handleStepClick(stepId, iconId) {
         return;
     }
 
+    // Validación de campos de selección de servicio, área y doctor
+    const serviceSelected = document.getElementById('service-select').value;
+    const areaSelected = document.getElementById('area-select').value;
+    const doctorSelected = document.getElementById('staff-select').value;
+    if (areaSelected === '' || doctorSelected === '' || serviceSelected === '') {
+        alert('Por favor, complete todos los campos del servicio antes de continuar.');
+        return;
+    }
+
+    // Validación de fecha y hora
+    const selectedDate = document.getElementById('date-select').value;
+    const selectedTime = document.getElementById('selected-time').value;
+    if (selectedDate === '' || selectedTime === '') {
+        alert('Por favor, seleccione una fecha y una hora para continuar.');
+        return;
+    }
+
+    // Validación de mascota seleccionada
+    const selectedPet = document.getElementById('pet-select').value;
+    if (!selectedPet) {
+        alert('Por favor, seleccione una mascota.');
+        return;
+    }
+
+    // Validación de detalles de la cita
+    const appointmentDetails = document.getElementById('appointment-details').value;
+    if (!appointmentDetails) {
+        alert('Por favor, complete los detalles de la cita.');
+        return;
+    }
+
+    // Si todas las validaciones pasan, cambiar de paso
     goToStep(stepId, iconId);
 }
+
 
 // Actualizar íconos según el paso actual
 function updateStepIcons(currentIcon, direction) {
@@ -302,11 +335,18 @@ document.querySelectorAll('#time-select button').forEach(button => {
 
         createCalendar(); // Llamar a la función para crear el calendario inicial
 
+        //Función para validar selección de fecha y dia
         function validateDateTime() {
-            // Lógica para validar la fecha y hora
-            // Asegúrate de que retorne true si todo es correcto
-            return true; // Cambia esto según tu lógica de validación
+            const selectedDate = document.getElementById('date-select').value;
+            const selectedTime = document.getElementById('selected-time').value;
+    
+            if (selectedDate === '' || selectedTime === '') {
+                alert('Por favor, seleccione una fecha y una hora para continuar.');
+                return false;
+            }
+            return true;
         }
+
 ///Fin calendario
 
 /// Función para generar los botones de hora
@@ -403,6 +443,15 @@ function goToStep(stepId, iconId) {
 
 // Función para confirmar la cita y mostrar la fase de éxito
 function confirmAppointment() {
+    
+    // Validar que se ha seleccionado una mascota
+    const selectedPet = document.getElementById('pet-select').value;
+    if (!selectedPet) {
+        alert('Por favor, seleccione una mascota.');
+        return;
+    }
+    
+    //// Validar que se han completado los detalles de la cita
     const appointmentDetails = document.getElementById('appointment-details').value;
     if (!appointmentDetails) {
         alert('Por favor, complete los detalles de la cita.');
@@ -414,18 +463,28 @@ function confirmAppointment() {
     const selectedTime = document.getElementById('selected-time').value;
     const doctorName = document.getElementById('doctor-name').innerText;
     const petName = document.getElementById('pet-name').innerText;
+    
+    // Obtener el RUT ingresado y validar si está registrado
+    const rut = document.getElementById('rut-input').value;
+    const user = registeredUsers[rut]; // Obtener el usuario del objeto registeredUsers
+
+    if (!user) {
+        alert('El RUT ingresado no está registrado.');
+        return;
+    }
 
     console.log(`Fecha: ${selectedDate}`);
     console.log(`Hora: ${selectedTime}`);
     console.log(`Doctor: ${doctorName}`);
     console.log(`Mascota: ${petName}`);
+    console.log(`Usuario: ${user.name}, Dirección: ${user.address}, Teléfono: ${user.phone}`);
 
     // Actualizar la tarjeta de resumen de cita
     document.getElementById('summary-date').innerText = `Fecha: ${selectedDate}`;
     document.getElementById('summary-time').innerText = `Hora: ${selectedTime}`;
     document.getElementById('summary-doctor').innerText = `Doctor: ${doctorName}`;
     document.getElementById('summary-pet').innerText = `Mascota: ${petName}`;
-    document.getElementById('summary-address').innerText = 'Domicilio: [Dirección del domicilio]'; // Puedes ajustar esto si es dinámico
+    document.getElementById('summary-address').innerText = `Dirección: ${user.address}`;
 
     // Actualiza la fase actual y muestra la fase de éxito
     goToStep('step-success', 'success-icon');
