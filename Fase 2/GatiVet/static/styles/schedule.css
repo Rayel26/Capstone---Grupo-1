@@ -1,0 +1,127 @@
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px; /* Espacio mínimo entre los días */
+    text-align: center;
+    font-size: 0.8rem; /* Tamaño de la fuente */
+}
+
+.day {
+    padding: 4px; /* Ajustar el padding */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #fff; /* Fondo para días habilitados */
+    transition: background-color 0.3s; /* Añade una transición suave */
+    font-weight: bold; /* Negrita para los nombres de los días */
+}
+
+.day.weekend {
+    opacity: 0.5; /* Disminuye la opacidad */
+    pointer-events: none; /* Deshabilita los clics */
+    text-decoration: line-through; /* Agrega un efecto de tachado */
+    color: gray; /* Cambia el color del texto */
+}
+
+.day.holiday {
+    opacity: 0.5; /* Disminuye la opacidad para los días festivos */
+    pointer-events: none; /* Deshabilita los clics */
+    text-decoration: line-through; /* Agrega un efecto de tachado */
+    color: gray; /* Cambia el color del texto */
+    background-color: #ff4d4d; /* Color de fondo más intenso para días festivos */
+}
+
+.day:hover {
+    background-color: #e0e0e0; /* Color de fondo al pasar el mouse */
+}
+
+.day.selected {
+    background-color: #4caf50; /* Color para el día seleccionado */
+    color: white; /* Color de texto para el día seleccionado */
+}
+
+.day.today {
+    background-color: #2196F3; /* Color para el día actual */
+    color: white; /* Color de texto para el día actual */
+    border: 2px solid #1976D2; /* Borde más oscuro para el día actual */
+}
+
+.calendar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* Ancho completo para el calendario */
+    max-width: 300px; /* Ancho máximo para el calendario */
+}
+
+.month-name {
+    font-size: 1.2rem; /* Tamaño del nombre del mes */
+    margin-bottom: 10px; /* Espacio entre el nombre del mes y el calendario */
+    font-weight: bold; /* Negrita para el nombre del mes */
+}
+
+.nav-buttons {
+    margin-bottom: 10px; /* Espacio entre los botones y el calendario */
+    display: flex; /* Alineación flexible para los botones */
+    justify-content: space-between; /* Espacio entre los botones */
+    width: 100%; /* Ancho completo para los botones */
+}
+
+#next-month, #prev-month {
+    font-size: 1.5rem; /* Tamaño de la flecha */
+    background: none; /* Sin fondo */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cambia el cursor a puntero */
+    color: #18beaa; /* Color de las flechas */
+}
+
+/* Cambios para pantallas pequeñas */
+@media (max-width: 480px) {
+    .step-icon {
+        font-size: 1.5rem; /* Tamaño de icono para pantallas menores a 480px */
+    }
+    .calendar {
+        font-size: 0.7rem; /* Reducir el tamaño de la fuente */
+    }
+    .day {
+        padding: 2px; /* Ajustar el padding para días */
+    }
+    .month-name {
+        font-size: 1rem; /* Tamaño del nombre del mes */
+    }
+}
+
+#user-card {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+
+
+/* Cambios para pantallas muy pequeñas */
+@media (max-width: 360px) {
+    .step-icon {
+        font-size: 1.2rem; /* Tamaño de icono para pantallas menores a 360px */
+    }
+    .calendar {
+        font-size: 0.6rem; /* Aumentar la reducción de tamaño */
+    }
+    .day {
+        padding: 1px; /* Ajustar el padding para días */
+    }
+    .month-name {
+        font-size: 0.9rem; /* Tamaño del nombre del mes */
+    }
+}
+
+/* Ocultar nombres de iconos en pantallas pequeñas */
+@media (max-width: 480px) {
+    .step-icon-name {
+        display: none; /* Ocultar nombre en pantallas menores a 480px */
+    }
+}
+
+@media (max-width: 360px) {
+    .step-icon-name {
+        display: none; /* También oculta nombre en pantallas menores a 360px */
+    }
+}

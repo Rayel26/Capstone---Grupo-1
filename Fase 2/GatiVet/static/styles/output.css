@@ -1012,12 +1012,20 @@ video {
   margin-bottom: 2px;
 }
 
+.ml-0 {
+  margin-left: 0px;
+}
+
 .ml-1 {
   margin-left: 0.25rem;
 }
 
 .ml-2 {
   margin-left: 0.5rem;
+}
+
+.ml-20 {
+  margin-left: 5rem;
 }
 
 .ml-3 {
@@ -1034,6 +1042,10 @@ video {
 
 .ml-6 {
   margin-left: 1.5rem;
+}
+
+.ml-8 {
+  margin-left: 2rem;
 }
 
 .ml-auto {
@@ -1058,6 +1070,10 @@ video {
 
 .mr-2 {
   margin-right: 0.5rem;
+}
+
+.mr-20 {
+  margin-right: 5rem;
 }
 
 .mr-3 {
@@ -1491,6 +1507,10 @@ video {
 
 .max-w-\[1340px\] {
   max-width: 1340px;
+}
+
+.max-w-\[600px\] {
+  max-width: 600px;
 }
 
 .max-w-full {
@@ -3049,6 +3069,10 @@ video {
   line-height: 1.5rem;
 }
 
+.leading-8 {
+  line-height: 2rem;
+}
+
 .leading-none {
   line-height: 1;
 }
@@ -3567,6 +3591,11 @@ video {
   color: rgb(75 85 99 / var(--tw-text-opacity));
 }
 
+.hover\:text-gray-700:hover {
+  --tw-text-opacity: 1;
+  color: rgb(55 65 81 / var(--tw-text-opacity));
+}
+
 .hover\:text-gray-800:hover {
   --tw-text-opacity: 1;
   color: rgb(31 41 55 / var(--tw-text-opacity));
@@ -3585,6 +3614,11 @@ video {
 .hover\:text-white:hover {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.hover\:text-yellow-500:hover {
+  --tw-text-opacity: 1;
+  color: rgb(234 179 8 / var(--tw-text-opacity));
 }
 
 .hover\:underline:hover {
@@ -3959,6 +3993,11 @@ video {
     line-height: 1;
   }
 
+  .sm\:text-base {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
   .sm\:text-lg {
     font-size: 1.125rem;
     line-height: 1.75rem;
@@ -4002,6 +4041,10 @@ video {
 
   .md\:ml-4 {
     margin-left: 1rem;
+  }
+
+  .md\:ml-8 {
+    margin-left: 2rem;
   }
 
   .md\:ml-auto {
@@ -4050,6 +4093,10 @@ video {
 
   .md\:w-1\/4 {
     width: 25%;
+  }
+
+  .md\:w-4\/12 {
+    width: 33.333333%;
   }
 
   .md\:w-56 {
@@ -4157,9 +4204,19 @@ video {
     text-align: left;
   }
 
+  .md\:text-4xl {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+
   .md\:text-6xl {
     font-size: 3.75rem;
     line-height: 1;
+  }
+
+  .md\:text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
   }
 
   .md\:text-xl {

@@ -110,11 +110,12 @@
     transition: background-color 0.3s; /* Suaviza la transición del color */
 }
 
-#commentIcon:hover {
-    background-color: #148f7a; /* Color más oscuro al pasar el mouse */
-}
+
 
 
 label {
     font-size: 24px; /* Ajusta el tamaño de la estrella */
 }
+
+
+/////////////
