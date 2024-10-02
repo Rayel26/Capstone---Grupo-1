@@ -173,7 +173,7 @@
           </div>
       </nav>
       <div class="mt-8 md:mb-8 flex justify-center space-x-6 md:order-3  ">
-          <a href="#" class="text-white hover:text-gray-200">
+          <a href="#" class="text-white hover:text-gray-200 mt-5">
               <span class="sr-only">Facebook</span>
               <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path fill-rule="evenodd"
@@ -182,7 +182,7 @@
               </svg>
           </a>
 
-          <a href="https://www.instagram.com/gativet/" class="text-white hover:text-gray-200">
+          <a href="https://www.instagram.com/gativet/" class="text-white hover:text-gray-200 mt-5">
             <span class="sr-only">Instagram</span>
             <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path fill-rule="evenodd"
@@ -190,13 +190,155 @@
                 clip-rule="evenodd" />
             </svg>
           </a>
+
+          <div class="flex justify-end mt-2">
+            <button id="commentIcon" class="bg-[rgb(24,190,170)] text-white rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                <i class="fas fa-comment"></i> <!-- Icono de mensaje -->
+            </button>
+        </div>
+        
       </div>
       <div class="mt-8  md:order-1 md:mt-0 ">
           <p class="text-center text-base text-white">
-              &copy; FraFra & Asociados
+              &copy; FraFra & Asociada
           </p>
       </div>
   </div>
 </footer>
+
+<!-- Modal para Comentarios -->
+<div id="commentModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50">
+  <div class="max-w-[600px] w-4/12 h-auto bg-white rounded-lg shadow-lg flex flex-col">
+      <div class="flex justify-between items-center border-b-2 pb-2 px-4 mt-4">
+          <h3 class="font-bold text-lg">Comentarios</h3>
+          <button id="closeModal" class="text-gray-500 hover:text-gray-700">
+              &times;
+          </button>
+      </div>
+      <div class="mt-2 flex-grow px-4">
+          <!-- Título del Comentario -->
+          <input type="text" id="commentTitle" class="w-full border border-gray-300 rounded-md p-2 mb-2" placeholder="Título del comentario" />
+
+          <!-- Selección de Estrellas -->
+          <div class="flex items-center mb-2">
+              <span class="mr-2">Calificación:</span>
+              <div class="flex">
+                  <input type="radio" id="star1" name="rating" value="1" class="hidden" />
+                  <label for="star1" class="cursor-pointer text-gray-400 hover:text-yellow-500">★</label>
+
+                  <input type="radio" id="star2" name="rating" value="2" class="hidden" />
+                  <label for="star2" class="cursor-pointer text-gray-400 hover:text-yellow-500">★</label>
+
+                  <input type="radio" id="star3" name="rating" value="3" class="hidden" />
+                  <label for="star3" class="cursor-pointer text-gray-400 hover:text-yellow-500">★</label>
+
+                  <input type="radio" id="star4" name="rating" value="4" class="hidden" />
+                  <label for="star4" class="cursor-pointer text-gray-400 hover:text-yellow-500">★</label>
+
+                  <input type="radio" id="star5" name="rating" value="5" class="hidden" />
+                  <label for="star5" class="cursor-pointer text-gray-400 hover:text-yellow-500">★</label>
+              </div>
+          </div>
+
+          <!-- Textarea para el Comentario -->
+          <textarea id="commentTextArea" rows="4" class="w-full border border-gray-300 rounded-md p-2" placeholder="Escribe tu comentario aquí..."></textarea>
+          <p id="wordCount" class="text-gray-500">Palabras restantes: 40</p> <!-- Aquí se mostrará el conteo de palabras -->
+          <p id="error-message" class="text-red-500 hidden">El comentario debe tener al menos 15 caracteres.</p>
+      </div>
+      <div class="flex justify-end mt-2 px-4">
+          <button id="submitComment" class="bg-green-500 text-white px-4 py-2 rounded-md mb-4">Enviar</button>
+      </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      const maxWords = 40; // Máximo de palabras permitidas
+      const commentTextArea = document.getElementById('commentTextArea');
+      const wordCount = document.getElementById('wordCount');
+
+      document.getElementById('commentIcon').addEventListener('click', function() {
+          console.log("El modal se está abriendo."); // Mensaje en la consola
+          document.getElementById('commentModal').classList.remove('hidden');
+          updateWordCount(); // Actualizar conteo al abrir el modal
+      });
+
+      document.getElementById('closeModal').addEventListener('click', function() {
+          console.log("El modal se está cerrando."); // Mensaje en la consola
+          document.getElementById('commentModal').classList.add('hidden');
+      });
+
+      commentTextArea.addEventListener('input', function() {
+          updateWordCount();
+          handleHoverEffect();
+      });
+
+      document.getElementById('submitComment').addEventListener('click', function() {
+          const commentText = commentTextArea.value;
+          const errorMessage = document.getElementById('error-message');
+
+          if (commentText.length < 15) {
+              errorMessage.classList.remove('hidden');
+          } else {
+              errorMessage.classList.add('hidden');
+              alert("Comentario enviado: " + commentText); // Esto es un ejemplo
+              commentTextArea.value = ''; // Limpiar textarea
+              updateWordCount(); // Resetear conteo
+              console.log("Comentario enviado: ", commentText); // Mensaje en la consola
+              document.getElementById('commentModal').classList.add('hidden'); // Cerrar modal
+          }
+      });
+
+      function updateWordCount() {
+          const words = commentTextArea.value.trim().split(/\s+/).filter(word => word.length > 0);
+          const remainingWords = maxWords - words.length;
+          wordCount.textContent = `Palabras restantes: ${remainingWords}`;
+
+          // Limitar el número de palabras
+          if (remainingWords < 0) {
+              commentTextArea.value = words.slice(0, maxWords).join(' '); // Limitar a maxWords
+              updateWordCount(); // Actualizar el conteo después de limitar
+          }
+      }
+
+      function handleHoverEffect() {
+          const words = commentTextArea.value.trim().split(/\s+/).filter(word => word.length > 0);
+          const remainingWords = maxWords - words.length;
+
+          if (remainingWords <= 0) {
+              commentTextArea.classList.add('border-red-500'); // Agregar clase para efecto hover en rojo
+              commentTextArea.addEventListener('input', preventInput); // Desactivar el input
+          } else {
+              commentTextArea.classList.remove('border-red-500'); // Quitar efecto hover
+              commentTextArea.removeEventListener('input', preventInput); // Reactivar el input
+          }
+      }
+
+      function preventInput(event) {
+          event.preventDefault(); // Prevenir el ingreso de nuevas letras
+      }
+
+      // Llenar las estrellas de acuerdo a la selección
+      const stars = document.querySelectorAll('input[name="rating"]');
+      const labels = document.querySelectorAll('label[for^="star"]');
+
+      stars.forEach((star, index) => {
+          star.addEventListener('change', () => {
+              // Llenar las estrellas según la selección
+              labels.forEach((label, i) => {
+                  if (i <= index) {
+                      label.classList.remove('text-gray-400');
+                      label.classList.add('text-yellow-500');
+                  } else {
+                      label.classList.remove('text-yellow-500');
+                      label.classList.add('text-gray-400');
+                  }
+              });
+          });
+      });
+  });
+</script>
+
+
 </body>
 </html>
