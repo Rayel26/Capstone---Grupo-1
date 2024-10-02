@@ -453,6 +453,52 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+        ///calculo edad mascota y mascota fallecida
+        document.addEventListener('DOMContentLoaded', function () {
+            const deceasedCheckbox = document.getElementById('pet-deceased-checkbox');
+            const causeOfDeathSection = document.getElementById('cause-of-death-section');
+            const causeOfDeathSelect = document.getElementById('cause-of-death');
+            const otherCauseContainer = document.getElementById('other-cause-container');
+            
+            // Elementos de detalles de la mascota
+            const petNameInput = document.getElementById('pet-name');
+            const petAgeInput = document.getElementById('pet-age');
+            const petSpeciesInput = document.getElementById('pet-species');
+            const petBreedInput = document.getElementById('pet-breed');
+    
+            // Mostrar/ocultar la sección de causa de muerte al marcar/desmarcar el checkbox
+            deceasedCheckbox.addEventListener('change', function () {
+                if (deceasedCheckbox.checked) {
+                    causeOfDeathSection.classList.remove('hidden');
+    
+                    // Aplicar estilo para indicar que la mascota ha fallecido (color gris)
+                    petNameInput.classList.add('text-gray-500'); // Cambia a gris
+                    petAgeInput.classList.add('text-gray-500');
+                    petSpeciesInput.classList.add('text-gray-500');
+                    petBreedInput.classList.add('text-gray-500');
+                } else {
+                    causeOfDeathSection.classList.add('hidden');
+                    causeOfDeathSelect.value = ""; // Reiniciar selección
+                    otherCauseContainer.classList.add('hidden'); // Ocultar el campo de otros
+    
+                    // Remover estilo
+                    petNameInput.classList.remove('text-gray-500');
+                    petAgeInput.classList.remove('text-gray-500');
+                    petSpeciesInput.classList.remove('text-gray-500');
+                    petBreedInput.classList.remove('text-gray-500');
+                }
+            });
+    
+            // Mostrar el campo para especificar otro motivo
+            causeOfDeathSelect.addEventListener('change', function () {
+                if (causeOfDeathSelect.value === 'otros') {
+                    otherCauseContainer.classList.remove('hidden');
+                } else {
+                    otherCauseContainer.classList.add('hidden');
+                }
+            });
+        });
+    
     // Obtén el botón de cerrar el modal usando el nuevo ID
     const closeEditModalButton = document.getElementById('close-edit-modal');
 

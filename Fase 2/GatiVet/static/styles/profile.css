@@ -1,27 +1,3 @@
-/* Sidebar Styles */
-.step-sidebar {
-    background-color: #ffffff;
-    /* Fondo blanco */
-    border-right: 1px solid #e5e7eb;
-    width: 250px;
-    /* Ancho por defecto */
-    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
-    transition: width 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    border-radius: 0.5rem;
-    /* Esquinas redondeadas */
-    height: calc(35vh - 2rem);
-    /* Altura fija menos un margen */
-    overflow-y: auto;
-    /* Scroll vertical si el contenido excede la altura */
-}
-
-.step-sidebar.collapsed {
-    width: 80px;
-    /* Ancho colapsado */
-}
-
 /* Iconos y texto */
 .step-icon {
     font-size: 1.5rem;
@@ -35,11 +11,6 @@
 
 .step-text {
     transition: opacity 0.3s ease;
-}
-
-.step-sidebar.collapsed .step-text {
-    opacity: 0;
-    /* Oculta el texto en el estado colapsado */
 }
 
 /* Botones */
@@ -72,28 +43,6 @@
     /* Fondo ligeramente diferente */
 }
 
-/* Responsividad */
-@media (max-width: 768px) {
-    .step-sidebar {
-        width: 80px;
-        /* Ancho colapsado */
-        height: 400px;
-        /* Altura fija menos un margen */
-    }
-
-    .step-sidebar .step-text {
-        opacity: 0;
-        /* Oculta el texto en pantallas pequeñas */
-    }
-}
-
-/* Ajuste para pantallas grandes */
-@media (min-width: 1024px) {
-    .step-content input {
-        max-width: 100%;
-        /* Ancho máximo del 50% en pantallas grandes */
-    }
-}
 
 /* Alinear el contenedor principal al lado izquierdo */
 .container {
@@ -127,27 +76,7 @@
     display: none; /* Oculta completamente el elemento */
 }
 
-
 /* Fin icono lapiz modo edición */
-
-/*css celular*/
-
-.phone-input-container {
-    display: flex;
-    align-items: center;
-}
-
-.phone-prefix {
-    font-size: 1rem;
-    margin-right: 0.5rem;
-    color: #18beaa; /* Color del prefijo */
-}
-
-#phone {
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
 
 .hidden {
     display: none;
@@ -310,4 +239,64 @@ input[type="checkbox"]:checked::before {
 
 .text-gray-500 {
     color: #a0aec0; /* Un tono gris */
+}
+.step-sidebar {
+    max-height: 420px; /* Altura fija para el contenedor */
+    min-height: 420px; /* Altura mínima para asegurarse de que no sea más pequeño */
+    overflow: hidden; /* Ocultar contenido que excede la altura del contenedor */
+}
+
+/* Responsividad para pantallas pequeñas */
+@media (max-width: 768px) {
+    .step-sidebar {
+        width: 60px; /* Reducir aún más el ancho para móviles */
+    }
+
+    .step-sidebar .step-text {
+        opacity: 0; /* Mantener el texto oculto */
+        transition: opacity 0.3s ease; /* Suavizar la transición de opacidad */
+    }
+
+    .container {
+        flex-direction: column; /* Cambiar la dirección a columna para móviles */
+        align-items: flex-start; /* Alinear los elementos al inicio */
+    }
+
+    .step-content {
+        margin-top: 1rem; /* Añadir margen superior para separar contenido */
+    }
+
+    .input-short {
+        width: 100%; /* Ampliar inputs a ancho completo */
+    }
+
+    .form-background {
+        padding: 1rem; /* Mantener un padding adecuado */
+        border-radius: 0.5rem; /* Bordes redondeados para un aspecto suave */
+        box-shadow: none; /* Quitar sombra para un aspecto más limpio */
+    }
+
+    /* Ajustar tamaños de texto para mejor legibilidad */
+    .step-icon {
+        font-size: 1.2rem; /* Tamaño de icono más pequeño para móviles */
+    }
+
+    .step-text {
+        font-size: 0.8rem; /* Texto más pequeño para pantallas pequeñas */
+    }
+}
+
+/* Media Queries para tabletas */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .step-content {
+        margin-top: 0.5rem; /* Margen superior para separar contenido en tabletas */
+    }
+
+    .step-icon {
+        font-size: 1.5rem; /* Aumentar el tamaño del icono para tabletas */
+    }
+
+    .step-text {
+        font-size: 1rem; /* Ajustar el tamaño del texto para tabletas */
+    }
 }
