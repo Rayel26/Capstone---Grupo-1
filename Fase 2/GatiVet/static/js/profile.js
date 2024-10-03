@@ -686,8 +686,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const notificationModal = document.getElementById('notification-modal');
     const modalClose = document.getElementById('modal-close');
     const modalCloseBtn = document.getElementById('modal-close-btn');
-    const confirmationModal = document.getElementById('confirmation-modal');
-    const confirmationCloseBtn = document.getElementById('confirmation-close-btn');
     const petSelect = document.getElementById('mascota-select');
     const modalPet = document.getElementById('modal-pet');
     const modalCertificates = document.getElementById('modal-certificates');
@@ -698,12 +696,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function hideModal(modal) {
         modal.classList.add('hidden');
-    }
-
-    function clearCheckboxes() {
-        document.querySelectorAll('input[name="certificates"]:checked').forEach((checkbox) => {
-            checkbox.checked = false;
-        });
     }
 
     function showCertificatesConfirmation() {
@@ -743,11 +735,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     modalCloseBtn.addEventListener('click', () => {
         hideModal(notificationModal);
-        showModal(confirmationModal); // Mostrar el segundo modal al aceptar
+        // Aquí puedes agregar lógica para mostrar otro modal si es necesario
     });
+});
 
-    confirmationCloseBtn.addEventListener('click', () => {
-        hideModal(confirmationModal);
-        clearCheckboxes(); // Limpiar los checkboxes al cerrar el modal
-    });
+// Selecciona el input de fecha
+const dateInput = document.getElementById('pet-birthdate');
+
+// Añade un evento click al input de fecha
+dateInput.addEventListener('click', function() {
+    this.showPicker(); // Muestra el selector de fecha
+});
+
+// Selecciona el input de fecha
+const newDateInput = document.getElementById('new-pet-birthdate');
+
+ // Añade un evento click al input de fecha
+newDateInput.addEventListener('click', function() {
+    this.showPicker(); // Muestra el selector de fecha
+});
+
+// Selecciona el input de fecha
+const editDateInput = document.getElementById('edit-pet-birthdate');
+
+// Añade un evento click al input de fecha
+editDateInput.addEventListener('click', function() {
+    this.showPicker(); // Muestra el selector de fecha
 });
