@@ -6,9 +6,59 @@
 
 <head>
     <!-- Importa el archivo CSS específico para profile -->
-    <link rel="stylesheet" href="static/styles/profile.css?v=1.0">
+    <link rel="stylesheet" href="static/styles/profile_vet.css?v=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
+<body>
+    <div class="max-w-6xl mx-auto p-4">
+        <div class="flex relative" style="top: 50px">
+            <div class="step-container flex-1">
+                <ul class="flex border-b border-gray-300">
+                    <li class="mr-1">
+                        <button onclick="showContent('profilevet')"
+                            class="tab-button px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-t-lg hover:bg-gray-300">
+                            <i class="fas fa-user step-icon" id="profile-icon"></i>
+                            <span class="step-text" id="profile-text">Mis datos</span>
+                        </button>
+                    </li>
+                    <li class="mr-1">
+                        <button onclick="showContent('history')"
+                            class="tab-button px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-t-lg hover:bg-gray-300">
+                            <i class="fas fa-paw step-icon" id="pets-icon"></i>
+                            <span class="step-text" id="pets-text">Mis Mascotas</span>
+                        </button>
+                    </li>
+                    <li class="mr-1">
+                        <button onclick="showContent('schedule')"
+                            class="tab-button px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-t-lg hover:bg-gray-300">
+                            <i class="fas fa-id-card step-icon" id="carnet-icon"></i>
+                            <span class="step-text" id="carnet-text">Carnet Digital</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="flex-1 mt-4">
+            <div id="profilevet" class="hidden p-6 bg-white shadow-md rounded-lg">
+                <h2 class="text-2xl font-bold mb-4">Mis Datos</h2>
+                <p>Aquí iría el contenido de Mis Datos.</p>
+            </div>
+
+            <div id="history" class="hidden p-6 bg-white shadow-md rounded-lg">
+                <h2 class="text-2xl font-bold mb-4">Mis Mascotas</h2>
+                <p>Aquí iría el contenido de Mis Mascotas.</p>
+            </div>
+
+            <div id="schedule" class="hidden p-6 bg-white shadow-md rounded-lg">
+                <h2 class="text-2xl font-bold mb-4">Carnet Digital</h2>
+                <p>Aquí iría el contenido de Carnet Digital.</p>
+            </div>
+        </div>
+    </div>
+</body>
+
 
 <body>
     <!-- Contenedor principal para centralizar el contenido -->
@@ -17,7 +67,6 @@
         <div class="flex">
             <!-- Sidebar -->
             <div id="sidebar" class="step-sidebar p-4 mr-2 flex-none w-64">
-                <h2 class="text-xl font-bold mb-4 step-text">Perfil Veterinario</h2>
                 <div class="flex flex-col space-y-4">
                     <button onclick="showContent('searchOwner')" class="flex items-center space-x-2">
                         <i class="fas fa-search step-icon" id="search-owner-icon"></i>

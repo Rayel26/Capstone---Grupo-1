@@ -1,3 +1,21 @@
+//// Manejo de Step
+function showContent(sectionId) {
+    // Ocultar todas las secciones
+    document.getElementById('profilevet').classList.add('hidden');
+    document.getElementById('history').classList.add('hidden');
+    document.getElementById('schedule').classList.add('hidden');
+
+    // Mostrar la sección seleccionada
+    document.getElementById(sectionId).classList.remove('hidden');
+}
+
+// Mostrar la sección por defecto al cargar
+showContent('profilevet');
+
+
+
+
+
 // Función para formatear el RUT automáticamente mientras se escribe
 function formatRut(value) {
     value = value.replace(/[^0-9kK]/g, '');

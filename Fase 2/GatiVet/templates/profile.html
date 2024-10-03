@@ -59,7 +59,8 @@
                     <!-- Columna 1 -->
                     <!-- Nombre -->
                     <div class="mb-4 relative">
-                        <label for="first-name" class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Nombre:</label>
+                        <label for="first-name"
+                            class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Nombre:</label>
                         <div class="relative flex items-center">
                             <input type="text" name="first-name" id="first-name" value="Juan"
                                 class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
@@ -67,10 +68,11 @@
                             <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
                         </div>
                     </div>
-                
+
                     <!-- Apellido Paterno -->
                     <div class="mb-4 relative">
-                        <label for="last-name" class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Apellido Paterno:</label>
+                        <label for="last-name" class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Apellido
+                            Paterno:</label>
                         <div class="relative flex items-center">
                             <input type="text" name="last-name" id="last-name" value="Pérez"
                                 class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
@@ -78,10 +80,11 @@
                             <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
                         </div>
                     </div>
-                
+
                     <!-- Apellido Materno -->
                     <div class="mb-4 relative">
-                        <label for="maternal-last-name" class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Apellido Materno:</label>
+                        <label for="maternal-last-name"
+                            class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Apellido Materno:</label>
                         <div class="relative flex items-center">
                             <input type="text" name="maternal-last-name" id="maternal-last-name" value="González"
                                 class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
@@ -89,7 +92,7 @@
                             <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
                         </div>
                     </div>
-                
+
                     <!-- Rut -->
                     <div class="mb-4 relative">
                         <label for="rut" class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">RUT:</label>
@@ -99,13 +102,15 @@
                                 class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
                                 required readonly>
                             <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
-                            <span id="rut-error-message" class="text-red-500 text-xs hidden">El RUT debe tener el formato xx.xxx.xxx-x o xx.xxx.xxx-k.</span>
+                            <span id="rut-error-message" class="text-red-500 text-xs hidden">El RUT debe tener el
+                                formato xx.xxx.xxx-x o xx.xxx.xxx-k.</span>
                         </div>
                     </div>
-                
+
                     <!-- Dirección -->
                     <div class="mb-4 relative">
-                        <label for="address" class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Dirección:</label>
+                        <label for="address"
+                            class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Dirección:</label>
                         <div class="relative flex items-center">
                             <input type="text" name="address" id="address" value="Av. Siempre Viva 123"
                                 class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
@@ -113,10 +118,11 @@
                             <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
                         </div>
                     </div>
-                
+
                     <!-- Comuna -->
                     <div class="mb-4 relative">
-                        <label for="commune" class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Comuna:</label>
+                        <label for="commune"
+                            class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Comuna:</label>
                         <div class="relative flex items-center">
                             <select name="commune" id="commune"
                                 class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
@@ -130,10 +136,11 @@
                             <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
                         </div>
                     </div>
-                
+
                     <!-- Celular -->
                     <div class="mb-4 relative">
-                        <label for="phone" class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Celular:</label>
+                        <label for="phone"
+                            class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Celular:</label>
                         <div class="relative flex items-center">
                             <input type="text" name="phone" id="phone" value="+569 " pattern="\+569 \d{4} \d{4}"
                                 title="Ingrese 8 dígitos después del prefijo +569, separados en dos grupos de 4 dígitos."
@@ -141,40 +148,46 @@
                                 readonly />
                             <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
                         </div>
-                        <span id="phone-error-message" class="text-red-500 text-xs hidden">El número de teléfono debe tener 8 dígitos después del prefijo</span>
+                        <span id="phone-error-message" class="text-red-500 text-xs hidden">El número de teléfono debe
+                            tener 8 dígitos después del prefijo</span>
                     </div>
                     <!-- Fin Celular -->
-                
+
                     <!-- Correo -->
                     <div class="mb-4 relative">
-                        <label for="email" class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Correo:</label>
+                        <label for="email"
+                            class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Correo:</label>
                         <div class="relative flex items-center">
                             <input type="email" name="email" id="email" value="juan.perez@example.com" pattern=".+@.+"
                                 title="El correo debe contener al menos un @"
                                 class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
                                 required readonly>
                             <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
-                            <span id="email-error-message" class="text-red-500 text-xs hidden">Formato de correo inválido. Por favor ingresa un correo válido.</span>
+                            <span id="email-error-message" class="text-red-500 text-xs hidden">Formato de correo
+                                inválido. Por favor ingresa un correo válido.</span>
                         </div>
                     </div>
                     <!-- Fin Correo -->
-                
+
                     <!-- Inicio Contraseña -->
                     <div class="mb-4 relative">
-                        <label for="password" class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Contraseña:</label>
+                        <label for="password"
+                            class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Contraseña:</label>
                         <div class="relative flex items-center">
                             <input type="password" name="password" id="password"
                                 class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
                                 required readonly>
                             <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
                         </div>
-                        <span id="password-error-message" class="text-red-500 text-xs mt-1 block hidden">La contraseña debe contener al menos una letra mayúscula y un número.</span>
+                        <span id="password-error-message" class="text-red-500 text-xs mt-1 block hidden">La contraseña
+                            debe contener al menos una letra mayúscula y un número.</span>
                     </div>
                     <!-- Fin Contraseña -->
-                
+
                     <!-- Region -->
                     <div class="mb-4 relative">
-                        <label for="region" class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Región:</label>
+                        <label for="region"
+                            class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Región:</label>
                         <div class="relative flex items-center">
                             <select name="region" id="region"
                                 class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 input-short input-background"
@@ -187,7 +200,7 @@
                     </div>
                     <!-- Fin Region -->
                 </form>
-                
+
                 <!-- Contenedor para los botones de editar y eliminar -->
                 <div class="flex justify-between items-center mt-4">
                     <button type="button" id="edit-save-button" onclick="toggleEditSaveProfile()"
@@ -285,7 +298,8 @@
                         <!-- Detalles de la mascota -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                             <div class="relative mb-4">
-                                <label for="pet-name" class="text-xs font-medium text-gray-900 block mb-2">Nombre:</label>
+                                <label for="pet-name"
+                                    class="text-xs font-medium text-gray-900 block mb-2">Nombre:</label>
                                 <input type="text" name="pet-name" id="pet-name" value="Selecciona una mascota"
                                     class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
                                     required readonly>
@@ -297,19 +311,22 @@
                                     required readonly>
                             </div>
                             <div class="relative mb-4">
-                                <label for="pet-birthdate" class="text-xs font-medium text-gray-900 block mb-2">Fecha de nacimiento:</label>
+                                <label for="pet-birthdate" class="text-xs font-medium text-gray-900 block mb-2">Fecha de
+                                    nacimiento:</label>
                                 <input type="date" id="pet-birthdate" name="pet-birthdate"
                                     class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
                                     required>
                             </div>
                             <div class="relative mb-4">
-                                <label for="pet-species" class="text-xs font-medium text-gray-900 block mb-2">Especie:</label>
+                                <label for="pet-species"
+                                    class="text-xs font-medium text-gray-900 block mb-2">Especie:</label>
                                 <input type="text" name="pet-species" id="pet-species" value=""
                                     class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
                                     required readonly>
                             </div>
                             <div class="relative mb-4">
-                                <label for="pet-breed" class="text-xs font-medium text-gray-900 block mb-2">Raza:</label>
+                                <label for="pet-breed"
+                                    class="text-xs font-medium text-gray-900 block mb-2">Raza:</label>
                                 <input type="text" name="pet-breed" id="pet-breed" value=""
                                     class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
                                     required readonly>
@@ -349,7 +366,6 @@
                 </div>
 
             </div>
-
             <!-- Fin Mis mascotas -->
         </div>
 
@@ -601,8 +617,6 @@
                 });
             });
         </script>
-
-
         <!-- Fin Mis mascotas -->
 
 
@@ -652,10 +666,18 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre de Vacuna</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha de Administración</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Próxima Fecha de Administración</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Veterinario</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Nombre de Vacuna</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Fecha de Administración</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Próxima Fecha de Administración</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Veterinario</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -685,10 +707,18 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre del Desparasitante</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha de Administración</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Próxima Fecha de Administración</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Veterinario</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Nombre del Desparasitante</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Fecha de Administración</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Próxima Fecha de Administración</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Veterinario</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -718,10 +748,18 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo de Control</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha del Control</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Veterinario</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripción</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Tipo de Control</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Fecha del Control</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Veterinario</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Descripción</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -730,7 +768,9 @@
                                 <td class="px-6 py-4 whitespace-nowrap">01/03/2024</td>
                                 <td class="px-6 py-4 whitespace-nowrap">Dr. Ruiz</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="truncate w-48 cursor-pointer" onclick="openModal('descripcion1')">Revisión completa de salud. Chequeo de peso, temperatura y estado general.</span>
+                                    <span class="truncate w-48 cursor-pointer"
+                                        onclick="openModal('descripcion1')">Revisión completa de salud. Chequeo de peso,
+                                        temperatura y estado general.</span>
                                 </td>
                             </tr>
                             <tr>
@@ -738,7 +778,9 @@
                                 <td class="px-6 py-4 whitespace-nowrap">01/09/2024</td>
                                 <td class="px-6 py-4 whitespace-nowrap">Dr. Martínez</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="truncate w-48 cursor-pointer" onclick="openModal('descripcion2')">Revisión de dientes y encías. Limpieza dental recomendada.</span>
+                                    <span class="truncate w-48 cursor-pointer"
+                                        onclick="openModal('descripcion2')">Revisión de dientes y encías. Limpieza
+                                        dental recomendada.</span>
                                 </td>
                             </tr>
                             <!-- Agrega más filas según sea necesario -->
@@ -767,7 +809,7 @@
         <!-- Certificados -->
         <div id="certificates"
             class="hidden step-content p-4 rounded-lg shadow-md relative p-6 bg-white shadow-md rounded-lg active">
-            <h2 class="text-lg font-bold mb-4">Solicitar Certificados</h2>
+            <h2 class="text-2xl font-bold mb-4">Solicitar Certificados</h2>
             <p class="text-gray-600 mb-4 text-sm">Seleccione los certificados que desea solicitar y la mascota a la
                 que aplicará. Los certificados solicitados tienen un tiempo de procesamiento de entre 5 a 10 días
                 hábiles y serán enviados al correo registrado.</p>
@@ -778,31 +820,38 @@
                     <label class="text-lg block mb-2 font-bold">Seleccione los certificados:</label>
                     <div class="block w-full border border-gray-300 rounded-md shadow-sm p-4 bg-white">
 
-                        <label class="checkbox-text text-sm flex items-center mb- hover:bg-gray-100 p-4 rounded-md transition">
+                        <label
+                            class="checkbox-text text-sm flex items-center mb- hover:bg-gray-100 p-4 rounded-md transition">
                             <input type="checkbox" name="certificates" value="certificate1">
                             Certificado de Salud
                         </label>
-                        <label class="checkbox-text text-sm flex items-center mb- hover:bg-gray-100 p-4 rounded-md transition">
+                        <label
+                            class="checkbox-text text-sm flex items-center mb- hover:bg-gray-100 p-4 rounded-md transition">
                             <input type="checkbox" name="certificates" value="certificate2">
                             Certificado de Vacunación
                         </label>
-                        <label class="checkbox-text text-sm flex items-center mb- hover:bg-gray-100 p-4 rounded-md transition">
+                        <label
+                            class="checkbox-text text-sm flex items-center mb- hover:bg-gray-100 p-4 rounded-md transition">
                             <input type="checkbox" name="certificates" value="certificate3">
                             Certificado de Desparasitación
                         </label>
-                        <label class="checkbox-text text-sm flex items-center mb- hover:bg-gray-100 p-4 rounded-md transition">
+                        <label
+                            class="checkbox-text text-sm flex items-center mb- hover:bg-gray-100 p-4 rounded-md transition">
                             <input type="checkbox" name="certificates" value="certificate4">
                             Certificado para Viajes Internacionales
                         </label>
-                        <label class="checkbox-text text-sm flex items-center mb- hover:bg-gray-100 p-4 rounded-md transition">
+                        <label
+                            class="checkbox-text text-sm flex items-center mb- hover:bg-gray-100 p-4 rounded-md transition">
                             <input type="checkbox" name="certificates" value="certificate5">
                             Certificado de Esterilización o Castración
                         </label>
-                        <label class="checkbox-text text-sm flex items-center mb- hover:bg-gray-100 p-4 rounded-md transition">
+                        <label
+                            class="checkbox-text text-sm flex items-center mb- hover:bg-gray-100 p-4 rounded-md transition">
                             <input type="checkbox" name="certificates" value="certificate6">
                             Certificado de Muerte o Eutanasia
                         </label>
-                        <label class="checkbox-text text-sm flex items-center mb- hover:bg-gray-100 p-4 rounded-md transition">
+                        <label
+                            class="checkbox-text text-sm flex items-center mb- hover:bg-gray-100 p-4 rounded-md transition">
                             <input type="checkbox" name="certificates" value="certificate7">
                             Certificado de Identificación
                         </label>

@@ -1,3 +1,6 @@
+.hidden { display: none; }
+.active { display: block; }
+
 #rut-error-message {
     display: block; /* Asegura que se muestre en un bloque */
 }
