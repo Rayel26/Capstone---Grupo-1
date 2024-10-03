@@ -1,0 +1,4 @@
+.hidden { display: none; }
+.low-stock { background-color: rgba(255, 0, 0, 0.1); color: red; } /* Estilo para bajo stock */
+.high-stock { background-color: rgba(0, 255, 0, 0.1); color: green; } /* Estilo para stock adecuado */
+.error { color: red; font-size: 0.875rem; } /* Estilo para mensajes de error */

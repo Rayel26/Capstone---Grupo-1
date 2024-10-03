@@ -1,0 +1,224 @@
+{% extends "base_producto.html" %}
+
+{% block title %}Perfil{% endblock %}
+
+{% block content %}
+
+<head>
+    <!-- Importa el archivo CSS específico para profile -->
+    <link rel="stylesheet" href="static/styles/admin_dashboard.css?v=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+
+    <!-- Encabezado con menú horizontal -->
+    <header class="bg-white shadow">
+        <div class="container mx-auto flex justify-between items-center p-4">
+            <h1 class="text-2xl font-bold text-blue-600">Administrador</h1>
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a href="#" onclick="showSection('productos')" class="text-gray-700 hover:text-blue-500">Productos</a></li>
+                    <li><a href="#" onclick="showSection('usuarios')" class="text-gray-700 hover:text-blue-500">Usuarios</a></li>
+                    <li><a href="#" onclick="showSection('reportes')" class="text-gray-700 hover:text-blue-500">Reportes</a></li>
+                    <li><a href="#" onclick="showSection('configuracion')" class="text-gray-700 hover:text-blue-500">Configuración</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="flex">
+        <!-- Contenido Principal -->
+        <div class="flex-1 p-6">
+            <h2 class="text-3xl font-bold text-gray-800">Dashboard</h2>
+
+            <!-- Sección de Productos -->
+            <div id="productos" class="section hidden">
+                <h3 class="text-2xl font-semibold mt-4 mb-2">Gestión de Productos</h3>
+
+                <!-- Tabla de stock de productos -->
+                <table class="min-w-full mt-4 bg-white border border-gray-300 shadow rounded-lg overflow-hidden">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="py-2 px-4 border-b">Nombre del Producto</th>
+                            <th class="py-2 px-4 border-b">Tipo de Producto</th>
+                            <th class="py-2 px-4 border-b">Marca</th>
+                            <th class="py-2 px-4 border-b">Precio</th>
+                            <th class="py-2 px-4 border-b">Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTable">
+                        <!-- Aquí se mostrarán los productos añadidos -->
+                    </tbody>
+                </table>
+
+                <!-- Formulario para subir productos -->
+                <form id="productForm" class="mt-6 bg-white p-6 shadow rounded-lg">
+                    <h4 class="text-lg font-semibold">Agregar Nuevo Producto</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                        <div>
+                            <label for="productName" class="block text-gray-700">Nombre del Producto:</label>
+                            <input type="text" id="productName" class="border rounded w-full py-2 px-3 text-gray-700" placeholder="Nombre del producto" required>
+                            <div id="nameError" class="error hidden">Este campo es obligatorio.</div>
+                        </div>
+                        <div>
+                            <label for="productImage" class="block text-gray-700">Imagen del Producto:</label>
+                            <input type="file" id="productImage" class="border rounded w-full py-2 px-3 text-gray-700">
+                        </div>
+                        <div>
+                            <label for="productType" class="block text-gray-700">Tipo de Producto:</label>
+                            <select id="productType" class="border rounded w-full py-2 px-3 text-gray-700" required>
+                                <option value="">Seleccione un tipo</option>
+                                <option value="alimento_perro">Alimento para Perros</option>
+                                <option value="alimento_gato">Alimento para Gatos</option>
+                                <option value="medicamento">Medicamento Veterinario</option>
+                            </select>
+                            <div id="typeError" class="error hidden">Este campo es obligatorio.</div>
+                        </div>
+                        <div>
+                            <label for="brand" class="block text-gray-700">Marca:</label>
+                            <select id="brand" class="border rounded w-full py-2 px-3 text-gray-700" required>
+                                <option value="">Seleccione una marca</option>
+                                <optgroup label="Alimento para Perros">
+                                    <option value="Royal Canin">Royal Canin</option>
+                                    <option value="Purina Pro Plan">Purina Pro Plan</option>
+                                    <option value="Pedigree">Pedigree</option>
+                                    <option value="Eukanuba">Eukanuba</option>
+                                </optgroup>
+                                <optgroup label="Alimento para Gatos">
+                                    <option value="Whiskas">Whiskas</option>
+                                    <option value="Royal Canin">Royal Canin</option>
+                                    <option value="Purina Cat Chow">Purina Cat Chow</option>
+                                </optgroup>
+                                <optgroup label="Medicamentos Veterinarios">
+                                    <option value="NexGard">NexGard</option>
+                                    <option value="Frontline">Frontline</option>
+                                    <option value="Advantage">Advantage</option>
+                                </optgroup>
+                            </select>
+                            <div id="brandError" class="error hidden">Este campo es obligatorio.</div>
+                        </div>
+                        <div>
+                            <label for="price" class="block text-gray-700">Precio:</label>
+                            <input type="text" id="price" class="border rounded w-full py-2 px-3 text-gray-700" placeholder="Precio del producto" oninput="formatCurrency(this)" required>
+                            <div id="priceError" class="error hidden">Este campo es obligatorio.</div>
+                        </div>
+                        <div>
+                            <label for="quantity" class="block text-gray-700">Cantidad:</label>
+                            <input type="number" id="quantity" class="border rounded w-full py-2 px-3 text-gray-700" placeholder="Cantidad disponible" required>
+                            <div id="quantityError" class="error hidden">Este campo es obligatorio.</div>
+                        </div>
+                    </div>
+                    <button type="submit" class="mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-500 transition duration-200">Subir Producto</button>
+                </form>
+            </div>
+
+            <!-- Sección de Usuarios -->
+            <div id="usuarios" class="section hidden">
+                <h3 class="text-2xl font-semibold mt-4 mb-2">Gestión de Usuarios</h3>
+                <p>Aquí puedes ver y gestionar los usuarios registrados.</p>
+            </div>
+
+            <!-- Sección de Reportes -->
+            <div id="reportes" class="section hidden">
+                <h3 class="text-2xl font-semibold mt-4 mb-2">Reportes</h3>
+                <p>Aquí puedes ver estadísticas y reportes.</p>
+            </div>
+
+            <!-- Sección de Configuración -->
+            <div id="configuracion" class="section hidden">
+                <h3 class="text-2xl font-semibold mt-4 mb-2">Configuración</h3>
+                <p>Aquí puedes ajustar las configuraciones de la aplicación.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para mostrar la sección correspondiente
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+
+        // Mostrar la sección de productos por defecto al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            showSection('productos');
+        });
+
+        // Función para formatear el precio como moneda chilena
+        function formatCurrency(input) {
+            // Eliminar cualquier carácter que no sea un número
+            let value = input.value.replace(/\D/g, '');
+            // Formatear el número como moneda chilena
+            if (value) {
+                input.value = parseInt(value).toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
+            }
+        }
+
+        // Manejo del formulario
+        document.getElementById('productForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Evitar el envío del formulario
+            let isValid = true;
+
+            // Limpiar mensajes de error
+            document.querySelectorAll('.error').forEach(error => error.classList.add('hidden'));
+
+            // Obtener valores del formulario
+            const name = document.getElementById('productName').value.trim();
+            const type = document.getElementById('productType').value;
+            const brand = document.getElementById('brand').value;
+            const priceInput = document.getElementById('price').value.replace(/\D/g, ''); // Limpiar formato
+            const price = parseInt(priceInput, 10);
+            const quantity = parseInt(document.getElementById('quantity').value, 10);
+
+            // Validaciones
+            if (!name) {
+                document.getElementById('nameError').classList.remove('hidden');
+                isValid = false;
+            }
+            if (!type) {
+                document.getElementById('typeError').classList.remove('hidden');
+                isValid = false;
+            }
+            if (!brand) {
+                document.getElementById('brandError').classList.remove('hidden');
+                isValid = false;
+            }
+            if (!priceInput) {
+                document.getElementById('priceError').classList.remove('hidden');
+                isValid = false;
+            }
+            if (isNaN(quantity) || quantity <= 0) {
+                document.getElementById('quantityError').classList.remove('hidden');
+                isValid = false;
+            }
+
+            // Si todo es válido, proceder a añadir el producto
+            if (isValid) {
+                // Crear el contenido de la celda de stock
+                let stockCellClass = quantity < 20 ? 'low-stock' : 'high-stock';
+                let stockCellContent = quantity < 20 ? `¡Bajo Stock! (${quantity} disponibles)` : `${quantity} disponibles`;
+
+                // Crear la fila de producto y agregarla a la tabla
+                const table = document.getElementById('productTable');
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="py-2 px-4 border-b">${name}</td>
+                    <td class="py-2 px-4 border-b">${type}</td>
+                    <td class="py-2 px-4 border-b">${brand}</td>
+                    <td class="py-2 px-4 border-b">${price ? price.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' }) : 'N/A'}</td>
+                    <td class="py-2 px-4 border-b ${stockCellClass}">${stockCellContent}</td>
+                `;
+
+                table.appendChild(row);
+
+                // Limpiar el formulario
+                this.reset();
+                document.getElementById('productImage').value = ''; // Limpiar el input de archivo
+            }
+        });
+    </script>
+</body>
+{% endblock %}
