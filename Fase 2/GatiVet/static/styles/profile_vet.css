@@ -1,404 +1,64 @@
-/* Sidebar Styles */
-
-.step-sidebar.collapsed {
-    width: 80px;
+/* Reset de márgenes y paddings */
+body, h1, h2, h3, p, label, input, textarea, button {
+    margin: 0;
+    padding: 0;
 }
 
-/* Iconos y texto */
-.step-icon {
-    font-size: 1.5rem;
-    color: rgb(255, 255, 255);
-    transition: color 0.3s ease;
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9; /* Color de fondo */
+    padding: 20px; /* Padding alrededor del contenido */
 }
 
-.step-icon.active {
-    color: #ffffff;
-}
-
-.step-text {
-    transition: opacity 0.3s ease;
-}
-
-.step-sidebar.collapsed .step-text {
-    opacity: 0;
-}
-
-/* Botones */
-.step-sidebar button {
-    transition: background-color 0.3s ease;
-    border: none;
-    padding: 0.5rem;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    text-align: left;
-    display: flex;
-    align-items: center;
-    width: 100%;
-}
-
-.step-sidebar button:hover,
-.step-sidebar button:focus {
-    background-color: #e2f0e8;
-}
-
-.step-sidebar button:active {
-    background-color: #c1e1c1;
-}
-
-/* Edit mode */
-.edit-mode {
-    border: 2px solid #18beaa;
-    background-color: #f0f8f7;
-}
-
-/* Alinear el contenedor principal al lado izquierdo */
 .container {
-    display: flex;
-    width: 100%;
-    margin: 0;
+    max-width: 1200px; /* Ancho máximo del contenedor */
+    width: 90%; /* Ancho del contenedor */
+    margin: 0 auto; /* Centrar el contenedor */
+    background: white; /* Fondo blanco */
+    padding: 20px; /* Espacio interno */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra sutil */
 }
 
-/* icono lapiz modo edición */
-.edit-icon {
-    font-size: 1rem;
-    color: #18beaa;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
+/* Secciones */
+section {
+    margin-bottom: 20px; /* Espacio entre secciones */
 }
 
-.edit-icon.hidden {
-    opacity: 0;
-    display: none;
+/* Estilos para formularios */
+form {
+    display: grid; /* Usar grid para organizar inputs */
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+    gap: 10px; /* Espacio entre inputs */
 }
 
-.edit-mode .edit-icon {
-    opacity: 1;
+/* Estilos de botones */
+button {
+    background-color: #4CAF50; /* Color de fondo */
+    color: white; /* Color de texto */
+    border: none; /* Sin borde */
+    padding: 10px 15px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cursor pointer */
 }
 
-.edit-icon.disabled {
-    opacity: 0.5;
+button:hover {
+    background-color: #45a049; /* Cambio de color al pasar el mouse */
 }
 
-
-/* CSS celular */
-.phone-input-container {
-    display: flex;
-    align-items: center;
-}
-
-.phone-prefix {
-    font-size: 1rem;
-    margin-right: 0.5rem;
-    color: #18beaa;
-}
-
-#phone {
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-/* Ajusta el espacio entre columnas */
-.reduce-column-gap {
-    grid-column-gap: 0.5rem;
-}
-
-/* Ajusta el tamaño de los inputs */
-.input-short {
-    width: 80%;
-}
-
-/* Fondo blanco para el formulario y los campos de entrada */
-.form-background {
-    background-color: #ffffff;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
-}
-
-.input-background {
-    background-color: #ffffff;
-}
-
-/* Asegúrate de que el contenedor principal esté alineado correctamente */
-.step-content {
-    margin-top: 0;
-}
-
-/* CSS mascotas */
-#add-pet-modal.hidden {
-    display: none;
-}
-
-#add-pet-modal {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-}
-
-.no-outline:focus {
-    outline: none;
-}
-
-/* carnet digital */
-table tbody tr:hover {
-    background-color: #82f1e6 !important;
-}
-
-/* Estilos para la paginación */
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.pagination button {
-    border: 1px solid #ddd;
-    padding: 5px 10px;
-    margin: 0 2px;
-    cursor: pointer;
-}
-
-.pagination button.active {
-    background-color: #69d9cd;
-    color: white;
-    border: none;
-}
-
-/* Estilo para los botones de las pestañas */
-.tab-button {
-    background-color: #69d9cd;
-    color: white;
-    cursor: pointer;
-}
-
-.tab-button:hover {
-    background-color: #18beaa;
-}
-
-/* Estilo para la pestaña activa (opcional) */
-.tab-button.active {
-    background-color: #18beaa;
-}
-
-.truncate {
-    display: block;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-
-/* Contenedor de la fecha y el logo */
-#carnet .absolute {
-    top: 0.5rem;
-    right: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    z-index: 10;
-}
-
-/* Estilo para la fecha de emisión */
-#carnet .absolute p {
-    margin: 0;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #6e6e6e;
-}
-
-/* Estilo para el logo */
-#carnet .absolute img {
-    width: 430px;
-    height: 10rem;
-    object-fit: contain;
-}
-
-/* CSS certificados */
-.checkbox-container {
-    display: flex; /* Usa flexbox para alinear checkbox y texto */
-    align-items: center; /* Centra verticalmente los elementos */
-}
-
-input[type="checkbox"] {
-    appearance: none; /* Elimina el estilo predeterminado del navegador */
-    background-color: #fff; /* Color de fondo */
-    margin-right: 0.5rem; /* Margen a la derecha */
-    font: inherit; /* Hereda la fuente del contenedor */
-    width: 24px; /* Ancho fijo */
-    height: 24px; /* Altura fija */
-    border: 2px solid #d1d5db; /* Borde */
-    border-radius: 0; /* Mantisene el checkbox cuadrado */
-    display: grid; /* Usar grid para centrar el contenido */
-    place-content: center; /* Centrar el contenido dentro del checkbox */
-    transition: background-color 0.3s ease, border-color 0.3s ease; /* Transiciones para el hover */
-}
-
-input[type="checkbox"]:hover {
-    border-color: #10b981; /* Color del borde al pasar el mouse */
-}
-
-input[type="checkbox"]:checked {
-    background-color: #10b981; /* Color de fondo al estar chequeado */
-    border-color: #10b981; /* Color del borde al estar chequeado */
-}
-
-input[type="checkbox"]:checked::before {
-    content: "✓"; /* Marca de verificación */
-    font-size: 1rem; /* Tamaño de la marca de verificación */
-    color: white; /* Color de la marca de verificación */
-}
-
-/* Asegurarte que el texto no afecte el tamaño del checkbox */
-.checkbox-text {
-    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-    overflow: hidden; /* Oculta el texto que se sale del contenedor */
-    text-overflow: ellipsis; /* Muestra puntos suspensivos si el texto es demasiado largo */
-}
-
-
-
-.text-gray-500 {
-    color: #a0aec0;
-}
-
-
-/* Ajustes generales para pantallas pequeñas */
-/* Ajustes generales del sidebar */
-#sidebar {
-    width: 16rem; /* 64px */
-    flex-direction: column;
-}
-
-/* Ajustes para pantallas hasta 1024px */
-@media (max-width: 1024px) {
-    #sidebar {
-        width: 5rem; /* Cambia el ancho del sidebar */
-    }
-
-    .step-text {
-        display: none; /* Oculta el texto */
-    }
-
-    .step-icon {
-        font-size: 1.5rem; /* Ajusta el tamaño del ícono */
-    }
-}
-
-/* Ajustes para pantallas hasta 768px */
-@media (max-width: 768px) {
-    #sidebar {
-        width: 4.5rem; /* Ajuste adicional del ancho del sidebar */
-    }
-
-    .step-icon {
-        font-size: 1.4rem; /* Ajusta el tamaño del ícono */
-    }
-}
-
-.step-icon:hover {
-    color: white !important; /* Cambia el color a blanco y fuerza la regla */
-    transform: scale(1.1); /* Mantiene el efecto de escalado */
-}
-
-
-
-/* Media query para pantallas menores a 480px */
-@media (max-width: 480px) {
-    #sidebar {
-        width: 100%; /* Ocupa el 100% del ancho */
-        flex-direction: row; /* Los íconos estarán en fila */
-        justify-content: space-around;
-        position: relative; /* Mantener el sidebar dentro del flujo del documento */
-        padding: 0.5rem 0;
-        background-color: #fff; /* Fondo blanco */
-        z-index: 1000;
-    }
-
-    #sidebar h2 {
-        display: none; /* Ocultar el título "Mi cuenta" en pantallas pequeñas */
-    }
-
-    .step-sidebar button {
-        display: flex;
-        flex-direction: column; /* Los íconos y textos estarán apilados verticalmente */
-        align-items: center;
-        padding: 0;
-    }
-
-    .step-text {
-        display: none; /* Ocultar el texto en pantallas pequeñas */
-    }
-
-    .step-icon {
-        font-size: 1.5rem; /* Ajustar tamaño del ícono */
-    }
-
-    .flex-none {
-        flex: 1; /* Asegura que cada ícono ocupe espacio equitativo */
-    }
-}
-/* Contenedor para habilitar el desplazamiento horizontal */
-.table-container {
-    overflow-x: auto; /* Habilita el desplazamiento horizontal */
-    max-width: 100%; /* Limita el ancho al 100% del contenedor */
-    display: block; /* Hace que el contenedor de la tabla sea un bloque */
-}
-
-/* Estilo para las tablas */
+/* Ajustar tablas */
 table {
-    min-width: 600px; /* Asegura que las tablas tengan un ancho mínimo para que el desplazamiento sea efectivo */
-    width: auto; /* Permite que la tabla se expanda según su contenido */
+    width: 100%; /* Ancho completo */
+    border-collapse: collapse; /* Colapsar bordes */
 }
 
-@media (max-width: 460px) {
-    .tab-button {
-        padding: 0.25rem 0.5rem; /* Ajusta el tamaño del padding */
-        font-size: 0.75rem; /* Cambia el tamaño de la fuente si es necesario */
-    }
-
-    #mascota {
-        width: 100%; /* Hace que el selector use todo el ancho disponible */
-        padding: 0.5rem; /* Ajusta el padding del selector */
-        font-size: 0.875rem; /* Cambia el tamaño de la fuente del selector si es necesario */
-    }
+th, td {
+    padding: 10px; /* Espaciado interno en celdas */
+    text-align: left; /* Alinear texto a la izquierda */
+    border-bottom: 1px solid #ddd; /* Línea divisoria */
 }
 
-@media (max-width: 460px) {
-    .tab-button {
-        white-space: nowrap; /* Evita que el texto se envuelva */
-        overflow: hidden; /* Oculta el desbordamiento de texto */
-        text-overflow: ellipsis; /* Muestra puntos suspensivos (...) */
-        width: 60px; /* Ajusta el ancho según sea necesario */
-    }
-}
-
-/* Estilos generales para el checkbox */
-input[type="checkbox"] {
-    width: 15px; /* Tamaño del checkbox */
-    height: 15px; /* Tamaño del checkbox */
-    margin-right: 5px; /* Espacio entre el checkbox y la etiqueta */
-    flex-shrink: 0; /* Evita que el checkbox se deforme */
-}
-
-/* Estilos para la etiqueta */
-.checkbox-text {
-    font-size: 16px; /* Tamaño de fuente normal */
-    white-space: nowrap; /* Evita que la etiqueta se rompa en múltiples líneas */
-    overflow: hidden; /* Esconde el desbordamiento del texto */
-    text-overflow: ellipsis; /* Añade puntos suspensivos al final */
-    max-width: calc(100% - 20px); /* Ajusta el ancho para dejar espacio para el checkbox */
-    display: flex; /* Mantiene el texto y el checkbox en línea */
-    align-items: center; /* Alinea verticalmente el texto con el checkbox */
-}
-
-/* Media query para pantallas pequeñas */
-@media (max-width: 460px) {
-    .checkbox-text {
-        font-size: 0.6rem; /* Tamaño de fuente más pequeño para pantallas menores a 460px */
-        max-width: 300px; /* Limitar el ancho para permitir el efecto de puntos suspensivos */
-    }
+th {
+    background-color: #f2f2f2; /* Fondo para encabezados */
 }
