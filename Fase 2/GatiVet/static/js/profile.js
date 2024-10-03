@@ -453,52 +453,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-        ///calculo edad mascota y mascota fallecida
-        document.addEventListener('DOMContentLoaded', function () {
-            const deceasedCheckbox = document.getElementById('pet-deceased-checkbox');
-            const causeOfDeathSection = document.getElementById('cause-of-death-section');
-            const causeOfDeathSelect = document.getElementById('cause-of-death');
-            const otherCauseContainer = document.getElementById('other-cause-container');
-            
-            // Elementos de detalles de la mascota
-            const petNameInput = document.getElementById('pet-name');
-            const petAgeInput = document.getElementById('pet-age');
-            const petSpeciesInput = document.getElementById('pet-species');
-            const petBreedInput = document.getElementById('pet-breed');
-    
-            // Mostrar/ocultar la sección de causa de muerte al marcar/desmarcar el checkbox
-            deceasedCheckbox.addEventListener('change', function () {
-                if (deceasedCheckbox.checked) {
-                    causeOfDeathSection.classList.remove('hidden');
-    
-                    // Aplicar estilo para indicar que la mascota ha fallecido (color gris)
-                    petNameInput.classList.add('text-gray-500'); // Cambia a gris
-                    petAgeInput.classList.add('text-gray-500');
-                    petSpeciesInput.classList.add('text-gray-500');
-                    petBreedInput.classList.add('text-gray-500');
-                } else {
-                    causeOfDeathSection.classList.add('hidden');
-                    causeOfDeathSelect.value = ""; // Reiniciar selección
-                    otherCauseContainer.classList.add('hidden'); // Ocultar el campo de otros
-    
-                    // Remover estilo
-                    petNameInput.classList.remove('text-gray-500');
-                    petAgeInput.classList.remove('text-gray-500');
-                    petSpeciesInput.classList.remove('text-gray-500');
-                    petBreedInput.classList.remove('text-gray-500');
-                }
-            });
-    
-            // Mostrar el campo para especificar otro motivo
-            causeOfDeathSelect.addEventListener('change', function () {
-                if (causeOfDeathSelect.value === 'otros') {
-                    otherCauseContainer.classList.remove('hidden');
-                } else {
-                    otherCauseContainer.classList.add('hidden');
-                }
-            });
-        });
-    
     // Obtén el botón de cerrar el modal usando el nuevo ID
     const closeEditModalButton = document.getElementById('close-edit-modal');
 
@@ -732,8 +686,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const notificationModal = document.getElementById('notification-modal');
     const modalClose = document.getElementById('modal-close');
     const modalCloseBtn = document.getElementById('modal-close-btn');
-    const confirmationModal = document.getElementById('confirmation-modal');
-    const confirmationCloseBtn = document.getElementById('confirmation-close-btn');
     const petSelect = document.getElementById('mascota-select');
     const modalPet = document.getElementById('modal-pet');
     const modalCertificates = document.getElementById('modal-certificates');
@@ -744,12 +696,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function hideModal(modal) {
         modal.classList.add('hidden');
-    }
-
-    function clearCheckboxes() {
-        document.querySelectorAll('input[name="certificates"]:checked').forEach((checkbox) => {
-            checkbox.checked = false;
-        });
     }
 
     function showCertificatesConfirmation() {
@@ -789,11 +735,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     modalCloseBtn.addEventListener('click', () => {
         hideModal(notificationModal);
-        showModal(confirmationModal); // Mostrar el segundo modal al aceptar
+        // Aquí puedes agregar lógica para mostrar otro modal si es necesario
     });
+});
 
-    confirmationCloseBtn.addEventListener('click', () => {
-        hideModal(confirmationModal);
-        clearCheckboxes(); // Limpiar los checkboxes al cerrar el modal
-    });
+// Selecciona el input de fecha
+const dateInput = document.getElementById('pet-birthdate');
+
+// Añade un evento click al input de fecha
+dateInput.addEventListener('click', function() {
+    this.showPicker(); // Muestra el selector de fecha
+});
+
+// Selecciona el input de fecha
+const newDateInput = document.getElementById('new-pet-birthdate');
+
+ // Añade un evento click al input de fecha
+newDateInput.addEventListener('click', function() {
+    this.showPicker(); // Muestra el selector de fecha
+});
+
+// Selecciona el input de fecha
+const editDateInput = document.getElementById('edit-pet-birthdate');
+
+// Añade un evento click al input de fecha
+editDateInput.addEventListener('click', function() {
+    this.showPicker(); // Muestra el selector de fecha
 });
