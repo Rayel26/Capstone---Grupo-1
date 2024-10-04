@@ -26,11 +26,25 @@ section {
     margin-bottom: 20px; /* Espacio entre secciones */
 }
 
-/* Estilos para formularios */
-form {
-    display: grid; /* Usar grid para organizar inputs */
-    grid-template-columns: repeat(2, 1fr); /* Dos columnas */
-    gap: 10px; /* Espacio entre inputs */
+/* Ajustar formulario */
+.doctor-form {
+    display: flex;
+    justify-content: space-between; /* Separar columnas */
+    align-items: flex-start; /* Alinear al inicio */
+}
+
+.doctor-details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas para los inputs */
+    gap: 20px; /* Espacio entre los inputs */
+    width: 65%; /* Ocupa 65% del ancho */
+}
+
+.doctor-photo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30%; /* Ocupa 30% del ancho */
 }
 
 /* Estilos de botones */
@@ -40,25 +54,24 @@ button {
     border: none; /* Sin borde */
     padding: 10px 15px; /* Espaciado interno */
     border-radius: 5px; /* Bordes redondeados */
-    cursor: pointer; /* Cursor pointer */
 }
 
 button:hover {
     background-color: #45a049; /* Cambio de color al pasar el mouse */
 }
 
-/* Ajustar tablas */
-table {
-    width: 100%; /* Ancho completo */
-    border-collapse: collapse; /* Colapsar bordes */
+/* Estilos para inputs y labels */
+label {
+    font-size: 0.875rem; /* Tamaño de fuente más pequeño para labels */
 }
 
-th, td {
-    padding: 10px; /* Espaciado interno en celdas */
-    text-align: left; /* Alinear texto a la izquierda */
-    border-bottom: 1px solid #ddd; /* Línea divisoria */
+input {
+    font-size: 0.875rem; /* Tamaño de fuente más pequeño para inputs */
+    padding: 0.5rem; /* Padding reducido */
 }
 
-th {
-    background-color: #f2f2f2; /* Fondo para encabezados */
+/* Aumentar el tamaño de la imagen */
+#profile-picture {
+    width: 100%; /* Ancho completo del contenedor */
+    height: auto; /* Mantener la proporción */
 }

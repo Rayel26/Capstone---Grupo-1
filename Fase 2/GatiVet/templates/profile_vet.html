@@ -7,31 +7,9 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/Logo Gativet.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-
-    <style>
-        /* Estilos para hacer los labels e inputs más pequeños */
-        label {
-            font-size: 0.875rem; /* Tamaño de fuente más pequeño para labels */
-        }
-
-        input {
-            font-size: 0.875rem; /* Tamaño de fuente más pequeño para inputs */
-            padding: 0.5rem; /* Padding reducido */
-        }
-
-        .upload-container {
-            width: 100px; /* Ancho del cuadrado */
-            height: 100px; /* Alto del cuadrado */
-            border: 2px dashed gray; /* Estilo del borde */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            background-color: white; /* Color de fondo del cuadrado */
-        }
-    </style>
 </head>
 <body class="bg-gray-100">
+    <!-- Steps -->
     <header class="flex bg-gray-200 p-4 border-b border-gray-300">
         <button class="tab-button bg-gray-200 border border-gray-300 py-2 px-4 mr-2 focus:outline-none" onclick="showSection('doctor-info', this)">Datos del Doctor</button>
         <button class="tab-button bg-gray-200 border border-gray-300 py-2 px-4 mr-2 focus:outline-none" onclick="showSection('clinical-records', this)">Fichas Clínicas</button>
@@ -39,77 +17,79 @@
         <button class="tab-button bg-gray-200 border border-gray-300 py-2 px-4 mr-2 focus:outline-none" onclick="showSection('pet-info', this)">Datos de Mascota</button>
         <button class="tab-button bg-gray-200 border border-gray-300 py-2 px-4 mr-2 focus:outline-none" onclick="showSection('reminders', this)">Recordatorio</button>
     </header>
+    <!-- Fin Steps -->
 
-    <!-- Datos del Doctor -->
-    <div class="container hidden" id="doctor-info">
-        <section class="p-4">
-            <h2 class="text-xl font-semibold">Datos del Doctor</h2>
+<!-- Datos del Doctor -->
+<div class="container mx-auto p-2 bg-white shadow-md" id="doctor-info">
+    <h2 class="text-sm font-semibold mb-2">Información del Veterinario</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Primera Carta - Información Personal Parte 1 -->
+        <div class="card bg-gray-100 p-2 rounded-md shadow">
             <form>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-2">
                     <div>
-                        <label for="nombre-doctor" class="block text-gray-700">Nombre:</label>
-                        <input type="text" id="nombre-doctor" name="nombre-doctor" required class="mt-1 block w-3/4 border border-gray-300 rounded-md">
+                        <label for="titulo" class="block text-gray-600 text-sm">Título</label>
+                        <input type="text" id="titulo" name="titulo" required class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
                     </div>
-
                     <div>
-                        <label for="apellido-paterno" class="block text-gray-700">Apellido Paterno:</label>
-                        <input type="text" id="apellido-paterno" name="apellido-paterno" required class="mt-1 block w-3/4 border border-gray-300 rounded-md">
+                        <label for="nombre-doctor" class="block text-gray-600 text-sm">Nombre</label>
+                        <input type="text" id="nombre-doctor" name="nombre-doctor" required class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
                     </div>
-
                     <div>
-                        <label for="apellido-materno" class="block text-gray-700">Apellido Materno:</label>
-                        <input type="text" id="apellido-materno" name="apellido-materno" required class="mt-1 block w-3/4 border border-gray-300 rounded-md">
+                        <label for="apellido" class="block text-gray-600 text-sm">Apellido</label>
+                        <input type="text" id="apellido" name="apellido" required class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
                     </div>
-
                     <div>
-                        <label for="especialidad" class="block text-gray-700">Especialidad:</label>
-                        <input type="text" id="especialidad" name="especialidad" required class="mt-1 block w-3/4 border border-gray-300 rounded-md">
-                    </div>
-
-                    <div>
-                        <label for="rut" class="block text-gray-700">RUT:</label>
-                        <input type="text" id="rut" name="rut" required class="mt-1 block w-3/4 border border-gray-300 rounded-md">
-                    </div>
-
-                    <div>
-                        <label for="direccion" class="block text-gray-700">Dirección:</label>
-                        <input type="text" id="direccion" name="direccion" required class="mt-1 block w-3/4 border border-gray-300 rounded-md">
-                    </div>
-
-                    <div>
-                        <label for="comuna" class="block text-gray-700">Comuna:</label>
-                        <input type="text" id="comuna" name="comuna" required class="mt-1 block w-3/4 border border-gray-300 rounded-md">
-                    </div>
-
-                    <div>
-                        <label for="celular" class="block text-gray-700">Celular:</label>
-                        <input type="text" id="celular" name="celular" required class="mt-1 block w-3/4 border border-gray-300 rounded-md">
-                    </div>
-
-                    <div>
-                        <label for="correo" class="block text-gray-700">Correo:</label>
-                        <input type="email" id="correo" name="correo" required class="mt-1 block w-3/4 border border-gray-300 rounded-md">
-                    </div>
-
-                    <div>
-                        <label for="contrasena" class="block text-gray-700">Contraseña:</label>
-                        <input type="password" id="contrasena" name="contrasena" required class="mt-1 block w-3/4 border border-gray-300 rounded-md">
-                    </div>
-
-                    <div>
-                        <label for="region" class="block text-gray-700">Región:</label>
-                        <input type="text" id="region" name="region" required class="mt-1 block w-3/4 border border-gray-300 rounded-md">
-                    </div>
-
-                    <!-- Cuadro para subir foto del doctor -->
-                    <div class="upload-container col-span-1 md:col-span-2">
-                        <span>Subir Foto</span>
+                        <label for="especialidad" class="block text-gray-600 text-sm">Especialidad</label>
+                        <input type="text" id="especialidad" name="especialidad" required class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
                     </div>
                 </div>
-                <button type="submit" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded">Guardar Datos del Doctor</button>
             </form>
-        </section>
+        </div>
+
+        <!-- Segunda Carta - Información Personal Parte 2 -->
+        <div class="card bg-gray-100 p-2 rounded-md shadow">
+            <form>
+                <div class="space-y-2">
+                    <div>
+                        <label for="domicilio" class="block text-gray-600 text-sm">Domicilio</label>
+                        <input type="text" id="domicilio" name="domicilio" required class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                    </div>
+                    <div>
+                        <label for="telefono-dom" class="block text-gray-600 text-sm">Teléfono</label>
+                        <input type="text" id="telefono-dom" name="telefono-dom" required class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                    </div>
+                    <div>
+                        <label for="correo" class="block text-gray-600 text-sm">Correo Electrónico</label>
+                        <input type="email" id="correo" name="correo" required class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                    </div>
+                    <div>
+                        <label for="fecha-nacimiento" class="block text-gray-600 text-sm">Fecha de Nacimiento</label>
+                        <input type="date" id="fecha-nacimiento" name="fecha-nacimiento" required class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tercera Carta - Foto del Doctor -->
+        <div class="card bg-gray-100 p-2 rounded-md shadow flex flex-col items-center">
+            <div class="w-48 h-48 border rounded-md overflow-hidden mb-2">
+                <img id="profile-picture" src="https://via.placeholder.com/150" alt="Foto del Doctor" class="w-full h-full object-cover">
+            </div>
+            <input type="file" id="upload-photo" class="hidden">
+            <label for="upload-photo" class="bg-blue-500 text-white py-1 px-2 rounded cursor-pointer text-sm">Cambiar Foto</label>
+        </div>
     </div>
+
+    <!-- Botón para guardar -->
+    <div class="mt-4">
+        <button type="submit" class="bg-blue-500 text-white py-1 px-2 rounded text-sm">Guardar Información</button>
+    </div>
+</div>
+
+<!-- Fin Datos del Doctor -->
+
+
 
 
     <!-- Fichas Clínicas -->
@@ -239,27 +219,7 @@
         </section>
     </div>
 
-    <script>
-        function showSection(sectionId, button) {
-            const sections = document.querySelectorAll('.container');
-            sections.forEach(section => {
-                section.classList.add('hidden');
-            });
-            document.getElementById(sectionId).classList.remove('hidden');
+    <script src="{{ url_for('static', filename='js/profile_vet.js') }}"></script>
 
-            const buttons = document.querySelectorAll('.tab-button');
-            buttons.forEach(btn => {
-                btn.classList.remove('bg-blue-500', 'text-white');
-                btn.classList.add('bg-gray-200', 'text-gray-800');
-            });
-            button.classList.add('bg-blue-500', 'text-white');
-            button.classList.remove('bg-gray-200', 'text-gray-800');
-        }
-
-        // Mostrar la sección de Datos del Doctor al cargar la página
-        window.onload = () => {
-            showSection('doctor-info', document.querySelector('.tab-button'));
-        };
-    </script>
 </body>
 </html>

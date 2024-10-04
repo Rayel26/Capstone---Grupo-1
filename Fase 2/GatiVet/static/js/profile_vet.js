@@ -1,28 +1,33 @@
 function showSection(sectionId, button) {
-    // Ocultar todas las secciones
     const sections = document.querySelectorAll('.container');
     sections.forEach(section => {
         section.classList.add('hidden');
     });
+    document.getElementById(sectionId).classList.remove('hidden');
 
-    // Mostrar la sección seleccionada
-    const selectedSection = document.getElementById(sectionId);
-    selectedSection.classList.remove('hidden');
-
-    // Remover la clase activa de todos los botones
     const buttons = document.querySelectorAll('.tab-button');
     buttons.forEach(btn => {
-        btn.classList.remove('bg-white', 'border-b-0');
-        btn.classList.add('bg-gray-200');
+        btn.classList.remove('bg-blue-500', 'text-white');
+        btn.classList.add('bg-gray-200', 'text-gray-800');
     });
-
-    // Agregar la clase activa al botón presionado
-    button.classList.add('bg-white', 'border-b-0');
-    button.classList.remove('bg-gray-200');
+    button.classList.add('bg-blue-500', 'text-white');
+    button.classList.remove('bg-gray-200', 'text-gray-800');
 }
 
-// Al cargar la página, mostrar la primera sección
+// Mostrar la sección de Datos del Doctor al cargar la página
 window.onload = () => {
-    const firstButton = document.querySelector('.tab-button');
-    firstButton.click();
+    showSection('doctor-info', document.querySelector('.tab-button'));
 };
+
+// Datos del doctor
+document.getElementById('upload-photo').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('profile-picture').src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+});
+// Fin Datos del doctor
