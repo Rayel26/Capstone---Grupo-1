@@ -1,3 +1,29 @@
+/* Tab Button */
+#editModal .tab-button {
+    background-color: #18beaa !important;
+    color: white !important;
+}
+.btn-custom {
+    background-color: #18beaa !important; /* Color de fondo */
+    color: white !important; /* Color de texto */
+    border: none; /* Sin borde */
+    padding: 0.5rem 1rem; /* Espaciado interno */
+    border-radius: 0.375rem; /* Bordes redondeados */
+    font-size: 0.875rem; /* Tamaño de fuente */
+    cursor: pointer; /* Cambiar el cursor al pasar el ratón */
+}
+
+.btn-custom:hover {
+    background-color: #16a89a !important; /* Color al hacer hover */
+}
+
+
+/* Para evitar que el botón pierda el estilo en el enfoque */
+.tab-button:focus {
+    outline: none; /* Eliminar el contorno por defecto */
+}
+
+
 /* Reset de márgenes y paddings */
 body, h1, h2, h3, p, label, input, textarea, button {
     margin: 0;
@@ -21,11 +47,6 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra sutil */
 }
 
-/* Secciones */
-section {
-    margin-bottom: 20px; /* Espacio entre secciones */
-}
-
 /* Ajustar formulario */
 .doctor-form {
     display: flex;
@@ -38,26 +59,6 @@ section {
     grid-template-columns: repeat(2, 1fr); /* Dos columnas para los inputs */
     gap: 20px; /* Espacio entre los inputs */
     width: 65%; /* Ocupa 65% del ancho */
-}
-
-.doctor-photo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 30%; /* Ocupa 30% del ancho */
-}
-
-/* Estilos de botones */
-button {
-    background-color: #4CAF50; /* Color de fondo */
-    color: white; /* Color de texto */
-    border: none; /* Sin borde */
-    padding: 10px 15px; /* Espaciado interno */
-    border-radius: 5px; /* Bordes redondeados */
-}
-
-button:hover {
-    background-color: #45a049; /* Cambio de color al pasar el mouse */
 }
 
 /* Estilos para inputs y labels */
@@ -74,4 +75,13 @@ input {
 #profile-picture {
     width: 100%; /* Ancho completo del contenedor */
     height: auto; /* Mantener la proporción */
+}
+
+.error {
+    color: red;
+    font-size: 0.75rem;
+}
+
+.hidden {
+    display: none;
 }

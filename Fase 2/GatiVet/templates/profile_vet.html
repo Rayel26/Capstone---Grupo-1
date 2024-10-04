@@ -1,137 +1,416 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historial de Mascotas</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/Logo Gativet.png') }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
+
 <body class="bg-gray-100">
+
     <!-- Steps -->
-    <header class="flex bg-gray-200 p-4 border-b border-gray-300">
-        <button class="tab-button bg-gray-200 border border-gray-300 py-2 px-4 mr-2 focus:outline-none" onclick="showSection('doctor-info', this)">Datos del Doctor</button>
-        <button class="tab-button bg-gray-200 border border-gray-300 py-2 px-4 mr-2 focus:outline-none" onclick="showSection('clinical-records', this)">Fichas Clínicas</button>
-        <button class="tab-button bg-gray-200 border border-gray-300 py-2 px-4 mr-2 focus:outline-none" onclick="showSection('agenda', this)">Agenda</button>
-        <button class="tab-button bg-gray-200 border border-gray-300 py-2 px-4 mr-2 focus:outline-none" onclick="showSection('pet-info', this)">Datos de Mascota</button>
-        <button class="tab-button bg-gray-200 border border-gray-300 py-2 px-4 mr-2 focus:outline-none" onclick="showSection('reminders', this)">Recordatorio</button>
+    <header class="flex p-4 border-b border-gray-300" style="background-color: #18beab;">
+        <a href="{{ url_for('home') }}">
+            <img src="{{ url_for('static', filename='img/Logo Gativet.png') }}" alt="Logo Gativet"
+                class="w-12 h-12 mr-2">
+        </a>
+        <button
+            class="tab-button bg-[#18beaa] text-white border border-gray-300 py-1 px-2 mr-2 focus:outline-none hover:bg-[#16a89a] transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer"
+            onclick="showSection('doctor-info', this)">Datos del Doctor</button>
+        <button
+            class="tab-button bg-[#18beaa] text-white border border-gray-300 py-1 px-2 mr-2 focus:outline-none hover:bg-[#16a89a] transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer"
+            onclick="showSection('clinical-records', this)">Fichas Clínicas</button>
+        <button
+            class="tab-button bg-[#18beaa] text-white border border-gray-300 py-1 px-2 mr-2 focus:outline-none hover:bg-[#16a89a] transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer"
+            onclick="showSection('agenda', this)">Agenda</button>
+        <button
+            class="tab-button bg-[#18beaa] text-white border border-gray-300 py-1 px-2 mr-2 focus:outline-none hover:bg-[#16a89a] transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer"
+            onclick="showSection('pet-info', this)">Datos de Mascota</button>
+        <button
+            class="tab-button bg-[#18beaa] text-white border border-gray-300 py-1 px-2 mr-2 focus:outline-none hover:bg-[#16a89a] transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer"
+            onclick="showSection('reminders', this)">Recordatorio</button>
     </header>
     <!-- Fin Steps -->
 
-<!-- Datos del Doctor -->
-<div class="container mx-auto p-2 bg-white shadow-md" id="doctor-info">
-    <h2 class="text-sm font-semibold mb-2">Información del Veterinario</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- Primera Carta - Información Personal Parte 1 -->
-        <div class="card bg-gray-100 p-2 rounded-md shadow">
-            <form>
+
+    <!-- Datos del Doctor -->
+    <!-- Modal para editar información -->
+    <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center hidden">
+        <div class="bg-white p-4 rounded-lg shadow-lg w-3/4 md:w-1/3">
+            <h2 class="text-lg font-semibold mb-2">Editar Información del Veterinario</h2>
+            <form id="editForm">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="edit-rut" class="block text-gray-600 text-sm">RUT</label>
+                        <input type="text" id="edit-rut" name="rut" placeholder="12.345.678-9" required
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                        <small id="rutError" class="text-xs text-red-500 hidden">Formato incorrecto. Ej:
+                            12.345.678-9</small>
+                    </div>
+                    <div>
+                        <label for="edit-nombre-doctor" class="block text-gray-600 text-sm">Nombre</label>
+                        <input type="text" id="edit-nombre-doctor" name="nombre-doctor" required
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                    </div>
+                    <div>
+                        <label for="edit-apellido" class="block text-gray-600 text-sm">Apellido</label>
+                        <input type="text" id="edit-apellido" name="apellido" required
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                    </div>
+                    <div>
+                        <label for="edit-especialidad" class="block text-gray-600 text-sm">Especialidad</label>
+                        <input type="text" id="edit-especialidad" name="especialidad" required
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                    </div>
+                    <div>
+                        <label for="edit-domicilio" class="block text-gray-600 text-sm">Domicilio</label>
+                        <input type="text" id="edit-domicilio" name="domicilio" required
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                    </div>
+                    <div>
+                        <label for="edit-telefono-dom" class="block text-gray-600 text-sm">Teléfono</label>
+                        <input type="text" id="edit-telefono-dom" name="telefono-dom" placeholder="+569-" required
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                        <small id="telefonoError" class="text-xs text-red-500 hidden">Debe comenzar con +569- y tener
+                            exactamente 8 dígitos después del prefijo.</small>
+                    </div>
+                    <div>
+                        <label for="edit-correo" class="block text-gray-600 text-sm">Correo Electrónico</label>
+                        <input type="email" id="edit-correo" name="correo" required
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                    </div>
+                    <div>
+                        <label for="edit-fecha-nacimiento" class="block text-gray-600 text-sm">Fecha de
+                            Nacimiento</label>
+                        <input type="date" id="edit-fecha-nacimiento" name="fecha-nacimiento" required
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                    </div>
+                </div>
+                <div class="mt-4 flex justify-end">
+                    <button type="button" id="closeModalBtn"
+                        class="bg-red-500 text-white py-1 px-2 rounded text-sm mr-2">Cancelar</button>
+                    <button type="submit" style="background-color: #18beaa; color: white;"
+                        class="py-1 px-2 rounded text-sm">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Formulario Datos del Doctor -->
+    <div class="mt-5 container mx-auto p-2 bg-white shadow-md" id="doctor-info">
+        <h2 class="text-sm font-semibold mb-2">Información del Veterinario</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-1">
+            <!-- Primera Carta - Información Personal Parte 1 -->
+            <div class="card bg-gray-100 p-2 rounded-md shadow w-64">
                 <div class="space-y-2">
                     <div>
-                        <label for="titulo" class="block text-gray-600 text-sm">Título</label>
-                        <input type="text" id="titulo" name="titulo" required class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                        <label for="rut" class="block text-gray-600 text-sm">Rut</label>
+                        <input type="text" id="rut" name="rut" disabled
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="Rut">
                     </div>
                     <div>
                         <label for="nombre-doctor" class="block text-gray-600 text-sm">Nombre</label>
-                        <input type="text" id="nombre-doctor" name="nombre-doctor" required class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                        <input type="text" id="nombre-doctor" name="nombre-doctor" disabled
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="Nombre">
                     </div>
                     <div>
                         <label for="apellido" class="block text-gray-600 text-sm">Apellido</label>
-                        <input type="text" id="apellido" name="apellido" required class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                        <input type="text" id="apellido" name="apellido" disabled
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="Apellido">
                     </div>
                     <div>
                         <label for="especialidad" class="block text-gray-600 text-sm">Especialidad</label>
-                        <input type="text" id="especialidad" name="especialidad" required class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                        <input type="text" id="especialidad" name="especialidad" disabled
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
+                            value="Especialidad">
                     </div>
                 </div>
-            </form>
-        </div>
+            </div>
 
-        <!-- Segunda Carta - Información Personal Parte 2 -->
-        <div class="card bg-gray-100 p-2 rounded-md shadow">
-            <form>
+            <!-- Segunda Carta - Información Personal Parte 2 -->
+            <div class="card bg-gray-100 p-2 rounded-md shadow w-64">
                 <div class="space-y-2">
                     <div>
                         <label for="domicilio" class="block text-gray-600 text-sm">Domicilio</label>
-                        <input type="text" id="domicilio" name="domicilio" required class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                        <input type="text" id="domicilio" name="domicilio" disabled
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="Dirección">
                     </div>
                     <div>
                         <label for="telefono-dom" class="block text-gray-600 text-sm">Teléfono</label>
-                        <input type="text" id="telefono-dom" name="telefono-dom" required class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                        <input type="text" id="telefono-dom" name="telefono-dom" disabled
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="123456789">
                     </div>
                     <div>
                         <label for="correo" class="block text-gray-600 text-sm">Correo Electrónico</label>
-                        <input type="email" id="correo" name="correo" required class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                        <input type="email" id="correo" name="correo" disabled
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
+                            value="correo@ejemplo.com">
                     </div>
                     <div>
                         <label for="fecha-nacimiento" class="block text-gray-600 text-sm">Fecha de Nacimiento</label>
-                        <input type="date" id="fecha-nacimiento" name="fecha-nacimiento" required class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                        <input type="date" id="fecha-nacimiento" name="fecha-nacimiento" disabled
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
                     </div>
                 </div>
-            </form>
-        </div>
-
-        <!-- Tercera Carta - Foto del Doctor -->
-        <div class="card bg-gray-100 p-2 rounded-md shadow flex flex-col items-center">
-            <div class="w-48 h-48 border rounded-md overflow-hidden mb-2">
-                <img id="profile-picture" src="https://via.placeholder.com/150" alt="Foto del Doctor" class="w-full h-full object-cover">
             </div>
-            <input type="file" id="upload-photo" class="hidden">
-            <label for="upload-photo" class="bg-blue-500 text-white py-1 px-2 rounded cursor-pointer text-sm">Cambiar Foto</label>
+
+            <!-- Tercera Carta - Foto del Doctor -->
+            <div class="card bg-gray-100 p-2 rounded-md shadow flex flex-col items-center">
+                <div class="w-48 h-48 border rounded-md overflow-hidden mb-2">
+                    <img id="profile-picture" src="https://via.placeholder.com/150" alt="Foto del Doctor"
+                        class="w-full h-full object-cover">
+                </div>
+                <input type="file" id="upload-photo" class="hidden">
+                <label for="upload-photo" style="background-color: #18beaa; color: white;"
+                    class="py-1 px-2 rounded cursor-pointer text-sm">Cambiar Foto</label>
+            </div>
+        </div>
+
+        <!-- Botón para abrir el modal de edición -->
+        <div class="mt-4">
+            <button type="button" id="editBtn" style="background-color: #18beaa; color: white;"
+                class="py-1 px-2 rounded text-sm">Editar</button>
+        </div>
+
+        <!-- Línea de separación -->
+        <hr class="my-4 border-gray-300">
+
+        <!-- Sección de Recordatorios -->
+        <div class="bg-white p-4 rounded-lg shadow">
+            <h2 class="font-bold text-lg">Recordatorios</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Atenciones Pasadas -->
+                <div class="bg-gray-100 p-2 rounded-md shadow">
+                    <h3 class="font-semibold text-sm">Atenciones Pasadas</h3>
+                    <table class="min-w-full mt-2 border border-gray-300">
+                        <thead>
+                            <tr>
+                                <th class="border border-gray-300 p-1 text-sm text-left fecha">Fecha</th>
+                                <th class="border border-gray-300 p-1 text-sm text-left descripcion">Descripción</th>
+                                <th class="border border-gray-300 p-1 text-sm text-left mascota">Mascota</th>
+                                <th class="border border-gray-300 p-1 text-sm text-left dueño">Dueño</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border border-gray-300 p-1 text-sm">01/01/2024</td>
+                                <td class="border border-gray-300 p-1 text-sm">Atención 1: Detalle de atención pasada
+                                </td>
+                                <td class="border border-gray-300 p-1 text-sm">Mascota 1</td>
+                                <td class="border border-gray-300 p-1 text-sm">Dueño 1</td>
+                            </tr>
+                            <tr>
+                                <td class="border border-gray-300 p-1 text-sm">01/02/2024</td>
+                                <td class="border border-gray-300 p-1 text-sm">Atención 2: Detalle de atención pasada
+                                </td>
+                                <td class="border border-gray-300 p-1 text-sm">Mascota 2</td>
+                                <td class="border border-gray-300 p-1 text-sm">Dueño 2</td>
+                            </tr>
+                            <tr>
+                                <td class="border border-gray-300 p-1 text-sm">01/03/2024</td>
+                                <td class="border border-gray-300 p-1 text-sm">Atención 3: Detalle de atención pasada
+                                </td>
+                                <td class="border border-gray-300 p-1 text-sm">Mascota 3</td>
+                                <td class="border border-gray-300 p-1 text-sm">Dueño 3</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Atenciones Futuras -->
+                <div class="bg-gray-100 p-2 rounded-md shadow">
+                    <h3 class="font-semibold text-sm">Atenciones Futuras</h3>
+                    <table class="min-w-full mt-2 border border-gray-300">
+                        <thead>
+                            <tr>
+                                <th class="border border-gray-300 p-1 text-sm text-left fecha">Fecha</th>
+                                <th class="border border-gray-300 p-1 text-sm text-left descripcion">Descripción</th>
+                                <th class="border border-gray-300 p-1 text-sm text-left mascota">Mascota</th>
+                                <th class="border border-gray-300 p-1 text-sm text-left dueño">Dueño</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border border-gray-300 p-1 text-sm">01/04/2024</td>
+                                <td class="border border-gray-300 p-1 text-sm">Atención 1: Detalle de atención futura
+                                </td>
+                                <td class="border border-gray-300 p-1 text-sm">Mascota 1</td>
+                                <td class="border border-gray-300 p-1 text-sm">Dueño 1</td>
+                            </tr>
+                            <tr>
+                                <td class="border border-gray-300 p-1 text-sm">01/05/2024</td>
+                                <td class="border border-gray-300 p-1 text-sm">Atención 2: Detalle de atención futura
+                                </td>
+                                <td class="border border-gray-300 p-1 text-sm">Mascota 2</td>
+                                <td class="border border-gray-300 p-1 text-sm">Dueño 2</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-
-    <!-- Botón para guardar -->
-    <div class="mt-4">
-        <button type="submit" class="bg-blue-500 text-white py-1 px-2 rounded text-sm">Guardar Información</button>
-    </div>
-</div>
-
-<!-- Fin Datos del Doctor -->
+    <!-- Datos del Doctor -->
 
 
 
 
-    <!-- Fichas Clínicas -->
-    <div class="container hidden" id="clinical-records">
-        <section class="p-4">
-            <h2 class="text-xl font-semibold">Fichas Clínicas</h2>
-            <form>
-                <label for="rut-paciente" class="block text-gray-700">Buscar por RUT:</label>
-                <input type="text" id="rut-paciente" name="rut-paciente" required class="mt-1 block w-3/4 border border-gray-300 rounded-md">
-                <button type="submit" class="mt-2 bg-blue-500 text-white py-2 px-4 rounded">Buscar</button>
+
+
+
+<!-- Fichas Clínicas -->
+<div class="container hidden" id="clinical-records">
+    <div class="flex justify-center">
+        <section class="p-4 w-full max-w-3xl">
+            <h2 class="text-xl font-semibold text-center">Fichas Clínicas</h2>
+
+            <form class="w-1/4 mt-2" onsubmit="return searchPetByRUT();">
+                <label for="rut-paciente" class="block text-gray-700 text-xs">Buscar por RUT:</label>
+                <div class="relative">
+                    <input type="text" id="rut-paciente" name="rut-paciente" required maxlength="12"
+                        placeholder="12.345.678-9"
+                        class="mt-1 block w-full border border-gray-300 rounded-md text-xs py-1 px-2 pr-8"
+                        onblur="formatRUT(this)">
+
+                    <button type="submit" class="absolute right-0 top-1/4 transform -translate-y-1/2 mt-1 mr-2"
+                        style="background: none; border: none; cursor: pointer;">
+                        <i class="fas fa-search text-gray-700 text-xs"></i>
+                    </button>
+                </div>
+                <div class="error text-xs" id="error-message"></div>
             </form>
-            <table class="mt-4 w-full border border-gray-300">
-                <thead class="bg-gray-200">
-                    <tr>
-                        <th class="border border-gray-300 px-4 py-2">Nombre de la Mascota</th>
-                        <th class="border border-gray-300 px-4 py-2">RUT</th>
-                        <th class="border border-gray-300 px-4 py-2">Consulta</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Aquí se pueden agregar los datos de las fichas clínicas -->
-                </tbody>
-            </table>
 
-            <!-- Historial de Tratamientos -->
+            <div id="pet-data" class="mt-4 hidden">
+                <h3 class="text-lg font-semibold">Datos de la Mascota</h3>
+                <div class="grid grid-cols-2 gap-4 mt-2">
+                    <div class="border border-gray-300 p-2">
+                        <strong>Nombre:</strong> <span id="pet-name"></span><br>
+                        <strong>Fecha de Nacimiento:</strong> <span id="birth-date"></span><br>
+                        <strong>Edad:</strong> <span id="age"></span><br>
+                        <strong>Sexo:</strong> <span id="gender"></span><br>
+                        <strong>Peso:</strong> <span id="weight"></span><br>
+                        <strong>N° Microchip:</strong> <span id="microchip-number"></span><br>
+                    </div>
+                    <div class="border border-gray-300 p-2">
+                        <strong>Dueño:</strong> <span id="owner-name"></span><br>
+                        <strong>Dirección:</strong> <span id="owner-address"></span><br>
+                        <strong>Teléfono:</strong> <span id="owner-phone"></span><br>
+                        <strong>Email:</strong> <span id="owner-email"></span><br>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de Secciones -->
             <div class="mt-4">
-                <h2 class="text-lg font-semibold">Historial de Tratamientos</h2>
-                <table class="mt-2 w-full border border-gray-300">
-                    <thead class="bg-gray-200">
-                        <tr>
-                            <th class="border border-gray-300 px-4 py-2">Fecha</th>
-                            <th class="border border-gray-300 px-4 py-2">Tratamiento</th>
-                            <th class="border border-gray-300 px-4 py-2">Comentarios</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Aquí se pueden agregar los datos del historial de tratamientos -->
-                    </tbody>
-                </table>
+                <button type="button" class="tab-button bg-blue-500 text-white py-1 px-2 rounded"
+                    onclick="showSection('patient-data', this)">Datos del Paciente</button>
+                <button type="button" class="tab-button bg-blue-500 text-white py-1 px-2 rounded"
+                    onclick="showSection('clinical-history', this)">Historia Clínica</button>
+                <button type="button" class="tab-button bg-blue-500 text-white py-1 px-2 rounded"
+                    onclick="showSection('vaccinations', this)">Vacunas</button>
+                <button type="button" class="tab-button bg-blue-500 text-white py-1 px-2 rounded"
+                    onclick="showSection('dewormings', this)">Desparacitaciones</button>
+                <button type="button" class="tab-button bg-blue-500 text-white py-1 px-2 rounded"
+                    onclick="showSection('studies', this)">Estudios</button>
+                <button type="button" class="tab-button bg-blue-500 text-white py-1 px-2 rounded"
+                    onclick="showSection('analyses', this)">Análisis</button>
+            </div>
+
+            <!-- Secciones de Contenido -->
+            <div id="patient-data" class="mt-4 hidden tab-content">
+                <h3 class="text-lg font-semibold">Datos del Paciente</h3>
+                <div class="border border-gray-300 p-2">
+                    <strong>Especie:</strong> <span id="species"></span><br>
+                    <strong>Raza:</strong> <span id="breed"></span><br>
+                    <strong>Tamaño:</strong> <span id="size"></span><br>
+                </div>
+                <div class="mt-2">
+                    <label><input type="checkbox" id="deceased"> Fallecimiento</label><br>
+                    <label for="cause-of-death">Causa del deceso:</label>
+                    <input type="text" id="cause-of-death" class="border border-gray-300 rounded-md py-1 px-2">
+                </div>
+            </div>
+
+            <div id="clinical-history" class="mt-4 hidden tab-content">
+                <h3 class="text-lg font-semibold">Historia Clínica</h3>
+                <p>Aquí se mostrará la historia clínica.</p>
+            </div>
+
+            <div id="vaccinations" class="mt-4 hidden tab-content">
+                <h3 class="text-lg font-semibold">Vacunas</h3>
+                <p>Aquí se mostrará la información de las vacunas.</p>
+            </div>
+
+            <div id="dewormings" class="mt-4 hidden tab-content">
+                <h3 class="text-lg font-semibold">Desparacitaciones</h3>
+                <p>Aquí se mostrará la información de las desparacitaciones.</p>
+            </div>
+
+            <div id="studies" class="mt-4 hidden tab-content">
+                <h3 class="text-lg font-semibold">Estudios</h3>
+                <p>Aquí se mostrará la información de los estudios.</p>
+            </div>
+
+            <div id="analyses" class="mt-4 hidden tab-content">
+                <h3 class="text-lg font-semibold">Análisis</h3>
+                <p>Aquí se mostrará la información de los análisis.</p>
+            </div>
+
+            <!-- Botón para abrir el modal de edición -->
+            <div class="mt-4">
+                <button type="button" id="editBtn" class="mt-2 bg-blue-500 text-white py-2 px-4 rounded text-xs"
+                    onclick="openModal()">Editar Ficha</button>
             </div>
         </section>
     </div>
+</div>
+
+
+    <!-- Fichas Clínicas -->
+    <script>
+function showSection(sectionId, button) {
+    // Ocultar todas las secciones
+    const sections = document.querySelectorAll('.tab-content');
+    sections.forEach(section => {
+        section.classList.add('hidden');
+    });
+
+    // Mostrar la sección correspondiente
+    const activeSection = document.getElementById(sectionId);
+    if (activeSection) {
+        activeSection.classList.remove('hidden');
+    }
+
+    // Resaltar el botón activo
+    const buttons = document.querySelectorAll('.tab-button');
+    buttons.forEach(btn => {
+        btn.classList.remove('bg-blue-700'); // Eliminar clase activa
+        btn.classList.add('bg-blue-500'); // Volver a poner color original
+    });
+
+    // Establecer el botón actual como activo
+    button.classList.remove('bg-blue-500');
+    button.classList.add('bg-blue-700');
+}
+
+    </script>
+    
+    
+    
+
+
+
+
+
+
+
+
+
 
     <!-- Agenda -->
     <div class="container hidden" id="agenda">
@@ -162,37 +441,44 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label for="nombre-mascota" class="block text-gray-700">Nombre de la Mascota:</label>
-                        <input type="text" id="nombre-mascota" name="nombre-mascota" required class="mt-1 block w-3/4 border border-gray-300 rounded-md">
+                        <input type="text" id="nombre-mascota" name="nombre-mascota" required
+                            class="mt-1 block w-3/4 border border-gray-300 rounded-md">
                     </div>
 
                     <div>
                         <label for="tipo-mascota" class="block text-gray-700">Tipo de Mascota:</label>
-                        <input type="text" id="tipo-mascota" name="tipo-mascota" required class="mt-1 block w-3/4 border border-gray-300 rounded-md">
+                        <input type="text" id="tipo-mascota" name="tipo-mascota" required
+                            class="mt-1 block w-3/4 border border-gray-300 rounded-md">
                     </div>
 
                     <div>
                         <label for="raza-mascota" class="block text-gray-700">Raza:</label>
-                        <input type="text" id="raza-mascota" name="raza-mascota" required class="mt-1 block w-3/4 border border-gray-300 rounded-md">
+                        <input type="text" id="raza-mascota" name="raza-mascota" required
+                            class="mt-1 block w-3/4 border border-gray-300 rounded-md">
                     </div>
 
                     <div>
                         <label for="fecha-nacimiento" class="block text-gray-700">Fecha de Nacimiento:</label>
-                        <input type="date" id="fecha-nacimiento" name="fecha-nacimiento" required class="mt-1 block w-3/4 border border-gray-300 rounded-md">
+                        <input type="date" id="fecha-nacimiento" name="fecha-nacimiento" required
+                            class="mt-1 block w-3/4 border border-gray-300 rounded-md">
                     </div>
 
                     <div>
                         <label for="rut-mascota" class="block text-gray-700">RUT de la Mascota:</label>
-                        <input type="text" id="rut-mascota" name="rut-mascota" required class="mt-1 block w-3/4 border border-gray-300 rounded-md">
+                        <input type="text" id="rut-mascota" name="rut-mascota" required
+                            class="mt-1 block w-3/4 border border-gray-300 rounded-md">
                     </div>
 
                     <div>
                         <label for="dueño-mascota" class="block text-gray-700">Dueño de la Mascota:</label>
-                        <input type="text" id="dueño-mascota" name="dueño-mascota" required class="mt-1 block w-3/4 border border-gray-300 rounded-md">
+                        <input type="text" id="dueño-mascota" name="dueño-mascota" required
+                            class="mt-1 block w-3/4 border border-gray-300 rounded-md">
                     </div>
 
                     <div>
                         <label for="observaciones" class="block text-gray-700">Observaciones:</label>
-                        <textarea id="observaciones" name="observaciones" rows="3" class="mt-1 block w-3/4 border border-gray-300 rounded-md"></textarea>
+                        <textarea id="observaciones" name="observaciones" rows="3"
+                            class="mt-1 block w-3/4 border border-gray-300 rounded-md"></textarea>
                     </div>
 
                     <!-- Cuadro para subir foto de la mascota -->
@@ -200,7 +486,8 @@
                         <span>Subir Foto de la Mascota</span>
                     </div>
                 </div>
-                <button type="submit" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded">Guardar Datos de Mascota</button>
+                <button type="submit" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded">Guardar Datos de
+                    Mascota</button>
             </form>
         </section>
     </div>
@@ -211,10 +498,13 @@
             <h2 class="text-xl font-semibold">Recordatorio</h2>
             <form>
                 <label for="nombre-mascota-reminder" class="block text-gray-700">Nombre de la Mascota:</label>
-                <input type="text" id="nombre-mascota-reminder" name="nombre-mascota-reminder" required class="mt-1 block w-3/4 border border-gray-300 rounded-md">
+                <input type="text" id="nombre-mascota-reminder" name="nombre-mascota-reminder" required
+                    class="mt-1 block w-3/4 border border-gray-300 rounded-md">
                 <label for="fecha-recordatorio" class="block text-gray-700 mt-4">Fecha del Recordatorio:</label>
-                <input type="date" id="fecha-recordatorio" name="fecha-recordatorio" required class="mt-1 block w-3/4 border border-gray-300 rounded-md">
-                <button type="submit" class="mt-2 bg-blue-500 text-white py-2 px-4 rounded">Agregar Recordatorio</button>
+                <input type="date" id="fecha-recordatorio" name="fecha-recordatorio" required
+                    class="mt-1 block w-3/4 border border-gray-300 rounded-md">
+                <button type="submit" class="mt-2 bg-blue-500 text-white py-2 px-4 rounded">Agregar
+                    Recordatorio</button>
             </form>
         </section>
     </div>
@@ -222,4 +512,5 @@
     <script src="{{ url_for('static', filename='js/profile_vet.js') }}"></script>
 
 </body>
+
 </html>
