@@ -82,6 +82,7 @@ input {
     font-size: 0.75rem;
 }
 
-.hidden {
-    display: none;
+.modal {
+    display: none; /* Ocultar los modales por defecto */
+    z-index: 1000; /* Asegura que el modal esté por encima del contenido */
 }

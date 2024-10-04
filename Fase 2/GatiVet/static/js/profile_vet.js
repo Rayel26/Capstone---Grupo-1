@@ -139,92 +139,206 @@ editForm.addEventListener('submit', function(event) {
 });
 
 
-//Ficha Clinica
+//////////
+// Ficha Clinica:
+
+// Script para el comportamiento de las pestañas
+
+// Lógica de navegación de pestañas
+const tabButtons = document.querySelectorAll('a[id$="-btn"]'); // Selector para botones de pestañas
+const tabContents = document.querySelectorAll('div[id^="tab"]'); // Selector para contenidos de pestañas
+
+tabButtons.forEach(tab => {
+    tab.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        // Eliminar clase activa de todas las pestañas
+        tabButtons.forEach(t => {
+            t.classList.remove('text-blue-500', 'border-gray-300');
+            t.classList.add('text-gray-500'); // Cambia a texto gris
+        });
+
+        // Ocultar todo el contenido de las pestañas
+        tabContents.forEach(content => content.classList.add('hidden'));
+
+        // Añadir clase activa a la pestaña seleccionada y mostrar contenido relacionado
+        tab.classList.add('text-blue-500', 'border-gray-300'); // Cambia a texto azul
+        const targetContent = document.querySelector(tab.getAttribute('href'));
+        targetContent.classList.remove('hidden'); // Muestra el contenido de la pestaña seleccionada
+    });
+});
+// Fin Script para el comportamiento de las pestañas -->
 
 
-// Datos de ejemplo para mascotas
-const petRecords = [
-    {
-        rut: '12.345.678-9',
-        species: 'Perro',
-        breed: 'Labrador',
-        size: 'Grande',
-        name: 'Firulais',
-        birthDate: '2018-01-01',
-        age: '6',
-        gender: 'Macho',
-        weight: '30kg',
-        microchipNumber: '123456789',
-        ownerName: 'Juan Pérez',
-        ownerAddress: 'Calle Falsa 123',
-        ownerPhone: '987654321',
-        ownerEmail: 'juan.perez@example.com'
-    },
-    {
-        rut: '21.876.543-0',
-        species: 'Gato',
-        breed: 'Siamés',
-        size: 'Pequeño',
-        name: 'Mimi',
-        birthDate: '2020-05-15',
-        age: '4',
-        gender: 'Hembra',
-        weight: '4kg',
-        microchipNumber: '987654321',
-        ownerName: 'María López',
-        ownerAddress: 'Avenida Siempre Viva 456',
-        ownerPhone: '123456789',
-        ownerEmail: 'maria.lopez@example.com'
-    },
-    // Añadir más registros según sea necesario
-];
 
-
-// Función para buscar mascotas por RUT
-function searchPetByRUT() {
-    const rutInput = document.getElementById('rut-paciente').value; 
-    const normalizedRUT = rutInput.replace(/\D/g, ''); 
-    let foundPet = null;
-
-    for (let record of petRecords) {
-        const recordNormalizedRUT = record.rut.replace(/\D/g, '');
-        if (recordNormalizedRUT === normalizedRUT) {
-            foundPet = record;
-            break;
+////////////
+// Ficha clinica
+// Ejemplo de datos de mascotas (esto normalmente vendría de una base de datos)
+const petsData = {
+    "12345678-9": [
+        {
+            id: 1,
+            name: "Firulais",
+            birthDate: "01/01/2020",
+            age: "4 años",
+            gender: "Macho",
+            weight: "10 kg",
+            microchip: "123456789",
+            species: "Perro",
+            breed: "Labrador",
+            size: "Mediano",
+            coatColor: "Amarillo",
+            clinicalHistory: "Sin antecedentes.",
+            vaccines: "Vacuna antirrábica, vacuna cuadrivalente.",
+            dewormings: "Desparacitación anual.",
+            studies: "Análisis de sangre 2023",
+            owner: {
+                name: "Juan Pérez",
+                address: "Calle Falsa 123",
+                phone: "123456789",
+                email: "juan.perez@example.com"
+            }
+        },
+        {
+            id: 2,
+            name: "Miau",
+            birthDate: "05/05/2019",
+            age: "5 años",
+            gender: "Hembra",
+            weight: "5 kg",
+            microchip: "987654321",
+            species: "Gato",
+            breed: "Siames",
+            size: "Pequeño",
+            coatColor: "Blanco",
+            clinicalHistory: "Sin antecedentes.",
+            vaccines: "Vacuna antirrábica.",
+            dewormings: "Desparacitación semestral.",
+            studies: "Análisis de sangre 2022",
+            owner: {
+                name: "Ana Gómez",
+                address: "Avenida Siempre Viva 742",
+                phone: "987654321",
+                email: "ana.gomez@example.com"
+            }
         }
-    }
+    ]
+};
 
-    const petData = document.getElementById('pet-data');
-    const errorMessage = document.getElementById('error-message');
+// Función para buscar por RUT
+function searchPetByRUT() {
+    const rut = document.getElementById("rut-paciente-nuevo").value;
+    const pets = petsData[rut];
 
-    if (foundPet) {
-        // Mostrar datos de la mascota
-        document.getElementById('species').textContent = foundPet.species;
-        document.getElementById('breed').textContent = foundPet.breed;
-        document.getElementById('size').textContent = foundPet.size;
-        document.getElementById('pet-name').textContent = foundPet.name;
-        document.getElementById('birth-date').textContent = foundPet.birthDate;
-        document.getElementById('age').textContent = foundPet.age;
-        document.getElementById('gender').textContent = foundPet.gender;
-        document.getElementById('weight').textContent = foundPet.weight;
-        document.getElementById('microchip-number').textContent = foundPet.microchipNumber;
-    
-        // Mostrar datos del dueño
-        document.getElementById('owner-name').textContent = foundPet.ownerName;
-        document.getElementById('owner-address').textContent = foundPet.ownerAddress;
-        document.getElementById('owner-phone').textContent = foundPet.ownerPhone;
-        document.getElementById('owner-email').textContent = foundPet.ownerEmail;
-    
-        petData.classList.remove('hidden');
-        errorMessage.textContent = '';
+    // Limpiar el select de mascotas
+    const petSelect = document.getElementById("pet-select");
+    petSelect.innerHTML = ""; // Limpiar opciones previas
+
+    if (pets) {
+        pets.forEach(pet => {
+            const option = document.createElement("option");
+            option.value = pet.id;
+            option.textContent = pet.name;
+            petSelect.appendChild(option);
+        });
+        
+        // Mostrar los datos del dueño
+        document.getElementById("owner-name").textContent = pets[0].owner.name;
+        document.getElementById("owner-address").textContent = pets[0].owner.address;
+        document.getElementById("owner-phone").textContent = pets[0].owner.phone;
+        document.getElementById("owner-email").textContent = pets[0].owner.email;
+        
+        // Mostrar la sección con datos del dueño
+        document.getElementById("pet-data").classList.remove("hidden");
+        
+        // Mostrar datos de la primera mascota por defecto
+        showPetData(pets[0]);
     } else {
-        errorMessage.textContent = 'No se encontró ninguna mascota con ese RUT.';
-        petData.classList.add('hidden');
+        alert("No se encontraron mascotas para este RUT.");
+        document.getElementById("pet-data").classList.add("hidden");
     }
-    
-
-    return false; 
 }
 
+// Función para mostrar los datos de la mascota seleccionada
+function showPetData(pet) {
+    document.getElementById("pet-name").value = pet.name;
+    document.getElementById("birth-date").value = pet.birthDate;
+    document.getElementById("age").value = pet.age;
+    document.getElementById("gender").value = pet.gender;
+    document.getElementById("weight").value = pet.weight;
+    document.getElementById("microchip-number").value = pet.microchip;
+    document.getElementById("species").value = pet.species;
+    document.getElementById("breed").value = pet.breed;
+    document.getElementById("size").value = pet.size;
+    document.getElementById("coat-color").value = pet.coatColor;
 
+    // Aquí deberías agregar lógica para mostrar la historia clínica, vacunas, desparasitaciones y estudios
+    document.getElementById("tab2").innerHTML = `<p>${pet.clinicalHistory}</p>`;
+    document.getElementById("tab3").innerHTML = `<p>${pet.vaccines}</p>`;
+    document.getElementById("tab4").innerHTML = `<p>${pet.dewormings}</p>`;
+    document.getElementById("tab5").innerHTML = `<p>${pet.studies}</p>`;
+}
 
+// Evento para cambiar la mascota seleccionada
+document.getElementById("pet-select").addEventListener("change", function() {
+    const selectedPetId = this.value;
+    const rut = document.getElementById("rut-paciente-nuevo").value;
+    const pets = petsData[rut];
+
+    const selectedPet = pets.find(pet => pet.id == selectedPetId);
+    if (selectedPet) {
+        showPetData(selectedPet);
+    }
+});
+
+/// Script para manejar el modal de detalles de la cita (historia clinica)-->
+
+    function openModal(modalId) {
+        document.getElementById(modalId).classList.remove('hidden');
+        document.getElementById(modalId).classList.add('show');
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove('show');
+        document.getElementById(modalId).classList.add('hidden');
+    }
+
+    // Cerrar el modal al hacer clic fuera del contenido
+    window.onclick = function(event) {
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach((modal) => {
+            if (event.target === modal) {
+                closeModal(modal.id);
+            }
+        });
+    }
+/// Fin Script para manejar el modal de detalles de la cita-->
+
+/// Script para manejar el modal de vacunas-->
+function openModal(modalId) {
+    document.getElementById(modalId).classList.remove('hidden');
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.add('hidden');
+}
+/// Fin Script para manejar el modal de vacunas-->
+
+/// Script para manejar el modal de desparacitaciones-->
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.remove('hidden');
+    modal.querySelector('.transform').classList.add('scale-100');
+    modal.querySelector('.transform').classList.remove('scale-95');
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.querySelector('.transform').classList.add('scale-95');
+    modal.querySelector('.transform').classList.remove('scale-100');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+    }, 300); // Retraso para que la animación ocurra antes de ocultar
+}
+
+/// Fin Script para manejar el modal de desparacitaciones-->
