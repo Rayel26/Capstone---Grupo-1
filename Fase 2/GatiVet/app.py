@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask_cors import CORS
 from functools import wraps
 
 app = Flask(__name__)
+CORS(app)
 app.secret_key = 'supersecretkey'  # Clave para las sesiones
 
 # Datos simulados para usuarios

@@ -7,8 +7,7 @@
     <title>Historial de Mascotas</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/Logo Gativet.png') }}">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
+    <link rel="stylesheet" href="static/styles/profile_vet.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
@@ -160,7 +159,7 @@
                         <div class="flex flex-col items-center">
                             <label class="block text-gray-600 text-sm">Foto de perfil:</label>
                             <div class="w-48 h-48 border rounded-md overflow-hidden mb-2">
-                                <img id="profile-picture" src="https://via.placeholder.com/150" alt="Foto del Doctor"
+                                <img id="profile-picture" src="https://games-b26f.kxcdn.com/wp-content/uploads/2024/04/james-1024x1024.jpg" alt="Foto del Doctor"
                                     class="w-full h-full object-cover">
                             </div>
                             <input type="file" id="upload-photo" class="hidden">
@@ -276,9 +275,11 @@
                         onblur="formatRUT(this)">
                 </div>
                 <button type="button" onclick="searchPetByRUT()"
-                    class="mt-4 p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 flex items-center justify-center">
+                    class="mt-4 p-2 text-white rounded-md flex items-center justify-center"
+                    style="background-color: #69d9cd; hover: background-color: #18beaa;">
                     <i class="fas fa-search" style="font-size: 14px;"></i>
                 </button>
+
 
 
                 <!-- Select para elegir mascota -->
@@ -294,7 +295,7 @@
             <!-- Contenido del paciente después de la búsqueda -->
             <div id="pet-data" class="flex justify-center mt-4 hidden">
                 <div class="w-full max-w-md">
-                    <h2 class="text-lg font-bold text-center text-blue-600 mb-4">Datos del Dueño</h2>
+                    <h2 class="text-lg font-bold text-center text-green-600 mb-4">Datos del Dueño</h2>
                     <div class="border border-blue-300 p-6 rounded-lg shadow-lg bg-white">
                         <p class="text-gray-700 text-sm mb-2">
                             <strong>Nombre del Dueño:</strong> <span id="owner-name" class="text-gray-600">Nombre del
@@ -316,14 +317,12 @@
                 </div>
             </div>
 
-
-
             <!-- Sistema de Pestañas -->
             <div class="border-b border-gray-300 mt-4">
                 <ul class="flex">
                     <li class="-mb-px mr-1">
                         <a id="tab1-btn" href="#tab1"
-                            class="bg-white inline-block py-2 px-4 text-blue-500 font-semibold border-l border-t border-r border-gray-300 rounded-t hover:bg-gray-100">
+                            class="bg-white inline-block py-2 px-4 text-green-500 font-semibold border-l border-t border-r border-gray-300 rounded-t hover:bg-gray-100">
                             Datos del Paciente
                         </a>
                     </li>
@@ -348,7 +347,7 @@
                     <li class="mr-1">
                         <a id="tab5-btn" href="#tab5"
                             class="bg-white inline-block py-2 px-4 text-gray-500 font-semibold hover:bg-gray-100">
-                            Estudios/Análisis
+                            Ficha
                         </a>
                     </li>
                 </ul>
@@ -428,12 +427,20 @@
                             </div>
                         </div>
                         <div class="flex justify-center items-center">
-                            <div>
-                                <label class="block text-gray-600 text-sm">Imagen de la Mascota:</label>
-                                <img id="pet-image" src="" alt="Imagen de la Mascota" class="rounded-md shadow-md mt-2"
-                                    style="max-width: 200px; max-height: 200px; object-fit: cover;">
+                            <div class="flex flex-col items-center">
+                                <label class="block text-gray-600 text-sm">Foto de perfil:</label>
+                                <div class="w-48 h-48 border rounded-md overflow-hidden mb-2">
+                                    <img id="profile-picture" src="https://media.tenor.com/zqSA5TmyIYUAAAAM/sus-cat-2-suspicious-cat.gif" alt="Foto de la Mascota"
+                                        class="w-full h-full object-cover">
+                                </div>
+                                <input type="file" id="upload-photo" class="hidden">
+                                <label for="upload-photo" style="background-color: #18beaa; color: white;"
+                                    class="py-1 px-2 rounded cursor-pointer text-sm">Cambiar Foto</label>
+                                <!-- Aquí se mostrará el estado -->
+                                <div id="status-info" class="mt-4 text-gray-600 text-sm"></div>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
                 <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -445,6 +452,10 @@
                         <div class="flex items-center">
                             <input type="checkbox" id="treatment" class="mr-2">
                             <label for="treatment" class="text-gray-600 text-sm">En Tratamiento anticonceptivo</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="sterilized" class="mr-2">
+                            <label for="sterilized" class="text-gray-600 text-sm">Esterilizado/Castrado</label>
                         </div>
                     </div>
 
@@ -459,7 +470,8 @@
                                 class="border border-gray-300 rounded-md py-1 px-2 w-full">
                         </div>
                         <button id="save-status-btn"
-                            class="mt-2 bg-blue-500 text-white rounded-md py-1 px-3 hover:bg-blue-600">
+                            style="background-color: #18beaa; color: white;"
+                            class="mt-2 py-1 px-2 rounded cursor-pointer text-sm">
                             Guardar Estado
                         </button>
                         <p id="save-message" class="text-green-500 mt-2"></p>
@@ -468,12 +480,9 @@
             </div>
             <!-- Fin Contenido Datos del Paciente -->
 
-
             <!-- Contenido Historia Clínica -->
-
-            <div id="tab2" class="p-6">
+            <div id="tab2" class="hidden p-6">
                 <h2 class="text-2xl font-bold">Historia Clínica</h2>
-
                 <!-- Tabla para el historial médico -->
                 <div class="overflow-x-auto mt-4">
                     <table class="min-w-full border border-gray-300 rounded-lg text-xs">
@@ -494,7 +503,7 @@
                                 <td class="border border-gray-300 p-1">Salud óptima</td>
                                 <td class="border border-gray-300 p-1">Vacuna aplicada</td>
                                 <td class="border border-gray-300 p-1"><button onclick="openModal('modal1')"
-                                        class="text-blue-600 hover:underline">Ver Detalles</button></td>
+                                        class="text-green-500 hover:underline">Ver detalles</button></td>
                             </tr>
                             <tr>
                                 <td class="border border-gray-300 p-1 rounded-b-lg">15/02/2024</td>
@@ -502,7 +511,7 @@
                                 <td class="border border-gray-300 p-1">Infección respiratoria</td>
                                 <td class="border border-gray-300 p-1">Antibióticos recetados</td>
                                 <td class="border border-gray-300 p-1"><button onclick="openModal('modal2')"
-                                        class="text-blue-600 hover:underline">Ver Detalles</button></td>
+                                        class="text-green-500 hover:underline">Ver detalles</button></td>
                             </tr>
                             <tr>
                                 <td class="border border-gray-300 p-1 rounded-b-lg">10/03/2024</td>
@@ -510,24 +519,30 @@
                                 <td class="border border-gray-300 p-1">Parásitos detectados</td>
                                 <td class="border border-gray-300 p-1">Desparasitante administrado</td>
                                 <td class="border border-gray-300 p-1"><button onclick="openModal('modal3')"
-                                        class="text-blue-600 hover:underline">Ver Detalles</button></td>
+                                        class="text-green-500 hover:underline">Ver detalles</button></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+                
             <!-- Fin Contenido Historia Clínica -->
             <!-- Modales para detalles de la cita -->
             <div id="modal1" class="modal hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                 <div
                     class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full transition-all duration-300 transform scale-95">
                     <h2 class="text-xl font-semibold mb-4">Detalles de la Cita</h2>
-                    <p class="mb-2"><strong>Fecha:</strong> 01/01/2024</p>
-                    <p class="mb-2"><strong>Veterinario:</strong> Dr. Pérez</p>
-                    <p class="mb-2"><strong>Clínica:</strong> Clínica Central</p>
-                    <p class="mb-4"><strong>Notas:</strong> Chequeo general, vacuna aplicada.</p>
+                    <div class="space-y-2 text-gray-600">
+                        <p class="mb-2"><strong>Fecha:</strong> 01/01/2024</p>
+                        <p class="mb-2"><strong>Veterinario:</strong> Dr. Pérez</p>
+                        <p class="mb-2"><strong>Clínica:</strong> Clínica Central</p>
+                        <p class="mb-4"><strong>Notas:</strong> Chequeo general, vacuna aplicada.</p>
+                    </div>
+                    
                     <button onclick="closeModal('modal1')"
-                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition duration-200">Cerrar</button>
+                        class="mt-6 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200"
+                        style="background-color: #69d9cd;">
+                        Cerrar</button>
                 </div>
             </div>
             <!-- Fin Contenido Historia Clínica -->
@@ -558,7 +573,7 @@
                                 <td class="border border-gray-300 px-2 py-1">1ª dosis</td>
                                 <td class="border border-gray-300 px-2 py-1">Dr. Pérez</td>
                                 <td class="border border-gray-300 px-2 py-1">
-                                    <button class="text-blue-500" onclick="openModal('modalVacuna1')">Ver
+                                    <button class="text-green-500" onclick="openModal('modalVacuna1')">Ver
                                         detalles</button>
                                 </td>
                             </tr>
@@ -568,7 +583,7 @@
                                 <td class="border border-gray-300 px-2 py-1">Refuerzo</td>
                                 <td class="border border-gray-300 px-2 py-1">Dra. González</td>
                                 <td class="border border-gray-300 px-2 py-1">
-                                    <button class="text-blue-500" onclick="openModal('modalVacuna2')">Ver
+                                    <button class="text-green-500" onclick="openModal('modalVacuna2')">Ver
                                         detalles</button>
                                 </td>
                             </tr>
@@ -578,7 +593,7 @@
                                 <td class="border border-gray-300 px-2 py-1">2ª dosis</td>
                                 <td class="border border-gray-300 px-2 py-1">Dr. López</td>
                                 <td class="border border-gray-300 px-2 py-1">
-                                    <button class="text-blue-500" onclick="openModal('modalVacuna3')">Ver
+                                    <button class="text-green-500" onclick="openModal('modalVacuna3')">Ver
                                         detalles</button>
                                 </td>
                             </tr>
@@ -601,17 +616,17 @@
                         <p><strong>Notas:</strong> Administrada en Clínica Central</p>
                     </div>
                     <button onclick="closeModal('modalVacuna1')"
-                        class="mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200">Cerrar</button>
+                    class="mt-6 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200"
+                    style="background-color: #69d9cd;">
+                    Cerrar</button>
                 </div>
             </div>
             <!--Fin Contenido Vacunas -->
 
 
             <!-- Contenido Desparasitaciones -->
-            <!-- Contenido Desparasitaciones -->
             <div id="tab4" class="hidden p-6">
                 <h2 class="text-2xl font-bold">Desparasitaciones</h2>
-                <p>Información sobre las desparasitaciones realizadas.</p>
 
                 <!-- Tabla de desparasitaciones -->
                 <div class="overflow-x-auto mt-4">
@@ -633,7 +648,7 @@
                                 <td class="border border-gray-300 px-2 py-1">Praziquantel</td>
                                 <td class="border border-gray-300 px-2 py-1">50 mg</td>
                                 <td class="border border-gray-300 px-2 py-1">Dr. Pérez</td>
-                                <td class="border border-gray-300 px-2 py-1 text-blue-500 cursor-pointer hover:underline"
+                                <td class="border border-gray-300 px-2 py-1 text-green-500 cursor-pointer hover:underline"
                                     onclick="openModal('modalDesparasitacion1')">Ver detalles</td>
                             </tr>
                             <tr>
@@ -641,7 +656,7 @@
                                 <td class="border border-gray-300 px-2 py-1">Ivermectina</td>
                                 <td class="border border-gray-300 px-2 py-1">10 mg</td>
                                 <td class="border border-gray-300 px-2 py-1">Dra. González</td>
-                                <td class="border border-gray-300 px-2 py-1 text-blue-500 cursor-pointer hover:underline"
+                                <td class="border border-gray-300 px-2 py-1 text-green-500 cursor-pointer hover:underline"
                                     onclick="openModal('modalDesparasitacion2')">Ver detalles</td>
                             </tr>
                             <tr>
@@ -649,7 +664,7 @@
                                 <td class="border border-gray-300 px-2 py-1">Fenbendazol</td>
                                 <td class="border border-gray-300 px-2 py-1">100 mg</td>
                                 <td class="border border-gray-300 px-2 py-1">Dr. López</td>
-                                <td class="border border-gray-300 px-2 py-1 text-blue-500 cursor-pointer hover:underline"
+                                <td class="border border-gray-300 px-2 py-1 text-green-500 cursor-pointer hover:underline"
                                     onclick="openModal('modalDesparasitacion3')">Ver detalles</td>
                             </tr>
                             <!-- Puedes agregar más filas según sea necesario -->
@@ -673,7 +688,9 @@
                         <p><strong>Notas:</strong> Administrada en Clínica Central. Requiere refuerzo en 6 meses.</p>
                     </div>
                     <button onclick="closeModal('modalDesparasitacion1')"
-                        class="mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200">Cerrar</button>
+                    class="mt-6 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200"
+                    style="background-color: #69d9cd;">
+                    Cerrar</button>
                 </div>
             </div>
 
@@ -698,8 +715,181 @@
             <!-- Fin Contenido Desparasitaciones -->
 
             <div id="tab5" class="hidden p-6">
-                <h2 class="text-2xl font-bold">Estudios/Análisis</h2>
-                <p>Resultados de estudios y análisis clínicos realizados.</p>
+                <h2 class="text-2xl font-bold">Ficha</h2>
+                
+                <!-- Card para Datos del propietario -->
+                <section class="mt-6">
+                    <h3 class="text-lg font-semibold">Datos del propietario</h3>
+                    <div class="bg-gray-100 p-4 rounded-lg shadow-md">
+                        <form id="ownerForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <label class="block mt-2">
+                                Nombre:
+                                <input type="text" id="ownerName" class="border border-gray-300 rounded-md w-full" value="Juan" readonly>
+                            </label>
+                            <label class="block mt-2">
+                                Apellido:
+                                <input type="text" id="ownerLastName" class="border border-gray-300 rounded-md w-full" value="Pérez" readonly>
+                            </label>
+                            <label class="block mt-2">
+                                RUT:
+                                <input type="text" id="ownerRUT" class="border border-gray-300 rounded-md w-full" value="12.345.678-9" readonly>
+                            </label>
+                            <label class="block mt-2">
+                                Cédula de Identidad:
+                                <input type="text" id="ownerID" class="border border-gray-300 rounded-md w-full" value="98765432" readonly>
+                            </label>
+                            <label class="block mt-2">
+                                Dirección de residencia:
+                                <input type="text" id="ownerAddress" class="border border-gray-300 rounded-md w-full" value="Av. Libertador Bernardo O'Higgins 123" readonly>
+                            </label>
+                            <label class="block mt-2">
+                                Teléfono:
+                                <input type="text" id="ownerPhone" class="border border-gray-300 rounded-md w-full" value="987654321" readonly>
+                            </label>
+                            <label class="block mt-2">
+                                Correo:
+                                <input type="email" id="ownerEmail" class="border border-gray-300 rounded-md w-full" value="juan.perez@example.com" readonly>
+                            </label>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Card para Reseña -->
+                <section class="mt-6">
+                    <h3 class="text-lg font-semibold">Reseña</h3>
+                    <div class="bg-gray-100 p-4 rounded-lg shadow-md">
+                        <form id="patientForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <label class="block mt-2">
+                                Nombre del paciente:
+                                <input type="text" id="patientName" class="border border-gray-300 rounded-md w-full" value="Firulais" readonly>
+                            </label>
+                            <label class="block mt-2">
+                                Especie:
+                                <input type="text" id="patientSpecies" class="border border-gray-300 rounded-md w-full" value="Perro" readonly>
+                            </label>
+                            <label class="block mt-2">
+                                Raza:
+                                <input type="text" id="patientBreed" class="border border-gray-300 rounded-md w-full" value="Labrador" readonly>
+                            </label>
+                            <label class="block mt-2">
+                                Sexo:
+                                <input type="text" id="patientSex" class="border border-gray-300 rounded-md w-full" value="Macho" readonly>
+                            </label>
+                            <label class="block mt-2">
+                                Fecha de nacimiento:
+                                <input type="date" id="patientBirthDate" class="border border-gray-300 rounded-md w-full" value="2020-01-01" readonly>
+                            </label>
+                            <label class="block mt-2">
+                                Peso (en gramos):
+                                <input type="number" id="patientWeight" class="border border-gray-300 rounded-md w-full" value="30000" readonly>
+                            </label>
+                            <label class="block mt-2">
+                                Color:
+                                <input type="text" id="patientColor" class="border border-gray-300 rounded-md w-full" value="Amarillo" readonly>
+                            </label>
+                            <label class="block mt-2">
+                                Tipo de Pelaje:
+                                <input type="text" id="patientFurType" class="border border-gray-300 rounded-md w-full" value="Corto" readonly>
+                            </label>
+                            <label class="block mt-2">
+                                Otras identificaciones:
+                                <input type="text" id="otherIdentifiers" class="border border-gray-300 rounded-md w-full">
+                            </label>
+                            <label class="block mt-2">
+                                Fin Zootécnico:
+                                <input type="text" id="zootechnicalPurpose" class="border border-gray-300 rounded-md w-full">
+                            </label>
+                            <label class="block mt-2">
+                                Origen/Procedencia:
+                                <input type="text" id="origin" class="border border-gray-300 rounded-md w-full">
+                            </label>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Card para Anamnesis -->
+                <section class="mt-6">
+                    <h3 class="text-lg font-semibold">Anamnesis</h3>
+                    <div class="bg-gray-100 p-4 rounded-lg shadow-md">
+                        <form id="anamnesisForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <label class="block mt-2">
+                                Dieta:
+                                <input type="text" id="diet" class="border border-gray-300 rounded-md w-full">
+                            </label>
+                            <label class="block mt-2">
+                                Enfermedades Previas:
+                                <input type="text" id="previousDiseases" class="border border-gray-300 rounded-md w-full">
+                            </label>
+                            <label class="block mt-2">
+                                ¿Está esterilizado?:
+                                <select id="isSterilized" class="border border-gray-300 rounded-md w-full">
+                                    <option value="Sí">Sí</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </label>
+                            <label class="block mt-2">
+                                Número de partos:
+                                <input type="text" id="litters" class="border border-gray-300 rounded-md w-full" placeholder="Indique '0' si no ha tenido">
+                            </label>
+                            <label class="block mt-2">
+                                Cirugías Previas:
+                                <input type="text" id="previousSurgeries" class="border border-gray-300 rounded-md w-full">
+                            </label>
+                            <label class="block mt-2">
+                                Esquema vacunal:
+                                <input type="text" id="vaccinationScheme" class="border border-gray-300 rounded-md w-full">
+                            </label>
+                            <label class="block mt-2">
+                                Última desparasitación y producto:
+                                <input type="text" id="lastDeworming" class="border border-gray-300 rounded-md w-full">
+                            </label>
+                            <label class="block mt-2">
+                                Tratamientos recientes:
+                                <input type="text" id="recentTreatments" class="border border-gray-300 rounded-md w-full">
+                            </label>
+                            <label class="block mt-2">
+                                ¿Viajes recientes?:
+                                <input type="text" id="recentTravels" class="border border-gray-300 rounded-md w-full">
+                            </label>
+                            <label class="block mt-2">
+                                ¿Vive con otros animales?:
+                                <select id="livesWithOtherAnimals" class="border border-gray-300 rounded-md w-full">
+                                    <option value="Sí">Sí</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </label>
+                            <label class="block mt-2">
+                                ¿Cuáles?:
+                                <input type="text" id="whichAnimals" class="border border-gray-300 rounded-md w-full">
+                            </label>
+                            <label class="block mt-2">
+                                Comportamiento del animal:
+                                <textarea id="animalBehavior" class="border border-gray-300 rounded-md w-full" rows="3"></textarea>
+                            </label>
+                            <label class="block mt-2">
+                                Motivo de la consulta:
+                                <textarea id="consultationReason" class="border border-gray-300 rounded-md w-full" rows="3"></textarea>
+                            </label>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Botón guardar -->
+                <button id="saveButton" class="mt-4 p-2 bg-green-400 text-white rounded-md hover:bg-green-600 flex items-center justify-center">
+                    Guardar ficha
+                </button>
+
+                <!-- Modal -->
+                <div id="confirmationModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="text-lg font-semibold">Confirmación</h3>
+                        <p>¿Estás seguro de que deseas guardar la ficha?</p>
+                        <div class="mt-4 flex justify-between">
+                            <button id="confirmSave" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Confirmar</button>
+                            <button id="cancelSave" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
@@ -709,22 +899,26 @@
     <div class="container hidden" id="agenda">
         <section class="p-4">
             <h2 class="text-xl font-semibold">Agenda</h2>
-            <table class="mt-4 w-full border border-gray-300">
-                <thead class="bg-gray-200">
-                    <tr>
-                        <th class="border border-gray-300 px-4 py-2">Fecha</th>
-                        <th class="border border-gray-300 px-4 py-2">Hora</th>
-                        <th class="border border-gray-300 px-4 py-2">Nombre de la Mascota</th>
-                        <th class="border border-gray-300 px-4 py-2">RUT</th>
-                        <th class="border border-gray-300 px-4 py-2">Estado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Aquí se pueden agregar los datos de la agenda -->
-                </tbody>
-            </table>
+            <div class="flex">
+                <!-- Selector de Mes -->
+                <div class="mr-4">
+                    <label for="month-selector" class="block text-lg font-semibold">Selecciona el Mes:</label>
+                    <select id="month-selector" class="mt-2 p-2 border border-gray-300 rounded" onchange="updateAgenda()">
+                        <option value="octubre">Octubre</option>
+                        <option value="noviembre">Noviembre</option>
+                        <option value="diciembre">Diciembre</option>
+                    </select>
+                </div>
+
+                <!-- Cuadros estilo Post-it -->
+                <div id="agenda-postits" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 w-full">
+                    <!-- Los cuadros se llenarán aquí mediante JavaScript -->
+                </div>
+            </div>
         </section>
     </div>
+
+
 
     <script src="{{ url_for('static', filename='js/profile_vet.js') }}"></script>
 

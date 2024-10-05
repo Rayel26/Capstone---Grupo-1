@@ -8,10 +8,10 @@ function showSection(sectionId, button) {
 
     const buttons = document.querySelectorAll('.tab-button');
     buttons.forEach(btn => {
-        btn.classList.remove('bg-blue-500', 'text-white');
+        btn.classList.remove('bg-green-500', 'text-white');
         btn.classList.add('bg-gray-200', 'text-gray-800'); // Cambiar estilo de todos los botones
     });
-    button.classList.add('bg-blue-500', 'text-white'); // Estilo del botón seleccionado
+    button.classList.add('bg-green-500', 'text-white'); // Estilo del botón seleccionado
     button.classList.remove('bg-gray-200', 'text-gray-800');
 }
 
@@ -154,7 +154,7 @@ tabButtons.forEach(tab => {
 
         // Eliminar clase activa de todas las pestañas
         tabButtons.forEach(t => {
-            t.classList.remove('text-blue-500', 'border-gray-300');
+            t.classList.remove('text-green-500', 'border-gray-300');
             t.classList.add('text-gray-500'); // Cambia a texto gris
         });
 
@@ -162,7 +162,7 @@ tabButtons.forEach(tab => {
         tabContents.forEach(content => content.classList.add('hidden'));
 
         // Añadir clase activa a la pestaña seleccionada y mostrar contenido relacionado
-        tab.classList.add('text-blue-500', 'border-gray-300'); // Cambia a texto azul
+        tab.classList.add('text-green-500', 'border-gray-300'); // Cambia a texto azul
         const targetContent = document.querySelector(tab.getAttribute('href'));
         targetContent.classList.remove('hidden'); // Muestra el contenido de la pestaña seleccionada
     });
@@ -342,3 +342,245 @@ function closeModal(modalId) {
 }
 
 /// Fin Script para manejar el modal de desparacitaciones-->
+
+//Inicio Script relacionado a datos de mascota
+
+// Obtener los elementos necesarios
+const saveStatusBtn = document.getElementById('save-status-btn');
+const reproducerCheckbox = document.getElementById('reproducer');
+const treatmentCheckbox = document.getElementById('treatment');
+const sterilizedCheckbox = document.getElementById('sterilized');
+const deceasedCheckbox = document.getElementById('deceased');
+const causeOfDeathInput = document.getElementById('cause-of-death');
+const statusInfoDiv = document.getElementById('status-info');
+const saveMessage = document.getElementById('save-message');
+
+// Función que se ejecuta al presionar "Guardar Estado"
+saveStatusBtn.addEventListener('click', function() {
+    // Limpiar el área de estado
+    statusInfoDiv.innerHTML = '';
+
+    // Crear una lista para almacenar los estados seleccionados
+    let statusList = [];
+
+    // Verificar las casillas de verificación y agregar texto correspondiente
+    if (reproducerCheckbox.checked) {
+        statusList.push("Es reproductor.");
+    }
+    if (treatmentCheckbox.checked) {
+        statusList.push("Está en tratamiento anticonceptivo.");
+    }
+    if (sterilizedCheckbox.checked) {
+        statusList.push("Está esterilizado/castrado.");
+    }
+    if (deceasedCheckbox.checked) {
+        // Verificar si se ha proporcionado una causa de muerte
+        const causeOfDeath = causeOfDeathInput.value.trim();
+        if (causeOfDeath) {
+            statusList.push(`Falleció. Causa del deceso: ${causeOfDeath}`);
+        } else {
+            statusList.push("Falleció.");
+        }
+    }
+
+    // Si no hay ninguna opción seleccionada, mostrar un mensaje
+    if (statusList.length === 0) {
+        statusInfoDiv.innerHTML = "No se ha seleccionado ningún estado.";
+    } else {
+        // Mostrar el estado debajo de la imagen
+        statusInfoDiv.innerHTML = statusList.join(' <br> ');
+    }
+
+    // Mostrar un mensaje de éxito temporalmente
+    saveMessage.textContent = "Estado guardado correctamente.";
+    setTimeout(() => {
+        saveMessage.textContent = '';
+    }, 2000);
+});
+
+//Fin de script relacionado a datos de mascotas
+
+//Inicio script de Agenda
+
+const agendaData = {
+    octubre: [
+        { nombre: "Rocco", hora: "08:30 a. m.", rut: "12345678-9", estado: "Confirmado" },
+        { nombre: "Milo", hora: "10:30 a. m.", rut: "98765432-1", estado: "Pendiente" },
+        { nombre: "Luna", hora: "12:30 p. m.", rut: "11223344-5", estado: "Cancelado" },
+        { nombre: "Bobby", hora: "02:30 p. m.", rut: "55667788-0", estado: "Confirmado" },
+        { nombre: "Rocky", hora: "04:30 p. m.", rut: "22334455-6", estado: "Pendiente" },
+        { nombre: "Bella", hora: "08:30 a. m.", rut: "66778899-0", estado: "Cancelado" },
+        { nombre: "Daisy", hora: "10:30 a. m.", rut: "33445566-7", estado: "Confirmado" },
+        { nombre: "Charlie", hora: "12:30 p. m.", rut: "77889900-2", estado: "Pendiente" },
+        { nombre: "Coco", hora: "02:30 p. m.", rut: "44556677-8", estado: "Confirmado" },
+        { nombre: "Max", hora: "04:30 p. m.", rut: "88990011-3", estado: "Cancelado" },
+    ],
+    noviembre: [
+        { nombre: "Rocco", hora: "08:30 a. m.", rut: "12345678-9", estado: "Pendiente" },
+        { nombre: "Milo", hora: "10:30 a. m.", rut: "98765432-1", estado: "Confirmado" },
+        { nombre: "Luna", hora: "12:30 p. m.", rut: "11223344-5", estado: "Cancelado" },
+        { nombre: "Bobby", hora: "02:30 p. m.", rut: "55667788-0", estado: "Pendiente" },
+        { nombre: "Rocky", hora: "04:30 p. m.", rut: "22334455-6", estado: "Confirmado" },
+        { nombre: "Bella", hora: "08:30 a. m.", rut: "66778899-0", estado: "Cancelado" },
+        { nombre: "Daisy", hora: "10:30 a. m.", rut: "33445566-7", estado: "Pendiente" },
+        { nombre: "Charlie", hora: "12:30 p. m.", rut: "77889900-2", estado: "Confirmado" },
+        { nombre: "Coco", hora: "02:30 p. m.", rut: "44556677-8", estado: "Pendiente" },
+        { nombre: "Max", hora: "04:30 p. m.", rut: "88990011-3", estado: "Cancelado" },
+    ],
+    diciembre: [
+        { nombre: "Rocco", hora: "08:30 a. m.", rut: "12345678-9", estado: "Confirmado" },
+        { nombre: "Milo", hora: "10:30 a. m.", rut: "98765432-1", estado: "Confirmado" },
+        { nombre: "Luna", hora: "12:30 p. m.", rut: "11223344-5", estado: "Pendiente" },
+        { nombre: "Bobby", hora: "02:30 p. m.", rut: "55667788-0", estado: "Cancelado" },
+        { nombre: "Rocky", hora: "04:30 p. m.", rut: "22334455-6", estado: "Confirmado" },
+        { nombre: "Bella", hora: "08:30 a. m.", rut: "66778899-0", estado: "Pendiente" },
+        { nombre: "Daisy", hora: "10:30 a. m.", rut: "33445566-7", estado: "Cancelado" },
+        { nombre: "Charlie", hora: "12:30 p. m.", rut: "77889900-2", estado: "Confirmado" },
+        { nombre: "Coco", hora: "02:30 p. m.", rut: "44556677-8", estado: "Pendiente" },
+        { nombre: "Max", hora: "04:30 p. m.", rut: "88990011-3", estado: "Cancelado" },
+    ]
+};
+
+function updateAgenda() {
+    const month = document.getElementById("month-selector").value;
+    const postitsContainer = document.getElementById("agenda-postits");
+    postitsContainer.innerHTML = ""; // Limpiar el contenido actual
+
+    const data = agendaData[month];
+    data.forEach(item => {
+        const color = getColorByState(item.estado);
+        const postit = document.createElement("div");
+        postit.className = `postit p-4 rounded-md shadow-md ${color}`; // Añadir clase 'postit'
+        postit.innerHTML = `
+            <h3 class="font-semibold">${item.nombre}</h3>
+            <p><strong>Fecha:</strong> ${month}</p>
+            <p><strong>Hora:</strong> ${item.hora}</p>
+            <p><strong>RUT:</strong> ${item.rut}</p>
+            <p><strong>Estado:</strong> ${item.estado}</p>
+            <p><strong>Doctor:</strong> Nicolás Villalba</p> <!-- Agregar nombre del doctor -->
+        `;
+        postitsContainer.appendChild(postit);
+    });
+}
+
+function getColorByState(state) {
+    switch (state) {
+        case "Confirmado":
+            return "bg-green-200"; // Color para estado confirmado
+        case "Pendiente":
+            return "bg-yellow-200"; // Color para estado pendiente
+        case "Cancelado":
+            return "bg-red-200"; // Color para estado cancelado
+        default:
+            return "bg-gray-200"; // Color por defecto
+    }
+}
+
+// Llamar a la función al cargar la página para mostrar el mes inicial
+updateAgenda();
+//Fin script de Agenda
+
+////////////////////////////////
+//Inicio de Script de Ficha
+
+// Guardar la información
+document.getElementById('saveButton').addEventListener('click', () => {
+    document.getElementById('confirmationModal').classList.remove('hidden');
+});
+
+document.getElementById('confirmSave').addEventListener('click', () => {
+    const ownerData = {
+        ownerName: document.getElementById('ownerName').value,
+        ownerLastName: document.getElementById('ownerLastName').value,
+        ownerRUT: document.getElementById('ownerRUT').value,
+        ownerID: document.getElementById('ownerID').value,
+        ownerAddress: document.getElementById('ownerAddress').value,
+        ownerPhone: document.getElementById('ownerPhone').value,
+        ownerEmail: document.getElementById('ownerEmail').value
+    };
+
+    const patientData = {
+        patientName: document.getElementById('patientName').value,
+        patientSpecies: document.getElementById('patientSpecies').value,
+        patientBreed: document.getElementById('patientBreed').value,
+        patientSex: document.getElementById('patientSex').value,
+        patientBirthDate: document.getElementById('patientBirthDate').value,
+        patientWeight: document.getElementById('patientWeight').value,
+        patientColor: document.getElementById('patientColor').value,
+        patientFurType: document.getElementById('patientFurType').value,
+        otherIdentifiers: document.getElementById('otherIdentifiers').value,
+        zootechnicalPurpose: document.getElementById('zootechnicalPurpose').value,
+        origin: document.getElementById('origin').value,
+        diet: document.getElementById('diet').value,
+        previousDiseases: document.getElementById('previousDiseases').value,
+        isSterilized: document.getElementById('isSterilized').value,
+        litters: document.getElementById('litters').value,
+        previousSurgeries: document.getElementById('previousSurgeries').value,
+        vaccinationScheme: document.getElementById('vaccinationScheme').value,
+        lastDeworming: document.getElementById('lastDeworming').value,
+        recentTreatments: document.getElementById('recentTreatments').value,
+        recentTravels: document.getElementById('recentTravels').value,
+        livesWithOtherAnimals: document.getElementById('livesWithOtherAnimals').value,
+        whichAnimals: document.getElementById('whichAnimals').value,
+        animalBehavior: document.getElementById('animalBehavior').value,
+        consultationReason: document.getElementById('consultationReason').value
+    };
+
+    // Guardar en localStorage
+    localStorage.setItem('ownerData', JSON.stringify(ownerData));
+    localStorage.setItem('patientData', JSON.stringify(patientData));
+
+    // Cerrar el modal
+    document.getElementById('confirmationModal').classList.add('hidden');
+
+    alert('Ficha guardada exitosamente.');
+});
+
+document.getElementById('cancelSave').addEventListener('click', () => {
+    document.getElementById('confirmationModal').classList.add('hidden');
+});
+
+// Cargar datos guardados al abrir la pestaña
+window.onload = () => {
+    const ownerData = JSON.parse(localStorage.getItem('ownerData'));
+    const patientData = JSON.parse(localStorage.getItem('patientData'));
+
+    if (ownerData) {
+        document.getElementById('ownerName').value = ownerData.ownerName;
+        document.getElementById('ownerLastName').value = ownerData.ownerLastName;
+        document.getElementById('ownerRUT').value = ownerData.ownerRUT;
+        document.getElementById('ownerID').value = ownerData.ownerID;
+        document.getElementById('ownerAddress').value = ownerData.ownerAddress;
+        document.getElementById('ownerPhone').value = ownerData.ownerPhone;
+        document.getElementById('ownerEmail').value = ownerData.ownerEmail;
+    }
+
+    if (patientData) {
+        document.getElementById('patientName').value = patientData.patientName;
+        document.getElementById('patientSpecies').value = patientData.patientSpecies;
+        document.getElementById('patientBreed').value = patientData.patientBreed;
+        document.getElementById('patientSex').value = patientData.patientSex;
+        document.getElementById('patientBirthDate').value = patientData.patientBirthDate;
+        document.getElementById('patientWeight').value = patientData.patientWeight;
+        document.getElementById('patientColor').value = patientData.patientColor;
+        document.getElementById('patientFurType').value = patientData.patientFurType;
+        document.getElementById('otherIdentifiers').value = patientData.otherIdentifiers;
+        document.getElementById('zootechnicalPurpose').value = patientData.zootechnicalPurpose;
+        document.getElementById('origin').value = patientData.origin;
+        document.getElementById('diet').value = patientData.diet;
+        document.getElementById('previousDiseases').value = patientData.previousDiseases;
+        document.getElementById('isSterilized').value = patientData.isSterilized;
+        document.getElementById('litters').value = patientData.litters;
+        document.getElementById('previousSurgeries').value = patientData.previousSurgeries;
+        document.getElementById('vaccinationScheme').value = patientData.vaccinationScheme;
+        document.getElementById('lastDeworming').value = patientData.lastDeworming;
+        document.getElementById('recentTreatments').value = patientData.recentTreatments;
+        document.getElementById('recentTravels').value = patientData.recentTravels;
+        document.getElementById('livesWithOtherAnimals').value = patientData.livesWithOtherAnimals;
+        document.getElementById('whichAnimals').value = patientData.whichAnimals;
+        document.getElementById('animalBehavior').value = patientData.animalBehavior;
+        document.getElementById('consultationReason').value = patientData.consultationReason;
+    }
+};
+
+//Fin de script de Ficha

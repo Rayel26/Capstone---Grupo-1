@@ -25,17 +25,10 @@
 }
 
 
-/* Reset de márgenes y paddings */
-body, h1, h2, h3, p, label, input, textarea, button {
-    margin: 0;
-    padding: 0;
-}
-
 /* Estilos generales */
 body {
     font-family: Arial, sans-serif;
     background-color: #f9f9f9; /* Color de fondo */
-    padding: 20px; /* Padding alrededor del contenido */
 }
 
 .container {
@@ -86,4 +79,12 @@ input {
 .modal {
     display: none; /* Ocultar los modales por defecto */
     z-index: 1000; /* Asegura que el modal esté por encima del contenido */
+}
+
+.postit {
+    transition: transform 0.2s; /* Transición suave para el crecimiento */
+}
+
+.postit:hover {
+    transform: scale(1.05); /* Aumenta el tamaño al pasar el mouse */
 }
