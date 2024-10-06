@@ -584,3 +584,55 @@ window.onload = () => {
 };
 
 //Fin de script de Ficha
+
+///////////////////////////////////////////////////////
+// Script para editar información de modals de citas
+function guardarCambios(id) {
+    // Obtener los valores actualizados del modal correspondiente
+    const nuevaFecha = document.getElementById(`editFecha${id}`).value;
+    const nuevoMotivo = document.getElementById(`editMotivo${id}`).value;
+    const nuevoDiagnostico = document.getElementById(`editDiagnostico${id}`).value;
+    const nuevoTratamiento = document.getElementById(`editTratamiento${id}`).value;
+
+    // Actualizar los valores en la tabla correspondiente
+    document.getElementById(`citaFecha${id}`).textContent = nuevaFecha;
+    document.getElementById(`citaMotivo${id}`).textContent = nuevoMotivo;
+    document.getElementById(`citaDiagnostico${id}`).textContent = nuevoDiagnostico;
+    document.getElementById(`citaTratamiento${id}`).textContent = nuevoTratamiento;
+
+    // Cerrar el modal después de guardar los cambios
+    closeModal('modal' + id);
+}
+
+// Función para guardar cambios de vacunas
+function guardarCambiosVacuna(vacunaId) {
+    const vacufecha = document.getElementById(`editVacunaFecha${vacunaId}`).value;
+    const producto = document.getElementById(`editVacunaNombre${vacunaId}`).value;
+    const dosis = document.getElementById(`editVacunaDosis${vacunaId}`).value;
+    const veterinario = document.getElementById(`editVacunaVeterinario${vacunaId}`).value;
+
+    // Aquí puedes agregar el código para guardar estos cambios en el servidor o en una base de datos
+    // Actualizar los valores en la tabla correspondiente
+    document.getElementById(`vacunaFecha${vacunaId}`).textContent = vacufecha;
+    document.getElementById(`vacunaNombre${vacunaId}`).textContent = producto;
+    document.getElementById(`vacunaDosis${vacunaId}`).textContent = dosis;
+    document.getElementById(`vacunaVeterinario${vacunaId}`).textContent = veterinario;
+    // Por ejemplo, simplemente mostrar una alerta como confirmación
+    closeModal(`modalVacuna${vacunaId}`); // Cerrar el modal
+}
+
+// Función para guardar cambios de desparasitaciones
+function guardarCambiosDesparasitacion(desparasitacionId) {
+    const desfecha = document.getElementById(`editDesparasitacionFecha${desparasitacionId}`).value;
+    const producto = document.getElementById(`editDesparasitacionProducto${desparasitacionId}`).value;
+    const dosis = document.getElementById(`editDesparasitacionDosis${desparasitacionId}`).value;
+    const veterinario = document.getElementById(`editDesparasitacionVeterinario${desparasitacionId}`).value;
+
+    // Actualizar los valores en la tabla correspondiente
+    document.getElementById(`desparasitacionFecha${desparasitacionId}`).textContent = desfecha;
+    document.getElementById(`desparasitacionProducto${desparasitacionId}`).textContent = producto;
+    document.getElementById(`desparasitacionDosis${desparasitacionId}`).textContent = dosis;
+    document.getElementById(`desparasitacionVeterinario${desparasitacionId}`).textContent = veterinario;
+    // Por ejemplo, simplemente mostrar una alerta como confirmación
+    closeModal(`modalDesparasitacion${desparasitacionId}`); // Cerrar el modal
+}

@@ -498,10 +498,10 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="border border-gray-300 p-1 rounded-b-lg">01/01/2024</td>
-                                <td class="border border-gray-300 p-1">Chequeo general</td>
-                                <td class="border border-gray-300 p-1">Salud óptima</td>
-                                <td class="border border-gray-300 p-1">Vacuna aplicada</td>
+                                <td id="citaFecha1" class="border border-gray-300 p-1 rounded-b-lg">01/01/2024</td>
+                                <td id="citaMotivo1" class="border border-gray-300 p-1">Chequeo general</td>
+                                <td id="citaDiagnostico1" class="border border-gray-300 p-1">Salud óptima</td>
+                                <td id="citaTratamiento1" class="border border-gray-300 p-1">Vacuna aplicada</td>
                                 <td class="border border-gray-300 p-1"><button onclick="openModal('modal1')"
                                         class="text-green-500 hover:underline">Ver detalles</button></td>
                             </tr>
@@ -527,22 +527,39 @@
             </div>
                 
             <!-- Fin Contenido Historia Clínica -->
+            
             <!-- Modales para detalles de la cita -->
             <div id="modal1" class="modal hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                <div
-                    class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full transition-all duration-300 transform scale-95">
+                <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full transition-all duration-300 transform scale-95">
                     <h2 class="text-xl font-semibold mb-4">Detalles de la Cita</h2>
-                    <div class="space-y-2 text-gray-600">
-                        <p class="mb-2"><strong>Fecha:</strong> 01/01/2024</p>
-                        <p class="mb-2"><strong>Veterinario:</strong> Dr. Pérez</p>
-                        <p class="mb-2"><strong>Clínica:</strong> Clínica Central</p>
-                        <p class="mb-4"><strong>Notas:</strong> Chequeo general, vacuna aplicada.</p>
+                    <div class="space-y-4 text-gray-600">
+                        <label class="block">
+                            <strong>Fecha:</strong>
+                            <input type="date" id="editFecha1" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="2024-01-01">
+                        </label>
+                        <label class="block">
+                            <strong>Motivo de Consulta:</strong>
+                            <input type="text" id="editMotivo1" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="Chequeo general">
+                        </label>
+                        <label class="block">
+                            <strong>Diagnóstico:</strong>
+                            <input type="text" id="editDiagnostico1" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="Salud óptima">
+                        </label>
+                        <label class="block">
+                            <strong>Tratamiento:</strong>
+                            <input type="text" id="editTratamiento1" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="Vacuna aplicada">
+                        </label>
                     </div>
-                    
-                    <button onclick="closeModal('modal1')"
-                        class="mt-6 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200"
-                        style="background-color: #69d9cd;">
-                        Cerrar</button>
+                    <button onclick="guardarCambios('1')" 
+                    class="mt-4 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200"
+                    style="background-color: #69d9cd;">
+                        Guardar Cambios
+                    </button>
+                    <button onclick="closeModal('modal1')" 
+                    class="mt-2 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200"
+                    style="background-color: #69d9cd;">
+                        Cerrar
+                    </button>
                 </div>
             </div>
             <!-- Fin Contenido Historia Clínica -->
@@ -557,44 +574,39 @@
                     <table class="min-w-full border border-gray-300 rounded-lg text-xs">
                         <thead>
                             <tr class="bg-gray-100">
-                                <th class="border border-gray-300 px-2 py-1 text-left rounded-tl-lg rounded-tr-lg">Fecha
-                                </th>
+                                <th class="border border-gray-300 px-2 py-1 text-left rounded-tl-lg rounded-tr-lg">Fecha</th>
                                 <th class="border border-gray-300 px-2 py-1 text-left">Vacuna</th>
                                 <th class="border border-gray-300 px-2 py-1 text-left">Dosis</th>
                                 <th class="border border-gray-300 px-2 py-1 text-left">Veterinario</th>
-                                <th class="border border-gray-300 px-2 py-1 text-left rounded-bl-lg rounded-br-lg">
-                                    Detalles</th>
+                                <th class="border border-gray-300 px-2 py-1 text-left rounded-bl-lg rounded-br-lg">Detalles</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="border border-gray-300 px-2 py-1">05/01/2024</td>
-                                <td class="border border-gray-300 px-2 py-1">Rabia</td>
-                                <td class="border border-gray-300 px-2 py-1">1ª dosis</td>
-                                <td class="border border-gray-300 px-2 py-1">Dr. Pérez</td>
+                                <td id="vacunaFecha1" class="border border-gray-300 px-2 py-1">05/01/2024</td>
+                                <td id="vacunaNombre1" class="border border-gray-300 px-2 py-1">Rabia</td>
+                                <td id="vacunaDosis1" class="border border-gray-300 px-2 py-1">1ª dosis</td>
+                                <td id="vacunaVeterinario1" class="border border-gray-300 px-2 py-1">Dr. Pérez</td>
                                 <td class="border border-gray-300 px-2 py-1">
-                                    <button class="text-green-500" onclick="openModal('modalVacuna1')">Ver
-                                        detalles</button>
+                                    <button onclick="openModal('modalVacuna1')" class="text-green-500 hover:underline">Ver detalles</button>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="border border-gray-300 px-2 py-1">20/02/2024</td>
-                                <td class="border border-gray-300 px-2 py-1">Moquillo</td>
-                                <td class="border border-gray-300 px-2 py-1">Refuerzo</td>
-                                <td class="border border-gray-300 px-2 py-1">Dra. González</td>
+                                <td id="vacunaFecha2" class="border border-gray-300 px-2 py-1">20/02/2024</td>
+                                <td id="vacunaNombre2" class="border border-gray-300 px-2 py-1">Moquillo</td>
+                                <td id="vacunaDosis2" class="border border-gray-300 px-2 py-1">Refuerzo</td>
+                                <td id="vacunaVeterinario2" class="border border-gray-300 px-2 py-1">Dra. González</td>
                                 <td class="border border-gray-300 px-2 py-1">
-                                    <button class="text-green-500" onclick="openModal('modalVacuna2')">Ver
-                                        detalles</button>
+                                    <button onclick="openModal('modalVacuna2')" class="text-green-500 hover:underline">Ver detalles</button>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="border border-gray-300 px-2 py-1">15/03/2024</td>
-                                <td class="border border-gray-300 px-2 py-1">Parvovirus</td>
-                                <td class="border border-gray-300 px-2 py-1">2ª dosis</td>
-                                <td class="border border-gray-300 px-2 py-1">Dr. López</td>
+                                <td id="vacunaFecha3" class="border border-gray-300 px-2 py-1">15/03/2024</td>
+                                <td id="vacunaNombre3" class="border border-gray-300 px-2 py-1">Parvovirus</td>
+                                <td id="vacunaDosis3" class="border border-gray-300 px-2 py-1">2ª dosis</td>
+                                <td id="vacunaVeterinario3" class="border border-gray-300 px-2 py-1">Dr. López</td>
                                 <td class="border border-gray-300 px-2 py-1">
-                                    <button class="text-green-500" onclick="openModal('modalVacuna3')">Ver
-                                        detalles</button>
+                                    <button onclick="openModal('modalVacuna3')" class="text-green-500 hover:underline">Ver detalles</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -602,23 +614,94 @@
                 </div>
             </div>
 
-            <!-- Modales para detalles de vacunas con mejor estilo -->
-            <div id="modalVacuna1"
-                class="modal hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 ease-in-out">
-                <div
-                    class="bg-white rounded-xl shadow-lg p-6 max-w-md w-full transform transition-transform duration-300 ease-in-out scale-95">
-                    <h2 class="text-xl font-semibold text-gray-700 mb-4">Detalles de la Vacuna</h2>
-                    <div class="space-y-2 text-gray-600">
-                        <p><strong>Fecha:</strong> 05/01/2024</p>
-                        <p><strong>Vacuna:</strong> Rabia</p>
-                        <p><strong>Dosis:</strong> 1ª dosis</p>
-                        <p><strong>Veterinario:</strong> Dr. Pérez</p>
-                        <p><strong>Notas:</strong> Administrada en Clínica Central</p>
+            <!-- Modales para detalles de las vacunas -->
+            <div id="modalVacuna1" class="modal hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full transition-all duration-300 transform scale-95">
+                    <h2 class="text-xl font-semibold mb-4">Detalles de la Vacuna</h2>
+                    <div class="space-y-4 text-gray-600">
+                        <label class="block">
+                            <strong>Fecha:</strong>
+                            <input type="date" id="editVacunaFecha1" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="2024-01-05">
+                        </label>
+                        <label class="block">
+                            <strong>Vacuna:</strong>
+                            <input type="text" id="editVacunaNombre1" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="Rabia">
+                        </label>
+                        <label class="block">
+                            <strong>Dosis:</strong>
+                            <input type="text" id="editVacunaDosis1" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="1ª dosis">
+                        </label>
+                        <label class="block">
+                            <strong>Veterinario:</strong>
+                            <input type="text" id="editVacunaVeterinario1" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="Dr. Pérez">
+                        </label>
                     </div>
-                    <button onclick="closeModal('modalVacuna1')"
-                    class="mt-6 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200"
-                    style="background-color: #69d9cd;">
-                    Cerrar</button>
+                    <button onclick="guardarCambiosVacuna('1')" class="mt-4 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200" style="background-color: #69d9cd;">
+                        Guardar Cambios
+                    </button>
+                    <button onclick="closeModal('modalVacuna1')" class="mt-2 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200" style="background-color: #69d9cd;">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+
+            <div id="modalVacuna2" class="modal hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full transition-all duration-300 transform scale-95">
+                    <h2 class="text-xl font-semibold mb-4">Detalles de la Vacuna</h2>
+                    <div class="space-y-4 text-gray-600">
+                        <label class="block">
+                            <strong>Fecha:</strong>
+                            <input type="date" id="editVacunaFecha2" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="2024-02-20">
+                        </label>
+                        <label class="block">
+                            <strong>Vacuna:</strong>
+                            <input type="text" id="editVacunaNombre2" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="Moquillo">
+                        </label>
+                        <label class="block">
+                            <strong>Dosis:</strong>
+                            <input type="text" id="editVacunaDosis2" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="Refuerzo">
+                        </label>
+                        <label class="block">
+                            <strong>Veterinario:</strong>
+                            <input type="text" id="editVacunaVeterinario2" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="Dra. González">
+                        </label>
+                    </div>
+                    <button onclick="guardarCambiosVacuna('2')" class="mt-4 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200" style="background-color: #69d9cd;">
+                        Guardar Cambios
+                    </button>
+                    <button onclick="closeModal('modalVacuna2')" class="mt-2 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200" style="background-color: #69d9cd;">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+
+            <div id="modalVacuna3" class="modal hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full transition-all duration-300 transform scale-95">
+                    <h2 class="text-xl font-semibold mb-4">Detalles de la Vacuna</h2>
+                    <div class="space-y-4 text-gray-600">
+                        <label class="block">
+                            <strong>Fecha:</strong>
+                            <input type="date" id="editVacunaFecha3" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="2024-03-15">
+                        </label>
+                        <label class="block">
+                            <strong>Vacuna:</strong>
+                            <input type="text" id="editVacunaNombre3" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="Parvovirus">
+                        </label>
+                        <label class="block">
+                            <strong>Dosis:</strong>
+                            <input type="text" id="editVacunaDosis3" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="2ª dosis">
+                        </label>
+                        <label class="block">
+                            <strong>Veterinario:</strong>
+                            <input type="text" id="editVacunaVeterinario3" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="Dr. López">
+                        </label>
+                    </div>
+                    <button onclick="guardarCambiosVacuna('3')" class="mt-4 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200" style="background-color: #69d9cd;">
+                        Guardar Cambios
+                    </button>
+                    <button onclick="closeModal('modalVacuna3')" class="mt-2 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200" style="background-color: #69d9cd;">
+                        Cerrar
+                    </button>
                 </div>
             </div>
             <!--Fin Contenido Vacunas -->
@@ -628,69 +711,140 @@
             <div id="tab4" class="hidden p-6">
                 <h2 class="text-2xl font-bold">Desparasitaciones</h2>
 
-                <!-- Tabla de desparasitaciones -->
+                <!-- Tabla para el historial de desparasitaciones ajustada para ser más pequeña -->
                 <div class="overflow-x-auto mt-4">
                     <table class="min-w-full border border-gray-300 rounded-lg text-xs">
-                        <!-- Tamaño de texto reducido -->
                         <thead>
                             <tr class="bg-gray-100">
-                                <th class="border border-gray-300 px-2 py-1 text-left rounded-tl-lg">Fecha</th>
-                                <!-- Padding reducido -->
-                                <th class="border border-gray-300 px-2 py-1 text-left">Desparasitante</th>
+                                <th class="border border-gray-300 px-2 py-1 text-left rounded-tl-lg rounded-tr-lg">Fecha</th>
+                                <th class="border border-gray-300 px-2 py-1 text-left">Producto</th>
                                 <th class="border border-gray-300 px-2 py-1 text-left">Dosis</th>
                                 <th class="border border-gray-300 px-2 py-1 text-left">Veterinario</th>
-                                <th class="border border-gray-300 px-2 py-1 text-left rounded-tr-lg">Detalles</th>
+                                <th class="border border-gray-300 px-2 py-1 text-left rounded-bl-lg rounded-br-lg">Detalles</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="border border-gray-300 px-2 py-1">12/01/2024</td>
-                                <td class="border border-gray-300 px-2 py-1">Praziquantel</td>
-                                <td class="border border-gray-300 px-2 py-1">50 mg</td>
-                                <td class="border border-gray-300 px-2 py-1">Dr. Pérez</td>
-                                <td class="border border-gray-300 px-2 py-1 text-green-500 cursor-pointer hover:underline"
-                                    onclick="openModal('modalDesparasitacion1')">Ver detalles</td>
+                                <td id="desparasitacionFecha1" class="border border-gray-300 px-2 py-1">10/01/2024</td>
+                                <td id="desparasitacionProducto1" class="border border-gray-300 px-2 py-1">Pyrantel</td>
+                                <td id="desparasitacionDosis1" class="border border-gray-300 px-2 py-1">5 ml</td>
+                                <td id="desparasitacionVeterinario1" class="border border-gray-300 px-2 py-1">Dr. Martínez</td>
+                                <td class="border border-gray-300 px-2 py-1">
+                                    <button onclick="openModal('modalDesparasitacion1')" class="text-green-500 hover:underline">Ver detalles</button>
+                                </td>
                             </tr>
                             <tr>
-                                <td class="border border-gray-300 px-2 py-1">15/03/2024</td>
-                                <td class="border border-gray-300 px-2 py-1">Ivermectina</td>
-                                <td class="border border-gray-300 px-2 py-1">10 mg</td>
-                                <td class="border border-gray-300 px-2 py-1">Dra. González</td>
-                                <td class="border border-gray-300 px-2 py-1 text-green-500 cursor-pointer hover:underline"
-                                    onclick="openModal('modalDesparasitacion2')">Ver detalles</td>
+                                <td id="desparasitacionFecha2" class="border border-gray-300 px-2 py-1">15/02/2024</td>
+                                <td id="desparasitacionProducto2" class="border border-gray-300 px-2 py-1">Fenbendazol</td>
+                                <td id="desparasitacionDosis2" class="border border-gray-300 px-2 py-1">10 ml</td>
+                                <td id="desparasitacionVeterinario2" class="border border-gray-300 px-2 py-1">Dra. Silva</td>
+                                <td class="border border-gray-300 px-2 py-1">
+                                    <button onclick="openModal('modalDesparasitacion2')" class="text-green-500 hover:underline">Ver detalles</button>
+                                </td>
                             </tr>
                             <tr>
-                                <td class="border border-gray-300 px-2 py-1">25/05/2024</td>
-                                <td class="border border-gray-300 px-2 py-1">Fenbendazol</td>
-                                <td class="border border-gray-300 px-2 py-1">100 mg</td>
-                                <td class="border border-gray-300 px-2 py-1">Dr. López</td>
-                                <td class="border border-gray-300 px-2 py-1 text-green-500 cursor-pointer hover:underline"
-                                    onclick="openModal('modalDesparasitacion3')">Ver detalles</td>
+                                <td id="desparasitacionFecha3" class="border border-gray-300 px-2 py-1">20/03/2024</td>
+                                <td id="desparasitacionProducto3" class="border border-gray-300 px-2 py-1">Praziquantel</td>
+                                <td id="desparasitacionDosis3" class="border border-gray-300 px-2 py-1">2 tabletas</td>
+                                <td id="desparasitacionVeterinario3" class="border border-gray-300 px-2 py-1">Dr. Torres</td>
+                                <td class="border border-gray-300 px-2 py-1">
+                                    <button onclick="openModal('modalDesparasitacion3')" class="text-green-500 hover:underline">Ver detalles</button>
+                                </td>
                             </tr>
-                            <!-- Puedes agregar más filas según sea necesario -->
                         </tbody>
                     </table>
                 </div>
             </div>
 
 
-            <!-- Modales para detalles de desparasitaciones -->
-            <div id="modalDesparasitacion1"
-                class="modal hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 ease-in-out">
-                <div
-                    class="bg-white rounded-xl shadow-lg p-6 max-w-md w-full transform transition-transform duration-300 ease-in-out scale-95">
-                    <h2 class="text-xl font-semibold text-gray-700 mb-4">Detalles de la Desparasitación</h2>
-                    <div class="space-y-2 text-gray-600">
-                        <p><strong>Fecha:</strong> 12/01/2024</p>
-                        <p><strong>Desparasitante:</strong> Praziquantel</p>
-                        <p><strong>Dosis:</strong> 50 mg</p>
-                        <p><strong>Veterinario:</strong> Dr. Pérez</p>
-                        <p><strong>Notas:</strong> Administrada en Clínica Central. Requiere refuerzo en 6 meses.</p>
+            <!-- Modales para detalles de las desparasitaciones -->
+            <div id="modalDesparasitacion1" class="modal hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full transition-all duration-300 transform scale-95">
+                    <h2 class="text-xl font-semibold mb-4">Detalles de la Desparasitacion</h2>
+                    <div class="space-y-4 text-gray-600">
+                        <label class="block">
+                            <strong>Fecha:</strong>
+                            <input type="date" id="editDesparasitacionFecha1" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="2024-01-10">
+                        </label>
+                        <label class="block">
+                            <strong>Producto:</strong>
+                            <input type="text" id="editDesparasitacionProducto1" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="Pyrantel">
+                        </label>
+                        <label class="block">
+                            <strong>Dosis:</strong>
+                            <input type="text" id="editDesparasitacionDosis1" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="5 ml">
+                        </label>
+                        <label class="block">
+                            <strong>Veterinario:</strong>
+                            <input type="text" id="editDesparasitacionVeterinario1" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="Dr. Martínez">
+                        </label>
                     </div>
-                    <button onclick="closeModal('modalDesparasitacion1')"
-                    class="mt-6 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200"
-                    style="background-color: #69d9cd;">
-                    Cerrar</button>
+                    <button onclick="guardarCambiosDesparasitacion('1')" class="mt-4 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200" style="background-color: #69d9cd;">
+                        Guardar Cambios
+                    </button>
+                    <button onclick="closeModal('modalDesparasitacion1')" class="mt-2 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200" style="background-color: #69d9cd;">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+
+            <div id="modalDesparasitacion2" class="modal hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full transition-all duration-300 transform scale-95">
+                    <h2 class="text-xl font-semibold mb-4">Detalles de la Desparasitacion</h2>
+                    <div class="space-y-4 text-gray-600">
+                        <label class="block">
+                            <strong>Fecha:</strong>
+                            <input type="date" id="editDesparasitacionFecha2" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="2024-02-15">
+                        </label>
+                        <label class="block">
+                            <strong>Producto:</strong>
+                            <input type="text" id="editDesparasitacionProducto2" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="Fenbendazol">
+                        </label>
+                        <label class="block">
+                            <strong>Dosis:</strong>
+                            <input type="text" id="editDesparasitacionDosis2" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="10 ml">
+                        </label>
+                        <label class="block">
+                            <strong>Veterinario:</strong>
+                            <input type="text" id="editDesparasitacionVeterinario2" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="Dra. Silva">
+                        </label>
+                    </div>
+                    <button onclick="guardarCambiosDesparasitacion('2')" class="mt-4 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200" style="background-color: #69d9cd;">
+                        Guardar Cambios
+                    </button>
+                    <button onclick="closeModal('modalDesparasitacion2')" class="mt-2 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200" style="background-color: #69d9cd;">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+
+            <div id="modalDesparasitacion3" class="modal hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full transition-all duration-300 transform scale-95">
+                    <h2 class="text-xl font-semibold mb-4">Detalles de la Desparasitacion</h2>
+                    <div class="space-y-4 text-gray-600">
+                        <label class="block">
+                            <strong>Fecha:</strong>
+                            <input type="date" id="editDesparasitacionFecha3" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="2024-03-20">
+                        </label>
+                        <label class="block">
+                            <strong>Producto:</strong>
+                            <input type="text" id="editDesparasitacionProducto3" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="Praziquantel">
+                        </label>
+                        <label class="block">
+                            <strong>Dosis:</strong>
+                            <input type="text" id="editDesparasitacionDosis3" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="2 tabletas">
+                        </label>
+                        <label class="block">
+                            <strong>Veterinario:</strong>
+                            <input type="text" id="editDesparasitacionVeterinario3" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300" value="Dr. Torres">
+                        </label>
+                    </div>
+                    <button onclick="guardarCambiosDesparasitacion('3')" class="mt-4 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200" style="background-color: #69d9cd;">
+                        Guardar Cambios
+                    </button>
+                    <button onclick="closeModal('modalDesparasitacion3')" class="mt-2 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200" style="background-color: #69d9cd;">
+                        Cerrar
+                    </button>
                 </div>
             </div>
 
@@ -813,6 +967,10 @@
                     <div class="bg-gray-100 p-4 rounded-lg shadow-md">
                         <form id="anamnesisForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <label class="block mt-2">
+                                Hora de inicio de la consulta:
+                                <input type="time" id="consultationStartTime" class="border border-gray-300 rounded-md w-full">
+                            </label>
+                            <label class="block mt-2">
                                 Dieta:
                                 <input type="text" id="diet" class="border border-gray-300 rounded-md w-full">
                             </label>
@@ -870,9 +1028,18 @@
                                 Motivo de la consulta:
                                 <textarea id="consultationReason" class="border border-gray-300 rounded-md w-full" rows="3"></textarea>
                             </label>
+                            <label class="block mt-2">
+                                Examen físico:
+                                <textarea id="physicalExam" class="border border-gray-300 rounded-md w-full" rows="3"></textarea>
+                            </label>
+                            <label class="block mt-2">
+                                Temperatura del animal (°C):
+                                <input type="text" id="animalTemperature" class="border border-gray-300 rounded-md w-full" placeholder="Temperatura en grados Celsius">
+                            </label>
                         </form>
                     </div>
                 </section>
+
 
                 <!-- Botón guardar -->
                 <button id="saveButton" class="mt-4 p-2 bg-green-400 text-white rounded-md hover:bg-green-600 flex items-center justify-center">
