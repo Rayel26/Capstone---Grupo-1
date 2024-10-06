@@ -476,6 +476,12 @@ function getColorByState(state) {
     }
 }
 
+
+
+
+
+
+
 // Llamar a la función al cargar la página para mostrar el mes inicial
 updateAgenda();
 //Fin script de Agenda

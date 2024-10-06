@@ -88,3 +88,12 @@ input {
 .postit:hover {
     transform: scale(1.05); /* Aumenta el tamaño al pasar el mouse */
 }
+
+.weekend {
+    text-decoration: line-through;
+    color: gray;
+}
+.appointment-card {
+    padding: 4px;
+    cursor: pointer;
+}

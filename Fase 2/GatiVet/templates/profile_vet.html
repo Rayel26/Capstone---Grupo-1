@@ -1061,29 +1061,231 @@
         </section>
     </div>
 
+<!-- Agenda -->
+<div class="container mx-auto flex items-start justify-center pt-10" id="agenda">
+    <section class="p-4 w-full max-w-5xl bg-white shadow-md rounded-lg">
+        <h2 id="monthTitle" class="text-xl font-semibold text-center mb-4">Mi Agenda - Octubre 2024</h2> <!-- Mes actual -->
 
-    <!-- Agenda -->
-    <div class="container hidden" id="agenda">
-        <section class="p-4">
-            <h2 class="text-xl font-semibold">Agenda</h2>
-            <div class="flex">
-                <!-- Selector de Mes -->
-                <div class="mr-4">
-                    <label for="month-selector" class="block text-lg font-semibold">Selecciona el Mes:</label>
-                    <select id="month-selector" class="mt-2 p-2 border border-gray-300 rounded" onchange="updateAgenda()">
-                        <option value="octubre">Octubre</option>
-                        <option value="noviembre">Noviembre</option>
-                        <option value="diciembre">Diciembre</option>
-                    </select>
+        <!-- Contenedor para los enlaces de navegación -->
+        <div class="flex justify-end mb-2">
+            <span id="prevMonth" class="cursor-pointer text-blue-500 underline text-sm mr-2 hidden">◀</span> <!-- Solo el ícono -->
+            <span id="toggleView" class="cursor-pointer text-blue-500 underline text-xs mx-2">Cambiar a Vista Mensual</span> <!-- Tamaño de fuente más pequeño -->
+            <span id="nextMonth" class="cursor-pointer text-blue-500 underline text-sm hidden">▶</span> <!-- Solo el ícono -->
+        </div>
+
+        <!-- Contenido de la agenda -->
+        <div id="weeklyView" class="agenda-view">
+            <!-- Días de la semana -->
+            <div class="grid grid-cols-6 gap-2 text-center mb-4 mt-2">
+                <div></div> <!-- Espacio vacío para las horas -->
+                <div>Lunes 7</div>
+                <div>Martes 8</div>
+                <div>Miércoles 9</div>
+                <div>Jueves 10</div>
+                <div>Viernes 11</div>
+            </div>
+
+            <!-- Horas y Citas -->
+            <div class="grid grid-cols-6 gap-2">
+                <!-- Horas en la columna izquierda -->
+                <div class="text-right pr-2">
+                    <div class="py-1 border-t">08:30</div>
+                    <div class="py-1 border-t">09:30</div>
+                    <div class="py-1 border-t">10:30</div>
+                    <div class="py-1 border-t">11:30</div>
+                    <div class="py-1 border-t">12:30</div>
+                    <div class="py-1 border-t">13:30</div>
+                    <div class="py-1 border-t">14:30</div>
+                    <div class="py-1 border-t">15:30</div>
+                    <div class="py-1 border-t">16:30</div>
+                    <div class="py-1 border-t">17:30</div>
                 </div>
 
-                <!-- Cuadros estilo Post-it -->
-                <div id="agenda-postits" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 w-full">
-                    <!-- Los cuadros se llenarán aquí mediante JavaScript -->
+                <!-- Citas para cada día (tarjetas más pequeñas y compactas) -->
+                <div class="border-l">
+                    <!-- Tarjeta para una cita de 11:00 a 12:00 -->
+                    <div class="border-t bg-yellow-100 text-yellow-700 rounded-md shadow-lg p-1" style="grid-row: 4 / span 2;">
+                        <p class="text-xs font-bold">11:00 - 12:00</p>
+                        <p class="text-sm font-semibold">COOKIE</p>
+                        <p class="text-xs">Yorkshire Terrier</p>
+                        <div class="flex items-center text-xs">
+                            <span class="mr-1 text-gray-500"><i class="fas fa-user"></i></span>
+                            <p>Fernanda Sanz</p>
+                        </div>
+                    </div>
+                    <div class="py-1 border-t"></div>
+                </div>
+
+                <div class="border-l">
+                    <!-- Tarjeta para una cita de 10:30 a 11:30 -->
+                    <div class="border-t bg-green-100 text-green-700 rounded-md shadow-lg p-1" style="grid-row: 3 / span 2;">
+                        <p class="text-xs font-bold">10:30 - 11:30</p>
+                        <p class="text-sm font-semibold">MANDARINA</p>
+                        <p class="text-xs">Gato</p>
+                        <div class="flex items-center text-xs">
+                            <span class="mr-1 text-gray-500"><i class="fas fa-user"></i></span>
+                            <p>Mario Pérez</p>
+                        </div>
+                    </div>
+                    <div class="py-1 border-t"></div>
                 </div>
             </div>
-        </section>
-    </div>
+        </div>
+
+        <!-- Vista mensual (inicialmente oculta) -->
+        <div id="monthlyView" class="agenda-view hidden">
+            <div class="grid grid-cols-7 gap-2 text-center mb-4 mt-2">
+                <div>Dom</div>
+                <div>Lun</div>
+                <div>Mar</div>
+                <div>Mié</div>
+                <div>Jue</div>
+                <div>Vie</div>
+                <div>Sáb</div>
+            </div>
+            <div class="grid grid-cols-7 gap-2" id="calendarDays"></div>
+        </div>
+    </section>
+</div>
+<!-- Fin Agenda -->
+
+<script>
+// JavaScript para cambiar entre vistas
+const toggleButton = document.getElementById('toggleView');
+const prevMonthButton = document.getElementById('prevMonth');
+const nextMonthButton = document.getElementById('nextMonth');
+const weeklyView = document.getElementById('weeklyView');
+const monthlyView = document.getElementById('monthlyView');
+const calendarDays = document.getElementById('calendarDays');
+const monthTitle = document.getElementById('monthTitle');
+
+let currentYear = 2024;
+let currentMonth = 9; // Octubre (0-indexado)
+
+// Datos de citas para mostrar en el calendario
+const appointments = {
+    7: [
+        { time: '11:00 - 12:00', pet: 'COOKIE', color: 'bg-yellow-100' },
+        { time: '13:00 - 14:00', pet: 'BELLA', color: 'bg-blue-100' }
+    ],
+    8: [
+        { time: '10:30 - 11:30', pet: 'MANDARINA', color: 'bg-green-100' },
+        { time: '15:00 - 16:00', pet: 'LUNA', color: 'bg-red-100' },
+    ],
+    9: [
+        { time: '09:00 - 10:00', pet: 'MAX', color: 'bg-purple-100' },
+    ],
+    10: [
+        { time: '14:00 - 15:00', pet: 'RUFUS', color: 'bg-orange-100' },
+    ],
+    // Agrega más citas aquí con la misma estructura
+};
+
+// Array de nombres de meses
+const monthNames = [
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+];
+
+// Función para generar días del mes
+function generateCalendar(year, month) {
+    // Limpiar los días del calendario
+    calendarDays.innerHTML = '';
+
+    // Cambiar el título del mes
+    monthTitle.textContent = `Mi Agenda - ${monthNames[month]} ${year}`;
+
+    // Obtener el primer día del mes y el número de días
+    const firstDay = new Date(year, month, 1);
+    const totalDays = new Date(year, month + 1, 0).getDate();
+    const startDay = firstDay.getDay(); // Día de la semana (0-6)
+
+    // Agregar días vacíos antes del primer día del mes
+    for (let i = 0; i < startDay; i++) {
+        const emptyDiv = document.createElement('div');
+        calendarDays.appendChild(emptyDiv);
+    }
+
+    // Agregar días del mes
+    for (let day = 1; day <= totalDays; day++) {
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'border p-1 relative'; // Hacer que el padding sea más pequeño
+
+        // Tachado solo para sábados y domingos
+        const dayOfWeek = (startDay + day - 1) % 7; // Obtener el índice del día de la semana
+        if (dayOfWeek === 0 || dayOfWeek === 6) { // Domingo (0) y Sábado (6)
+            dayDiv.classList.add('weekend');
+        } else {
+            // Solo crear tarjetas para días de semana (lunes a viernes)
+            dayDiv.textContent = day;
+
+            // Mostrar citas si hay
+            if (appointments[day]) {
+                const appointmentList = document.createElement('div');
+                appointmentList.className = 'mt-1'; // Margen superior para la lista de citas
+
+                appointments[day].forEach(appointment => {
+                    const appointmentDiv = document.createElement('div');
+                    appointmentDiv.className = `rounded-md shadow-md p-1 text-xs ${appointment.color} mb-1`;
+                    appointmentDiv.textContent = `${appointment.time}: ${appointment.pet}`;
+                    appointmentList.appendChild(appointmentDiv);
+                });
+
+                dayDiv.appendChild(appointmentList);
+            }
+        }
+
+        calendarDays.appendChild(dayDiv);
+    }
+}
+
+// Inicializar el calendario
+generateCalendar(currentYear, currentMonth);
+
+// Cambiar entre vista semanal y mensual
+toggleButton.addEventListener('click', () => {
+    if (weeklyView.classList.contains('hidden')) {
+        weeklyView.classList.remove('hidden');
+        monthlyView.classList.add('hidden');
+        toggleButton.textContent = 'Cambiar a Vista Mensual';
+        prevMonthButton.classList.add('hidden'); // Ocultar botones de navegación en vista semanal
+        nextMonthButton.classList.add('hidden');
+    } else {
+        weeklyView.classList.add('hidden');
+        monthlyView.classList.remove('hidden');
+        toggleButton.textContent = 'Cambiar a Vista Semanal';
+        prevMonthButton.classList.remove('hidden'); // Mostrar botones de navegación en vista mensual
+        nextMonthButton.classList.remove('hidden');
+    }
+});
+
+// Navegar entre meses
+prevMonthButton.addEventListener('click', () => {
+    currentMonth--;
+    if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+    }
+    generateCalendar(currentYear, currentMonth);
+});
+
+nextMonthButton.addEventListener('click', () => {
+    currentMonth++;
+    if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+    }
+    generateCalendar(currentYear, currentMonth);
+});
+</script>
+
+<style>
+.weekend {
+    text-decoration: line-through;
+    color: gray;
+}
+</style>
+<!--Fin Agenda -->
 
 
 
