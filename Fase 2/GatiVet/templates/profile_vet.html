@@ -581,7 +581,7 @@
                                 <th class="border border-gray-300 px-2 py-1 text-left rounded-bl-lg rounded-br-lg">Detalles</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="vacunasTableBody">
                             <tr>
                                 <td id="vacunaFecha1" class="border border-gray-300 px-2 py-1">05/01/2024</td>
                                 <td id="vacunaNombre1" class="border border-gray-300 px-2 py-1">Rabia</td>
@@ -611,6 +611,10 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+                <!-- Botón para añadir vacuna -->
+                <div class="flex justify-end mt-4">
+                    <button id="addVaccineBtn" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600" onclick="openAddVaccineModal()">Añadir Vacuna</button>
                 </div>
             </div>
 
@@ -704,6 +708,36 @@
                     </button>
                 </div>
             </div>
+
+            <!-- Modal para añadir vacuna -->
+            <div id="addVaccineModal" class="modal hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-xl font-bold mb-4">Añadir Vacuna</h2>
+                    <form id="addVaccineForm">
+                        <div class="mb-4">
+                            <label for="vacunaFecha" class="block mb-2">Fecha:</label>
+                            <input type="date" id="vacunaFecha" class="border border-gray-300 rounded-md p-1 w-full" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="vacunaNombre" class="block mb-2">Vacuna:</label>
+                            <input type="text" id="vacunaNombre" class="border border-gray-300 rounded-md p-1 w-full" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="vacunaDosis" class="block mb-2">Dosis:</label>
+                            <input type="text" id="vacunaDosis" class="border border-gray-300 rounded-md p-1 w-full" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="vacunaVeterinario" class="block mb-2">Veterinario:</label>
+                            <input type="text" id="vacunaVeterinario" class="border border-gray-300 rounded-md p-1 w-full" required>
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="button" class="mt-4 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200 mr-5" style="background-color: #69d9cd;" onclick="addVaccine()">Agregar</button>
+                            <button type="button" class="mt-4 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200" style="background-color: #f83131;" onclick="closeModal('addVaccineModal')">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <!--Fin Contenido Vacunas -->
 
 
@@ -723,7 +757,7 @@
                                 <th class="border border-gray-300 px-2 py-1 text-left rounded-bl-lg rounded-br-lg">Detalles</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="desparasitacionesTableBody">
                             <tr>
                                 <td id="desparasitacionFecha1" class="border border-gray-300 px-2 py-1">10/01/2024</td>
                                 <td id="desparasitacionProducto1" class="border border-gray-300 px-2 py-1">Pyrantel</td>
@@ -754,6 +788,8 @@
                         </tbody>
                     </table>
                 </div>
+                <!-- Botón para añadir desparasitacion -->
+                <button id="addDesparasitacionBtn" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600" onclick="openDesparasitacionModal()">Añadir Desparasitacion</button>
             </div>
 
 
@@ -848,6 +884,26 @@
                 </div>
             </div>
 
+            <!-- Modal para agregar nueva desparasitacion -->
+            <div id="desparasitacionModal" class="modal hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <div class="flex items-center justify-center w-full">
+                    <div class="bg-white rounded-lg p-6">
+                        <h2 class="text-lg font-bold mb-4">Agregar Nueva Desparasitacion</h2>
+                        <label class="block mb-2">Fecha:</label>
+                        <input type="date" id="newDesparasitacionFecha" class="border border-gray-300 rounded-md w-full mb-4 p-1">
+                        <label class="block mb-2">Producto:</label>
+                        <input type="text" id="newDesparasitacionProducto" class="border border-gray-300 rounded-md w-full mb-4 p-1" placeholder="Nombre del producto">
+                        <label class="block mb-2">Dosis:</label>
+                        <input type="text" id="newDesparasitacionDosis" class="border border-gray-300 rounded-md w-full mb-4 p-1" placeholder="Dosis (ml/tabletas)">
+                        <label class="block mb-2">Veterinario:</label>
+                        <input type="text" id="newDesparasitacionVeterinario" class="border border-gray-300 rounded-md w-full mb-4 p-1" placeholder="Nombre del veterinario">
+                        <div class="flex justify-end">
+                            <button class="mt-4 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200 mr-5" style="background-color: #69d9cd;" onclick="addDesparasitacion()">Guardar</button>
+                            <button class="mt-4 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200" style="background-color: #f83131;" onclick="closeModal()">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <script>
                 function openModal(modalId) {
@@ -875,34 +931,34 @@
                 <section class="mt-6">
                     <h3 class="text-lg font-semibold">Datos del propietario</h3>
                     <div class="bg-gray-100 p-4 rounded-lg shadow-md">
-                        <form id="ownerForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <label class="block mt-2">
+                        <form id="ownerForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <label class="block text-gray-600 text-sm mt-2">
                                 Nombre:
-                                <input type="text" id="ownerName" class="border border-gray-300 rounded-md w-full" value="Juan" readonly>
+                                <input type="text" id="ownerName" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="Juan" disabled>
                             </label>
                             <label class="block mt-2">
                                 Apellido:
-                                <input type="text" id="ownerLastName" class="border border-gray-300 rounded-md w-full" value="Pérez" readonly>
+                                <input type="text" id="ownerLastName" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="Pérez" disabled>
                             </label>
                             <label class="block mt-2">
                                 RUT:
-                                <input type="text" id="ownerRUT" class="border border-gray-300 rounded-md w-full" value="12.345.678-9" readonly>
+                                <input type="text" id="ownerRUT" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="12.345.678-9" disabled>
                             </label>
                             <label class="block mt-2">
                                 Cédula de Identidad:
-                                <input type="text" id="ownerID" class="border border-gray-300 rounded-md w-full" value="98765432" readonly>
+                                <input type="text" id="ownerID" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="98765432" disabled>
                             </label>
                             <label class="block mt-2">
                                 Dirección de residencia:
-                                <input type="text" id="ownerAddress" class="border border-gray-300 rounded-md w-full" value="Av. Libertador Bernardo O'Higgins 123" readonly>
+                                <input type="text" id="ownerAddress" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="Av. Libertador Bernardo O'Higgins 123" disabled>
                             </label>
                             <label class="block mt-2">
                                 Teléfono:
-                                <input type="text" id="ownerPhone" class="border border-gray-300 rounded-md w-full" value="987654321" readonly>
+                                <input type="text" id="ownerPhone" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="987654321" disabled>
                             </label>
                             <label class="block mt-2">
                                 Correo:
-                                <input type="email" id="ownerEmail" class="border border-gray-300 rounded-md w-full" value="juan.perez@example.com" readonly>
+                                <input type="email" id="ownerEmail" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="juan.perez@example.com" disabled>
                             </label>
                         </form>
                     </div>
@@ -912,50 +968,38 @@
                 <section class="mt-6">
                     <h3 class="text-lg font-semibold">Reseña</h3>
                     <div class="bg-gray-100 p-4 rounded-lg shadow-md">
-                        <form id="patientForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <form id="patientForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <label class="block mt-2">
                                 Nombre del paciente:
-                                <input type="text" id="patientName" class="border border-gray-300 rounded-md w-full" value="Firulais" readonly>
+                                <input type="text" id="patientName" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="Firulais" disabled>
                             </label>
                             <label class="block mt-2">
                                 Especie:
-                                <input type="text" id="patientSpecies" class="border border-gray-300 rounded-md w-full" value="Perro" readonly>
+                                <input type="text" id="patientSpecies" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="Perro" disabled>
                             </label>
                             <label class="block mt-2">
                                 Raza:
-                                <input type="text" id="patientBreed" class="border border-gray-300 rounded-md w-full" value="Labrador" readonly>
+                                <input type="text" id="patientBreed" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="Labrador" disabled>
                             </label>
                             <label class="block mt-2">
                                 Sexo:
-                                <input type="text" id="patientSex" class="border border-gray-300 rounded-md w-full" value="Macho" readonly>
+                                <input type="text" id="patientSex" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="Macho" disabled>
                             </label>
                             <label class="block mt-2">
                                 Fecha de nacimiento:
-                                <input type="date" id="patientBirthDate" class="border border-gray-300 rounded-md w-full" value="2020-01-01" readonly>
+                                <input type="date" id="patientBirthDate" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="2020-01-01" disabled>
                             </label>
                             <label class="block mt-2">
-                                Peso (en gramos):
-                                <input type="number" id="patientWeight" class="border border-gray-300 rounded-md w-full" value="30000" readonly>
+                                Peso a ultima fecha (en kg):
+                                <input type="text" id="patientWeight" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="30000" disabled>
                             </label>
                             <label class="block mt-2">
                                 Color:
-                                <input type="text" id="patientColor" class="border border-gray-300 rounded-md w-full" value="Amarillo" readonly>
+                                <input type="text" id="patientColor" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="Amarillo" disabled>
                             </label>
                             <label class="block mt-2">
                                 Tipo de Pelaje:
-                                <input type="text" id="patientFurType" class="border border-gray-300 rounded-md w-full" value="Corto" readonly>
-                            </label>
-                            <label class="block mt-2">
-                                Otras identificaciones:
-                                <input type="text" id="otherIdentifiers" class="border border-gray-300 rounded-md w-full">
-                            </label>
-                            <label class="block mt-2">
-                                Fin Zootécnico:
-                                <input type="text" id="zootechnicalPurpose" class="border border-gray-300 rounded-md w-full">
-                            </label>
-                            <label class="block mt-2">
-                                Origen/Procedencia:
-                                <input type="text" id="origin" class="border border-gray-300 rounded-md w-full">
+                                <input type="text" id="patientFurType" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="Corto" disabled>
                             </label>
                         </form>
                     </div>
@@ -965,78 +1009,52 @@
                 <section class="mt-6">
                     <h3 class="text-lg font-semibold">Anamnesis</h3>
                     <div class="bg-gray-100 p-4 rounded-lg shadow-md">
-                        <form id="anamnesisForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <form id="anamnesisForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <label class="block mt-2">
                                 Hora de inicio de la consulta:
-                                <input type="time" id="consultationStartTime" class="border border-gray-300 rounded-md w-full">
-                            </label>
-                            <label class="block mt-2">
-                                Dieta:
-                                <input type="text" id="diet" class="border border-gray-300 rounded-md w-full">
-                            </label>
-                            <label class="block mt-2">
-                                Enfermedades Previas:
-                                <input type="text" id="previousDiseases" class="border border-gray-300 rounded-md w-full">
-                            </label>
-                            <label class="block mt-2">
-                                ¿Está esterilizado?:
-                                <select id="isSterilized" class="border border-gray-300 rounded-md w-full">
-                                    <option value="Sí">Sí</option>
-                                    <option value="No">No</option>
-                                </select>
-                            </label>
-                            <label class="block mt-2">
-                                Número de partos:
-                                <input type="text" id="litters" class="border border-gray-300 rounded-md w-full" placeholder="Indique '0' si no ha tenido">
-                            </label>
-                            <label class="block mt-2">
-                                Cirugías Previas:
-                                <input type="text" id="previousSurgeries" class="border border-gray-300 rounded-md w-full">
-                            </label>
-                            <label class="block mt-2">
-                                Esquema vacunal:
-                                <input type="text" id="vaccinationScheme" class="border border-gray-300 rounded-md w-full">
-                            </label>
-                            <label class="block mt-2">
-                                Última desparasitación y producto:
-                                <input type="text" id="lastDeworming" class="border border-gray-300 rounded-md w-full">
-                            </label>
-                            <label class="block mt-2">
-                                Tratamientos recientes:
-                                <input type="text" id="recentTreatments" class="border border-gray-300 rounded-md w-full">
-                            </label>
-                            <label class="block mt-2">
-                                ¿Viajes recientes?:
-                                <input type="text" id="recentTravels" class="border border-gray-300 rounded-md w-full">
-                            </label>
-                            <label class="block mt-2">
-                                ¿Vive con otros animales?:
-                                <select id="livesWithOtherAnimals" class="border border-gray-300 rounded-md w-full">
-                                    <option value="Sí">Sí</option>
-                                    <option value="No">No</option>
-                                </select>
-                            </label>
-                            <label class="block mt-2">
-                                ¿Cuáles?:
-                                <input type="text" id="whichAnimals" class="border border-gray-300 rounded-md w-full">
-                            </label>
-                            <label class="block mt-2">
-                                Comportamiento del animal:
-                                <textarea id="animalBehavior" class="border border-gray-300 rounded-md w-full" rows="3"></textarea>
-                            </label>
-                            <label class="block mt-2">
-                                Motivo de la consulta:
-                                <textarea id="consultationReason" class="border border-gray-300 rounded-md w-full" rows="3"></textarea>
-                            </label>
-                            <label class="block mt-2">
-                                Examen físico:
-                                <textarea id="physicalExam" class="border border-gray-300 rounded-md w-full" rows="3"></textarea>
+                                <input type="time" id="consultationStartTime" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" min="09:00" max="18:00" required>
                             </label>
                             <label class="block mt-2">
                                 Temperatura del animal (°C):
-                                <input type="text" id="animalTemperature" class="border border-gray-300 rounded-md w-full" placeholder="Temperatura en grados Celsius">
+                                <input type="number" id="animalTemperature" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" placeholder="Temperatura en grados Celsius" step="0.1" min="32" max="41">
+                                <small class="text-gray-500">Usar punto (.) para decimales</small>
                             </label>
-                        </form>
+                            
+                            <label class="block mt-2">
+                                Dieta:
+                                <input type="text" id="diet" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                            </label>
+                        
+                            <!-- Modificaciones realizadas aquí -->
+                            <label class="block mt-2 col-span-3">
+                                Motivo de la consulta:
+                                <textarea id="consultationReason" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" rows="3"></textarea>
+                            </label>
+                            <label class="block mt-2 col-span-3">
+                                Examen físico:
+                                <textarea id="physicalExam" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" rows="3"></textarea>
+                            </label>
+                            <label class="block mt-2 col-span-3">
+                                Diagnóstico:
+                                <textarea id="diagnosis" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" rows="3"></textarea>
+                            </label>
+                            <label class="block mt-2 col-span-3">
+                                Indicaciones:
+                                <textarea id="indications" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" rows="3"></textarea>
+                            </label>
+                            
+                            <div class="col-span-1 md:col-span-1 md:col-start-3"> <!-- Alinea el select a la derecha -->
+                                <label for="staff-select" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccione un doctor:</label>
+                                <select id="staff-select"
+                                    class="block w-full border border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                    onchange="updateDoctorInfoFromSelection()">
+                                    <option value="none" selected>Seleccione un doctor</option>
+                                    <option value="" disabled selected>-- Seleccione Dr(a)</option>
+                                    <option value="doctor1" data-name="Dr. Nicolás Villalba" data-image="static/img/doctor1.jpg">Dr. Nicolás Villalba</option>
+                                    <option value="doctor2" data-name="Dra. Kirito Aravena" data-image="static/img/doctor2.jpg">Dra. Kirito Aravena</option>
+                                </select>
+                            </div>
+                        </form>                                        
                     </div>
                 </section>
 
@@ -1061,235 +1079,159 @@
         </section>
     </div>
 
-<!-- Agenda -->
-<div class="container mx-auto flex items-start justify-center pt-10" id="agenda">
-    <section class="p-4 w-full max-w-5xl bg-white shadow-md rounded-lg">
-        <h2 id="monthTitle" class="text-xl font-semibold text-center mb-4">Mi Agenda - Octubre 2024</h2> <!-- Mes actual -->
+    <!-- Agenda -->
+    <div class="container mx-auto flex items-start justify-center pt-10" id="agenda">
+        <section class="p-4 w-full max-w-5xl bg-white shadow-md rounded-lg">
+            <h2 id="monthTitle" class="text-xl font-semibold text-center mb-4">Mi Agenda - Octubre 2024</h2> <!-- Mes actual -->
 
-        <!-- Contenedor para los enlaces de navegación -->
-        <div class="flex justify-end mb-2">
-            <span id="prevMonth" class="cursor-pointer text-blue-500 underline text-sm mr-2 hidden">◀</span> <!-- Solo el ícono -->
-            <span id="toggleView" class="cursor-pointer text-blue-500 underline text-xs mx-2">Cambiar a Vista Mensual</span> <!-- Tamaño de fuente más pequeño -->
-            <span id="nextMonth" class="cursor-pointer text-blue-500 underline text-sm hidden">▶</span> <!-- Solo el ícono -->
-        </div>
-
-        <!-- Contenido de la agenda -->
-        <div id="weeklyView" class="agenda-view">
-            <!-- Días de la semana -->
-            <div class="grid grid-cols-6 gap-2 text-center mb-4 mt-2">
-                <div></div> <!-- Espacio vacío para las horas -->
-                <div>Lunes 7</div>
-                <div>Martes 8</div>
-                <div>Miércoles 9</div>
-                <div>Jueves 10</div>
-                <div>Viernes 11</div>
+            <!-- Contenedor para los enlaces de navegación -->
+            <div class="flex justify-end mb-2">
+                <span id="prevMonth" class="cursor-pointer text-blue-500 underline text-sm mr-2 hidden">◀</span> <!-- Solo el ícono -->
+                <span id="toggleView" class="cursor-pointer text-blue-500 underline text-xs mx-2">Cambiar a Vista Mensual</span> <!-- Tamaño de fuente más pequeño -->
+                <span id="nextMonth" class="cursor-pointer text-blue-500 underline text-sm hidden">▶</span> <!-- Solo el ícono -->
             </div>
 
-            <!-- Horas y Citas -->
-            <div class="grid grid-cols-6 gap-2">
-                <!-- Horas en la columna izquierda -->
-                <div class="text-right pr-2">
-                    <div class="py-1 border-t">08:30</div>
-                    <div class="py-1 border-t">09:30</div>
-                    <div class="py-1 border-t">10:30</div>
-                    <div class="py-1 border-t">11:30</div>
-                    <div class="py-1 border-t">12:30</div>
-                    <div class="py-1 border-t">13:30</div>
-                    <div class="py-1 border-t">14:30</div>
-                    <div class="py-1 border-t">15:30</div>
-                    <div class="py-1 border-t">16:30</div>
-                    <div class="py-1 border-t">17:30</div>
+            <!-- Contenido de la agenda -->
+            <div id="weeklyView" class="agenda-view">
+                <!-- Días de la semana -->
+                <div class="grid grid-cols-6 gap-2 text-center mb-4 mt-2">
+                    <div></div> <!-- Espacio vacío para las horas -->
+                    <div>Lunes 7</div>
+                    <div>Martes 8</div>
+                    <div>Miércoles 9</div>
+                    <div>Jueves 10</div>
+                    <div>Viernes 11</div>
                 </div>
 
-                <!-- Citas para cada día (tarjetas más pequeñas y compactas) -->
-                <div class="border-l">
-                    <!-- Tarjeta para una cita de 11:00 a 12:00 -->
-                    <div class="border-t bg-yellow-100 text-yellow-700 rounded-md shadow-lg p-1" style="grid-row: 4 / span 2;">
-                        <p class="text-xs font-bold">11:00 - 12:00</p>
-                        <p class="text-sm font-semibold">COOKIE</p>
-                        <p class="text-xs">Yorkshire Terrier</p>
-                        <div class="flex items-center text-xs">
-                            <span class="mr-1 text-gray-500"><i class="fas fa-user"></i></span>
-                            <p>Fernanda Sanz</p>
-                        </div>
+                <!-- Horas y Citas -->
+                <div class="grid grid-cols-6 gap-2">
+                    <!-- Horas en la columna izquierda -->
+                    <div class="text-right pr-2">
+                        <div class="py-1 border-t">08:30</div>
+                        <div class="py-1 border-t">09:30</div>
+                        <div class="py-1 border-t">10:30</div>
+                        <div class="py-1 border-t">11:30</div>
+                        <div class="py-1 border-t">12:30</div>
+                        <div class="py-1 border-t">13:30</div>
+                        <div class="py-1 border-t">14:30</div>
+                        <div class="py-1 border-t">15:30</div>
+                        <div class="py-1 border-t">16:30</div>
+                        <div class="py-1 border-t">17:30</div>
                     </div>
-                    <div class="py-1 border-t"></div>
-                </div>
 
-                <div class="border-l">
-                    <!-- Tarjeta para una cita de 10:30 a 11:30 -->
-                    <div class="border-t bg-green-100 text-green-700 rounded-md shadow-lg p-1" style="grid-row: 3 / span 2;">
-                        <p class="text-xs font-bold">10:30 - 11:30</p>
-                        <p class="text-sm font-semibold">MANDARINA</p>
-                        <p class="text-xs">Gato</p>
-                        <div class="flex items-center text-xs">
-                            <span class="mr-1 text-gray-500"><i class="fas fa-user"></i></span>
-                            <p>Mario Pérez</p>
+                    <!-- Citas para cada día -->
+                    <div class="border-l">
+                        <div class="appointment-card border-t bg-yellow-100 text-yellow-700 rounded-md shadow-lg p-1 cursor-pointer" 
+                            style="grid-row: 4 / span 2;" 
+                            onclick="openModalWeek('Presencial', 'Fernanda Sanz', 'fernanda@example.com', '+56912345678', 'fas fa-dog', 'COOKIE', 'Yorkshire Terrier', 'Hembra', '11:00 AM', '12:00 PM', 'Consulta General', 'Revisión anual', '25 de Octubre 2024')">
+                            <p class="text-xs font-bold">11:00 - 12:00</p>
+                            <p class="text-sm font-semibold">COOKIE</p>
+                            <p class="text-xs">Yorkshire Terrier</p>
+                            <div class="flex items-center text-xs">
+                                <span class="mr-1 text-gray-500"><i class="fas fa-user"></i></span>
+                                <p>Fernanda Sanz</p>
+                            </div>
                         </div>
+                        <div class="py-1 border-t"></div>
                     </div>
-                    <div class="py-1 border-t"></div>
+
+                    <div class="border-l">
+                        <div class="appointment-card border-t bg-green-100 text-green-700 rounded-md shadow-lg p-1 cursor-pointer" 
+                            style="grid-row: 3 / span 2;" 
+                            onclick="openModalWeek('Presencial', 'Mario Pérez', 'mario@example.com', '+56987654321', 'fas fa-cat', 'MANDARINA', 'Gato', 'Macho', '10:30 AM', '11:30 AM', 'Consulta General', 'Revisión anual', '25 de Octubre 2024')">
+                            <p class="text-xs font-bold">10:30 - 11:30</p>
+                            <p class="text-sm font-semibold">MANDARINA</p>
+                            <p class="text-xs">Gato</p>
+                            <div class="flex items-center text-xs">
+                                <span class="mr-1 text-gray-500"><i class="fas fa-user"></i></span>
+                                <p>Mario Pérez</p>
+                            </div>
+                        </div>
+                        <div class="py-1 border-t"></div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Vista mensual (inicialmente oculta) -->
-        <div id="monthlyView" class="agenda-view hidden">
-            <div class="grid grid-cols-7 gap-2 text-center mb-4 mt-2">
-                <div>Dom</div>
-                <div>Lun</div>
-                <div>Mar</div>
-                <div>Mié</div>
-                <div>Jue</div>
-                <div>Vie</div>
-                <div>Sáb</div>
+            <!-- Vista mensual (inicialmente oculta) -->
+            <div id="monthlyView" class="agenda-view hidden">
+                <div class="grid grid-cols-7 gap-2 text-center mb-4 mt-2">
+                    <div>Dom</div>
+                    <div>Lun</div>
+                    <div>Mar</div>
+                    <div>Mié</div>
+                    <div>Jue</div>
+                    <div>Vie</div>
+                    <div>Sáb</div>
+                </div>
+                <div class="grid grid-cols-7 gap-2" id="calendarDays"></div>
             </div>
-            <div class="grid grid-cols-7 gap-2" id="calendarDays"></div>
-        </div>
-    </section>
-</div>
-<!-- Fin Agenda -->
+        </section>
 
-<script>
-// JavaScript para cambiar entre vistas
-const toggleButton = document.getElementById('toggleView');
-const prevMonthButton = document.getElementById('prevMonth');
-const nextMonthButton = document.getElementById('nextMonth');
-const weeklyView = document.getElementById('weeklyView');
-const monthlyView = document.getElementById('monthlyView');
-const calendarDays = document.getElementById('calendarDays');
-const monthTitle = document.getElementById('monthTitle');
-
-let currentYear = 2024;
-let currentMonth = 9; // Octubre (0-indexado)
-
-// Datos de citas para mostrar en el calendario
-const appointments = {
-    7: [
-        { time: '11:00 - 12:00', pet: 'COOKIE', color: 'bg-yellow-100' },
-        { time: '13:00 - 14:00', pet: 'BELLA', color: 'bg-blue-100' }
-    ],
-    8: [
-        { time: '10:30 - 11:30', pet: 'MANDARINA', color: 'bg-green-100' },
-        { time: '15:00 - 16:00', pet: 'LUNA', color: 'bg-red-100' },
-    ],
-    9: [
-        { time: '09:00 - 10:00', pet: 'MAX', color: 'bg-purple-100' },
-    ],
-    10: [
-        { time: '14:00 - 15:00', pet: 'RUFUS', color: 'bg-orange-100' },
-    ],
-    // Agrega más citas aquí con la misma estructura
-};
-
-// Array de nombres de meses
-const monthNames = [
-    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
-    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-];
-
-// Función para generar días del mes
-function generateCalendar(year, month) {
-    // Limpiar los días del calendario
-    calendarDays.innerHTML = '';
-
-    // Cambiar el título del mes
-    monthTitle.textContent = `Mi Agenda - ${monthNames[month]} ${year}`;
-
-    // Obtener el primer día del mes y el número de días
-    const firstDay = new Date(year, month, 1);
-    const totalDays = new Date(year, month + 1, 0).getDate();
-    const startDay = firstDay.getDay(); // Día de la semana (0-6)
-
-    // Agregar días vacíos antes del primer día del mes
-    for (let i = 0; i < startDay; i++) {
-        const emptyDiv = document.createElement('div');
-        calendarDays.appendChild(emptyDiv);
-    }
-
-    // Agregar días del mes
-    for (let day = 1; day <= totalDays; day++) {
-        const dayDiv = document.createElement('div');
-        dayDiv.className = 'border p-1 relative'; // Hacer que el padding sea más pequeño
-
-        // Tachado solo para sábados y domingos
-        const dayOfWeek = (startDay + day - 1) % 7; // Obtener el índice del día de la semana
-        if (dayOfWeek === 0 || dayOfWeek === 6) { // Domingo (0) y Sábado (6)
-            dayDiv.classList.add('weekend');
-        } else {
-            // Solo crear tarjetas para días de semana (lunes a viernes)
-            dayDiv.textContent = day;
-
-            // Mostrar citas si hay
-            if (appointments[day]) {
-                const appointmentList = document.createElement('div');
-                appointmentList.className = 'mt-1'; // Margen superior para la lista de citas
-
-                appointments[day].forEach(appointment => {
-                    const appointmentDiv = document.createElement('div');
-                    appointmentDiv.className = `rounded-md shadow-md p-1 text-xs ${appointment.color} mb-1`;
-                    appointmentDiv.textContent = `${appointment.time}: ${appointment.pet}`;
-                    appointmentList.appendChild(appointmentDiv);
-                });
-
-                dayDiv.appendChild(appointmentList);
-            }
-        }
-
-        calendarDays.appendChild(dayDiv);
-    }
-}
-
-// Inicializar el calendario
-generateCalendar(currentYear, currentMonth);
-
-// Cambiar entre vista semanal y mensual
-toggleButton.addEventListener('click', () => {
-    if (weeklyView.classList.contains('hidden')) {
-        weeklyView.classList.remove('hidden');
-        monthlyView.classList.add('hidden');
-        toggleButton.textContent = 'Cambiar a Vista Mensual';
-        prevMonthButton.classList.add('hidden'); // Ocultar botones de navegación en vista semanal
-        nextMonthButton.classList.add('hidden');
-    } else {
-        weeklyView.classList.add('hidden');
-        monthlyView.classList.remove('hidden');
-        toggleButton.textContent = 'Cambiar a Vista Semanal';
-        prevMonthButton.classList.remove('hidden'); // Mostrar botones de navegación en vista mensual
-        nextMonthButton.classList.remove('hidden');
-    }
-});
-
-// Navegar entre meses
-prevMonthButton.addEventListener('click', () => {
-    currentMonth--;
-    if (currentMonth < 0) {
-        currentMonth = 11;
-        currentYear--;
-    }
-    generateCalendar(currentYear, currentMonth);
-});
-
-nextMonthButton.addEventListener('click', () => {
-    currentMonth++;
-    if (currentMonth > 11) {
-        currentMonth = 0;
-        currentYear++;
-    }
-    generateCalendar(currentYear, currentMonth);
-});
-</script>
-
-<style>
-.weekend {
-    text-decoration: line-through;
-    color: gray;
-}
-</style>
-<!--Fin Agenda -->
+        <!-- Modal semanal -->
+        <!-- Modal (inicialmente oculto) -->
+        <div id="modalweek" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+            <div class="bg-white rounded-lg p-6 w-96 shadow-xl relative">
+                <!-- Botón de cerrar -->
+                <button class="absolute top-2 right-2 text-gray-500 hover:text-gray-700" onclick="closeModalWeek()">
+                    <i class="fas fa-times"></i> <!-- Ícono de cerrar -->
+                </button>
+        
+                <!-- Header del modal -->
+                <div class="flex justify-between items-center mb-4 border-b pb-2">
+                    <h2 class="text-xl font-bold" id="modalweek-type">Cita: Presencial</h2> <!-- Puedes cambiar a 'Online' dinámicamente -->
+                    <span class="text-gray-500 text-sm" id="modalweek-date-icon"><i class="fas fa-calendar"></i> <span id="modalweek-date">25 de Octubre 2024</span></span>
+                </div>
+        
+                <!-- Información del dueño -->
+                <div class="mb-4 border-b border-gray-300 pb-2">
+                    <p class="text-lg font-semibold" id="modalweek-owner">Fernanda Sanz</p>
+                    <p class="text-sm text-gray-600">
+                        <i class="fas fa-envelope mr-1"></i> 
+                        <span id="modalweek-email">fernanda@example.com</span>
+                    </p>
+                    <p class="text-sm text-gray-600">
+                        <i class="fas fa-phone mr-1"></i> 
+                        <span id="modalweek-phone">+56912345678</span>
+                    </p>
+                </div>
+        
+                <!-- Información de la mascota -->
+                <div class="flex items-center mb-4 border-b border-gray-300 pb-2">
+                    <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mr-4">
+                        <i id="modalweek-pet-icon" class="fas fa-dog text-2xl text-yellow-500"></i> <!-- Cambiará entre 'fas fa-cat' o 'fas fa-dog' -->
+                    </div>
+                    <div>
+                        <p class="text-lg font-semibold" id="modalweek-pet">COOKIE</p>
+                        <p class="text-sm text-gray-600" id="modalweek-breed">Yorkshire Terrier, Hembra</p> <!-- Sexo dinámico -->
+                    </div>
+                </div>
+        
+                <!-- Detalles de la cita -->
+                <div class="mb-4 text-sm text-gray-600 space-y-2 border-gray-300 pb-2">
+                    <p>
+                        <i class="fas fa-clock mr-1"></i> Hora Inicio:  
+                        <input id="modalweek-start-time" type="time" value="11:00" disabled />
+                    </p>
+                    <p>
+                        <i class="fas fa-clock mr-1"></i> Hora Fin:  
+                        <input id="modalweek-end-time" type="time" value="12:00" disabled />
+                    </p>                    
+                    <p><i class="fas fa-info-circle mr-1"></i> Tipo: <span id="modalweek-type-info">Consulta General</span></p>
+                    <p><i class="fas fa-file-alt mr-1"></i> Motivo: <span id="modalweek-reason">Revisión anual</span></p>
+                </div>
+        
+                <!-- Botones de acción -->
+                <div class="flex justify-between">
+                    <button class="bg-red-500 text-white px-4 py-2 rounded-md" onclick="cancelAppointmentWeek()">Cancelar</button>
+                    <button id="editTime" class="bg-green-400 text-white px-4 py-2 rounded-md" onclick="editAppointmentWeek()">Editar</button>
+            </div>
+        </div>        
+    </div>
+    <!-- Fin Agenda -->
 
 
 
-    <script src="{{ url_for('static', filename='js/profile_vet.js') }}"></script>
+<script src="{{ url_for('static', filename='js/profile_vet.js') }}"></script>
 
 </body>
 

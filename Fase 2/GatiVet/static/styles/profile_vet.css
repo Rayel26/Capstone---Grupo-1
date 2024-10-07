@@ -96,4 +96,15 @@ input {
 .appointment-card {
     padding: 4px;
     cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+.appointment-card:hover {
+    transform: scale(1.05);
+}
+
+/* Ocultar el icono del reloj en el input */
+input[type="time"]::-webkit-inner-spin-button,
+input[type="time"]::-webkit-calendar-picker-indicator {
+    display: none; /* Ocultar el icono de calendario */
 }

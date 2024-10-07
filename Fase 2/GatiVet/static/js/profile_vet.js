@@ -400,92 +400,6 @@ saveStatusBtn.addEventListener('click', function() {
 
 //Fin de script relacionado a datos de mascotas
 
-//Inicio script de Agenda
-
-const agendaData = {
-    octubre: [
-        { nombre: "Rocco", hora: "08:30 a. m.", rut: "12345678-9", estado: "Confirmado" },
-        { nombre: "Milo", hora: "10:30 a. m.", rut: "98765432-1", estado: "Pendiente" },
-        { nombre: "Luna", hora: "12:30 p. m.", rut: "11223344-5", estado: "Cancelado" },
-        { nombre: "Bobby", hora: "02:30 p. m.", rut: "55667788-0", estado: "Confirmado" },
-        { nombre: "Rocky", hora: "04:30 p. m.", rut: "22334455-6", estado: "Pendiente" },
-        { nombre: "Bella", hora: "08:30 a. m.", rut: "66778899-0", estado: "Cancelado" },
-        { nombre: "Daisy", hora: "10:30 a. m.", rut: "33445566-7", estado: "Confirmado" },
-        { nombre: "Charlie", hora: "12:30 p. m.", rut: "77889900-2", estado: "Pendiente" },
-        { nombre: "Coco", hora: "02:30 p. m.", rut: "44556677-8", estado: "Confirmado" },
-        { nombre: "Max", hora: "04:30 p. m.", rut: "88990011-3", estado: "Cancelado" },
-    ],
-    noviembre: [
-        { nombre: "Rocco", hora: "08:30 a. m.", rut: "12345678-9", estado: "Pendiente" },
-        { nombre: "Milo", hora: "10:30 a. m.", rut: "98765432-1", estado: "Confirmado" },
-        { nombre: "Luna", hora: "12:30 p. m.", rut: "11223344-5", estado: "Cancelado" },
-        { nombre: "Bobby", hora: "02:30 p. m.", rut: "55667788-0", estado: "Pendiente" },
-        { nombre: "Rocky", hora: "04:30 p. m.", rut: "22334455-6", estado: "Confirmado" },
-        { nombre: "Bella", hora: "08:30 a. m.", rut: "66778899-0", estado: "Cancelado" },
-        { nombre: "Daisy", hora: "10:30 a. m.", rut: "33445566-7", estado: "Pendiente" },
-        { nombre: "Charlie", hora: "12:30 p. m.", rut: "77889900-2", estado: "Confirmado" },
-        { nombre: "Coco", hora: "02:30 p. m.", rut: "44556677-8", estado: "Pendiente" },
-        { nombre: "Max", hora: "04:30 p. m.", rut: "88990011-3", estado: "Cancelado" },
-    ],
-    diciembre: [
-        { nombre: "Rocco", hora: "08:30 a. m.", rut: "12345678-9", estado: "Confirmado" },
-        { nombre: "Milo", hora: "10:30 a. m.", rut: "98765432-1", estado: "Confirmado" },
-        { nombre: "Luna", hora: "12:30 p. m.", rut: "11223344-5", estado: "Pendiente" },
-        { nombre: "Bobby", hora: "02:30 p. m.", rut: "55667788-0", estado: "Cancelado" },
-        { nombre: "Rocky", hora: "04:30 p. m.", rut: "22334455-6", estado: "Confirmado" },
-        { nombre: "Bella", hora: "08:30 a. m.", rut: "66778899-0", estado: "Pendiente" },
-        { nombre: "Daisy", hora: "10:30 a. m.", rut: "33445566-7", estado: "Cancelado" },
-        { nombre: "Charlie", hora: "12:30 p. m.", rut: "77889900-2", estado: "Confirmado" },
-        { nombre: "Coco", hora: "02:30 p. m.", rut: "44556677-8", estado: "Pendiente" },
-        { nombre: "Max", hora: "04:30 p. m.", rut: "88990011-3", estado: "Cancelado" },
-    ]
-};
-
-function updateAgenda() {
-    const month = document.getElementById("month-selector").value;
-    const postitsContainer = document.getElementById("agenda-postits");
-    postitsContainer.innerHTML = ""; // Limpiar el contenido actual
-
-    const data = agendaData[month];
-    data.forEach(item => {
-        const color = getColorByState(item.estado);
-        const postit = document.createElement("div");
-        postit.className = `postit p-4 rounded-md shadow-md ${color}`; // Añadir clase 'postit'
-        postit.innerHTML = `
-            <h3 class="font-semibold">${item.nombre}</h3>
-            <p><strong>Fecha:</strong> ${month}</p>
-            <p><strong>Hora:</strong> ${item.hora}</p>
-            <p><strong>RUT:</strong> ${item.rut}</p>
-            <p><strong>Estado:</strong> ${item.estado}</p>
-            <p><strong>Doctor:</strong> Nicolás Villalba</p> <!-- Agregar nombre del doctor -->
-        `;
-        postitsContainer.appendChild(postit);
-    });
-}
-
-function getColorByState(state) {
-    switch (state) {
-        case "Confirmado":
-            return "bg-green-200"; // Color para estado confirmado
-        case "Pendiente":
-            return "bg-yellow-200"; // Color para estado pendiente
-        case "Cancelado":
-            return "bg-red-200"; // Color para estado cancelado
-        default:
-            return "bg-gray-200"; // Color por defecto
-    }
-}
-
-
-
-
-
-
-
-// Llamar a la función al cargar la página para mostrar el mes inicial
-updateAgenda();
-//Fin script de Agenda
-
 ////////////////////////////////
 //Inicio de Script de Ficha
 
@@ -514,21 +428,6 @@ document.getElementById('confirmSave').addEventListener('click', () => {
         patientWeight: document.getElementById('patientWeight').value,
         patientColor: document.getElementById('patientColor').value,
         patientFurType: document.getElementById('patientFurType').value,
-        otherIdentifiers: document.getElementById('otherIdentifiers').value,
-        zootechnicalPurpose: document.getElementById('zootechnicalPurpose').value,
-        origin: document.getElementById('origin').value,
-        diet: document.getElementById('diet').value,
-        previousDiseases: document.getElementById('previousDiseases').value,
-        isSterilized: document.getElementById('isSterilized').value,
-        litters: document.getElementById('litters').value,
-        previousSurgeries: document.getElementById('previousSurgeries').value,
-        vaccinationScheme: document.getElementById('vaccinationScheme').value,
-        lastDeworming: document.getElementById('lastDeworming').value,
-        recentTreatments: document.getElementById('recentTreatments').value,
-        recentTravels: document.getElementById('recentTravels').value,
-        livesWithOtherAnimals: document.getElementById('livesWithOtherAnimals').value,
-        whichAnimals: document.getElementById('whichAnimals').value,
-        animalBehavior: document.getElementById('animalBehavior').value,
         consultationReason: document.getElementById('consultationReason').value
     };
 
@@ -570,21 +469,6 @@ window.onload = () => {
         document.getElementById('patientWeight').value = patientData.patientWeight;
         document.getElementById('patientColor').value = patientData.patientColor;
         document.getElementById('patientFurType').value = patientData.patientFurType;
-        document.getElementById('otherIdentifiers').value = patientData.otherIdentifiers;
-        document.getElementById('zootechnicalPurpose').value = patientData.zootechnicalPurpose;
-        document.getElementById('origin').value = patientData.origin;
-        document.getElementById('diet').value = patientData.diet;
-        document.getElementById('previousDiseases').value = patientData.previousDiseases;
-        document.getElementById('isSterilized').value = patientData.isSterilized;
-        document.getElementById('litters').value = patientData.litters;
-        document.getElementById('previousSurgeries').value = patientData.previousSurgeries;
-        document.getElementById('vaccinationScheme').value = patientData.vaccinationScheme;
-        document.getElementById('lastDeworming').value = patientData.lastDeworming;
-        document.getElementById('recentTreatments').value = patientData.recentTreatments;
-        document.getElementById('recentTravels').value = patientData.recentTravels;
-        document.getElementById('livesWithOtherAnimals').value = patientData.livesWithOtherAnimals;
-        document.getElementById('whichAnimals').value = patientData.whichAnimals;
-        document.getElementById('animalBehavior').value = patientData.animalBehavior;
         document.getElementById('consultationReason').value = patientData.consultationReason;
     }
 };
@@ -641,4 +525,306 @@ function guardarCambiosDesparasitacion(desparasitacionId) {
     document.getElementById(`desparasitacionVeterinario${desparasitacionId}`).textContent = veterinario;
     // Por ejemplo, simplemente mostrar una alerta como confirmación
     closeModal(`modalDesparasitacion${desparasitacionId}`); // Cerrar el modal
+}
+
+//////////////////////////////////////////////////
+//Script para Agenda
+
+// JavaScript para cambiar entre vistas
+const toggleButton = document.getElementById('toggleView');
+const prevMonthButton = document.getElementById('prevMonth');
+const nextMonthButton = document.getElementById('nextMonth');
+const weeklyView = document.getElementById('weeklyView');
+const monthlyView = document.getElementById('monthlyView');
+const calendarDays = document.getElementById('calendarDays');
+const monthTitle = document.getElementById('monthTitle');
+
+let currentYear = 2024;
+let currentMonth = 9; // Octubre (0-indexado)
+
+// Datos de citas para mostrar en el calendario
+const appointments = {
+    7: [
+        { time: '11:00 - 12:00', pet: 'COOKIE', color: 'bg-yellow-100' },
+        { time: '13:00 - 14:00', pet: 'BELLA', color: 'bg-blue-100' }
+    ],
+    8: [
+        { time: '10:30 - 11:30', pet: 'MANDARINA', color: 'bg-green-100' },
+        { time: '15:00 - 16:00', pet: 'LUNA', color: 'bg-red-100' },
+    ],
+    9: [
+        { time: '09:00 - 10:00', pet: 'MAX', color: 'bg-purple-100' },
+    ],
+    10: [
+        { time: '14:00 - 15:00', pet: 'RUFUS', color: 'bg-orange-100' },
+    ],
+    // Agrega más citas aquí con la misma estructura
+};
+
+// Array de nombres de meses
+const monthNames = [
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+];
+
+// Función para generar días del mes
+function generateCalendar(year, month) {
+    // Limpiar los días del calendario
+    calendarDays.innerHTML = '';
+
+    // Cambiar el título del mes
+    monthTitle.textContent = `Mi Agenda - ${monthNames[month]} ${year}`;
+
+    // Obtener el primer día del mes y el número de días
+    const firstDay = new Date(year, month, 1);
+    const totalDays = new Date(year, month + 1, 0).getDate();
+    const startDay = firstDay.getDay(); // Día de la semana (0-6)
+
+    // Agregar días vacíos antes del primer día del mes
+    for (let i = 0; i < startDay; i++) {
+        const emptyDiv = document.createElement('div');
+        calendarDays.appendChild(emptyDiv);
+    }
+
+    // Agregar días del mes
+    for (let day = 1; day <= totalDays; day++) {
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'border p-1 relative'; // Hacer que el padding sea más pequeño
+
+        // Tachado solo para sábados y domingos
+        const dayOfWeek = (startDay + day - 1) % 7; // Obtener el índice del día de la semana
+        if (dayOfWeek === 0 || dayOfWeek === 6) { // Domingo (0) y Sábado (6)
+            dayDiv.classList.add('weekend');
+        } else {
+            // Solo crear tarjetas para días de semana (lunes a viernes)
+            dayDiv.textContent = day;
+
+            // Mostrar citas si hay
+            if (appointments[day]) {
+                const appointmentList = document.createElement('div');
+                appointmentList.className = 'mt-1'; // Margen superior para la lista de citas
+
+                appointments[day].forEach(appointment => {
+                    const appointmentDiv = document.createElement('div');
+                    appointmentDiv.className = `appointment-card rounded-md shadow-md p-1 text-xs ${appointment.color} mb-1`;
+                    appointmentDiv.textContent = `${appointment.time}: ${appointment.pet}`;
+                    appointmentList.appendChild(appointmentDiv);
+                });
+
+                dayDiv.appendChild(appointmentList);
+            }
+        }
+
+        calendarDays.appendChild(dayDiv);
+    }
+}
+
+// Inicializar el calendario
+generateCalendar(currentYear, currentMonth);
+
+// Cambiar entre vista semanal y mensual
+toggleButton.addEventListener('click', () => {
+    if (weeklyView.classList.contains('hidden')) {
+        weeklyView.classList.remove('hidden');
+        monthlyView.classList.add('hidden');
+        toggleButton.textContent = 'Cambiar a Vista Mensual';
+        prevMonthButton.classList.add('hidden'); // Ocultar botones de navegación en vista semanal
+        nextMonthButton.classList.add('hidden');
+    } else {
+        weeklyView.classList.add('hidden');
+        monthlyView.classList.remove('hidden');
+        toggleButton.textContent = 'Cambiar a Vista Semanal';
+        prevMonthButton.classList.remove('hidden'); // Mostrar botones de navegación en vista mensual
+        nextMonthButton.classList.remove('hidden');
+    }
+});
+
+// Navegar entre meses
+prevMonthButton.addEventListener('click', () => {
+    currentMonth--;
+    if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+    }
+    generateCalendar(currentYear, currentMonth);
+});
+
+nextMonthButton.addEventListener('click', () => {
+    currentMonth++;
+    if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+    }
+    generateCalendar(currentYear, currentMonth);
+});
+
+//Modal de la agenda
+
+// Función para abrir el modal con detalles dinámicos
+function openModalWeek(type, owner, email, phone, petIcon, pet, breed, sex, startTime, endTime, typeInfo, reason, date) {
+    document.getElementById('modalweek-type').innerText = `Cita: ${type}`;
+    document.getElementById('modalweek-owner').innerText = owner;
+    document.getElementById('modalweek-email').innerText = email;
+    document.getElementById('modalweek-phone').innerText = phone;
+    document.getElementById('modalweek-pet-icon').className = petIcon; // Icono de perro o gato
+    document.getElementById('modalweek-pet').innerText = pet;
+    document.getElementById('modalweek-breed').innerText = `${breed}, ${sex}`;
+    document.getElementById('modalweek-start-time').innerText = startTime;
+    document.getElementById('modalweek-end-time').innerText = endTime;
+    document.getElementById('modalweek-type-info').innerText = typeInfo;
+    document.getElementById('modalweek-reason').innerText = reason;
+    document.getElementById('modalweek-date').innerText = date;
+    document.getElementById('modalweek').classList.remove('hidden');
+}
+
+// Función para cerrar el modal
+function closeModalWeek() {
+    document.getElementById('modalweek').classList.add('hidden');
+}
+
+// Función para cancelar la cita
+function cancelAppointmentWeek() {
+    const appointmentCard = document.querySelector('.appointment-card[onclick*="Presencial"]'); // Selecciona la tarjeta actual
+    if (appointmentCard) {
+        appointmentCard.remove(); // Elimina la tarjeta visualmente
+    }
+    alert("Cita cancelada");
+    closeModalWeek();
+}
+
+
+// Variables para almacenar el estado de la cita
+let isEditing = false;
+
+function editAppointmentWeek() {
+    const startTimeInput = document.getElementById("modalweek-start-time");
+    const endTimeInput = document.getElementById("modalweek-end-time");
+    const editTime = document.getElementById("editTime");
+
+    if (isEditing) {
+        // Guardar los cambios
+        const startTime = startTimeInput.value;
+        const endTime = endTimeInput.value;
+
+        // Aquí podrías realizar una acción para guardar los datos, como enviar a un servidor.
+        console.log("Guardando cambios:", startTime, endTime);
+
+        // Alertar que los cambios se realizaron correctamente
+        alert("Los cambios se realizaron correctamente.");
+
+        // Cambiar el texto del botón de nuevo a "Editar"
+        editTime.textContent = "Editar";
+        // Deshabilitar los inputs
+        startTimeInput.disabled = true;
+        endTimeInput.disabled = true;
+    } else {
+        // Activar la edición
+        editTime.textContent = "Guardar Cambios";
+        startTimeInput.disabled = false;
+        endTimeInput.disabled = false;
+    }
+
+    // Alternar el estado de edición
+    isEditing = !isEditing;
+}
+
+// Selecciona el input de tiempo
+const timeInput = document.getElementById('consultationStartTime');
+
+// Agrega un evento de clic al input
+timeInput.addEventListener('click', function () {
+    this.showPicker(); // Muestra el selector de tiempo (timepicker)
+});
+
+
+/////////////////////////////////////////////
+//Script para agregar vacunas
+
+function openAddVaccineModal() {
+    document.getElementById('addVaccineModal').classList.remove('hidden');
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.add('hidden');
+}
+
+function addVaccine() {
+    // Obtener valores de los campos del formulario
+    const fecha = document.getElementById('vacunaFecha').value;
+    const nombre = document.getElementById('vacunaNombre').value;
+    const dosis = document.getElementById('vacunaDosis').value;
+    const veterinario = document.getElementById('vacunaVeterinario').value;
+
+    // Verificar que los campos no estén vacíos
+    if (!fecha || !nombre || !dosis || !veterinario) {
+        alert('Por favor, completa todos los campos.');
+        return;
+    }
+
+    // Crear una nueva fila en la tabla
+    const tbody = document.getElementById('vacunasTableBody'); // Cambié a usar el ID
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+        <td class="border border-gray-300 px-2 py-1">${fecha}</td>
+        <td class="border border-gray-300 px-2 py-1">${nombre}</td>
+        <td class="border border-gray-300 px-2 py-1">${dosis}</td>
+        <td class="border border-gray-300 px-2 py-1">${veterinario}</td>
+        <td class="border border-gray-300 px-2 py-1">
+            <button class="text-green-500 hover:underline" onclick="openModal('modalVacunaN')">Ver detalles</button>
+        </td>
+    `;
+    tbody.appendChild(newRow);
+
+    // Cerrar el modal
+    closeModal();
+
+    // Limpiar el formulario
+    document.getElementById('addVaccineForm').reset();
+}
+
+//Script para agregar desparasitaciones
+
+function openDesparasitacionModal() {
+    document.getElementById('desparasitacionModal').classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('desparasitacionModal').classList.add('hidden');
+}
+
+function addDesparasitacion() {
+    // Obtener los valores del modal
+    const fecha = document.getElementById('newDesparasitacionFecha').value;
+    const producto = document.getElementById('newDesparasitacionProducto').value;
+    const dosis = document.getElementById('newDesparasitacionDosis').value;
+    const veterinario = document.getElementById('newDesparasitacionVeterinario').value;
+
+    // Validar que todos los campos estén llenos
+    if (!fecha || !producto || !dosis || !veterinario) {
+        alert("Por favor, completa todos los campos.");
+        return;
+    }
+
+    // Crear una nueva fila en la tabla
+    const tbody = document.getElementById('desparasitacionesTableBody');
+    const newRow = document.createElement('tr');
+    
+    newRow.innerHTML = `
+        <td class="border border-gray-300 px-2 py-1">${fecha}</td>
+        <td class="border border-gray-300 px-2 py-1">${producto}</td>
+        <td class="border border-gray-300 px-2 py-1">${dosis}</td>
+        <td class="border border-gray-300 px-2 py-1">${veterinario}</td>
+        <td class="border border-gray-300 px-2 py-1">
+            <button class="text-green-500 hover:underline" onclick="openModal('modalDesparasitacionNew')">Ver detalles</button>
+        </td>
+    `;
+
+    // Agregar la nueva fila al tbody
+    tbody.appendChild(newRow);
+
+    // Limpiar los campos del modal
+    document.getElementById('newDesparasitacionFecha').value = '';
+    document.getElementById('newDesparasitacionProducto').value = '';
+    document.getElementById('newDesparasitacionDosis').value = '';
+    document.getElementById('newDesparasitacionVeterinario').value = ''
 }
