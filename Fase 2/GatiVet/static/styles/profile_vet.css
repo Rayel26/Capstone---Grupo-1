@@ -108,3 +108,105 @@ input[type="time"]::-webkit-inner-spin-button,
 input[type="time"]::-webkit-calendar-picker-indicator {
     display: none; /* Ocultar el icono de calendario */
 }
+
+@media screen and (max-width: 640px) {
+    table {
+        font-size: 0.875rem; /* Tamaño de texto más pequeño */
+    }
+    th, td {
+        padding: 0.5rem; /* Reducir el padding */
+    }
+}
+
+/* Ajustes para pantallas pequeñas de hasta 360px */
+@media (max-width: 360px) {
+    /* Contenedor general */
+    .container {
+        padding: 2px;
+    }
+    
+    /* Sección de la agenda */
+    section {
+        padding: 8px;
+        font-size: 0.75rem; /* Texto más pequeño */
+    }
+    
+    /* Título del mes */
+    #monthTitle {
+        font-size: 1rem; /* Más pequeño */
+    }
+    
+    /* Enlaces de navegación (vista mensual/semanal) */
+    #prevMonth, #nextMonth, #toggleView {
+        font-size: 0.6rem; /* Reducir tamaño del texto */
+    }
+    
+    /* Días de la semana */
+    .agenda-view div {
+        font-size: 0.7rem; /* Tamaño más pequeño */
+    }
+
+    /* Horas */
+    .grid div {
+        font-size: 0.6rem;
+        padding: 0.5rem 0;
+    }
+    
+    /* Modal */
+    #modalweek {
+        width: 100%; /* Ajustar el ancho para pantallas pequeñas */
+        padding: 10px;
+    }
+    
+    #modalweek h2 {
+        font-size: 1rem; /* Título más pequeño */
+    }
+    
+    #modalweek p {
+        font-size: 0.7rem; /* Reducir el tamaño del texto */
+    }
+
+    /* Botones del modal */
+    #modalweek button {
+        padding: 6px 10px; /* Reducir tamaño de botones */
+        font-size: 0.7rem;
+    }
+}
+
+/* Para pantallas de hasta 600px */
+@media (max-width: 600px) {
+    .appointment-card p {
+        font-size: 8px; /* Tamaño del texto general aún más pequeño */
+    }
+    .appointment-card .font-semibold {
+        font-size: 9px; /* Reducir aún más el tamaño de la fuente del nombre de la mascota */
+    }
+    .appointment-card .font-bold {
+        font-size: 9px; /* Reducir aún más el tamaño de la fuente del horario */
+    }
+    .appointment-card .flex p {
+        font-size: 8px; /* Reducir aún más el texto del nombre del dueño */
+    }
+    .appointment-card {
+        padding: 0.25rem; /* Ajustar el padding para que ocupe aún menos espacio */
+    }
+}
+
+/* Para pantallas de hasta 360px */
+@media (max-width: 360px) {
+    .appointment-card p {
+        font-size: 8px; /* Tamaño del texto general aún más pequeño */
+    }
+    .appointment-card .font-semibold {
+        font-size: 9px; /* Reducir aún más el tamaño de la fuente del nombre de la mascota */
+    }
+    .appointment-card .font-bold {
+        font-size: 9px; /* Reducir aún más el tamaño de la fuente del horario */
+    }
+    .appointment-card .flex p {
+        font-size: 8px; /* Reducir aún más el texto del nombre del dueño */
+    }
+    .appointment-card {
+        padding: 0.25rem; /* Ajustar el padding para que ocupe aún menos espacio */
+    }
+}

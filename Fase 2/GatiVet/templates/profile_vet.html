@@ -179,82 +179,80 @@
 
                 <div class="bg-white p-4 rounded-lg shadow flex items-center mt-2 w-full">
                     <div class="mt-4 flex flex-col gap-4 w-full">
-                        <h2 class="font-bold text-lg">Recordatorios</h2> <!-- Encabezado de Recordatorios aquí -->
+                        <h2 class="font-bold text-lg">Recordatorios</h2>
                         <div class="bg-gray-100 p-2 rounded-md shadow">
                             <h3 class="font-semibold text-sm">Atenciones Pasadas</h3>
-                            <table class="min-w-full mt-2 border border-gray-300">
-                                <thead>
-                                    <tr>
-                                        <th class="border border-gray-300 p-1 text-sm text-left">Fecha</th>
-                                        <th class="border border-gray-300 p-1 text-sm text-left">Detalle</th>
-                                        <th class="border border-gray-300 p-1 text-sm text-left">Mascota</th>
-                                        <th class="border border-gray-300 p-1 text-sm text-left">Dueño</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="border border-gray-300 p-1 text-sm">01/01/2024</td>
-                                        <td class="border border-gray-300 p-1 text-sm">Atención 1: Detalle de atención
-                                            pasada</td>
-                                        <td class="border border-gray-300 p-1 text-sm">Mascota 1</td>
-                                        <td class="border border-gray-300 p-1 text-sm">Dueño 1</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border border-gray-300 p-1 text-sm">01/02/2024</td>
-                                        <td class="border border-gray-300 p-1 text-sm">Atención 2: Detalle de atención
-                                            pasada</td>
-                                        <td class="border border-gray-300 p-1 text-sm">Mascota 2</td>
-                                        <td class="border border-gray-300 p-1 text-sm">Dueño 2</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border border-gray-300 p-1 text-sm">01/03/2024</td>
-                                        <td class="border border-gray-300 p-1 text-sm">Atención 3: Detalle de atención
-                                            pasada</td>
-                                        <td class="border border-gray-300 p-1 text-sm">Mascota 3</td>
-                                        <td class="border border-gray-300 p-1 text-sm">Dueño 3</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full mt-2 border border-gray-300 table-fixed">
+                                    <thead>
+                                        <tr>
+                                            <th class="border border-gray-300 p-1 text-sm text-left">Fecha</th>
+                                            <th class="border border-gray-300 p-1 text-sm text-left">Detalle</th>
+                                            <th class="border border-gray-300 p-1 text-sm text-left">Mascota</th>
+                                            <th class="border border-gray-300 p-1 text-sm text-left">Dueño</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="border border-gray-300 p-1 text-sm">01/01/2024</td>
+                                            <td class="border border-gray-300 p-1 text-sm">Atención 1: Detalle de atención pasada</td>
+                                            <td class="border border-gray-300 p-1 text-sm">Mascota 1</td>
+                                            <td class="border border-gray-300 p-1 text-sm">Dueño 1</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border border-gray-300 p-1 text-sm">01/02/2024</td>
+                                            <td class="border border-gray-300 p-1 text-sm">Atención 2: Detalle de atención pasada</td>
+                                            <td class="border border-gray-300 p-1 text-sm">Mascota 2</td>
+                                            <td class="border border-gray-300 p-1 text-sm">Dueño 2</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border border-gray-300 p-1 text-sm">01/03/2024</td>
+                                            <td class="border border-gray-300 p-1 text-sm">Atención 3: Detalle de atención pasada</td>
+                                            <td class="border border-gray-300 p-1 text-sm">Mascota 3</td>
+                                            <td class="border border-gray-300 p-1 text-sm">Dueño 3</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="bg-gray-100 p-2 rounded-md shadow">
                             <h3 class="font-semibold text-sm">Atenciones Futuras</h3>
-                            <table class="min-w-full mt-2 border border-gray-300">
-                                <thead>
-                                    <tr>
-                                        <th class="border border-gray-300 p-1 text-sm text-left">Fecha</th>
-                                        <th class="border border-gray-300 p-1 text-sm text-left">Detalle</th>
-                                        <th class="border border-gray-300 p-1 text-sm text-left">Mascota</th>
-                                        <th class="border border-gray-300 p-1 text-sm text-left">Dueño</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="border border-gray-300 p-1 text-sm">01/04/2024</td>
-                                        <td class="border border-gray-300 p-1 text-sm">Atención 1: Detalle de
-                                            atención futura</td>
-                                        <td class="border border-gray-300 p-1 text-sm">Mascota 1</td>
-                                        <td class="border border-gray-300 p-1 text-sm">Dueño 1</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border border-gray-300 p-1 text-sm">01/05/2024</td>
-                                        <td class="border border-gray-300 p-1 text-sm">Atención 2: Detalle de
-                                            atención futura</td>
-                                        <td class="border border-gray-300 p-1 text-sm">Mascota 2</td>
-                                        <td class="border border-gray-300 p-1 text-sm">Dueño 2</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border border-gray-300 p-1 text-sm">01/06/2024</td>
-                                        <td class="border border-gray-300 p-1 text-sm">Atención 3: Detalle de
-                                            atención futura</td>
-                                        <td class="border border-gray-300 p-1 text-sm">Mascota 3</td>
-                                        <td class="border border-gray-300 p-1 text-sm">Dueño 3</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full mt-2 border border-gray-300 table-fixed">
+                                    <thead>
+                                        <tr>
+                                            <th class="border border-gray-300 p-1 text-sm text-left">Fecha</th>
+                                            <th class="border border-gray-300 p-1 text-sm text-left">Detalle</th>
+                                            <th class="border border-gray-300 p-1 text-sm text-left">Mascota</th>
+                                            <th class="border border-gray-300 p-1 text-sm text-left">Dueño</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="border border-gray-300 p-1 text-sm">01/04/2024</td>
+                                            <td class="border border-gray-300 p-1 text-sm">Atención 1: Detalle de atención futura</td>
+                                            <td class="border border-gray-300 p-1 text-sm">Mascota 1</td>
+                                            <td class="border border-gray-300 p-1 text-sm">Dueño 1</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border border-gray-300 p-1 text-sm">01/05/2024</td>
+                                            <td class="border border-gray-300 p-1 text-sm">Atención 2: Detalle de atención futura</td>
+                                            <td class="border border-gray-300 p-1 text-sm">Mascota 2</td>
+                                            <td class="border border-gray-300 p-1 text-sm">Dueño 2</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border border-gray-300 p-1 text-sm">01/06/2024</td>
+                                            <td class="border border-gray-300 p-1 text-sm">Atención 3: Detalle de atención futura</td>
+                                            <td class="border border-gray-300 p-1 text-sm">Mascota 3</td>
+                                            <td class="border border-gray-300 p-1 text-sm">Dueño 3</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-
+            </div>
         </section>
     </div>
     <!-- Datos del Doctor -->
@@ -266,31 +264,25 @@
             <h2 class="text-xl font-semibold text-center">Fichas Clínicas</h2>
 
             <!-- Formulario de búsqueda por RUT y selección de mascota -->
-            <form class="flex items-center mt-2" onsubmit="return false;">
-                <div class="relative w-1/4 mr-2">
+            <form class="flex flex-col space-y-4 items-center mt-2 w-full md:flex-row md:space-y-0 md:space-x-4" onsubmit="return false;">
+                <div class="relative w-full md:w-1/4">
                     <label for="rut-paciente-nuevo" class="block text-gray-700 text-xs">Buscar por RUT:</label>
-                    <input type="text" id="rut-paciente-nuevo" name="rut-paciente" required maxlength="12"
-                        placeholder="12.345.678-9"
-                        class="mt-1 block w-full border border-gray-300 rounded-md text-xs py-1 px-2 pr-10"
-                        onblur="formatRUT(this)">
+                    <input type="text" id="rut-paciente-nuevo" name="rut-paciente" required maxlength="12" placeholder="12.345.678-9"
+                        class="mt-1 block w-full border border-gray-300 rounded-md text-xs py-1 px-2 pr-10" onblur="formatRUT(this)">
                 </div>
-                <button type="button" onclick="searchPetByRUT()"
-                    class="mt-4 p-2 text-white rounded-md flex items-center justify-center"
+                <button type="button" onclick="searchPetByRUT()" class="mt-4 p-2 text-white rounded-md w-full md:w-auto flex items-center justify-center"
                     style="background-color: #69d9cd; hover: background-color: #18beaa;">
                     <i class="fas fa-search" style="font-size: 14px;"></i>
                 </button>
-
-
-
                 <!-- Select para elegir mascota -->
-                <div class="relative w-1/4 ml-6">
+                <div class="relative w-full md:w-1/4">
                     <label for="pet-select" class="block text-gray-700 text-xs">Seleccionar Mascota:</label>
-                    <select id="pet-select"
-                        class="mt-1 block w-full border border-gray-300 rounded-md text-xs py-1 px-2">
+                    <select id="pet-select" class="mt-1 block w-full border border-gray-300 rounded-md text-xs py-1 px-2">
                         <!-- Las opciones se llenarán dinámicamente -->
                     </select>
                 </div>
             </form>
+
 
             <!-- Contenido del paciente después de la búsqueda -->
             <div id="pet-data" class="flex justify-center mt-4 hidden">
@@ -317,41 +309,42 @@
                 </div>
             </div>
 
-            <!-- Sistema de Pestañas -->
-            <div class="border-b border-gray-300 mt-4">
-                <ul class="flex">
-                    <li class="-mb-px mr-1">
+            <!-- Sistema de Pestañas Mejorado -->
+            <div class="border-b border-gray-300 mt-4 overflow-x-auto">
+                <ul class="flex flex-wrap md:flex-nowrap">
+                    <li class="flex-grow md:flex-grow-0">
                         <a id="tab1-btn" href="#tab1"
-                            class="bg-white inline-block py-2 px-4 text-green-500 font-semibold border-l border-t border-r border-gray-300 rounded-t hover:bg-gray-100">
+                            class="bg-white block text-center py-2 px-4 text-green-500 font-semibold border-l border-t border-r border-gray-300 rounded-t hover:bg-gray-100">
                             Datos del Paciente
                         </a>
                     </li>
-                    <li class="mr-1">
+                    <li class="flex-grow md:flex-grow-0">
                         <a id="tab2-btn" href="#tab2"
-                            class="bg-white inline-block py-2 px-4 text-gray-500 font-semibold hover:bg-gray-100">
+                            class="bg-white block text-center py-2 px-4 text-gray-500 font-semibold hover:bg-gray-100">
                             Historia Clínica
                         </a>
                     </li>
-                    <li class="mr-1">
+                    <li class="flex-grow md:flex-grow-0">
                         <a id="tab3-btn" href="#tab3"
-                            class="bg-white inline-block py-2 px-4 text-gray-500 font-semibold hover:bg-gray-100">
+                            class="bg-white block text-center py-2 px-4 text-gray-500 font-semibold hover:bg-gray-100">
                             Vacunas
                         </a>
                     </li>
-                    <li class="mr-1">
+                    <li class="flex-grow md:flex-grow-0">
                         <a id="tab4-btn" href="#tab4"
-                            class="bg-white inline-block py-2 px-4 text-gray-500 font-semibold hover:bg-gray-100">
+                            class="bg-white block text-center py-2 px-4 text-gray-500 font-semibold hover:bg-gray-100">
                             Desparasitaciones
                         </a>
                     </li>
-                    <li class="mr-1">
+                    <li class="flex-grow md:flex-grow-0">
                         <a id="tab5-btn" href="#tab5"
-                            class="bg-white inline-block py-2 px-4 text-gray-500 font-semibold hover:bg-gray-100">
+                            class="bg-white block text-center py-2 px-4 text-gray-500 font-semibold hover:bg-gray-100">
                             Ficha
                         </a>
                     </li>
                 </ul>
             </div>
+
 
             <!-- Contenido de las pestañas -->
             <!-- Contenido Datos del Paciente -->
@@ -524,7 +517,25 @@
                         </tbody>
                     </table>
                 </div>
+                <!-- Botón para exportar PDF -->
+                <div class="mt-4">
+                    <button onclick="openExportModal()"
+                        class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">Exportar PDF de historial clínico</button>
+                </div>
             </div>
+
+            <!-- Modal para exportar PDF -->
+            <div id="exportModal" class="fixed inset-0 hidden z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
+                <div class="bg-white rounded-lg p-6 w-1/3">
+                    <h3 class="text-lg font-bold mb-4">Exportar PDF</h3>
+                    <p class="mb-4">El archivo PDF del historial clínico se exportará a su computador.</p>
+                    <div class="flex justify-end">
+                        <button onclick="closeExportModal()"
+                            class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-700">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+
                 
             <!-- Fin Contenido Historia Clínica -->
             
@@ -1009,7 +1020,7 @@
                 <section class="mt-6">
                     <h3 class="text-lg font-semibold">Anamnesis</h3>
                     <div class="bg-gray-100 p-4 rounded-lg shadow-md">
-                        <form id="anamnesisForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <form id="anamnesisForm" class="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <label class="block mt-2">
                                 Hora de inicio de la consulta:
                                 <input type="time" id="consultationStartTime" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" min="09:00" max="18:00" required>
@@ -1026,37 +1037,38 @@
                             </label>
                         
                             <!-- Modificaciones realizadas aquí -->
-                            <label class="block mt-2 col-span-3">
+                            <label class="block mt-2 col-span-1 md:col-span-2">
                                 Motivo de la consulta:
                                 <textarea id="consultationReason" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" rows="3"></textarea>
                             </label>
-                            <label class="block mt-2 col-span-3">
+                            <label class="block mt-2 col-span-1 md:col-span-2">
                                 Examen físico:
                                 <textarea id="physicalExam" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" rows="3"></textarea>
                             </label>
-                            <label class="block mt-2 col-span-3">
+                            <label class="block mt-2 col-span-1 md:col-span-2">
                                 Diagnóstico:
                                 <textarea id="diagnosis" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" rows="3"></textarea>
                             </label>
-                            <label class="block mt-2 col-span-3">
+                            <label class="block mt-2 col-span-1 md:col-span-2">
                                 Indicaciones:
                                 <textarea id="indications" class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" rows="3"></textarea>
                             </label>
                             
-                            <div class="col-span-1 md:col-span-1 md:col-start-3"> <!-- Alinea el select a la derecha -->
+                            <!-- Select del doctor con alineación a la derecha en pantallas grandes -->
+                            <div class="col-span-1 md:col-span-2 md:col-start-2">
                                 <label for="staff-select" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccione un doctor:</label>
-                                <select id="staff-select"
-                                    class="block w-full border border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                <select id="staff-select" class="block w-full border border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                                     onchange="updateDoctorInfoFromSelection()">
                                     <option value="none" selected>Seleccione un doctor</option>
-                                    <option value="" disabled selected>-- Seleccione Dr(a)</option>
+                                    <option value="" disabled>-- Seleccione Dr(a) --</option>
                                     <option value="doctor1" data-name="Dr. Nicolás Villalba" data-image="static/img/doctor1.jpg">Dr. Nicolás Villalba</option>
                                     <option value="doctor2" data-name="Dra. Kirito Aravena" data-image="static/img/doctor2.jpg">Dra. Kirito Aravena</option>
                                 </select>
                             </div>
-                        </form>                                        
+                        </form>
                     </div>
                 </section>
+
 
 
                 <!-- Botón guardar -->
@@ -1124,10 +1136,10 @@
                         <div class="appointment-card border-t bg-yellow-100 text-yellow-700 rounded-md shadow-lg p-1 cursor-pointer" 
                             style="grid-row: 4 / span 2;" 
                             onclick="openModalWeek('Presencial', 'Fernanda Sanz', 'fernanda@example.com', '+56912345678', 'fas fa-dog', 'COOKIE', 'Yorkshire Terrier', 'Hembra', '11:00 AM', '12:00 PM', 'Consulta General', 'Revisión anual', '25 de Octubre 2024')">
-                            <p class="text-xs font-bold">11:00 - 12:00</p>
-                            <p class="text-sm font-semibold">COOKIE</p>
-                            <p class="text-xs">Yorkshire Terrier</p>
-                            <div class="flex items-center text-xs">
+                            <p class="text-[10px] font-bold">11:00 - 12:00</p> <!-- Tamaño reducido -->
+                            <p class="text-xs font-semibold">COOKIE</p>
+                            <p class="text-[10px]">Yorkshire Terrier</p> <!-- Tamaño reducido -->
+                            <div class="flex items-center text-[10px]"> <!-- Tamaño reducido -->
                                 <span class="mr-1 text-gray-500"><i class="fas fa-user"></i></span>
                                 <p>Fernanda Sanz</p>
                             </div>
@@ -1139,10 +1151,10 @@
                         <div class="appointment-card border-t bg-green-100 text-green-700 rounded-md shadow-lg p-1 cursor-pointer" 
                             style="grid-row: 3 / span 2;" 
                             onclick="openModalWeek('Presencial', 'Mario Pérez', 'mario@example.com', '+56987654321', 'fas fa-cat', 'MANDARINA', 'Gato', 'Macho', '10:30 AM', '11:30 AM', 'Consulta General', 'Revisión anual', '25 de Octubre 2024')">
-                            <p class="text-xs font-bold">10:30 - 11:30</p>
-                            <p class="text-sm font-semibold">MANDARINA</p>
-                            <p class="text-xs">Gato</p>
-                            <div class="flex items-center text-xs">
+                            <p class="text-[10px] font-bold">10:30 - 11:30</p> <!-- Tamaño reducido -->
+                            <p class="text-xs font-semibold">MANDARINA</p>
+                            <p class="text-[10px]">Gato</p> <!-- Tamaño reducido -->
+                            <div class="flex items-center text-[10px]"> <!-- Tamaño reducido -->
                                 <span class="mr-1 text-gray-500"><i class="fas fa-user"></i></span>
                                 <p>Mario Pérez</p>
                             </div>

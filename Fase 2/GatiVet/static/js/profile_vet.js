@@ -828,3 +828,12 @@ function addDesparasitacion() {
     document.getElementById('newDesparasitacionDosis').value = '';
     document.getElementById('newDesparasitacionVeterinario').value = ''
 }
+
+//Modal PDF
+function openExportModal() {
+    document.getElementById('exportModal').classList.remove('hidden');
+}
+
+function closeExportModal() {
+    document.getElementById('exportModal').classList.add('hidden');
+}
