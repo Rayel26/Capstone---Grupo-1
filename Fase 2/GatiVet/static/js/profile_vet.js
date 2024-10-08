@@ -831,9 +831,65 @@ function addDesparasitacion() {
 
 //Modal PDF
 function openExportModal() {
-    document.getElementById('exportModal').classList.remove('hidden');
+    // Mostrar mensaje de alerta
+    alert("Se está exportando el archivo PDF al PC...");
+    
+    // Llamada para generar el PDF
+    generatePDF();
 }
 
-function closeExportModal() {
-    document.getElementById('exportModal').classList.add('hidden');
+function generatePDF() {
+    // Obtén los datos de la tabla
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    // Configura el título
+    doc.setFontSize(18);
+    doc.text("Historia Clínica", 14, 20);
+
+    // Configura la tabla
+    let startY = 30;
+    doc.setFontSize(10);
+    
+    // Agrega la tabla encabezado
+    doc.text("Fecha", 14, startY);
+    doc.text("Motivo de Consulta", 40, startY);
+    doc.text("Diagnóstico", 90, startY);
+    doc.text("Tratamiento", 130, startY);
+    
+    // Filas de la tabla
+    const citas = [
+        {
+            fecha: document.getElementById("citaFecha1").innerText,
+            motivo: document.getElementById("citaMotivo1").innerText,
+            diagnostico: document.getElementById("citaDiagnostico1").innerText,
+            tratamiento: document.getElementById("citaTratamiento1").innerText,
+        },
+        {
+            fecha: "15/02/2024",
+            motivo: "Tos persistente",
+            diagnostico: "Infección respiratoria",
+            tratamiento: "Antibióticos recetados",
+        },
+        {
+            fecha: "10/03/2024",
+            motivo: "Control de parásitos",
+            diagnostico: "Parásitos detectados",
+            tratamiento: "Desparasitante administrado",
+        }
+    ];
+
+    startY += 10; // Espacio después del encabezado
+
+    // Agrega cada fila a la tabla en el PDF
+    citas.forEach((cita) => {
+        doc.text(cita.fecha, 14, startY);
+        doc.text(cita.motivo, 40, startY);
+        doc.text(cita.diagnostico, 90, startY);
+        doc.text(cita.tratamiento, 130, startY);
+        startY += 10; // Ajusta el espacio entre filas
+    });
+
+    // Descarga el PDF con un nombre
+    doc.save("historia_clinica.pdf");
 }

@@ -253,27 +253,131 @@
         <div class="bg-white p-6 rounded-lg shadow-md w-80">
             <h2 class="text-lg font-bold mb-4" id="modalTitle">Agregar Usuario Veterinario</h2>
             <form id="modalUserForm">
-                <div class="mb-4">
-                    <label for="modalRut" class="block text-sm font-semibold">RUT:</label>
-                    <input type="text" id="modalRut" class="mt-1 block w-full border-gray-300 rounded-md"
-                        placeholder="Ingrese el RUT" required>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label for="modalRut" class="block text-sm font-semibold">RUT:</label>
+                        <input type="text" id="modalRut" class="mt-1 block w-full border-gray-300 rounded-md"
+                            placeholder="Ingrese el RUT" required>
+                    </div>
+                    <div>
+                        <label for="modalNombre" class="block text-sm font-semibold">Nombre:</label>
+                        <input type="text" id="modalNombre" class="mt-1 block w-full border-gray-300 rounded-md"
+                            placeholder="Ingrese el nombre" required>
+                    </div>
+                    <div>
+                        <label for="modalApellido" class="block text-sm font-semibold">Apellido:</label>
+                        <input type="text" id="modalApellido" class="mt-1 block w-full border-gray-300 rounded-md"
+                            placeholder="Ingrese el apellido" required>
+                    </div>
+                    <div>
+                        <label for="modalDomicilio" class="block text-sm font-semibold">Domicilio:</label>
+                        <input type="text" id="modalDomicilio" class="mt-1 block w-full border-gray-300 rounded-md"
+                            placeholder="Ingrese el domicilio" required>
+                    </div>
+                    <div>
+                        <label for="modalTelefono" class="block text-sm font-semibold">Teléfono:</label>
+                        <input type="tel" id="modalTelefono" class="mt-1 block w-full border-gray-300 rounded-md"
+                            placeholder="Ingrese el teléfono" required>
+                    </div>
+                    <div>
+                        <label for="modalCorreo" class="block text-sm font-semibold">Correo Electrónico:</label>
+                        <input type="email" id="modalCorreo" class="mt-1 block w-full border-gray-300 rounded-md"
+                            placeholder="Ingrese el correo electrónico" required>
+                    </div>
+                    <div>
+                        <label for="modalFechaNacimiento" class="block text-sm font-semibold">Fecha de Nacimiento:</label>
+                        <input type="date" id="modalFechaNacimiento" class="mt-1 block w-full border-gray-300 rounded-md"
+                            required>
+                    </div>
+                    <div>
+                        <label for="modalTipo" class="block text-sm font-semibold">Tipo de Usuario:</label>
+                        <select id="modalTipo" class="mt-1 block w-full border-gray-300 rounded-md" onchange="toggleUserFields()">
+                            <option value="veterinario">Veterinario</option>
+                            <option value="usuario">Usuario</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="mb-4">
-                    <label for="modalNombre" class="block text-sm font-semibold">Nombre:</label>
-                    <input type="text" id="modalNombre" class="mt-1 block w-full border-gray-300 rounded-md"
-                        placeholder="Ingrese el nombre" required>
+    
+                <!-- Campo de Especialidad, solo para Veterinarios -->
+                <div class="mb-4 hidden" id="modalEspecialidad">
+                    <label for="modalEspecialidadInput" class="block text-sm font-semibold">Especialidad:</label>
+                    <input type="text" id="modalEspecialidadInput" class="mt-1 block w-full border-gray-300 rounded-md"
+                        placeholder="Ingrese la especialidad">
                 </div>
-                <div class="mb-4">
-                    <label for="modalTipo" class="block text-sm font-semibold">Tipo de Usuario:</label>
-                    <select id="modalTipo" class="mt-1 block w-full border-gray-300 rounded-md">
-                        <option value="veterinario">Veterinario</option>
-                        <option value="usuario">Usuario</option>
-                        <!-- Puedes agregar más tipos si es necesario -->
+    
+                <!-- Campos de Mascota, solo para Usuarios -->
+                <div class="mb-4 hidden" id="modalMascota">
+                    <label for="modalSelectMascota" class="block text-sm font-semibold">Seleccionar Mascota:</label>
+                    <select id="modalSelectMascota" class="mt-1 block w-full border-gray-300 rounded-md">
+                        <option value="1">Mascota 1</option>
+                        <option value="2">Mascota 2</option>
+                        <!-- Puedes agregar más opciones según las mascotas disponibles -->
                     </select>
                 </div>
-                <div class="flex justify-end">
-                    <button type="button" class="mr-2 px-4 py-2 bg-gray-300 text-gray-800 rounded-md"
-                        onclick="closeModal()">Cancelar</button>
+    
+                <!-- Inputs para editar los datos de la mascota -->
+                <div class="hidden" id="mascotaFields">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="modalMascotaNombre" class="block text-sm font-semibold">Nombre de Mascota:</label>
+                            <input type="text" id="modalMascotaNombre" class="mt-1 block w-full border-gray-300 rounded-md"
+                                placeholder="Ingrese el nombre de la mascota" required>
+                        </div>
+                        <div>
+                            <label for="modalMascotaFechaNacimiento" class="block text-sm font-semibold">Fecha de Nacimiento:</label>
+                            <input type="date" id="modalMascotaFechaNacimiento" class="mt-1 block w-full border-gray-300 rounded-md"
+                                required>
+                        </div>
+                        <div>
+                            <label for="modalMascotaEdad" class="block text-sm font-semibold">Edad:</label>
+                            <input type="number" id="modalMascotaEdad" class="mt-1 block w-full border-gray-300 rounded-md"
+                                placeholder="Ingrese la edad" required>
+                        </div>
+                        <div>
+                            <label for="modalMascotaSexo" class="block text-sm font-semibold">Sexo:</label>
+                            <select id="modalMascotaSexo" class="mt-1 block w-full border-gray-300 rounded-md">
+                                <option value="macho">Macho</option>
+                                <option value="hembra">Hembra</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="modalMascotaPeso" class="block text-sm font-semibold">Peso (kg):</label>
+                            <input type="number" step="0.01" id="modalMascotaPeso" class="mt-1 block w-full border-gray-300 rounded-md"
+                                placeholder="Ingrese el peso en kg" required>
+                        </div>
+                        <div>
+                            <label for="modalMascotaMicrochip" class="block text-sm font-semibold">N° Microchip:</label>
+                            <input type="text" id="modalMascotaMicrochip" class="mt-1 block w-full border-gray-300 rounded-md"
+                                placeholder="Ingrese el N° de microchip" required>
+                        </div>
+                        <div>
+                            <label for="modalMascotaEspecie" class="block text-sm font-semibold">Especie:</label>
+                            <input type="text" id="modalMascotaEspecie" class="mt-1 block w-full border-gray-300 rounded-md"
+                                placeholder="Ingrese la especie" required>
+                        </div>
+                        <div>
+                            <label for="modalMascotaRaza" class="block text-sm font-semibold">Raza:</label>
+                            <input type="text" id="modalMascotaRaza" class="mt-1 block w-full border-gray-300 rounded-md"
+                                placeholder="Ingrese la raza" required>
+                        </div>
+                        <div>
+                            <label for="modalMascotaTamano" class="block text-sm font-semibold">Tamaño:</label>
+                            <select id="modalMascotaTamano" class="mt-1 block w-full border-gray-300 rounded-md">
+                                <option value="pequeño">Pequeño</option>
+                                <option value="mediano">Mediano</option>
+                                <option value="grande">Grande</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="modalMascotaColorPelaje" class="block text-sm font-semibold">Color de Pelaje:</label>
+                            <input type="text" id="modalMascotaColorPelaje" class="mt-1 block w-full border-gray-300 rounded-md"
+                                placeholder="Ingrese el color de pelaje" required>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="flex justify-end mt-4">
+                    <button type="button" class="mr-2 px-4 py-2 bg-gray-300 text-gray-800 rounded-md" onclick="closeModal()">Cancelar</button>
                     <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md">Guardar</button>
                 </div>
             </form>
@@ -417,6 +521,24 @@
 
         // Inicializar la tabla al cargar
         renderUserTable();
+
+        //Script para que aparezca especialidad
+        function toggleUserFields() {
+        var tipoUsuario = document.getElementById("modalTipo").value;
+        var especialidadField = document.getElementById("modalEspecialidad");
+        var mascotaField = document.getElementById("modalMascota");
+        var mascotaFields = document.getElementById("mascotaFields");
+
+        if (tipoUsuario === "veterinario") {
+            especialidadField.classList.remove("hidden");
+            mascotaField.classList.add("hidden");
+            mascotaFields.classList.add("hidden");
+        } else if (tipoUsuario === "usuario") {
+            especialidadField.classList.add("hidden");
+            mascotaField.classList.remove("hidden");
+            mascotaFields.classList.remove("hidden");
+        }
+    }
     </script>
 
 
