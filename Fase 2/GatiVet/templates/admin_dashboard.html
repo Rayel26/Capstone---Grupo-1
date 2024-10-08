@@ -201,11 +201,13 @@
                 <div class="mb-4">
                     <label for="search" class="block text-sm font-semibold text-xs">Buscar Usuario:</label>
                     <input type="text" id="search"
-                        class="mt-1 block w-full text-xs border-2 border-gray-300 rounded-md focus:border-gray-500 focus:outline-none"
+                        class="mt-1 block w-36 text-xs border-2 border-gray-300 rounded-md focus:border-gray-500 focus:outline-none"
                         placeholder="Buscar por RUT o nombre" oninput="renderUserTable()">
+                    <p class="mt-1 text-xs text-gray-600">Nota: El RUT debe ser sin puntos ni guion, y el nombre debe iniciar con mayúscula.</p>
                 </div>
             </div>
         </div>
+
 
         <!-- Filtros -->
         <div class="flex justify-between mb-4">
@@ -250,63 +252,214 @@
 
 <!-- Modal para agregar usuario veterinario -->
 <div id="addUserModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
-    <div class="bg-white p-6 rounded-lg shadow-md w-80">
+    <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-lg md:max-w-4xl">
         <h2 class="text-lg font-bold mb-4" id="addModalTitle">Agregar Usuario Veterinario</h2>
         <form id="addModalUserForm">
-            <div class="mb-4">
-                <label for="addModalRut" class="block text-sm font-semibold">RUT:</label>
-                <input type="text" id="addModalRut" class="mt-1 block w-full border-gray-300 rounded-md"
-                    placeholder="Ingrese el RUT" required>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Columna izquierda -->
+                <div>
+                    <div class="mb-4">
+                        <label for="addModalRut" class="block text-sm font-semibold">RUT:</label>
+                        <input type="text" id="addModalRut" class="mt-1 block w-full border-gray-300 rounded-md"
+                        maxlength="12" placeholder="Ingrese el RUT" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="addModalNombre" class="block text-sm font-semibold">Nombre:</label>
+                        <input type="text" id="addModalNombre" class="mt-1 block w-full border-gray-300 rounded-md"
+                            placeholder="Ingrese el nombre" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="modalApellido" class="block text-sm font-semibold">Apellido:</label>
+                        <input type="text" id="modalApellido" class="mt-1 block w-full border-gray-300 rounded-md"
+                            placeholder="Ingrese el apellido" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="modalDomicilio" class="block text-sm font-semibold">Domicilio:</label>
+                        <input type="text" id="modalDomicilio" class="mt-1 block w-full border-gray-300 rounded-md"
+                            placeholder="Ingrese el domicilio" required>
+                    </div>
+                </div>
+
+                <!-- Columna derecha -->
+                <div>
+                    <div class="mb-4">
+                        <label for="modalEspecialidad" class="block text-sm font-semibold">Especialidad:</label>
+                        <input type="text" id="modalEspecialidad" class="mt-1 block w-full border-gray-300 rounded-md"
+                            placeholder="Ingrese la especialidad" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="modalTelefono" class="block text-sm font-semibold">Teléfono:</label>
+                        <input type="tel" id="modalTelefono" class="mt-1 block w-full border-gray-300 rounded-md"
+                            placeholder="Ingrese el teléfono" required>
+                        <div id="phone-error-message" class="text-red-500 text-sm hidden">Formato inválido. Use +569 xxxx yyyy</div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="modalCorreo" class="block text-sm font-semibold">Correo Electrónico:</label>
+                        <input type="email" id="modalCorreo" class="mt-1 block w-full border-gray-300 rounded-md"
+                            placeholder="Ingrese el correo electrónico" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="modalFechaNacimiento" class="block text-sm font-semibold">Fecha de Nacimiento:</label>
+                        <input type="date" id="modalFechaNacimiento" class="mt-1 block w-full border-gray-300 rounded-md"
+                            required>
+                    </div>
+                </div>
             </div>
-            <div class="mb-4">
-                <label for="addModalNombre" class="block text-sm font-semibold">Nombre:</label>
-                <input type="text" id="addModalNombre" class="mt-1 block w-full border-gray-300 rounded-md"
-                    placeholder="Ingrese el nombre" required>
+
+            <!-- Campos de contraseña en una sola fila -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div class="relative">
+                    <label for="modalPassword" class="block text-sm font-semibold">Contraseña:</label>
+                    <input type="password" id="modalPassword" class="mt-1 block w-full border-gray-300 rounded-md"
+                        placeholder="Ingrese la contraseña" required>
+                    <span toggle="#modalPassword" class="absolute inset-y-0 right-3 top-6 cursor-pointer" 
+                        onclick="togglePasswordVisibility('modalPassword', this)">
+                        👁️
+                    </span>
+                    <div id="pswd_info" class="hidden">
+                        <p class="pp"><b>La contraseña debe tener:</b></p>
+                        <ul>
+                            <li id="capital" class="invalid">Al menos 1 mayúscula</li>
+                            <li id="letter" class="invalid">Al menos 1 minúscula</li>
+                            <li id="number" class="invalid">Al menos 1 número</li>
+                        </ul>
+                    </div>
+                    
+                </div>
+                
+                <div class="relative">
+                    <label for="modalConfirmPassword" class="block text-sm font-semibold">Confirmar Contraseña:</label>
+                    <input type="password" id="modalConfirmPassword" class="mt-1 block w-full border-gray-300 rounded-md"
+                        placeholder="Confirme la contraseña" required>
+                    <span toggle="#modalConfirmPassword" class="absolute inset-y-0 right-3 top-6 cursor-pointer" onclick="togglePasswordVisibility('modalConfirmPassword', this)">
+                        👁️
+                    </span>
+                    <div id="confirm-password-error-message" class="text-red-500 text-sm hidden">Las contraseñas no coinciden.</div>
+                </div>                
             </div>
-            <!-- Eliminamos el tipo de usuario -->
+
             <input type="hidden" id="addModalTipo" value="veterinario">
-            <div class="flex justify-end">
-                <button type="button" class="mr-2 px-4 py-2 bg-gray-300 text-gray-800 rounded-md"
+
+            <!-- Botones -->
+            <div class="flex justify-end mt-4">
+                <button type="button" 
+                class="mt-4 text-gray-800 py-2 px-4 rounded hover:bg-teal-500 transition duration-200 mr-5"
+                style="background-color: #d1d5db;"
                     onclick="closeAddUserModal()">Cancelar</button>
-                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md">Guardar</button>
+                <button type="submit" 
+                class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
+                style="background-color: #18beaa;">Guardar</button>
             </div>
         </form>
     </div>
 </div>
 <!-- Fin del Modal de agregar -->
 
-
 <!-- Modal para editar usuario veterinario -->
 <div id="editUserModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
-    <div class="bg-white p-6 rounded-lg shadow-md w-80">
+    <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-lg md:max-w-4xl">
         <h2 class="text-lg font-bold mb-4" id="editModalTitle">Editar Usuario Veterinario</h2>
         <form id="editModalUserForm">
-            <div class="mb-4">
-                <label for="editModalRut" class="block text-sm font-semibold">RUT:</label>
-                <input type="text" id="editModalRut" class="mt-1 block w-full border-gray-300 rounded-md"
-                    placeholder="Ingrese el RUT" required readonly>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Columna izquierda -->
+                <div>
+                    <div class="mb-4">
+                        <label for="editModalRut" class="block text-sm font-semibold">RUT:</label>
+                        <input type="text" id="editModalRut" class="mt-1 block w-full border-gray-300 rounded-md"
+                        maxlength="12" placeholder="Ingrese el RUT" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="editModalNombre" class="block text-sm font-semibold">Nombre:</label>
+                        <input type="text" id="editModalNombre" class="mt-1 block w-full border-gray-300 rounded-md"
+                            placeholder="Ingrese el nombre" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="editModalApellido" class="block text-sm font-semibold">Apellido:</label>
+                        <input type="text" id="editModalApellido" class="mt-1 block w-full border-gray-300 rounded-md"
+                            placeholder="Ingrese el apellido" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="editModalDomicilio" class="block text-sm font-semibold">Domicilio:</label>
+                        <input type="text" id="editModalDomicilio" class="mt-1 block w-full border-gray-300 rounded-md"
+                            placeholder="Ingrese el domicilio" required>
+                    </div>
+                </div>
+
+                <!-- Columna derecha -->
+                <div>
+                    <div class="mb-4">
+                        <label for="editModalEspecialidad" class="block text-sm font-semibold">Especialidad:</label>
+                        <input type="text" id="editModalEspecialidad" class="mt-1 block w-full border-gray-300 rounded-md"
+                            placeholder="Ingrese la especialidad" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="editModalTelefono" class="block text-sm font-semibold">Teléfono:</label>
+                        <input type="tel" id="editModalTelefono" class="mt-1 block w-full border-gray-300 rounded-md"
+                            placeholder="Ingrese el teléfono" required>
+                        <div id="phone-error-message-edit" class="text-red-500 text-sm hidden">Formato inválido. Use +569 xxxx yyyy</div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="editModalCorreo" class="block text-sm font-semibold">Correo Electrónico:</label>
+                        <input type="email" id="editModalCorreo" class="mt-1 block w-full border-gray-300 rounded-md"
+                            placeholder="Ingrese el correo electrónico" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="editModalFechaNacimiento" class="block text-sm font-semibold">Fecha de Nacimiento:</label>
+                        <input type="date" id="editModalFechaNacimiento" class="mt-1 block w-full border-gray-300 rounded-md"
+                            required>
+                    </div>
+                </div>
             </div>
-            <div class="mb-4">
-                <label for="editModalNombre" class="block text-sm font-semibold">Nombre:</label>
-                <input type="text" id="editModalNombre" class="mt-1 block w-full border-gray-300 rounded-md"
-                    placeholder="Ingrese el nombre" required>
+
+            <!-- Campos de contraseña en una sola fila -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div class="relative">
+                    <label for="editModalPassword" class="block text-sm font-semibold">Contraseña:</label>
+                    <input type="password" id="editModalPassword" class="mt-1 block w-full border-gray-300 rounded-md"
+                        placeholder="Ingrese la contraseña" required>
+                    <span toggle="#editModalPassword" class="absolute inset-y-0 right-3 top-6 cursor-pointer" 
+                        onclick="togglePasswordVisibility('editModalPassword', this)">
+                        👁️
+                    </span>
+                    <div id="pswd_info" class="hidden">
+                        <p class="pp"><b>La contraseña debe tener:</b></p>
+                        <ul>
+                            <li id="capital" class="invalid">Al menos 1 mayúscula</li>
+                            <li id="letter" class="invalid">Al menos 1 minúscula</li>
+                            <li id="number" class="invalid">Al menos 1 número</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <label for="editModalConfirmPassword" class="block text-sm font-semibold">Confirmar Contraseña:</label>
+                    <input type="password" id="editModalConfirmPassword" class="mt-1 block w-full border-gray-300 rounded-md"
+                        placeholder="Confirme la contraseña" required>
+                    <span toggle="#editModalConfirmPassword" class="absolute inset-y-0 right-3 top-6 cursor-pointer" onclick="togglePasswordVisibility('editModalConfirmPassword', this)">
+                        👁️
+                    </span>
+                    <div id="edit-confirm-password-error-message" class="text-red-500 text-sm hidden">Las contraseñas no coinciden.</div>
+                </div>                
             </div>
-            <div class="mb-4">
-                <label for="editModalTipo" class="block text-sm font-semibold">Tipo de Usuario:</label>
-                <select id="editModalTipo" class="mt-1 block w-full border-gray-300 rounded-md">
-                    <option value="veterinario">Veterinario</option>
-                    <option value="usuario">Usuario</option>
-                </select>
-            </div>
-            <div class="flex justify-end">
-                <button type="button" class="mr-2 px-4 py-2 bg-gray-300 text-gray-800 rounded-md"
+
+            <input type="hidden" id="editModalTipo" value="veterinario">
+
+            <!-- Botones -->
+            <div class="flex justify-end mt-4">
+                <button type="button" 
+                class="mt-4 text-gray-800 py-2 px-4 rounded hover:bg-teal-500 transition duration-200 mr-5"
+                style="background-color: #d1d5db;"
                     onclick="closeEditUserModal()">Cancelar</button>
-                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md">Guardar</button>
+                <button type="submit" 
+                class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
+                style="background-color: #18beaa;">Guardar</button>
             </div>
         </form>
     </div>
 </div>
+
 <!-- Fin del Modal de editar -->
+
 
 <!-- Modal de confirmación de eliminación -->
 <div id="confirmDeleteModal"
@@ -326,121 +479,8 @@
 
 <!-- JavaScript para manejar el formulario y la tabla de usuarios -->
 <script>
-    const userTable = document.getElementById('userTable');
-    const searchInput = document.getElementById('search');
-    const filterSelect = document.getElementById('filter');
 
-    let users = [
-        {
-            rut: "12.345.678-9",
-            nombre: "Juan Pérez",
-            tipo: "usuario",
-            fechaCreacion: "2023-01-15" // Ejemplo de fecha
-        },
-        {
-            rut: "98.765.432-1",
-            nombre: "María González",
-            tipo: "veterinario",
-            fechaCreacion: "2023-02-20" // Ejemplo de fecha
-        }
-    ];
 
-    let editingUserRut = null; // Variable para almacenar el RUT del usuario que se está editando
-
-    function renderUserTable() {
-        userTable.innerHTML = '';
-
-        const filteredUsers = users.filter(user => {
-            const searchMatch = user.rut.includes(searchInput.value) || user.nombre.includes(searchInput.value);
-            const filterMatch = filterSelect.value === '' || user.tipo === filterSelect.value;
-            return searchMatch && filterMatch;
-        });
-
-        filteredUsers.forEach(user => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td class="py-1 px-2 border-b">${user.rut}</td>
-                <td class="py-1 px-2 border-b">${user.nombre}</td>
-                <td class="py-1 px-2 border-b">${user.tipo}</td>
-                <td class="py-1 px-2 border-b">${user.fechaCreacion}</td> <!-- Nueva columna -->
-                <td class="py-1 px-2 border-b">
-                    <button class="text-blue-500 hover:underline" onclick="openEditUserModal('${user.rut}')">Editar</button>
-                    <button class="text-red-500 hover:underline" onclick="confirmDeleteUser('${user.rut}')">Eliminar</button>
-                </td>
-            `;
-            userTable.appendChild(row);
-        });
-    }
-
-    function openAddUserModal() {
-        document.getElementById('addUserModal').classList.remove('hidden');
-    }
-
-    function closeAddUserModal() {
-        document.getElementById('addUserModal').classList.add('hidden');
-        document.getElementById('addModalUserForm').reset();
-    }
-
-    document.getElementById('addModalUserForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-        const rut = document.getElementById('addModalRut').value;
-        const nombre = document.getElementById('addModalNombre').value;
-        const tipo = document.getElementById('addModalTipo').value;
-
-        users.push({ rut, nombre, tipo, fechaCreacion: new Date().toISOString().slice(0, 10) });
-        closeAddUserModal();
-        renderUserTable();
-    });
-
-    function openEditUserModal(rut) {
-        const user = users.find(u => u.rut === rut);
-        if (user) {
-            document.getElementById('editModalRut').value = user.rut;
-            document.getElementById('editModalNombre').value = user.nombre;
-            document.getElementById('editModalTipo').value = user.tipo;
-            editingUserRut = rut; // Almacena el RUT del usuario a editar
-            document.getElementById('editUserModal').classList.remove('hidden');
-        }
-    }
-
-    function closeEditUserModal() {
-        document.getElementById('editUserModal').classList.add('hidden');
-        document.getElementById('editModalUserForm').reset();
-    }
-
-    document.getElementById('editModalUserForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-        const nombre = document.getElementById('editModalNombre').value;
-        const tipo = document.getElementById('editModalTipo').value;
-
-        const userIndex = users.findIndex(u => u.rut === editingUserRut);
-        if (userIndex !== -1) {
-            users[userIndex].nombre = nombre;
-            users[userIndex].tipo = tipo;
-        }
-        closeEditUserModal();
-        renderUserTable();
-    });
-
-    function confirmDeleteUser(rut) {
-        document.getElementById('confirmDeleteModal').classList.remove('hidden');
-        document.getElementById('confirmDeleteButton').onclick = function () {
-            deleteUser(rut);
-        };
-    }
-
-    function deleteUser(rut) {
-        users = users.filter(user => user.rut !== rut);
-        closeConfirmDeleteModal();
-        renderUserTable();
-    }
-
-    function closeConfirmDeleteModal() {
-        document.getElementById('confirmDeleteModal').classList.add('hidden');
-    }
-
-    // Cargar la tabla de usuarios al iniciar
-    renderUserTable();
 </script>
 
 

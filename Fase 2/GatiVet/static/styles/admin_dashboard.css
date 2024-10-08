@@ -3,3 +3,45 @@
 .high-stock { background-color: rgba(0, 255, 0, 0.1); color: green; } /* Estilo para stock adecuado */
 .error { color: red; font-size: 0.875rem; } /* Estilo para mensajes de error */
 
+#pswd_info {
+    position: absolute;
+    top: 45px;
+    left: 210px; /* Ajusta según necesites */
+    width: 200px; /* Ajusta según necesites */
+    padding: 5px;
+    background: #fefefe;
+    font-size: .750em;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px #ccc;
+    border: 1px solid #ddd;
+    z-index: 1000; /* Asegúrate de que aparezca sobre otros elementos */
+    animation: slideDown 0.3s ease forwards; /* Agregar animación */
+}
+.invalid {
+    color: red;
+}
+.valid {
+    color: green;
+}
+.pp {
+    font-size: 12px;
+    font-weight: bold;
+}
+#pswd_info ul {
+    padding: 0;
+}
+#pswd_info li {
+    list-style: none;
+}
+
+/* Animación de aparición */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
