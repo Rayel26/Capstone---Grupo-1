@@ -1,10 +1,18 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from flask_cors import CORS
 from functools import wraps
+import requests
+from requests.auth import HTTPBasicAuth
+from supabase import create_client  # Importar Supabase
 
 app = Flask(__name__)
 CORS(app)
 app.secret_key = 'supersecretkey'  # Clave para las sesiones
+
+# Reemplaza con tus credenciales de Cloudinary
+CLOUD_NAME = 'dqeideoyd'
+API_KEY = '916694628586842'
+API_SECRET = '4v36fweAMrokX64C8ciboL7o_SA'
 
 # Datos simulados para usuarios
 users = {
@@ -12,6 +20,11 @@ users = {
     "vet@example.com": {"password": "vetpass", "role": "vet"},
     "admin@example.com": {"password": "adminpass", "role": "admin"}
 }
+
+# Inicializa Supabase aquí
+SUPABASE_URL = 'https://wlnahmbigsbckwbdwezo.supabase.co'
+SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndsbmFobWJpZ3NiY2t3YmR3ZXpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg1MDg5MzUsImV4cCI6MjA0NDA4NDkzNX0.CP-BaGcCf-fQD-lYrbH0_B-sKVOwUb9Xgy9-nzKjtLM'
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)  # Inicializar el cliente de Supabase
 
 # Decorador para verificar si el usuario está logueado
 def login_required(f):
@@ -127,9 +140,84 @@ def registration():
 def donation():
     return render_template('donation.html')
 
+from flask import request, jsonify
+
+@app.route('/create_product', methods=['POST'])
+@login_required
+@role_required('admin')
+def create_product():
+    # Obtener datos del formulario
+    data = request.get_json()
+
+    # Comprobar si se recibieron datos
+    if not data:
+        return jsonify({'error': 'No se recibió ningún dato.'}), 400
+
+    # Verificar claves necesarias
+    required_keys = ['name', 'description', 'price', 'brand', 'quantity', 'type']
+    for key in required_keys:
+        if key not in data:
+            return jsonify({'error': f'Falta el campo: {key}'}), 400
+
+    nombre_producto = data['name']
+    descripcion = data['description']
+    valor = data['price']
+    marca = data['brand']
+    stock = data['quantity']
+    fecha_ingreso = data['fecha_ingreso']
+    
+    # Determinar el tipo de producto
+    tipo_producto_id = 0
+    if data['type'] == 'alimento_perro':
+        tipo_producto_id = 1
+    elif data['type'] == 'alimento_gato':
+        tipo_producto_id = 2
+    elif data['type'] == 'medicamento':
+        tipo_producto_id = 3
+    else:
+        return jsonify({'error': 'Tipo de producto no válido.'}), 400
+
+    # Crear el producto en Supabase
+    response = supabase.table('Producto').insert({
+        'nombre_producto': nombre_producto,
+        'descripcion': descripcion,
+        'valor': valor,
+        'marca': marca,
+        'stock': stock,
+        'tipo_producto_id': tipo_producto_id,
+        'fecha_ingreso' : fecha_ingreso
+    }).execute()
+
+    # Verificar si la inserción fue exitosa
+    if response.data:  # Si hay datos en la respuesta, la inserción fue exitosa
+        return jsonify({'message': 'Producto creado exitosamente.', 'data': response.data}), 201
+    else:
+        # Si no hay datos, verifica el error
+        print('Error de Supabase:', response.error)  # Agregar esta línea
+        return jsonify({'error': 'Error al crear el producto.', 'details': response.error}), 400
+
+
+# Ruta para obtener los productos
+@app.route('/get_products', methods=['GET'])
+@login_required
+@role_required('admin')
+def get_products():
+    response = supabase.table('Producto').select('*').execute()
+    return jsonify(response.data), 200
+
+
+# Ruta para obtener imágenes de Cloudinary
+@app.route('/api/cloudinary/images', methods=['GET'])
+@login_required
+@role_required('admin')  # Ajusta el rol según sea necesario
+def get_cloudinary_images():
+    url = f'https://api.cloudinary.com/v1_1/{CLOUD_NAME}/resources/image/upload'
+    response = requests.get(url, auth=HTTPBasicAuth(API_KEY, API_SECRET))
+
+    if response.status_code == 200:
+        return jsonify(response.json())
+    else:
+        return jsonify({'error': 'Error fetching images from Cloudinary'}), response.status_code
+
 if __name__ == '__main__':
     app.run(debug=True)
-
-from flask import Flask, render_template, request
-app = Flask(__name__)
-

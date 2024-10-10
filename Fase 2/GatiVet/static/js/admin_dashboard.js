@@ -52,10 +52,11 @@ document.getElementById('productForm').addEventListener('submit', function (even
     // Obtener valores del formulario
     const name = document.getElementById('productName').value.trim();
     const type = document.getElementById('productType').value;
-    const brand = document.getElementById('brand').value;
+    const brand = document.getElementById('brand').value.trim();
     const priceInput = document.getElementById('price').value.replace(/\D/g, ''); // Limpiar formato
     const price = parseInt(priceInput, 10);
     const quantity = parseInt(document.getElementById('quantity').value, 10);
+    const description = document.getElementById('description').value.trim(); // Obtener descripción
 
     // Validaciones
     if (!name) {
@@ -81,30 +82,55 @@ document.getElementById('productForm').addEventListener('submit', function (even
 
     // Si todo es válido, proceder a añadir el producto
     if (isValid) {
-        // Crear el contenido de la celda de stock
-        let stockCellClass = quantity < 20 ? 'low-stock' : 'high-stock';
-        let stockCellContent = quantity < 20 ? `¡Bajo Stock! (${quantity} disponibles)` : `${quantity} disponibles`;
-
-        // Guardar el producto en la lista
-        const product = {
-            name: name,
-            type: type,
+        // Crear un objeto con los datos del producto
+        const productData = {
+            name: name,  // Cambiado a 'name'
+            type: type,  // Cambiado a 'type'
             brand: brand,
-            price: price,
-            stockCellClass: stockCellClass,
-            stockCellContent: stockCellContent,
-            dateAdded: getCurrentDate() // Añadimos la fecha de ingreso
+            price: price,  // Cambiado a 'price'
+            quantity: quantity,  // Cambiado a 'quantity'
+            description: description,
+            fecha_ingreso: getCurrentDate() // Agregar la fecha de ingreso
         };
-        products.push(product);
 
-        // Limpiar el formulario
-        this.reset();
-        document.getElementById('productImage').value = ''; // Limpiar el input de archivo
 
-        // Actualizar paginación y tabla
-        updatePagination();
+        // Depuración: Imprimir datos del producto en la consola
+        console.log('Datos del producto:', productData);
+
+        // Enviar los datos del producto al servidor
+        fetch('/create_product', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(productData)
+        })
+        .then(response => {
+            // Depuración: Imprimir la respuesta del servidor
+            console.log('Respuesta del servidor:', response);
+            if (response.ok) {
+                return response.json();
+            } else {
+                // Imprimir el error del servidor
+                return response.json().then(errorData => {
+                    throw new Error(`Error al crear el producto: ${errorData.error || response.statusText}`);
+                });
+            }
+        })
+        .then(data => {
+            console.log('Producto creado exitosamente:', data.message);
+            // Limpiar el formulario
+            document.getElementById('productForm').reset();
+            // Actualizar la tabla
+            loadProducts();
+        })
+        .catch(error => {
+            console.error('Error en el proceso:', error);
+            alert(`Error al crear el producto: ${error.message}`); // Mostrar alerta con el mensaje de error
+        });
     }
 });
+
 
 // Función para filtrar por mes
 function filterByMonth() {
@@ -119,36 +145,42 @@ function filterByMonth() {
     updatePagination();
 }
 
-// Actualiza la tabla mostrando los productos correspondientes a la página actual
-function updateTable() {
-    const startIndex = (currentPage - 1) * productsPerPage;
-    const endIndex = startIndex + productsPerPage;
+// Función para cargar los productos
+function loadProducts() {
+    fetch('/get_products')
+        .then(response => response.json())
+        .then(products => {
+            const table = document.getElementById('productTableExt');
+            table.innerHTML = ''; // Limpiar tabla existente
 
-    // Limpiar la tabla antes de agregar nuevas filas
-    const table = document.getElementById('productTable');
-    table.innerHTML = '';
+            products.forEach(product => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="py-2 px-4 border-b">${product.nombre_producto}</td>
+                    <td class="py-2 px-4 border-b">${product.tipo_producto_id}</td> <!-- Agrega lógica para mostrar el tipo -->
+                    <td class="py-2 px-4 border-b">${product.marca}</td>
+                    <td class="py-2 px-4 border-b">${product.valor ? product.valor.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' }) : 'N/A'}</td>
+                    <td class="py-2 px-4 border-b">${product.stock}</td>
+                    <td class="py-2 px-4 border-b">${product.fecha_ingreso}</td> <!-- Agregar columna para la fecha de ingreso -->
+                `;
+                
+                table.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error('Error al cargar los productos:', error);
+        });
+}
 
-// Agregar las filas correspondientes a la página actual
-products.slice(startIndex, endIndex).forEach(product => {
-    const formattedDate = new Date(product.dateAdded).toLocaleDateString('es-CL', { year: 'numeric', month: '2-digit', day: '2-digit' }); // Formatear la fecha
 
-    const row = document.createElement('tr');
-    row.innerHTML = `
-        <td class="py-2 px-4 border-b">${product.name}</td>
-        <td class="py-2 px-4 border-b">${product.type}</td>
-        <td class="py-2 px-4 border-b">${product.brand}</td>
-        <td class="py-2 px-4 border-b">${product.price ? product.price.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' }) : 'N/A'}</td>
-        <td class="py-2 px-4 border-b ${product.stockCellClass}">${product.stockCellContent}</td>
-        <td class="py-2 px-4 border-b">${formattedDate}</td> <!-- Usar la fecha formateada -->
-    `;
-    table.appendChild(row);
-});
+// Cargar los productos al inicio
+document.addEventListener('DOMContentLoaded', loadProducts);
 
 // Actualizar el estado de los botones y la página actual
 document.getElementById('currentPage').innerText = `Página ${currentPage} de ${totalPages}`;
 document.getElementById('prevPageBtn').disabled = currentPage === 1;
 document.getElementById('nextPageBtn').disabled = currentPage === totalPages;
-}
+
 
 // Maneja el botón "Siguiente"
 function nextPage() {
@@ -176,7 +208,7 @@ function updatePagination() {
 // Función para exportar la tabla a Excel
 function exportToExcel() {
     // Obtén la tabla de productos
-    const table = document.getElementById('productTable');
+    const table = document.getElementById('productTableExt');
 
     // Prepara los datos en formato de matriz para la exportación
     const ws_data = [['Nombre del Producto', 'Tipo de Producto', 'Marca', 'Precio', 'Stock', 'Fecha de Ingreso']]; // Encabezados
@@ -749,4 +781,74 @@ renderUserTable();
 
 // FinGestión de usuarios
 ////
+
+//Prueba cloudinary
+
+async function uploadImage() {
+    const input = document.getElementById('productImage');
+    if (input.files.length === 0) {
+        alert('Por favor, selecciona una imagen para subir.');
+        return;
+    }
+
+    const file = input.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'prueba'); // Tu upload preset
+    formData.append('cloud_name', 'dqeideoyd'); // Tu cloud name
+
+    try {
+        const response = await fetch(`https://api.cloudinary.com/v1_1/dqeideoyd/image/upload`, {
+            method: 'POST',
+            body: formData,
+        });
+        const result = await response.json();
+        console.log('Imagen subida:', result);
+        alert('Imagen subida correctamente: ' + result.secure_url);
+    } catch (error) {
+        console.error('Error al subir la imagen:', error);
+        alert('Error al subir la imagen. Intenta nuevamente.');
+    }
+}
+
+function submitProduct(event) {
+    event.preventDefault();
+    // Aquí puedes manejar el envío del formulario para agregar el producto
+    // Asegúrate de recoger la URL de la imagen si se ha subido a Cloudinary
+}
+
+function loadImages() {
+    const cloudinaryUrl = `https://api.cloudinary.com/v1_1/dqeideoyd/resources/image`;
+
+    fetch(cloudinaryUrl, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer TU_TOKEN_DE_API', // Si es necesario
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al obtener las imágenes: ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        const productImageSelect = document.getElementById('productImage');
+        productImageSelect.innerHTML = '<option value="">Seleccione una imagen</option>'; // Resetea el select
+
+        if (data.resources && data.resources.length > 0) {
+            data.resources.forEach(image => {
+                const option = document.createElement('option');
+                option.value = image.secure_url; // URL de la imagen
+                option.textContent = image.public_id; // Nombre o ID de la imagen
+                productImageSelect.appendChild(option);
+            });
+        } else {
+            console.log('No se encontraron imágenes en Cloudinary');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
 

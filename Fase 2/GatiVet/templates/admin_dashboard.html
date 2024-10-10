@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historial de Mascotas</title>
+    <title>Administración</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/Logo Gativet.png') }}">
     <link rel="stylesheet" href="static/styles/admin_dashboard.css?v=1.0">
@@ -86,7 +86,7 @@
             </div>
 
             <!-- Tabla de stock de productos -->
-            <table class="min-w-full bg-white border border-gray-300 shadow rounded-lg overflow-hidden text-xs mt-3">
+            <table id="productTable" class="min-w-full bg-white border border-gray-300 shadow rounded-lg overflow-hidden text-xs mt-3">
                 <!-- Cambiar a text-xs -->
                 <thead>
                     <tr class="text-white" style="background-color: #18beaa;">
@@ -98,7 +98,7 @@
                         <th class="py-1 px-2 border-b">Fecha ingreso</th>
                     </tr>
                 </thead>
-                <tbody id="productTable">
+                <tbody id="productTableExt">
                     <!-- Aquí se mostrarán los productos filtrados -->
                 </tbody>
             </table>
@@ -118,7 +118,7 @@
             </div>
 
             <!-- Formulario para subir productos -->
-            <form id="productForm" class="mt-6 bg-white p-6 shadow rounded-lg text-sm">
+            <form id="productForm" class="mt-6 bg-white p-6 shadow rounded-lg text-sm" onsubmit="submitProduct(event)">
                 <h4 class="text-base font-semibold">Agregar Nuevo Producto</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                     <div>
@@ -126,10 +126,6 @@
                         <input type="text" id="productName" class="border rounded w-full py-1 px-2 text-gray-700"
                             placeholder="Nombre del producto" required>
                         <div id="nameError" class="error hidden">Este campo es obligatorio.</div>
-                    </div>
-                    <div>
-                        <label for="productImage" class="block text-gray-700">Imagen del Producto:</label>
-                        <input type="file" id="productImage" class="border rounded w-full py-1 px-2 text-gray-700">
                     </div>
                     <div>
                         <label for="productType" class="block text-gray-700">Tipo de Producto:</label>
@@ -175,6 +171,11 @@
                         <input type="number" id="quantity" class="border rounded w-full py-1 px-2 text-gray-700"
                             placeholder="Cantidad disponible" required>
                         <div id="quantityError" class="error hidden">Este campo es obligatorio.</div>
+                    </div>
+                    <div>
+                        <label for="description" class="block text-gray-700">Descripción:</label>
+                        <textarea id="description" class="border rounded w-full py-1 px-2 text-gray-700"
+                            placeholder="Descripción del producto"></textarea>
                     </div>
                 </div>
                 <button type="submit"
