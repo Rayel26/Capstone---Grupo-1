@@ -1,20 +1,17 @@
-////
-//Productos
+// Productos
 // Función para mostrar la sección correspondiente
 function showSection(sectionId) {
-    // Oculta todas las secciones
     const sections = document.querySelectorAll('.section');
     sections.forEach(section => {
         section.classList.add('hidden');
     });
-
-    // Muestra la sección seleccionada
     document.getElementById(sectionId).classList.remove('hidden');
 }
 
-// Muestra la sección de productos por defecto al cargar la página
+// Mostrar la sección de productos por defecto al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
     showSection('productos');
+    loadProducts(); // Cargar productos al iniciar
 });
 
 // Obtener la fecha actual en formato YYYY-MM-DD
@@ -28,16 +25,15 @@ function getCurrentDate() {
 
 // Función para formatear el precio como moneda chilena
 function formatCurrency(input) {
-    // Eliminar cualquier carácter que no sea un número
     let value = input.value.replace(/\D/g, '');
-    // Formatear el número como moneda chilena
     if (value) {
         input.value = parseInt(value).toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
     }
 }
 
 let products = []; // Aquí se almacenarán los productos ingresados
-let productsPerPage = 20;
+let filteredProducts = []; // Productos filtrados
+let productsPerPage = 4;
 let currentPage = 1;
 let totalPages = 1;
 
@@ -56,7 +52,7 @@ document.getElementById('productForm').addEventListener('submit', function (even
     const priceInput = document.getElementById('price').value.replace(/\D/g, ''); // Limpiar formato
     const price = parseInt(priceInput, 10);
     const quantity = parseInt(document.getElementById('quantity').value, 10);
-    const description = document.getElementById('description').value.trim(); // Obtener descripción
+    const description = document.getElementById('description').value.trim();
 
     // Validaciones
     if (!name) {
@@ -82,107 +78,109 @@ document.getElementById('productForm').addEventListener('submit', function (even
 
     // Si todo es válido, proceder a añadir el producto
     if (isValid) {
-        // Crear un objeto con los datos del producto
         const productData = {
-            name: name,  // Cambiado a 'name'
-            type: type,  // Cambiado a 'type'
+            name: name,
+            type: type,
             brand: brand,
-            price: price,  // Cambiado a 'price'
-            quantity: quantity,  // Cambiado a 'quantity'
+            price: price,
+            quantity: quantity,
             description: description,
             fecha_ingreso: getCurrentDate() // Agregar la fecha de ingreso
         };
 
-
-        // Depuración: Imprimir datos del producto en la consola
-        console.log('Datos del producto:', productData);
-
-        // Enviar los datos del producto al servidor
         fetch('/create_product', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(productData)
         })
         .then(response => {
-            // Depuración: Imprimir la respuesta del servidor
-            console.log('Respuesta del servidor:', response);
-            if (response.ok) {
-                return response.json();
-            } else {
-                // Imprimir el error del servidor
-                return response.json().then(errorData => {
-                    throw new Error(`Error al crear el producto: ${errorData.error || response.statusText}`);
-                });
-            }
+            if (response.ok) return response.json();
+            else return response.json().then(errorData => {
+                throw new Error(`Error al crear el producto: ${errorData.error || response.statusText}`);
+            });
         })
         .then(data => {
-            console.log('Producto creado exitosamente:', data.message);
-            // Limpiar el formulario
             document.getElementById('productForm').reset();
-            // Actualizar la tabla
-            loadProducts();
+            loadProducts(); // Recargar productos después de añadir
         })
         .catch(error => {
             console.error('Error en el proceso:', error);
-            alert(`Error al crear el producto: ${error.message}`); // Mostrar alerta con el mensaje de error
+            alert(`Error al crear el producto: ${error.message}`);
         });
     }
 });
 
-
 // Función para filtrar por mes
 function filterByMonth() {
     const monthFilter = document.getElementById('monthFilter').value; // Formato YYYY-MM
-    const filteredProducts = products.filter(product => {
-        const rowMonth = product.dateAdded.substring(0, 7); // Extraer YYYY-MM
+    filteredProducts = products.filter(product => {
+        const rowMonth = product.fecha_ingreso.substring(0, 7); // Extraer YYYY-MM del producto
         return monthFilter === "" || rowMonth === monthFilter;
     });
-
-    // Actualizar la lista de productos mostrados
-    products = filteredProducts;
-    updatePagination();
+    updatePagination(); // Actualiza paginación con productos filtrados
 }
+
+// Mapeo de IDs a nombres de productos
+const tipoProductoMap = {
+    1: 'Alimento para Perros',
+    2: 'Alimento para Gatos',
+    3: 'Medicamento Veterinario'
+};
 
 // Función para cargar los productos
 function loadProducts() {
     fetch('/get_products')
         .then(response => response.json())
-        .then(products => {
-            const table = document.getElementById('productTableExt');
-            table.innerHTML = ''; // Limpiar tabla existente
-
-            products.forEach(product => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="py-2 px-4 border-b">${product.nombre_producto}</td>
-                    <td class="py-2 px-4 border-b">${product.tipo_producto_id}</td> <!-- Agrega lógica para mostrar el tipo -->
-                    <td class="py-2 px-4 border-b">${product.marca}</td>
-                    <td class="py-2 px-4 border-b">${product.valor ? product.valor.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' }) : 'N/A'}</td>
-                    <td class="py-2 px-4 border-b">${product.stock}</td>
-                    <td class="py-2 px-4 border-b">${product.fecha_ingreso}</td> <!-- Agregar columna para la fecha de ingreso -->
-                `;
-                
-                table.appendChild(row);
-            });
+        .then(data => {
+            products = data;
+            filterByMonth(); // Filtrar productos por mes si aplica
         })
         .catch(error => {
             console.error('Error al cargar los productos:', error);
         });
 }
 
+// Función para actualizar la tabla con productos
+function updateTable() {
+    const table = document.getElementById('productTableExt');
+    table.innerHTML = ''; // Limpiar tabla existente
 
-// Cargar los productos al inicio
-document.addEventListener('DOMContentLoaded', loadProducts);
+    const startIndex = (currentPage - 1) * productsPerPage;
+    const endIndex = startIndex + productsPerPage;
+    const productsToDisplay = filteredProducts.slice(startIndex, endIndex);
 
-// Actualizar el estado de los botones y la página actual
-document.getElementById('currentPage').innerText = `Página ${currentPage} de ${totalPages}`;
-document.getElementById('prevPageBtn').disabled = currentPage === 1;
-document.getElementById('nextPageBtn').disabled = currentPage === totalPages;
+    productsToDisplay.forEach(product => {
+        const row = document.createElement('tr');
+        const tipoProductoNombre = tipoProductoMap[product.tipo_producto_id] || 'Tipo desconocido';
 
+        row.innerHTML = `
+            <td class="py-2 px-4 border-b">${product.nombre_producto}</td>
+            <td class="py-2 px-4 border-b">${tipoProductoNombre}</td>
+            <td class="py-2 px-4 border-b">${product.marca}</td>
+            <td class="py-2 px-4 border-b">${product.valor ? product.valor.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' }) : 'N/A'}</td>
+            <td class="py-2 px-4 border-b">${product.stock}</td>
+            <td class="py-2 px-4 border-b">${product.fecha_ingreso}</td>
+        `;
+        table.appendChild(row);
+    });
+    updatePaginationControls();
+}
 
-// Maneja el botón "Siguiente"
+// Función para actualizar la paginación
+function updatePagination() {
+    totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+    currentPage = 1;
+    updateTable(); // Actualizar tabla cuando cambia la paginación
+}
+
+// Actualizar los botones de control de paginación
+function updatePaginationControls() {
+    document.getElementById('currentPage').innerText = `Página ${currentPage} de ${totalPages}`;
+    document.getElementById('prevPageBtn').disabled = currentPage === 1;
+    document.getElementById('nextPageBtn').disabled = currentPage === totalPages;
+}
+
+// Manejo del botón "Siguiente"
 function nextPage() {
     if (currentPage < totalPages) {
         currentPage++;
@@ -190,7 +188,7 @@ function nextPage() {
     }
 }
 
-// Maneja el botón "Anterior"
+// Manejo del botón "Anterior"
 function prevPage() {
     if (currentPage > 1) {
         currentPage--;
@@ -198,59 +196,55 @@ function prevPage() {
     }
 }
 
-// Actualiza el número total de páginas y la tabla
-function updatePagination() {
-    totalPages = Math.ceil(products.length / productsPerPage);
-    currentPage = 1; // Reiniciar a la primera página cada vez que se actualicen los productos
-    updateTable();
-}
-
 // Función para exportar la tabla a Excel
 function exportToExcel() {
-    // Obtén la tabla de productos
     const table = document.getElementById('productTableExt');
-
-    // Prepara los datos en formato de matriz para la exportación
-    const ws_data = [['Nombre del Producto', 'Tipo de Producto', 'Marca', 'Precio', 'Stock', 'Fecha de Ingreso']]; // Encabezados
+    const ws_data = [['Nombre del Producto', 'Tipo de Producto', 'Marca', 'Precio', 'Stock', 'Fecha de Ingreso']];
     const rows = table.querySelectorAll('tr');
-
-    // Itera sobre las filas de la tabla y agrega los datos a ws_data
+    
     rows.forEach(row => {
         const rowData = [
-            row.cells[0].innerText, // Nombre del Producto
-            row.cells[1].innerText, // Tipo de Producto
-            row.cells[2].innerText, // Marca
-            row.cells[3].innerText, // Precio
-            row.cells[4].innerText, // Stock
-            row.cells[5].innerText  // Fecha de Ingreso
+            row.cells[0].innerText,
+            row.cells[1].innerText,
+            row.cells[2].innerText,
+            row.cells[3].innerText,
+            row.cells[4].innerText,
+            row.cells[5].innerText
         ];
         ws_data.push(rowData);
     });
 
-    // Crea una hoja de trabajo
     const ws = XLSX.utils.aoa_to_sheet(ws_data);
-
-    // Crea un nuevo libro de trabajo y agrega la hoja de trabajo
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Stock de Productos');
-
-    // Exporta el libro de trabajo a un archivo Excel
     XLSX.writeFile(wb, 'stock_productos.xlsx');
-
     alert('Exportación completada.');
 }
 
 // Función para filtrar productos por tipo
 function filterProducts() {
     const filterValue = document.getElementById('productFilter').value;
-    const filteredProducts = products.filter(product => {
-        return filterValue === "" || product.type === filterValue;
-    });
 
-    // Actualizar la lista de productos mostrados
-    products = filteredProducts;
-    updatePagination();
+    // Si el filtro está vacío, se mostrarán todos los productos
+    if (filterValue === "") {
+        filteredProducts = products; // Mostrar todos los productos
+    } else {
+        // Convertir el valor del filtro a número
+        const filterTypeId = parseInt(filterValue, 10);
+
+        // Filtrar productos basados en el tipo seleccionado
+        filteredProducts = products.filter(product => {
+            return product.tipo_producto_id === filterTypeId;
+        });
+    }
+
+    // Actualizar la tabla de productos con los productos filtrados
+    currentPage = 1; // Reiniciar la paginación a la primera página después del filtrado
+    updateTable(); // Llamar a la función para actualizar la tabla
 }
+
+
+
 //Fin Productos
 ////
 

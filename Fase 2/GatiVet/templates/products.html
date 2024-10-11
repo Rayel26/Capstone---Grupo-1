@@ -147,41 +147,8 @@ block content %}
 
             <!-- Lista de productos -->
             <div class="w-full lg:w-3/4 mx-auto" id="productContainer">
-                <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                    <!-- Carta de producto -->
-                    <li class="product">
-                        <a href="{{ url_for('item') }}" class="group block overflow-hidden mt-2 rounded">
-                            <img src="https://res.cloudinary.com/dqeideoyd/image/upload/v1728504996/Alimento-Perro-Cachorro-Pedigree-Carne-Pollo-y-Cereales-15-kg_oxsjsh.webp"
-                                alt=""
-                                class="h-[200px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[200px]"
-                                loading="lazy" />
-                            <div class="relative bg-white pt-3">
-                                <h3
-                                    class="tipoProducto text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4 hidden">
-                                    Alimento seco para Gato
-                                </h3>
-                                <h3
-                                    class="nombreProducto text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4 ml-4">
-                                    Fit Formula Gato 10 Kg
-                                </h3>
-                                <p class="precioProducto mt-2 ml-4">
-                                    <span class="sr-only">Precio normal</span>
-                                    <span class="tracking-wider text-green-500 font-bold">$720</span>
-                                </p>
-                                <h3
-                                    class="marcaProducto text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4 hidden">
-                                    Fit Formula
-                                </h3>
-                                <!-- Botón de agregar al carrito -->
-                                <div class="mt-3 flex justify-center text-center mb-2">
-                                    <button
-                                        class="block rounded-md mb-6 bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 focus:outline-none text-sm transition-transform transform-gpu hover:-translate-y-1 hover:shadow-md cursor-pointer addToCartBtn">
-                                        Agregar al carrito
-                                    </button>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
+                <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4" id="productList">
+                    <!-- Aquí se insertarán dinámicamente las cartas de productos -->
                 </ul>
             </div>
 
@@ -223,8 +190,6 @@ block content %}
             <!-- Fin Modal -->
         </div>
     </div>
-
-    <script src="{{ url_for('static', filename='js/products.js') }}"></script>
-
 </body>
+<script src="{{ url_for('static', filename='js/products.js') }}"></script>
 {% endblock %}

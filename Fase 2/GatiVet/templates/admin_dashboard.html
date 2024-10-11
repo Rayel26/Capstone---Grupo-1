@@ -59,14 +59,14 @@
             <div class="flex justify-between mb-4">
                 <div class="flex items-center">
                     <!-- Filtro por Tipo de Producto -->
+                    <!-- Filtro por Tipo de Producto -->
                     <div class="mr-4">
                         <label for="productFilter" class="mr-1 text-gray-700 text-xs">Filtrar por tipo:</label>
-                        <select id="productFilter" class="border rounded py-0.5 px-1 text-gray-700 text-xs"
-                            onchange="filterProducts()">
+                        <select id="productFilter" class="border rounded py-0.5 px-1 text-gray-700 text-xs" onchange="filterProducts()">
                             <option value="">Todos los tipos</option>
-                            <option value="alimento_perro">Alimento para Perros</option>
-                            <option value="alimento_gato">Alimento para Gatos</option>
-                            <option value="medicamento">Medicamento Veterinario</option>
+                            <option value="1">Alimento para Perros</option>
+                            <option value="2">Alimento para Gatos</option>
+                            <option value="3">Medicamento Veterinario</option>
                         </select>
                     </div>
 
@@ -477,92 +477,6 @@
     </div>
 </div>
 <!-- Fin del Modal de confirmación de eliminación -->
-
-<!-- JavaScript para manejar el formulario y la tabla de usuarios -->
-<script>
-
-
-</script>
-
-
-
-
-<!-- Sección de Administración de Recordatorios -->
-<div class="container mx-auto flex items-start justify-center pt-10 section hidden" id="recordatorios">
-    <section class="p-4 w-full max-w-3xl bg-white shadow-md rounded-lg">
-        <h2 class="text-2xl font-bold">Administrar Recordatorios</h2>
-        <p>Aquí puedes ver y gestionar los recordatorios de mascotas.</p>
-
-        <div id="recordatoriosList" class="mt-4">
-            <!-- Aquí se cargarán los recordatorios -->
-        </div>
-    </section>
-</div>
-<!-- Fin Sección de Administración de Recordatorios -->
-
-<!-- Script para obtener y mostrar los recordatorios -->
-<script>
-    async function obtenerRecordatorios() {
-        try {
-            const response = await fetch('/api/get-recordatorios'); // Asegúrate de que esta ruta esté disponible en tu backend
-            const recordatorios = await response.json();
-            mostrarRecordatorios(recordatorios);
-        } catch (error) {
-            console.error('Error al obtener los recordatorios:', error);
-        }
-    }
-
-    function mostrarRecordatorios(recordatorios) {
-        const recordatoriosList = document.getElementById('recordatoriosList');
-        recordatoriosList.innerHTML = '';
-
-        if (recordatorios.length === 0) {
-            recordatoriosList.innerHTML = '<p class="text-gray-500">No hay recordatorios disponibles.</p>';
-            return;
-        }
-
-        recordatorios.forEach(recordatorio => {
-            const recordatorioDiv = document.createElement('div');
-            recordatorioDiv.classList.add('border p-4 mb-4 rounded-md shadow');
-
-            recordatorioDiv.innerHTML = `
-                <h3 class="text-lg font-semibold">${recordatorio.mascota}</h3>
-                <p><strong>Correo Electrónico:</strong> ${recordatorio.email}</p>
-                <p><strong>Fecha de Vacunación:</strong> ${new Date(recordatorio.fechaVacuna).toLocaleDateString()}</p>
-                <p><strong>Fecha de Desparasitaciones:</strong> ${new Date(recordatorio.fechaDesparacitacion).toLocaleDateString()}</p>
-                <p><strong>Fecha de Cita:</strong> ${new Date(recordatorio.fechaCita).toLocaleString()}</p>
-                <button onclick="eliminarRecordatorio('${recordatorio._id}')" class="mt-2 py-1 px-3 bg-red-600 text-white rounded hover:bg-red-700">Eliminar</button>
-            `;
-
-            recordatoriosList.appendChild(recordatorioDiv);
-        });
-    }
-
-    async function eliminarRecordatorio(id) {
-        if (confirm('¿Estás seguro de que deseas eliminar este recordatorio?')) {
-            try {
-                const response = await fetch(`/api/delete-recordatorio/${id}`, {
-                    method: 'DELETE'
-                });
-                if (response.ok) {
-                    alert('Recordatorio eliminado exitosamente.');
-                    obtenerRecordatorios(); // Volver a cargar la lista
-                } else {
-                    alert('Error al eliminar el recordatorio.');
-                }
-            } catch (error) {
-                console.error('Error al eliminar el recordatorio:', error);
-            }
-        }
-    }
-
-    // Cargar recordatorios al iniciar
-    document.addEventListener('DOMContentLoaded', obtenerRecordatorios);
-</script>
-
-
-
-
     <!-- Scripts -->
     <script src="{{ url_for('static', filename='js/admin_dashboard.js') }}"> </script>
 </body>
