@@ -38,3 +38,4 @@ document.addEventListener('DOMContentLoaded', function() {
         cartCountElement.textContent = 0;
     }
 });
+

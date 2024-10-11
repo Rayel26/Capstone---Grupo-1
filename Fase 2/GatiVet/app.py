@@ -112,9 +112,6 @@ def admin_dashboard():
 def products():
     return render_template('products.html', show_search=True)
 
-@app.route('/item')
-def item():
-    return render_template('item.html')
 
 @app.route('/help')
 def help():
@@ -199,17 +196,26 @@ def create_product():
 
 # Ruta para obtener los productos
 @app.route('/get_products', methods=['GET'])
-@login_required
-@role_required('admin')
 def get_products():
     response = supabase.table('Producto').select('*').execute()
     return jsonify(response.data), 200
 
 
+@app.route('/item/<int:id_producto>', methods=['GET'])
+def get_product(id_producto):
+    response = supabase.table('Producto').select('*').eq('id_producto', id_producto).execute()
+    
+    if response.data:
+        product = response.data[0]
+        print(product)  # Imprime el producto en la consola del servidor
+        return render_template('item.html', product=product)
+    else:
+        return "Producto no encontrado", 404
+
+
+    
 # Ruta para obtener imágenes de Cloudinary
 @app.route('/api/cloudinary/images', methods=['GET'])
-@login_required
-@role_required('admin')  # Ajusta el rol según sea necesario
 def get_cloudinary_images():
     url = f'https://api.cloudinary.com/v1_1/{CLOUD_NAME}/resources/image/upload'
     response = requests.get(url, auth=HTTPBasicAuth(API_KEY, API_SECRET))
