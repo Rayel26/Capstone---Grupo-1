@@ -63,9 +63,16 @@ const tipoProductoMap = {
     3: 'Medicamento Veterinario'
 };
 
+let selectedFilters = {
+    marca: [],  // Almacena marcas seleccionadas
+    tipo: [],   // Almacena tipos seleccionados
+    precio: { min: null, max: null },  // Almacena el rango de precios seleccionado
+    sortBy: ''  // Nuevo filtro para la ordenación
+};
+
 // Función para cargar los productos
 function loadProducts() {
-    fetch('/get_products')
+    fetch('/get_products')  // Este endpoint debería devolver todos los productos
         .then(response => response.json())
         .then(data => {
             products = data;
@@ -76,20 +83,37 @@ function loadProducts() {
         });
 }
 
-// Función para actualizar las cards con productos
+// Función para actualizar las cards con productos filtrados
 function updateProductCards() {
     const productList = document.getElementById('productList');
 
-    console.log('Elemento productList:', productList); // Verifica si se encuentra correctamente
-
     if (!productList) {
         console.error("No se pudo encontrar el elemento con ID 'productList'");
-        return; // Salir de la función si no se encuentra el elemento.
+        return;
     }
 
-    productList.innerHTML = ''; // Limpiar cards existentes
+    productList.innerHTML = '';  // Limpiar las cards existentes
 
-    products.forEach(product => {
+    // Filtrar los productos según los filtros seleccionados
+    let filteredProducts = products.filter(product => {
+        const matchesMarca = selectedFilters.marca.length === 0 || selectedFilters.marca.includes(product.marca);
+        const matchesTipo = selectedFilters.tipo.length === 0 || selectedFilters.tipo.includes(product.tipo_producto_id);
+        const matchesPrecio = (
+            (selectedFilters.precio.min === null || product.valor >= selectedFilters.precio.min) &&
+            (selectedFilters.precio.max === null || product.valor <= selectedFilters.precio.max)
+        );
+        return matchesMarca && matchesTipo && matchesPrecio;
+    });
+
+    // Ordenar los productos según el valor seleccionado
+    if (selectedFilters.sortBy === 'Price_DESC') {
+        filteredProducts.sort((a, b) => b.valor - a.valor);  // Ordenar por precio descendente
+    } else if (selectedFilters.sortBy === 'Price_ASC') {
+        filteredProducts.sort((a, b) => a.valor - b.valor);  // Ordenar por precio ascendente
+    }
+
+    // Generar las cards para los productos filtrados
+    filteredProducts.forEach(product => {
         const tipoProductoNombre = tipoProductoMap[product.tipo_producto_id] || 'Tipo desconocido';
 
         const cardHTML = `
@@ -107,28 +131,86 @@ function updateProductCards() {
                         ${product.nombre_producto}
                     </h3>
                     <p class="precioProducto mt-2 ml-4">
-                        <span class="sr-only">Precio normal</span>
-                        <span class="tracking-wider text-green-500 font-bold">${product.valor ? product.valor.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' }) : 'N/A'}</span>
+                        <span class="tracking-wider text-green-500 font-bold">
+                            ${product.valor ? product.valor.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' }) : 'N/A'}
+                        </span>
                     </p>
                     <h3 class="marcaProducto ml-4 text-xs text-gray-500 group-hover:underline group-hover:underline-offset-4">
                         ${product.marca}
                     </h3>
                     <div class="mt-3 flex justify-center text-center mb-2">
-                        <button class="block rounded-md mb-6 bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 focus:outline-none text-sm transition-transform transform-gpu hover:-translate-y-1 hover:shadow-md cursor-pointer addToCartBtn" data-product-id="${product.id}">
+                        <button class="block rounded-md mb-6 bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4">
                             Agregar al carrito
                         </button>
                     </div>
                 </div>
             </a>
-        </li>
-    `;
+        </li>`;
         productList.insertAdjacentHTML('beforeend', cardHTML);
     });
 }
 
+// Event listener para el selector de ordenar
+document.getElementById('SortBy').addEventListener('change', event => {
+    selectedFilters.sortBy = event.target.value;  // Actualizar el valor de ordenación
+    updateProductCards();  // Actualizar la lista de productos
+});
 
+// Event listener para checkboxes de filtros de marca
+document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+    checkbox.addEventListener('change', event => {
+        const checkboxId = event.target.id;
+        const checkboxChecked = event.target.checked;
+        const checkboxValue = event.target.nextElementSibling.textContent;
 
+        if (checkboxId.startsWith('Filter')) {
+            if (checkboxChecked) {
+                // Agregar el filtro
+                if (checkboxId.includes('Dog') || checkboxId.includes('Cat') || checkboxId.includes('Med')) {
+                    selectedFilters.marca.push(checkboxValue);  // Añadir marca
+                }
+            } else {
+                // Remover el filtro
+                if (checkboxId.includes('Dog') || checkboxId.includes('Cat') || checkboxId.includes('Med')) {
+                    selectedFilters.marca = selectedFilters.marca.filter(marca => marca !== checkboxValue);
+                }
+            }
+        }
 
+        // Actualizar la lista de productos cuando cambian los filtros
+        updateProductCards();
+    });
+});
+
+// Event listener para el filtro de tipo de producto
+document.querySelectorAll('#FilterType1, #FilterType2, #FilterType3').forEach(checkbox => {
+    checkbox.addEventListener('change', event => {
+        const checkboxId = event.target.id;
+        const checkboxChecked = event.target.checked;
+        const tipoProductoId = checkboxId === 'FilterType1' ? 1 : checkboxId === 'FilterType2' ? 2 : 3;
+
+        if (checkboxChecked) {
+            selectedFilters.tipo.push(tipoProductoId);  // Añadir tipo de producto
+        } else {
+            selectedFilters.tipo = selectedFilters.tipo.filter(tipo => tipo !== tipoProductoId);  // Remover tipo
+        }
+
+        updateProductCards();
+    });
+});
+
+// Event listeners para los filtros de precio
+document.getElementById('minPrice').addEventListener('input', event => {
+    const minValue = parseFloat(event.target.value);
+    selectedFilters.precio.min = isNaN(minValue) ? null : minValue;
+    updateProductCards();
+});
+
+document.getElementById('maxPrice').addEventListener('input', event => {
+    const maxValue = parseFloat(event.target.value);
+    selectedFilters.precio.max = isNaN(maxValue) ? null : maxValue;
+    updateProductCards();
+});
 
 // Función que se ejecuta al hacer clic en un producto
 function redirectToItem(productId) {
@@ -146,5 +228,5 @@ document.querySelectorAll('.product-item').forEach(item => {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-        loadProducts();
+    loadProducts();
 });

@@ -37,12 +37,8 @@ block content %}
                         <select id="SortBy"
                             class="mt-1 rounded-lg border-gray-300 text-xs w-full p-1 focus:ring-2 focus:ring-blue-400 transition duration-150 ease-in-out">
                             <option value="" class="text-xs">Selecciona...</option>
-                            <option value="Price, DESC" class="text-xs">
-                                Precio, DESC &#9660;
-                            </option>
-                            <option value="Price, ASC" class="text-xs">
-                                Precio, ASC &#9650;
-                            </option>
+                            <option value="Price_DESC" class="text-xs">Precio, DESC &#9660;</option>
+                            <option value="Price_ASC" class="text-xs">Precio, ASC &#9650;</option>
                         </select>
                     </div>
                 </div>
@@ -199,11 +195,12 @@ block content %}
                                 <span class="text-xs text-gray-700">Rango de precio</span>
                             </header>
                             <div class="p-2 space-y-2">
-                                <input type="number" placeholder="Mínimo" class="rounded border-gray-300 w-full p-1" />
-                                <input type="number" placeholder="Máximo" class="rounded border-gray-300 w-full p-1" />
+                                <input type="number" id="minPrice" placeholder="Mínimo" class="rounded border-gray-300 w-full p-1" />
+                                <input type="number" id="maxPrice" placeholder="Máximo" class="rounded border-gray-300 w-full p-1" />
                             </div>
                         </div>
                     </details>
+
                 </div>
             </div>
             <!-- Fin Filtros y Ordenar por (Responsivo) -->
