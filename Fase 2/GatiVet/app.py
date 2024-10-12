@@ -213,7 +213,6 @@ def get_product(id_producto):
         return "Producto no encontrado", 404
 
 
-    
 # Ruta para obtener imágenes de Cloudinary
 @app.route('/api/cloudinary/images', methods=['GET'])
 def get_cloudinary_images():
@@ -221,9 +220,13 @@ def get_cloudinary_images():
     response = requests.get(url, auth=HTTPBasicAuth(API_KEY, API_SECRET))
 
     if response.status_code == 200:
-        return jsonify(response.json())
+        # Obtener solo las URLs de las imágenes
+        images = [resource['secure_url'] for resource in response.json().get('resources', [])]
+        return jsonify(images)
     else:
         return jsonify({'error': 'Error fetching images from Cloudinary'}), response.status_code
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

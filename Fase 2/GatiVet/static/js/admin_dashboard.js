@@ -114,11 +114,15 @@ document.getElementById('productForm').addEventListener('submit', function (even
 function filterByMonth() {
     const monthFilter = document.getElementById('monthFilter').value; // Formato YYYY-MM
     filteredProducts = products.filter(product => {
-        const rowMonth = product.fecha_ingreso.substring(0, 7); // Extraer YYYY-MM del producto
+        // Asegúrate de que product.fecha_ingreso esté definido antes de llamar a substring
+        const rowMonth = product.fecha_ingreso ? product.fecha_ingreso.substring(0, 7) : null; // Extraer YYYY-MM del producto
         return monthFilter === "" || rowMonth === monthFilter;
     });
     updatePagination(); // Actualiza paginación con productos filtrados
+    console.log(products);
+    console.log(filteredProducts);
 }
+
 
 // Mapeo de IDs a nombres de productos
 const tipoProductoMap = {

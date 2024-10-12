@@ -119,7 +119,7 @@ function updateProductCards() {
         const cardHTML = `
         <li class="product">
             <a href="/item/${product.id_producto}" class="group block overflow-hidden mt-2 rounded">
-                <img src="${product.imagen_url || 'https://res.cloudinary.com/dqeideoyd/image/upload/v1728504996/Alimento-Perro-Cachorro-Pedigree-Carne-Pollo-y-Cereales-15-kg_oxsjsh.webp'}"
+                <img src="${product.imagen_url}"
                     alt="${product.nombre_producto}"
                     class="h-[200px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[200px]"
                     loading="lazy" />
