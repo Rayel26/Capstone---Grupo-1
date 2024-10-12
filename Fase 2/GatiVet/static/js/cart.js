@@ -147,6 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+
 function updateCartTotal() {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     let total = cart.reduce((sum, product) => sum + (product.cantidad * product.valor), 0);
