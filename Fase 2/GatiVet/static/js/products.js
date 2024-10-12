@@ -139,15 +139,24 @@ function updateProductCards() {
                         ${product.marca}
                     </h3>
                     <div class="mt-3 flex justify-center text-center mb-2">
-                        <button class="block rounded-md mb-6 bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4">
+                        <button class="agregar-carrito-btn block rounded-md mb-6 bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4" data-product-id="${product.id_producto}">
                             Agregar al carrito
                         </button>
                     </div>
                 </div>
             </a>
         </li>`;
+        
         productList.insertAdjacentHTML('beforeend', cardHTML);
+
+        // Agregar evento al botón "Agregar al carrito"
+        const addToCartBtn = productList.querySelector(`button[data-product-id="${product.id_producto}"]`);
+        addToCartBtn.addEventListener('click', (e) => {
+            e.preventDefault();  // Evitar que se redirija al enlace del producto
+            addToCart(product);
+        });
     });
+
 }
 
 // Event listener para el selector de ordenar
@@ -229,4 +238,41 @@ document.querySelectorAll('.product-item').forEach(item => {
 
 document.addEventListener('DOMContentLoaded', () => {
     loadProducts();
+});
+
+///////////////////////////
+//Carrito
+
+// Función para agregar el producto al carrito
+function addToCart(product) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    // Verificar si el producto ya está en el carrito
+    const existingProductIndex = cart.findIndex(item => item.id_producto === product.id_producto);
+
+    if (existingProductIndex !== -1) {
+        // Si el producto ya está en el carrito, incrementar la cantidad
+        cart[existingProductIndex].cantidad += 1;
+    } else {
+        // Si no está en el carrito, agregarlo con una cantidad inicial de 1
+        product.cantidad = 1;
+        cart.push(product);
+    }
+
+    // Guardar el carrito actualizado en localStorage
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    // Mostrar una alerta o mensaje que confirme la acción
+    alert("Producto agregado al carrito");
+}
+
+// Asignar el evento al botón "Agregar al carrito"
+document.querySelectorAll('.agregar-carrito-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const productId = this.getAttribute('data-product-id');
+        const product = products.find(p => p.id_producto === parseInt(productId));
+        if (product) {
+            addToCart(product);
+        }
+    });
 });
