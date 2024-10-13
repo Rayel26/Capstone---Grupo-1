@@ -151,7 +151,7 @@ def create_product():
         return jsonify({'error': 'No se recibió ningún dato.'}), 400
 
     # Verificar claves necesarias
-    required_keys = ['name', 'description', 'price', 'brand', 'quantity', 'type']
+    required_keys = ['name', 'description', 'price', 'brand', 'quantity', 'type', 'image_url']
     for key in required_keys:
         if key not in data:
             return jsonify({'error': f'Falta el campo: {key}'}), 400
@@ -162,7 +162,8 @@ def create_product():
     marca = data['brand']
     stock = data['quantity']
     fecha_ingreso = data['fecha_ingreso']
-    
+    imagen_url = data['image_url']  # Obtener la URL de la imagen
+
     # Determinar el tipo de producto
     tipo_producto_id = 0
     if data['type'] == 'alimento_perro':
@@ -174,7 +175,7 @@ def create_product():
     else:
         return jsonify({'error': 'Tipo de producto no válido.'}), 400
 
-    # Crear el producto en Supabase
+    # Crear el producto en Supabase incluyendo imagen_url
     response = supabase.table('Producto').insert({
         'nombre_producto': nombre_producto,
         'descripcion': descripcion,
@@ -182,7 +183,8 @@ def create_product():
         'marca': marca,
         'stock': stock,
         'tipo_producto_id': tipo_producto_id,
-        'fecha_ingreso' : fecha_ingreso
+        'fecha_ingreso': fecha_ingreso,
+        'imagen_url': imagen_url  # Guardar la URL de la imagen
     }).execute()
 
     # Verificar si la inserción fue exitosa
@@ -225,7 +227,6 @@ def get_cloudinary_images():
         return jsonify(images)
     else:
         return jsonify({'error': 'Error fetching images from Cloudinary'}), response.status_code
-
 
 
 if __name__ == '__main__':

@@ -14,7 +14,7 @@
         <div class="flex justify-end items-center">
           <!-- Cambia justify-center a justify-end para alinear a la derecha -->
           <img
-            src="https://res.cloudinary.com/dqeideoyd/image/upload/v1728504996/Alimento-Perro-Cachorro-Pedigree-Carne-Pollo-y-Cereales-15-kg_oxsjsh.webp"
+            src={{product.imagen_url}}
             alt="Producto" class="w-96 h-96 object-cover rounded-lg shadow-md" id="mainImage"> <!-- Aumentar tamaño aquí -->
         </div>
 
@@ -23,7 +23,14 @@
             <h3 class="text-lg font-semibold text-gray-600 mb-2">{{ product.marca }}</h3>
             <h2 class="text-3xl font-bold mb-2 text-gray-800">{{ product.nombre_producto }}</h2>
             <div class="mb-4">
-              <span class="text-2xl font-bold text-green-600">${{ product.valor or 'Precio no disponible' }}</span>
+              <span class="text-2xl font-bold text-green-600">
+                ${{ '{:,.0f}'.format(product.valor).replace(',', '.') if product.valor is not none else 'Precio no disponible' }} CLP
+              </span>
+              
+              
+              
+              
+              
             </div>
 
             <div class="mb-6">

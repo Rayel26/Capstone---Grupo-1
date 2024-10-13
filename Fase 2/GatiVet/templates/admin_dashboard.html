@@ -121,120 +121,83 @@
             </div>
 
         <!-- Formulario para subir productos -->
-<form id="productForm" class="mt-6 bg-white p-6 shadow rounded-lg text-sm" onsubmit="submitProduct(event)">
-    <h4 class="text-base font-semibold">Agregar Nuevo Producto</h4>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-        <div>
-            <label for="productName" class="block text-gray-700">Nombre del Producto:</label>
-            <input type="text" id="productName" class="border rounded w-full py-1 px-2 text-gray-700"
-                placeholder="Nombre del producto" required>
-            <div id="nameError" class="error hidden">Este campo es obligatorio.</div>
-        </div>
-        <div>
-            <label for="productType" class="block text-gray-700">Tipo de Producto:</label>
-            <select id="productType" class="border rounded w-full py-1 px-2 text-gray-700" required>
-                <option value="">Seleccione un tipo</option>
-                <option value="alimento_perro">Alimento para Perros</option>
-                <option value="alimento_gato">Alimento para Gatos</option>
-                <option value="medicamento">Medicamento Veterinario</option>
-            </select>
-            <div id="typeError" class="error hidden">Este campo es obligatorio.</div>
-        </div>
-        <div>
-            <label for="brand" class="block text-gray-700">Marca:</label>
-            <select id="brand" class="border rounded w-full py-1 px-2 text-gray-700" required>
-                <option value="">Seleccione una marca</option>
-                <optgroup label="Alimento para Perros">
-                    <option value="Royal Canin">Royal Canin</option>
-                    <option value="Purina Pro Plan">Purina Pro Plan</option>
-                    <option value="Pedigree">Pedigree</option>
-                    <option value="Eukanuba">Eukanuba</option>
-                </optgroup>
-                <optgroup label="Alimento para Gatos">
-                    <option value="Whiskas">Whiskas</option>
-                    <option value="Josera">Josera</option>
-                    <option value="Purina Cat Chow">Purina Cat Chow</option>
-                </optgroup>
-                <optgroup label="Medicamentos Veterinarios">
-                    <option value="NexGard">NexGard</option>
-                    <option value="Frontline">Frontline</option>
-                    <option value="Advantage">Advantage</option>
-                </optgroup>
-            </select>
-            <div id="brandError" class="error hidden">Este campo es obligatorio.</div>
-        </div>
-        <div>
-            <label for="price" class="block text-gray-700">Precio:</label>
-            <input type="text" id="price" class="border rounded w-full py-1 px-2 text-gray-700"
-                placeholder="Precio del producto" oninput="formatCurrency(this)" required>
-            <div id="priceError" class="error hidden">Este campo es obligatorio.</div>
-        </div>
-        <div>
-            <label for="quantity" class="block text-gray-700">Cantidad:</label>
-            <input type="number" id="quantity" class="border rounded w-full py-1 px-2 text-gray-700"
-                placeholder="Cantidad disponible" required>
-            <div id="quantityError" class="error hidden">Este campo es obligatorio.</div>
-        </div>
-        <div>
-            <label for="description" class="block text-gray-700">Descripción:</label>
-            <textarea id="description" class="border rounded w-full py-1 px-2 text-gray-700"
-                placeholder="Descripción del producto"></textarea>
-        </div>
-        <div>
-            <label for="productImage" class="block text-gray-700">Seleccionar Imagen del Producto:</label>
-            <select id="productImage" class="border rounded w-full py-1 px-2 text-gray-700" required onchange="updateImagePreview()">
-                <option value="">Seleccione una imagen</option>
-            </select>
-            <div id="imageError" class="error hidden">Este campo es obligatorio.</div>
-            <div class="mt-2">
-                <img id="imagePreview" src="" alt="Vista previa de la imagen" class="hidden w-32 h-32 border rounded mt-2"/>
+        <form id="productForm" class="mt-6 bg-white p-6 shadow rounded-lg text-sm" onsubmit="submitProduct(event)">
+            <h4 class="text-base font-semibold">Agregar Nuevo Producto</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                <div>
+                    <label for="productName" class="block text-gray-700">Nombre del Producto:</label>
+                    <input type="text" id="productName" class="border rounded w-full py-1 px-2 text-gray-700"
+                        placeholder="Nombre del producto" required>
+                    <div id="nameError" class="error hidden">Este campo es obligatorio.</div>
+                </div>
+                <div>
+                    <label for="productType" class="block text-gray-700">Tipo de Producto:</label>
+                    <select id="productType" class="border rounded w-full py-1 px-2 text-gray-700" required>
+                        <option value="">Seleccione un tipo</option>
+                        <option value="alimento_perro">Alimento para Perros</option>
+                        <option value="alimento_gato">Alimento para Gatos</option>
+                        <option value="medicamento">Medicamento Veterinario</option>
+                    </select>
+                    <div id="typeError" class="error hidden">Este campo es obligatorio.</div>
+                </div>
+                <div>
+                    <label for="brand" class="block text-gray-700">Marca:</label>
+                    <select id="brand" class="border rounded w-full py-1 px-2 text-gray-700" required>
+                        <option value="">Seleccione una marca</option>
+                        <optgroup label="Alimento para Perros">
+                            <option value="Royal Canin">Royal Canin</option>
+                            <option value="Purina Pro Plan">Purina Pro Plan</option>
+                            <option value="Pedigree">Pedigree</option>
+                            <option value="Eukanuba">Eukanuba</option>
+                        </optgroup>
+                        <optgroup label="Alimento para Gatos">
+                            <option value="Whiskas">Whiskas</option>
+                            <option value="Josera">Josera</option>
+                            <option value="Purina Cat Chow">Purina Cat Chow</option>
+                        </optgroup>
+                        <optgroup label="Medicamentos Veterinarios">
+                            <option value="NexGard">NexGard</option>
+                            <option value="Frontline">Frontline</option>
+                            <option value="Advantage">Advantage</option>
+                        </optgroup>
+                    </select>
+                    <div id="brandError" class="error hidden">Este campo es obligatorio.</div>
+                </div>
+                <div>
+                    <label for="price" class="block text-gray-700">Precio:</label>
+                    <input type="text" id="price" class="border rounded w-full py-1 px-2 text-gray-700"
+                        placeholder="Precio del producto" oninput="formatCurrency(this)" required>
+                    <div id="priceError" class="error hidden">Este campo es obligatorio.</div>
+                </div>
+                <div>
+                    <label for="quantity" class="block text-gray-700">Cantidad:</label>
+                    <input type="number" id="quantity" class="border rounded w-full py-1 px-2 text-gray-700"
+                        placeholder="Cantidad disponible" required>
+                    <div id="quantityError" class="error hidden">Este campo es obligatorio.</div>
+                </div>
+                <div>
+                    <label for="description" class="block text-gray-700">Descripción:</label>
+                    <textarea id="description" class="border rounded w-full py-1 px-2 text-gray-700"
+                        placeholder="Descripción del producto"></textarea>
+                </div>
+                <div>
+                    <label for="productImage" class="block text-gray-700">Seleccionar Imagen del Producto:</label>
+                    <select id="productImage" class="border rounded w-full py-1 px-2 text-gray-700" onchange="updateImagePreview()">
+                        <option value="">Seleccione una imagen</option>
+                    </select>
+                    <div id="imageError" class="error hidden">Este campo es obligatorio.</div>
+                    <div class="mt-2">
+                        <img id="imagePreview" src="" alt="Vista previa de la imagen" class="hidden w-32 h-32 border rounded mt-2"/>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <input type="file" id="uploadImage" accept="image/*" class="border rounded w-full py-1 px-2 text-gray-700" onchange="uploadImageToCloudinary()">
+                </div>
             </div>
-        </div>
-    </div>
-    <button type="submit"
-        class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
-        style="background-color: #18beaa;">Subir Producto</button>
-</form>
-<script>
-    // Función para cargar imágenes de Cloudinary
-    async function loadImages() {
-        try {
-            const response = await fetch('/api/cloudinary/images');
-            const images = await response.json();
-
-            if (Array.isArray(images)) {
-                const select = document.getElementById('productImage');
-
-                images.forEach(imageUrl => {
-                    const option = document.createElement('option');
-                    option.value = imageUrl; // Guardar la URL como valor del option
-                    option.textContent = imageUrl.split('/').pop(); // Mostrar el nombre del archivo
-                    select.appendChild(option);
-                });
-            }
-        } catch (error) {
-            console.error('Error loading images:', error);
-        }
-    }
-
-    // Función para actualizar la vista previa de la imagen
-    function updateImagePreview() {
-        const select = document.getElementById('productImage');
-        const imagePreview = document.getElementById('imagePreview');
-        const selectedImageUrl = select.value;
-
-        if (selectedImageUrl) {
-            imagePreview.src = selectedImageUrl; // Cambia la fuente de la imagen
-            imagePreview.classList.remove('hidden'); // Muestra la imagen
-        } else {
-            imagePreview.classList.add('hidden'); // Oculta la imagen si no hay selección
-        }
-    }
-
-    // Cargar imágenes al cargar la página
-    window.onload = loadImages;
-</script>
-
+            <button type="submit"
+            class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
+            style="background-color: #18beaa;">Subir Producto</button>
+        </form>
     </div>
     <!-- Fin Contenido Productos -->
 

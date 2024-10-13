@@ -1,4 +1,27 @@
 // Productos
+
+// Función para subir la imagen a Cloudinary
+async function uploadImageToCloudinary(file) {
+    const cloudName = 'dqeideoyd'; // Reemplaza con tu Cloud Name
+    const uploadPreset = 'prueba'; // Reemplaza con tu Upload Preset
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', uploadPreset);
+
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, {
+        method: 'POST',
+        body: formData
+    });
+
+    const data = await response.json();
+    if (data.secure_url) {
+        return data.secure_url; // Retornar la URL de la imagen
+    } else {
+        throw new Error('Error al cargar la imagen a Cloudinary');
+    }
+}
+
 // Función para mostrar la sección correspondiente
 function showSection(sectionId) {
     const sections = document.querySelectorAll('.section');
@@ -38,7 +61,7 @@ let currentPage = 1;
 let totalPages = 1;
 
 // Manejo del formulario
-document.getElementById('productForm').addEventListener('submit', function (event) {
+document.getElementById('productForm').addEventListener('submit', async function (event) {
     event.preventDefault(); // Evitar el envío del formulario
     let isValid = true;
 
@@ -53,6 +76,8 @@ document.getElementById('productForm').addEventListener('submit', function (even
     const price = parseInt(priceInput, 10);
     const quantity = parseInt(document.getElementById('quantity').value, 10);
     const description = document.getElementById('description').value.trim();
+    const imageFile = document.getElementById('uploadImage').files[0]; // Obtener el archivo de imagen
+    const selectedImageUrl = document.getElementById('productImage').value; // URL de la imagen seleccionada
 
     // Validaciones
     if (!name) {
@@ -76,8 +101,31 @@ document.getElementById('productForm').addEventListener('submit', function (even
         isValid = false;
     }
 
-    // Si todo es válido, proceder a añadir el producto
+    // Si no se selecciona imagen ni se carga una, mostrar error
+    if (!imageFile && !selectedImageUrl) {
+        document.getElementById('imageError').classList.remove('hidden');
+        isValid = false;
+    }
+
+    // Si todo es válido, proceder a cargar la imagen si es necesario
     if (isValid) {
+        let imageUrl;
+
+        if (imageFile) {
+            // Cargar imagen a Cloudinary
+            try {
+                imageUrl = await uploadImageToCloudinary(imageFile);
+            } catch (error) {
+                console.error('Error uploading image:', error);
+                alert(`Error al subir la imagen: ${error.message}`);
+                return;
+            }
+        } else {
+            // Usar la URL seleccionada de Cloudinary
+            imageUrl = selectedImageUrl;
+        }
+
+        // Preparar los datos del producto
         const productData = {
             name: name,
             type: type,
@@ -85,30 +133,34 @@ document.getElementById('productForm').addEventListener('submit', function (even
             price: price,
             quantity: quantity,
             description: description,
+            image_url: imageUrl, // Incluir la URL de la imagen
             fecha_ingreso: getCurrentDate() // Agregar la fecha de ingreso
         };
 
-        fetch('/create_product', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(productData)
-        })
-        .then(response => {
-            if (response.ok) return response.json();
-            else return response.json().then(errorData => {
-                throw new Error(`Error al crear el producto: ${errorData.error || response.statusText}`);
+        // Enviar los datos del producto al servidor
+        try {
+            const response = await fetch('/create_product', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(productData)
             });
-        })
-        .then(data => {
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`Error al crear el producto: ${errorData.error || response.statusText}`);
+            }
+
+            // Restablecer el formulario y recargar productos
             document.getElementById('productForm').reset();
             loadProducts(); // Recargar productos después de añadir
-        })
-        .catch(error => {
+        } catch (error) {
             console.error('Error en el proceso:', error);
             alert(`Error al crear el producto: ${error.message}`);
-        });
+        }
     }
 });
+
+
 
 // Función para filtrar por mes
 function filterByMonth() {
@@ -807,13 +859,8 @@ async function uploadImage() {
         console.error('Error al subir la imagen:', error);
         alert('Error al subir la imagen. Intenta nuevamente.');
     }
-}
+} 
 
-function submitProduct(event) {
-    event.preventDefault();
-    // Aquí puedes manejar el envío del formulario para agregar el producto
-    // Asegúrate de recoger la URL de la imagen si se ha subido a Cloudinary
-}
 
 function loadImages() {
     const cloudinaryUrl = `https://api.cloudinary.com/v1_1/dqeideoyd/resources/image`;
@@ -850,3 +897,42 @@ function loadImages() {
     });
 }
 
+//JS Cloudinary
+
+// Función para cargar imágenes de Cloudinary
+async function loadImages() {
+    try {
+        const response = await fetch('/api/cloudinary/images');
+        const images = await response.json();
+
+        if (Array.isArray(images)) {
+            const select = document.getElementById('productImage');
+
+            images.forEach(imageUrl => {
+                const option = document.createElement('option');
+                option.value = imageUrl; // Guardar la URL como valor del option
+                option.textContent = imageUrl.split('/').pop(); // Mostrar el nombre del archivo
+                select.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('Error loading images:', error);
+    }
+}
+
+// Función para actualizar la vista previa de la imagen
+function updateImagePreview() {
+    const select = document.getElementById('productImage');
+    const imagePreview = document.getElementById('imagePreview');
+    const selectedImageUrl = select.value;
+
+    if (selectedImageUrl) {
+        imagePreview.src = selectedImageUrl; // Cambia la fuente de la imagen
+        imagePreview.classList.remove('hidden'); // Muestra la imagen
+    } else {
+        imagePreview.classList.add('hidden'); // Oculta la imagen si no hay selección
+    }
+}
+
+// Cargar imágenes al cargar la página
+window.onload = loadImages;

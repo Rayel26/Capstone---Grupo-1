@@ -117,35 +117,37 @@ function updateProductCards() {
         const tipoProductoNombre = tipoProductoMap[product.tipo_producto_id] || 'Tipo desconocido';
 
         const cardHTML = `
-        <li class="product">
-            <a href="/item/${product.id_producto}" class="group block overflow-hidden mt-2 rounded">
-                <img src="${product.imagen_url}"
-                    alt="${product.nombre_producto}"
-                    class="h-[200px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[200px]"
-                    loading="lazy" />
-                <div class="relative bg-white pt-3">
-                    <h3 class="tipoProducto ml-4 text-xs text-gray-500 group-hover:underline group-hover:underline-offset-4">
-                        ${tipoProductoNombre}
-                    </h3>
-                    <h3 class="nombreProducto text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4 ml-4">
-                        ${product.nombre_producto}
-                    </h3>
-                    <p class="precioProducto mt-2 ml-4">
-                        <span class="tracking-wider text-green-500 font-bold">
-                            ${product.valor ? product.valor.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' }) : 'N/A'}
-                        </span>
-                    </p>
-                    <h3 class="marcaProducto ml-4 text-xs text-gray-500 group-hover:underline group-hover:underline-offset-4">
-                        ${product.marca}
-                    </h3>
-                    <div class="mt-3 flex justify-center text-center mb-2">
-                        <button class="agregar-carrito-btn block rounded-md mb-6 bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4" data-product-id="${product.id_producto}">
-                            Agregar al carrito
-                        </button>
+            <li class="product">
+                <a href="/item/${product.id_producto}" class="group block overflow-hidden mt-2 rounded">
+                    <img src="${product.imagen_url}"
+                        alt="${product.nombre_producto}"
+                        class="h-[200px] w-full object-cover transition duration-500 group-hover:scale-105"
+                        loading="lazy" />
+                    <div class="relative bg-white pt-3">
+                        <h3 class="tipoProducto ml-4 text-xs text-gray-500 group-hover:underline group-hover:underline-offset-4">
+                            ${tipoProductoNombre}
+                        </h3>
+                        <h3 class="nombreProducto text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4 ml-4">
+                            ${product.nombre_producto}
+                        </h3>
+                        <p class="precioProducto mt-2 ml-4">
+                            <span class="tracking-wider text-green-500 font-bold">
+                                ${product.valor ? product.valor.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' }) : 'N/A'}
+                            </span>
+                        </p>
+                        <h3 class="marcaProducto ml-4 text-xs text-gray-500 group-hover:underline group-hover:underline-offset-4">
+                            ${product.marca}
+                        </h3>
+                        <div class="mt-3 flex justify-center text-center mb-2">
+                            <button class="agregar-carrito-btn block rounded-md mb-6 bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4" data-product-id="${product.id_producto}">
+                                Agregar al carrito
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </a>
-        </li>`;
+                </a>
+            </li>
+            `;
+
         
         productList.insertAdjacentHTML('beforeend', cardHTML);
 

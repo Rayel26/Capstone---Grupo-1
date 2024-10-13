@@ -5,10 +5,16 @@
     justify-content: center; /* Centra los productos horizontalmente */
 }
 
-.product {
-    display: flex; /* Asegúrate de que los elementos hijos estén alineados correctamente */
-    box-sizing: border-box; /* Asegura que padding y border se incluyan en el ancho */
+.product img {
+    height: 200px; /* Establece una altura fija */
+    width: 100%; /* Ancho completo */
+    object-fit: cover; /* Asegura que la imagen cubra el área asignada */
 }
+
+.product {
+    width: 100%; /* Asegúrate de que las tarjetas ocupen el 100% del ancho de su contenedor */
+}
+
 
 @media (max-width: 1024px) {
     .product {

@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const cartItemHTML = `
             <div class="flex items-start gap-4">
                 <div class="w-28 h-28 flex p-3 bg-gray-300 rounded-md">
-                    <img src='${product.imagen_url}' class="w-full object-contain" />
+                    <img src="${product.imagen_url}" class="w-full object-contain" />
                 </div>
                 <div class="text-white flex flex-col justify-start">
                     <h3 class="text-lg font-semibold text-left">${product.nombre_producto}</h3>
