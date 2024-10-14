@@ -84,3 +84,67 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
+
+///////////////////////
+//Carrito
+// Función para actualizar el número de productos en el ícono del carrito
+function updateCartCount() {
+    // Obtener los productos del carrito almacenados en localStorage
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    // Contar solo productos únicos
+    let totalItems = cart.length;
+
+    // Actualizar el número en el span del carrito
+    const cartCountElement = document.getElementById('cartCount');
+    if (cartCountElement) {
+        cartCountElement.innerText = totalItems;
+    }
+}
+
+// Función para actualizar el total de productos
+function updateCartTotal() {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let total = cart.reduce((sum, product) => sum + (product.cantidad * product.valor), 0);
+    const cartTotalElement = document.getElementById('cart-total');
+    if (cartTotalElement) {
+        cartTotalElement.textContent = total.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
+    }
+}
+
+// Función para actualizar la cantidad de un producto en el carrito
+function updateProductQuantity(productId, change) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const productIndex = cart.findIndex(item => item.id_producto === parseInt(productId));
+
+    if (productIndex !== -1) {
+        cart[productIndex].cantidad += change;
+
+        // Eliminar el producto si la cantidad es 0
+        if (cart[productIndex].cantidad <= 0) {
+            cart.splice(productIndex, 1);
+        }
+
+        // Guardar el carrito actualizado en localStorage
+        localStorage.setItem('cart', JSON.stringify(cart));
+
+        // Actualizar el número de productos en el ícono del carrito
+        updateCartCount(); // Actualizar conteo aquí
+        updateCartTotal(); // También actualiza el total, si es necesario
+    }
+}
+
+// Actualizar el número de productos al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    updateCartCount();  // Actualiza el número de productos en el carrito
+    updateCartTotal();  // Asegúrate de que el total también se cargue correctamente
+
+    // Asignar el evento al botón de agregar al carrito en la página de productos
+    const addToCartButtons = document.querySelectorAll('.agregar-carrito-btn');
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.getAttribute('data-product-id');
+            addToCart(productId); // Aumentar cantidad al agregar
+        });
+    });
+});

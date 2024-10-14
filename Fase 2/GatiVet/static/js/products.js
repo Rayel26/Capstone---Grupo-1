@@ -138,6 +138,9 @@ function updateProductCards() {
                         <h3 class="marcaProducto ml-4 text-xs text-gray-500 group-hover:underline group-hover:underline-offset-4">
                             ${product.marca}
                         </h3>
+                        <h3 class="marcaProducto ml-4 text-xs text-gray-500 group-hover:underline group-hover:underline-offset-4">
+                            Stock: ${product.stock}
+                        </h3>
                         <div class="mt-3 flex justify-center text-center mb-2">
                             <button class="agregar-carrito-btn block rounded-md mb-6 bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4" data-product-id="${product.id_producto}">
                                 Agregar al carrito
@@ -249,24 +252,22 @@ document.addEventListener('DOMContentLoaded', () => {
 function addToCart(product) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    // Verificar si el producto ya está en el carrito
-    const existingProductIndex = cart.findIndex(item => item.id_producto === product.id_producto);
+    // Asegúrate de que id_producto sea un número
+    const existingProductIndex = cart.findIndex(item => item.id_producto === Number(product.id_producto));
 
     if (existingProductIndex !== -1) {
-        // Si el producto ya está en el carrito, incrementar la cantidad
+        // Incrementar cantidad
         cart[existingProductIndex].cantidad += 1;
     } else {
-        // Si no está en el carrito, agregarlo con una cantidad inicial de 1
+        // Añadir producto
         product.cantidad = 1;
         cart.push(product);
     }
 
-    // Guardar el carrito actualizado en localStorage
     localStorage.setItem('cart', JSON.stringify(cart));
-
-    // Mostrar una alerta o mensaje que confirme la acción
     alert("Producto agregado al carrito");
 }
+
 
 // Asignar el evento al botón "Agregar al carrito"
 document.querySelectorAll('.agregar-carrito-btn').forEach(button => {

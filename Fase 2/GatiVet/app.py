@@ -228,6 +228,51 @@ def get_cloudinary_images():
     else:
         return jsonify({'error': 'Error fetching images from Cloudinary'}), response.status_code
 
+# Ruta para obtener la cantidad de productos en el carrito
+@app.route('/cart_count', methods=['GET'])
+def cart_count():
+    # Aquí se obtiene la cantidad de productos del carrito en la sesión
+    cart_items = session.get('cart', [])
+    return jsonify({'count': len(cart_items)}), 200
+
+
+@app.route('/add_to_cart', methods=['POST'])
+def add_to_cart():
+    data = request.get_json()
+    product_id = data.get('product_id')
+    quantity = int(data.get('quantity'))
+
+    # Obtener el producto del stock
+    response = supabase.table('Producto').select('stock').eq('id_producto', product_id).execute()
+    
+    if not response.data:
+        return jsonify({'error': 'Producto no encontrado.'}), 404
+
+    product = response.data[0]
+    available_stock = product['stock']
+
+    # Verificar si hay suficiente stock
+    if available_stock < quantity:
+        return jsonify({'error': 'No hay suficiente stock disponible.'}), 400
+
+    # Calcular el nuevo stock
+    new_stock = available_stock - quantity
+    print(f'Available stock: {available_stock}, New stock: {new_stock}, Product ID: {product_id}')
+
+    # Actualizar el stock en la base de datos
+    update_response = supabase.table('Producto').update({'stock': new_stock}).eq('id_producto', product_id).execute()
+
+    if update_response.error:
+        print(update_response.error)  # Imprimir el error
+        return jsonify({'error': 'Error al actualizar el stock.'}), 500
+
+    # Agregar el producto al carrito
+    cart = session.get('cart', [])
+    cart.append({'product_id': product_id, 'quantity': quantity})
+    session['cart'] = cart
+
+    return jsonify({'message': 'Producto agregado al carrito con éxito.', 'stock_actual': new_stock}), 200
+
 
 if __name__ == '__main__':
     app.run(debug=True)

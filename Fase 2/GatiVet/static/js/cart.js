@@ -20,70 +20,85 @@ document.getElementById('decrement-btn').addEventListener('click', function() {
 
 function updateTotalPrice() {
     let quantity = parseInt(document.getElementById('quantity-input').value);
-    let pricePerItem = 20; // Example price per item
+    let pricePerItem = 20; // Ejemplo de precio por item
     let subtotal = quantity * pricePerItem;
-    let shipping = 10; // Example shipping cost
-    let tax = 5; // Example tax amount
+    let shipping = 10; // Costo de envío
+    let tax = 5; // Importe de impuestos
     let total = subtotal + shipping + tax;
 
-    document.getElementById('cart-total').textContent = `$${subtotal}`;
-    document.getElementById('order-subtotal').textContent = `$${subtotal}`;
-    document.getElementById('order-total').textContent = `$${total}`;
+    // Actualizar los elementos de la interfaz
+    document.getElementById('order-subtotal').textContent = `$${subtotal.toLocaleString('es-CL')}`;
+    document.getElementById('shipping-cost').textContent = `$${shipping.toLocaleString('es-CL')}`;
+    document.getElementById('tax-cost').textContent = `$${tax.toLocaleString('es-CL')}`;
+    document.getElementById('order-total').textContent = `$${total.toLocaleString('es-CL')}`;
 }
 
+// Initialize the flatpickr for the expiration date input
 flatpickr("#card-expiration-input", {
-    dateFormat: "m/y", // Format for user input
-    altInput: true, // Use an alternate input for display
-    altFormat: "m/y", // Format for the alternate input
+    dateFormat: "m/y",
+    altInput: true,
+    altFormat: "m/y",
     minDate: "today",
     enableTime: false,
     mode: "single",
     defaultDate: "01/24",
-    locale: "es", // Apply Spanish locale
-    onChange: function(selectedDates, dateStr, instance) {
-        console.log(selectedDates, dateStr, instance);
-    }
+    locale: "es",
 });
 
+// Cart modal functionality
 document.addEventListener('DOMContentLoaded', function() {
     const payNowBtn = document.getElementById('payNowBtn');
     const cartModal = document.getElementById('cartModal');
     const closeModalBtn = document.getElementById('closeModalBtn');
     const acceptModalBtn = document.getElementById('acceptModalBtn');
 
-    // Función para mostrar el modal
     payNowBtn.addEventListener('click', function() {
         cartModal.classList.remove('hidden');
     });
 
-    // Función para cerrar el modal
     closeModalBtn.addEventListener('click', function() {
         cartModal.classList.add('hidden');
     });
 
-    // Función para aceptar y cerrar el modal
     acceptModalBtn.addEventListener('click', function() {
         cartModal.classList.add('hidden');
     });
-});
 
-///////////////Ver productos
-document.addEventListener('DOMContentLoaded', function() {
     const cartItemsContainer = document.getElementById('cart-items');
-
-    // Obtener los productos del carrito del localStorage
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    renderCartItems(cart);
 
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = '<p class="text-white">El carrito está vacío.</p>';
-    } else {
+        return;
+    }
+
+    cartItemsContainer.addEventListener('click', function(event) {
+        if (event.target.classList.contains('increment-btn')) {
+            const productId = event.target.getAttribute('data-product-id');
+            updateProductQuantity(productId, 1);
+        }
+
+        if (event.target.classList.contains('decrement-btn')) {
+            const productId = event.target.getAttribute('data-product-id');
+            updateProductQuantity(productId, -1);
+        }
+    });
+
+    function renderCartItems(cart) {
+        cartItemsContainer.innerHTML = '';
+        let totalCartValue = 0;
+
         cart.forEach(product => {
             const totalPrice = product.cantidad * product.valor;
+            totalCartValue += totalPrice;
+
+            const imageUrl = product.imagen_url ? product.imagen_url : 'ruta/imagen/default.png';
 
             const cartItemHTML = `
             <div class="flex items-start gap-4">
                 <div class="w-28 h-28 flex p-3 bg-gray-300 rounded-md">
-                    <img src="${product.imagen_url}" class="w-full object-contain" />
+                    <img src="${imageUrl}" class="w-full object-contain" onerror="this.onerror=null; this.src='ruta/imagen/default.png';" />
                 </div>
                 <div class="text-white flex flex-col justify-start">
                     <h3 class="text-lg font-semibold text-left">${product.nombre_producto}</h3>
@@ -108,24 +123,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
             cartItemsContainer.insertAdjacentHTML('beforeend', cartItemHTML);
         });
+
+        document.getElementById('cart-total').textContent = totalCartValue.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
+        document.getElementById('order-subtotal').textContent = totalCartValue.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
+
+        // Call updateTotal to reflect the updated values
+        updateTotal();
     }
 
-    // Manejar incremento/decremento de cantidad
-    document.querySelectorAll('.increment-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = this.getAttribute('data-product-id');
-            updateProductQuantity(productId, 1);
-        });
-    });
-
-    document.querySelectorAll('.decrement-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = this.getAttribute('data-product-id');
-            updateProductQuantity(productId, -1);
-        });
-    });
-
-    // Función para actualizar la cantidad de un producto en el carrito
     function updateProductQuantity(productId, change) {
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         const productIndex = cart.findIndex(item => item.id_producto === parseInt(productId));
@@ -133,26 +138,32 @@ document.addEventListener('DOMContentLoaded', function() {
         if (productIndex !== -1) {
             cart[productIndex].cantidad += change;
 
-            // Eliminar el producto si la cantidad es 0
             if (cart[productIndex].cantidad <= 0) {
                 cart.splice(productIndex, 1);
             }
 
-            // Guardar el carrito actualizado en localStorage
             localStorage.setItem('cart', JSON.stringify(cart));
-
-            // Recargar la página para reflejar los cambios
-            location.reload();
+            renderCartItems(cart);
         }
     }
 });
 
+// Function to update total
+function updateTotal() {
+    const subtotal = parseFloat(document.getElementById("order-subtotal").textContent.replace('$', '').replace('.', '').replace('.', '')) || 0;
+    const shipping = parseFloat(document.getElementById("shipping-cost").textContent.replace('$', '').replace('.', '').replace('.', '')) || 0;
+    const tax = parseFloat(document.getElementById("tax-cost").textContent.replace('$', '').replace('.', '').replace('.', '')) || 0;
+    
+    const total = subtotal + shipping + tax;
+    document.getElementById("order-total").textContent = `$${total.toLocaleString('es-CL')}`;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    updateCartTotal(); // Initial cart total update
+});
 
 function updateCartTotal() {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     let total = cart.reduce((sum, product) => sum + (product.cantidad * product.valor), 0);
     document.getElementById('cart-total').textContent = total.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
 }
-
-// Llamar a la función al cargar la página
-document.addEventListener('DOMContentLoaded', updateCartTotal);

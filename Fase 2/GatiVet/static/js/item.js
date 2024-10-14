@@ -21,8 +21,6 @@ function addToCart(product) {
     // Guardar el carrito actualizado en localStorage
     localStorage.setItem('cart', JSON.stringify(cart));
 
-    // Mostrar una alerta o mensaje que confirme la acción
-    alert("Producto agregado al carrito");
 }
 
 
