@@ -154,12 +154,31 @@ function updateProductCards() {
         
         productList.insertAdjacentHTML('beforeend', cardHTML);
 
-        // Agregar evento al botón "Agregar al carrito"
-        const addToCartBtn = productList.querySelector(`button[data-product-id="${product.id_producto}"]`);
-        addToCartBtn.addEventListener('click', (e) => {
-            e.preventDefault();  // Evitar que se redirija al enlace del producto
-            addToCart(product);
-        });
+// Agregar evento al botón "Agregar al carrito"
+const addToCartBtn = productList.querySelector(`button[data-product-id="${product.id_producto}"]`);
+addToCartBtn.addEventListener('click', (e) => {
+    e.preventDefault();  // Evitar que se redirija al enlace del producto
+    addToCart(product);  // Agregar el producto al carrito
+    
+    // Mostrar el modal al agregar producto
+    const cartModal = document.getElementById('cartModal');
+    cartModal.classList.remove('hidden');
+});
+
+// Cerrar el modal al hacer clic en el botón de cerrar
+const closeModalBtn = document.getElementById('closeModalBtn');
+closeModalBtn.addEventListener('click', () => {
+    const cartModal = document.getElementById('cartModal');
+    cartModal.classList.add('hidden');
+});
+
+// Cerrar el modal al hacer clic en "Aceptar"
+const acceptModalBtn = document.getElementById('acceptModalBtn');
+acceptModalBtn.addEventListener('click', () => {
+    const cartModal = document.getElementById('cartModal');
+    cartModal.classList.add('hidden');
+});
+
     });
 
 }
@@ -264,9 +283,14 @@ function addToCart(product) {
         cart.push(product);
     }
 
+    // Guardar el carrito actualizado en localStorage
     localStorage.setItem('cart', JSON.stringify(cart));
-    alert("Producto agregado al carrito");
+
+    // Actualizar el contador y el total de productos
+    updateCartCount(); // Actualiza el número de productos en el carrito
+    updateCartTotal(); // Actualiza el total en el carrito
 }
+
 
 
 // Asignar el evento al botón "Agregar al carrito"
