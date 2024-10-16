@@ -132,6 +132,45 @@ def cart():
 def registration():
     return render_template('registration.html')
 
+@app.route('/register', methods=['POST'])
+def register():
+    data = request.get_json()
+    
+    # Log para ver los datos recibidos
+    print("Datos recibidos:", data)
+
+    # Extraer los datos del JSON
+    rut = data['id_usuario']
+    nombre = data['nombre']
+    appaterno = data['appaterno']
+    apmaterno = data['apmaterno']
+    correo = data['correo']
+    contraseña = data['contraseña']
+    celular = data['celular']
+
+    # Inserta los datos en Supabase
+    response = supabase.table('Usuario').insert({
+        'id_usuario': rut,
+        'nombre': nombre,
+        'appaterno': appaterno,
+        'apmaterno': apmaterno,
+        'correo': correo,
+        'contraseña': contraseña,
+        'celular': celular
+    }).execute()
+
+    # Log para ver la respuesta de Supabase
+    print("Respuesta de Supabase:", response)
+
+    if response.status_code == 201:  # Si la inserción fue exitosa
+        return jsonify({"message": "Usuario creado exitosamente", "data": response.data}), 201
+    else:
+     return jsonify({"error": "Error al crear el usuario", "details": response.json()}), 400
+
+
+
+
+
 @app.route('/donation')
 def donation():
     return render_template('donation.html')
