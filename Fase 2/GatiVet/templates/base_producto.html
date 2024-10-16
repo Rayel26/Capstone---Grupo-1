@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <!-- JS Externo -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script src="https://cdn.jsdelivr.net/npm/keen-slider@6.8.6/keen-slider.min.js"></script>
 </head>
 
@@ -92,10 +93,11 @@
           class="inline-flex items-center bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 rounded-full focus:outline-none text-base mt-4 md:mt-0 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
           Cerrar Sesión
           <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            class="w-4 h-4 ml-1" viewBox="0 0 24 24">
-            <path d="M5 12h14M12 5l7 7-7 7"></path>
+              class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
           </svg>
         </a>
+  
     {% else %}
         <a href="{{ url_for('login') }}"
           class="inline-flex items-center bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 rounded-full focus:outline-none text-base mt-4 md:mt-0 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">

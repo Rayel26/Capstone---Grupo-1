@@ -35,6 +35,47 @@ function showSection(sectionId) {
 document.addEventListener('DOMContentLoaded', () => {
     showSection('productos');
     loadProducts(); // Cargar productos al iniciar
+
+    // Aquí se agrega el manejo de eventos para el tipo de producto y la marca
+    const productTypeSelect = document.getElementById('productType');
+    const brandSelect = document.getElementById('brand');
+    const typeError = document.getElementById('typeError');
+    const brandError = document.getElementById('brandError');
+
+    productTypeSelect.addEventListener('change', function() {
+        // Ocultar todos los grupos de marcas
+        document.getElementById('dogFoodBrands').style.display = 'none';
+        document.getElementById('catFoodBrands').style.display = 'none';
+        document.getElementById('veterinaryMedicines').style.display = 'none';
+        brandSelect.value = ""; // Reiniciar la selección de marcas
+        brandError.style.display = 'none'; // Ocultar mensaje de error
+
+        if (this.value === "") {
+            typeError.style.display = 'block'; // Mostrar error si no hay selección
+        } else {
+            typeError.style.display = 'none'; // Ocultar error si hay selección
+            // Mostrar las marcas correspondientes
+            switch (this.value) {
+                case 'alimento_perro':
+                    document.getElementById('dogFoodBrands').style.display = 'block';
+                    break;
+                case 'alimento_gato':
+                    document.getElementById('catFoodBrands').style.display = 'block';
+                    break;
+                case 'medicamento':
+                    document.getElementById('veterinaryMedicines').style.display = 'block';
+                    break;
+            }
+        }
+    });
+
+    brandSelect.addEventListener('change', function() {
+        if (this.value === "") {
+            brandError.style.display = 'block'; // Mostrar error si no hay selección
+        } else {
+            brandError.style.display = 'none'; // Ocultar error si hay selección
+        }
+    });
 });
 
 // Obtener la fecha actual en formato YYYY-MM-DD
@@ -56,7 +97,7 @@ function formatCurrency(input) {
 
 let products = []; // Aquí se almacenarán los productos ingresados
 let filteredProducts = []; // Productos filtrados
-let productsPerPage = 4;
+let productsPerPage = 20;
 let currentPage = 1;
 let totalPages = 1;
 
@@ -298,7 +339,6 @@ function filterProducts() {
     currentPage = 1; // Reiniciar la paginación a la primera página después del filtrado
     updateTable(); // Llamar a la función para actualizar la tabla
 }
-
 
 
 //Fin Productos

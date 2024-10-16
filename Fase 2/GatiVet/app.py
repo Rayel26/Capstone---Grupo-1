@@ -3,7 +3,7 @@ from flask_cors import CORS
 from functools import wraps
 import requests
 from requests.auth import HTTPBasicAuth
-from supabase import create_client  # Importar Supabase
+from supabase import create_client
 
 app = Flask(__name__)
 CORS(app)
@@ -68,12 +68,9 @@ def login():
             session['is_logged_in'] = True  # Marca que el usuario ha iniciado sesión
             
             # Redirigir al perfil según el rol
-            if user['role'] == 'user':
-                return redirect(url_for('profile'))
-            elif user['role'] == 'vet':
-                return redirect(url_for('profile_vet'))
-            elif user['role'] == 'admin':
-                return redirect(url_for('admin_dashboard'))
+            return redirect(url_for('profile') if user['role'] == 'user' else
+                            'profile_vet' if user['role'] == 'vet' else
+                            'admin_dashboard')
         else:
             flash('Usuario o contraseña incorrectos', 'error')
     
@@ -112,7 +109,6 @@ def admin_dashboard():
 def products():
     return render_template('products.html', show_search=True)
 
-
 @app.route('/help')
 def help():
     return render_template('help.html')
@@ -127,6 +123,9 @@ def schedule():
 
 @app.route('/cart')
 def cart():
+    # Verificar si el usuario está logueado
+    if not session.get('is_logged_in'):
+        session['cart'] = []  # Vaciar el carrito si no está logueado
     return render_template('cart.html')
 
 @app.route('/registration')
@@ -136,8 +135,6 @@ def registration():
 @app.route('/donation')
 def donation():
     return render_template('donation.html')
-
-from flask import request, jsonify
 
 @app.route('/create_product', methods=['POST'])
 @login_required
@@ -151,50 +148,39 @@ def create_product():
         return jsonify({'error': 'No se recibió ningún dato.'}), 400
 
     # Verificar claves necesarias
-    required_keys = ['name', 'description', 'price', 'brand', 'quantity', 'type', 'image_url']
+    required_keys = ['name', 'description', 'price', 'brand', 'quantity', 'type', 'image_url', 'fecha_ingreso']
     for key in required_keys:
         if key not in data:
             return jsonify({'error': f'Falta el campo: {key}'}), 400
 
-    nombre_producto = data['name']
-    descripcion = data['description']
-    valor = data['price']
-    marca = data['brand']
-    stock = data['quantity']
-    fecha_ingreso = data['fecha_ingreso']
-    imagen_url = data['image_url']  # Obtener la URL de la imagen
-
     # Determinar el tipo de producto
-    tipo_producto_id = 0
-    if data['type'] == 'alimento_perro':
-        tipo_producto_id = 1
-    elif data['type'] == 'alimento_gato':
-        tipo_producto_id = 2
-    elif data['type'] == 'medicamento':
-        tipo_producto_id = 3
-    else:
+    tipo_producto_id = {
+        'alimento_perro': 1,
+        'alimento_gato': 2,
+        'medicamento': 3
+    }.get(data['type'])
+
+    if tipo_producto_id is None:
         return jsonify({'error': 'Tipo de producto no válido.'}), 400
 
-    # Crear el producto en Supabase incluyendo imagen_url
+    # Crear el producto en Supabase
     response = supabase.table('Producto').insert({
-        'nombre_producto': nombre_producto,
-        'descripcion': descripcion,
-        'valor': valor,
-        'marca': marca,
-        'stock': stock,
+        'nombre_producto': data['name'],
+        'descripcion': data['description'],
+        'valor': data['price'],
+        'marca': data['brand'],
+        'stock': data['quantity'],
         'tipo_producto_id': tipo_producto_id,
-        'fecha_ingreso': fecha_ingreso,
-        'imagen_url': imagen_url  # Guardar la URL de la imagen
+        'fecha_ingreso': data['fecha_ingreso'],
+        'imagen_url': data['image_url']
     }).execute()
 
     # Verificar si la inserción fue exitosa
-    if response.data:  # Si hay datos en la respuesta, la inserción fue exitosa
+    if response.data:
         return jsonify({'message': 'Producto creado exitosamente.', 'data': response.data}), 201
     else:
-        # Si no hay datos, verifica el error
-        print('Error de Supabase:', response.error)  # Agregar esta línea
+        print('Error de Supabase:', response.error)
         return jsonify({'error': 'Error al crear el producto.', 'details': response.error}), 400
-
 
 # Ruta para obtener los productos
 @app.route('/get_products', methods=['GET'])
@@ -202,18 +188,15 @@ def get_products():
     response = supabase.table('Producto').select('*').execute()
     return jsonify(response.data), 200
 
-
 @app.route('/item/<int:id_producto>', methods=['GET'])
 def get_product(id_producto):
     response = supabase.table('Producto').select('*').eq('id_producto', id_producto).execute()
     
     if response.data:
         product = response.data[0]
-        print(product)  # Imprime el producto en la consola del servidor
         return render_template('item.html', product=product)
     else:
         return "Producto no encontrado", 404
-
 
 # Ruta para obtener imágenes de Cloudinary
 @app.route('/api/cloudinary/images', methods=['GET'])
@@ -222,7 +205,6 @@ def get_cloudinary_images():
     response = requests.get(url, auth=HTTPBasicAuth(API_KEY, API_SECRET))
 
     if response.status_code == 200:
-        # Obtener solo las URLs de las imágenes
         images = [resource['secure_url'] for resource in response.json().get('resources', [])]
         return jsonify(images)
     else:
@@ -231,48 +213,54 @@ def get_cloudinary_images():
 # Ruta para obtener la cantidad de productos en el carrito
 @app.route('/cart_count', methods=['GET'])
 def cart_count():
-    # Aquí se obtiene la cantidad de productos del carrito en la sesión
     cart_items = session.get('cart', [])
     return jsonify({'count': len(cart_items)}), 200
 
-
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
-    data = request.get_json()
-    product_id = data.get('product_id')
-    quantity = int(data.get('quantity'))
-
-    # Obtener el producto del stock
-    response = supabase.table('Producto').select('stock').eq('id_producto', product_id).execute()
-    
-    if not response.data:
-        return jsonify({'error': 'Producto no encontrado.'}), 404
-
-    product = response.data[0]
-    available_stock = product['stock']
-
-    # Verificar si hay suficiente stock
-    if available_stock < quantity:
-        return jsonify({'error': 'No hay suficiente stock disponible.'}), 400
-
-    # Calcular el nuevo stock
-    new_stock = available_stock - quantity
-    print(f'Available stock: {available_stock}, New stock: {new_stock}, Product ID: {product_id}')
-
-    # Actualizar el stock en la base de datos
-    update_response = supabase.table('Producto').update({'stock': new_stock}).eq('id_producto', product_id).execute()
-
-    if update_response.error:
-        print(update_response.error)  # Imprimir el error
-        return jsonify({'error': 'Error al actualizar el stock.'}), 500
-
-    # Agregar el producto al carrito
+    product_id = request.json.get('id')
     cart = session.get('cart', [])
-    cart.append({'product_id': product_id, 'quantity': quantity})
-    session['cart'] = cart
+    cart.append(product_id)  # Agregar el producto al carrito
+    session['cart'] = cart  # Guardar el carrito en la sesión
+    return jsonify({'message': 'Producto agregado al carrito.'}), 200
 
-    return jsonify({'message': 'Producto agregado al carrito con éxito.', 'stock_actual': new_stock}), 200
+# Ruta para actualizar el stock
+@app.route('/update_stock/<int:product_id>', methods=['POST'])
+def update_stock(product_id):
+    try:
+        data = request.get_json()
+
+        # Verificar si los datos tienen el campo 'quantity'
+        if 'quantity' not in data:
+            return jsonify({"success": False, "message": "Cantidad no proporcionada"}), 400
+        
+        quantity = data['quantity']
+
+        # Verificar si el producto existe en la base de datos
+        response = supabase.table('Producto').select('*').eq('id_producto', product_id).execute()
+
+        if not response.data:
+            return jsonify({"success": False, "message": "Producto no encontrado"}), 404
+
+        # Obtener el producto y actualizar su stock
+        producto = response.data[0]
+        nuevo_stock = producto['stock'] - quantity
+
+        if nuevo_stock < 0:
+            return jsonify({"success": False, "message": "Stock insuficiente"}), 400
+
+        # Actualizar el stock en la base de datos
+        update_response = supabase.table('Producto').update({'stock': nuevo_stock}).eq('id_producto', product_id).execute()
+
+        if update_response.data:
+            return jsonify({"success": True, "message": f"Stock actualizado correctamente para el producto {product_id}"}), 200
+        else:
+            return jsonify({"success": False, "message": "Error al actualizar el stock"}), 500
+
+    except Exception as e:
+        return jsonify({"success": False, "message": f"Error interno: {str(e)}"}), 500
+
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True)  # Ejecuta la aplicación en modo depuración

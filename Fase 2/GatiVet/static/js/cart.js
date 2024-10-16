@@ -1,3 +1,37 @@
+document.getElementById('phone').addEventListener('input', function(event) {
+    let input = event.target.value;
+
+    // Eliminar caracteres que no sean números, excepto el '+'
+    input = input.replace(/[^+\d]/g, '');
+
+    // Asegúrate de que el número comience con +569
+    if (!input.startsWith('+569')) {
+        // Si no comienza con +569, reinicia el input
+        input = input.replace(/\D/g, ''); // Eliminar caracteres no numéricos
+        if (input.length > 8) {
+            input = input.slice(0, 8); // Limitar a 8 dígitos
+        }
+        input = '+569 ' + input; // Añadir +569 al inicio
+    } else {
+        // Solo mantener los 8 dígitos después del +569
+        input = input.slice(4).replace(/\D/g, ''); // Quitar +569 y caracteres no numéricos
+        if (input.length > 8) {
+            input = input.slice(0, 8); // Limitar a 8 dígitos
+        }
+        input = '+569 ' + input; // Reagregar +569
+    }
+
+    // Formatear en bloques de 4 dígitos
+    const match = input.match(/(\+569\s)(\d{0,4})(\d{0,4})/);
+    if (match) {
+        input = match[1] + (match[2] ? match[2] + ' ' : '') + match[3];
+    }
+
+    // Actualizar el valor del input
+    event.target.value = input.trim();
+});
+
+// Tu código existente
 document.getElementById('increment-btn').addEventListener('click', function() {
     let quantityInput = document.getElementById('quantity-input');
     let quantity = parseInt(quantityInput.value);
@@ -18,20 +52,6 @@ document.getElementById('decrement-btn').addEventListener('click', function() {
     }
 });
 
-function updateTotalPrice() {
-    let quantity = parseInt(document.getElementById('quantity-input').value);
-    let pricePerItem = 20; // Ejemplo de precio por item
-    let subtotal = quantity * pricePerItem;
-    let shipping = 10; // Costo de envío
-    let tax = 5; // Importe de impuestos
-    let total = subtotal + shipping + tax;
-
-    // Actualizar los elementos de la interfaz
-    document.getElementById('order-subtotal').textContent = `$${subtotal.toLocaleString('es-CL')}`;
-    document.getElementById('shipping-cost').textContent = `$${shipping.toLocaleString('es-CL')}`;
-    document.getElementById('tax-cost').textContent = `$${tax.toLocaleString('es-CL')}`;
-    document.getElementById('order-total').textContent = `$${total.toLocaleString('es-CL')}`;
-}
 
 // Initialize the flatpickr for the expiration date input
 flatpickr("#card-expiration-input", {
@@ -52,8 +72,103 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeModalBtn = document.getElementById('closeModalBtn');
     const acceptModalBtn = document.getElementById('acceptModalBtn');
 
-    payNowBtn.addEventListener('click', function() {
-        cartModal.classList.remove('hidden');
+    payNowBtn.addEventListener('click', function(event) {
+        event.preventDefault(); // Evita que el formulario se envíe inmediatamente
+        let isValid = true;
+
+        // Validar que el carrito no esté vacío
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        if (cart.length === 0) {
+            alert("El carrito está vacío.");
+            return;
+        }
+
+        // Limpiar mensajes de error anteriores
+        const errorMessages = document.querySelectorAll('.error-message');
+        errorMessages.forEach(msg => msg.classList.add('hidden'));
+
+        // Validar campos de información personal
+        const nameInput = document.getElementById('name');
+        const lastnameInput = document.getElementById('lastname');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+
+        if (!nameInput.value.trim()) {
+            showError(nameInput, 'name-error-message');
+            isValid = false;
+        }
+
+        if (!lastnameInput.value.trim()) {
+            showError(lastnameInput, 'lastname-error-message');
+            isValid = false;
+        }
+
+        if (!emailInput.value.trim() || !validateEmail(emailInput.value.trim())) {
+            showError(emailInput, 'email-error-message');
+            isValid = false;
+        }
+        
+        // Validar campos de método de pago
+        const cardNumberInput = document.getElementById('card-number-input');
+        const expirationInput = document.getElementById('card-expiration-input');
+        const cvvInput = document.getElementById('cvv-input');
+
+        if (!cardNumberInput.value.trim() || cardNumberInput.value.length !== 16) {
+            showError(cardNumberInput, 'card-number-error-message');
+            isValid = false;
+        }
+
+        if (!expirationInput.value.trim()) {
+            showError(expirationInput, 'expiration-error-message');
+            isValid = false;
+        }
+
+        if (!cvvInput.value.trim() || cvvInput.value.length !== 3) {
+            showError(cvvInput, 'cvv-error-message');
+            isValid = false;
+        }
+
+        if (isValid) {
+            // Preparar los datos para enviar
+            const orderData = cart.map(item => ({
+                id_producto: item.id_producto,
+                cantidad: item.cantidad
+            }));
+        
+            // Hacer la solicitud al backend para actualizar el stock
+            Promise.all(orderData.map(item => {
+                return fetch(`/update_stock/${item.id_producto}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ quantity: item.cantidad })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(data => {
+                            throw new Error(`Error al actualizar stock para producto ${item.id_producto}: ${data.message || response.statusText}`);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data.success) {
+                        throw new Error(`Error al actualizar stock para producto ${item.id_producto}: ${data.message}`);
+                    }
+                });
+            }))
+            .then(() => {
+                // Mostrar el modal en lugar de una alerta
+                cartModal.classList.remove('hidden'); // Mostrar el modal
+                localStorage.removeItem('cart');
+                renderCartItems([]); // Actualizar la UI con el carrito vacío
+            })
+            .catch(error => {
+                console.error("Error al procesar el stock:", error);
+                alert(`Ocurrió un error al actualizar el stock: ${error.message}`);
+            });
+        }        
     });
 
     closeModalBtn.addEventListener('click', function() {
@@ -125,38 +240,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         document.getElementById('cart-total').textContent = totalCartValue.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
-        document.getElementById('order-subtotal').textContent = totalCartValue.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
-
-        // Call updateTotal to reflect the updated values
-        updateTotal();
     }
 
     function updateProductQuantity(productId, change) {
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         const productIndex = cart.findIndex(item => item.id_producto === parseInt(productId));
-
+    
         if (productIndex !== -1) {
             cart[productIndex].cantidad += change;
-
+    
             if (cart[productIndex].cantidad <= 0) {
                 cart.splice(productIndex, 1);
             }
-
+    
             localStorage.setItem('cart', JSON.stringify(cart));
             renderCartItems(cart);
         }
     }
-});
-
-// Function to update total
-function updateTotal() {
-    const subtotal = parseFloat(document.getElementById("order-subtotal").textContent.replace('$', '').replace('.', '').replace('.', '')) || 0;
-    const shipping = parseFloat(document.getElementById("shipping-cost").textContent.replace('$', '').replace('.', '').replace('.', '')) || 0;
-    const tax = parseFloat(document.getElementById("tax-cost").textContent.replace('$', '').replace('.', '').replace('.', '')) || 0;
     
-    const total = subtotal + shipping + tax;
-    document.getElementById("order-total").textContent = `$${total.toLocaleString('es-CL')}`;
-}
+});
 
 document.addEventListener('DOMContentLoaded', function() {
     updateCartTotal(); // Initial cart total update
@@ -166,4 +268,36 @@ function updateCartTotal() {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     let total = cart.reduce((sum, product) => sum + (product.cantidad * product.valor), 0);
     document.getElementById('cart-total').textContent = total.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' });
+}
+
+const updateStock = async (productId, quantity) => {
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/update_stock/${productId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ quantity }), // Asegúrate de que esto se esté enviando correctamente
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Error al actualizar stock para producto ${productId}: ${response.statusText}`);
+        }
+        
+        const result = await response.json();
+        console.log(result.message);
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+function showError(input, errorMessageId) {
+    document.getElementById(errorMessageId).classList.remove('hidden');
+    input.classList.add('border-red-500'); // Resalta el borde del input
+    input.focus(); // Enfoca el input que tiene el error
+}
+
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
 }

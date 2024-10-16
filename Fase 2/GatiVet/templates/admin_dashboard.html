@@ -138,30 +138,30 @@
                         <option value="alimento_gato">Alimento para Gatos</option>
                         <option value="medicamento">Medicamento Veterinario</option>
                     </select>
-                    <div id="typeError" class="error hidden">Este campo es obligatorio.</div>
+                    <div id="typeError" class="error">Este campo es obligatorio.</div>
                 </div>
                 <div>
                     <label for="brand" class="block text-gray-700">Marca:</label>
                     <select id="brand" class="border rounded w-full py-1 px-2 text-gray-700" required>
                         <option value="">Seleccione una marca</option>
-                        <optgroup label="Alimento para Perros">
+                        <optgroup id="dogFoodBrands" label="Alimento para Perros" style="display: none;">
                             <option value="Royal Canin">Royal Canin</option>
                             <option value="Purina Pro Plan">Purina Pro Plan</option>
                             <option value="Pedigree">Pedigree</option>
                             <option value="Eukanuba">Eukanuba</option>
                         </optgroup>
-                        <optgroup label="Alimento para Gatos">
+                        <optgroup id="catFoodBrands" label="Alimento para Gatos" style="display: none;">
                             <option value="Whiskas">Whiskas</option>
                             <option value="Josera">Josera</option>
                             <option value="Purina Cat Chow">Purina Cat Chow</option>
                         </optgroup>
-                        <optgroup label="Medicamentos Veterinarios">
+                        <optgroup id="veterinaryMedicines" label="Medicamentos Veterinarios" style="display: none;">
                             <option value="NexGard">NexGard</option>
                             <option value="Frontline">Frontline</option>
                             <option value="Advantage">Advantage</option>
                         </optgroup>
                     </select>
-                    <div id="brandError" class="error hidden">Este campo es obligatorio.</div>
+                    <div id="brandError" class="error">Este campo es obligatorio.</div>
                 </div>
                 <div>
                     <label for="price" class="block text-gray-700">Precio:</label>

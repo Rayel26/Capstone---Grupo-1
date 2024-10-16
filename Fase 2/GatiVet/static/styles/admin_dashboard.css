@@ -45,3 +45,7 @@
         transform: translateY(0);
     }
 }
+.error {
+    color: red;
+    display: none; /* Ocultar por defecto */
+}
