@@ -406,10 +406,32 @@ function closeAddUserModal() {
     document.getElementById('addModalUserForm').reset();
 }
 
+// Mostrar el modal de confirmación
+function openConfirmModal() {
+    document.getElementById('confirmModal').classList.remove('hidden');
+}
+
+// Cerrar el modal de confirmación
+function closeConfirmModal() {
+    document.getElementById('confirmModal').classList.add('hidden');
+}
+
+// Al hacer clic en el botón de cancelar del modal de confirmación
+document.getElementById('cancelConfirmBtn').addEventListener('click', function () {
+    closeConfirmModal();
+});
+
+
 // Manejo del formulario de agregar usuario
 document.getElementById('addModalUserForm').addEventListener('submit', function (event) {
-    event.preventDefault();
+    event.preventDefault();  // Prevenir el envío inmediato del formulario
 
+    // Mostrar el modal de confirmación
+    openConfirmModal();
+});
+
+// Cuando se confirme la acción en el modal de confirmación
+document.getElementById('confirmBtn').addEventListener('click', function () {
     // Obtener los valores de los inputs
     const rut = document.getElementById('addModalRut').value;
     const nombre = document.getElementById('addModalNombre').value;
@@ -426,6 +448,7 @@ document.getElementById('addModalUserForm').addEventListener('submit', function 
     // Validación de contraseñas
     if (password !== confirmPassword) {
         alert('Las contraseñas no coinciden');
+        closeConfirmModal();
         return;
     }
 
@@ -435,6 +458,7 @@ document.getElementById('addModalUserForm').addEventListener('submit', function 
 
     if (!hasUpperCase || !hasNumber) {
         alert('La contraseña debe contener al menos una letra mayúscula y un número');
+        closeConfirmModal();
         return;
     }
 
@@ -453,7 +477,8 @@ document.getElementById('addModalUserForm').addEventListener('submit', function 
         fechaCreacion: new Date().toISOString().slice(0, 10)
     });
 
-    // Cerrar modal y resetear formulario
+    // Cerrar modal de confirmación y el modal de agregar usuario
+    closeConfirmModal();
     closeAddUserModal();
 
     // Renderizar la tabla de usuarios o actualizar la interfaz
