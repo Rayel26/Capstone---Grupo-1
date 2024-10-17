@@ -51,6 +51,7 @@
                 </ul>
             </div>
         </div>
+
         <!-- Contenido principal -->
         <div class="flex-1 mt-4"> <!-- Ajusta el margen superior para dar espacio a la sidebar -->
             <div id="profile" class="hidden step-content p-6 bg-white shadow-md rounded-lg active">
@@ -62,9 +63,9 @@
                         <label for="first-name"
                             class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Nombre:</label>
                         <div class="relative flex items-center">
-                            <input type="text" name="first-name" id="first-name" value="Juan"
-                                class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
-                                required readonly>
+                            <input type="text" name="first-name" id="first-name" value="{{ user.nombre }}"
+                            class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
+                            required readonly>
                             <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
                         </div>
                     </div>
@@ -74,7 +75,7 @@
                         <label for="last-name" class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Apellido
                             Paterno:</label>
                         <div class="relative flex items-center">
-                            <input type="text" name="last-name" id="last-name" value="Pérez"
+                            <input type="text" name="last-name" id="last-name" value="{{ user.appaterno }}"
                                 class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
                                 required readonly>
                             <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
@@ -86,7 +87,7 @@
                         <label for="maternal-last-name"
                             class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Apellido Materno:</label>
                         <div class="relative flex items-center">
-                            <input type="text" name="maternal-last-name" id="maternal-last-name" value="González"
+                            <input type="text" name="maternal-last-name" id="maternal-last-name" value="{{ user.apmaterno }}"
                                 class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
                                 required readonly>
                             <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
@@ -97,7 +98,7 @@
                     <div class="mb-4 relative">
                         <label for="rut" class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">RUT:</label>
                         <div class="relative flex items-center">
-                            <input type="text" name="rut" id="rut" value="12.345.678-9"
+                            <input type="text" name="rut" id="rut" value="{{ user.id_usuario }}"
                                 pattern="\d{2}\.\d{3}\.\d{3}-[\dkK]" title="Formato válido: xx.xxx.xxx-x o xx.xxx.xxx-k"
                                 class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
                                 required readonly>
@@ -142,7 +143,7 @@
                         <label for="phone"
                             class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Celular:</label>
                         <div class="relative flex items-center">
-                            <input type="text" name="phone" id="phone" value="+569 " pattern="\+569 \d{4} \d{4}"
+                            <input type="text" name="phone" id="phone" value="{{ user.celular }}" pattern="\+569 \d{4} \d{4}"
                                 title="Ingrese 8 dígitos después del prefijo +569, separados en dos grupos de 4 dígitos."
                                 class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 input-short input-background pr-10 w-full"
                                 readonly />
@@ -158,7 +159,7 @@
                         <label for="email"
                             class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Correo:</label>
                         <div class="relative flex items-center">
-                            <input type="email" name="email" id="email" value="juan.perez@example.com" pattern=".+@.+"
+                            <input type="email" name="email" id="email" value="{{ user.correo }}" pattern=".+@.+"
                                 title="El correo debe contener al menos un @"
                                 class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
                                 required readonly>
@@ -174,7 +175,7 @@
                         <label for="password"
                             class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Contraseña:</label>
                         <div class="relative flex items-center">
-                            <input type="password" name="password" id="password"
+                            <input type="password" name="password" id="password" value="{{ user.contraseña }}"
                                 class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
                                 required readonly>
                             <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
@@ -255,6 +256,7 @@
                     </div>
                 </div>
             </div>
+        </div>
             <!-- Fin Contenido principal de Datos -->
 
             <!-- Mis mascotas -->
@@ -367,7 +369,7 @@
 
             </div>
             <!-- Fin Mis mascotas -->
-        </div>
+        
 
         <!-- Modal para agregar una nueva mascota -->
         <div id="add-pet-modal"

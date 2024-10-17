@@ -108,10 +108,10 @@
 </div>
 
 <!-- Modal de Confirmación de Datos -->
-<div id="confirmModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-    <div class="bg-white dark:bg-gray-700 p-6 rounded-lg">
-        <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">¿Los datos ingresados son correctos?</h2>
-        <div id="dataSummary" class="mb-4 text-gray-700 dark:text-white">
+<div id="confirmModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden transition-opacity duration-300 ease-in-out">
+    <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg max-w-md w-full transform transition-transform duration-300 ease-in-out scale-95">
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4 text-center">¿Los datos ingresados son correctos?</h2>
+        <div id="dataSummary" class="mb-4 text-gray-700 dark:text-white space-y-2">
             <!-- Aquí se mostrarán los datos ingresados por el usuario -->
             <p><strong>Nombre:</strong> <span id="summaryFirstName"></span></p>
             <p><strong>Apellido Paterno:</strong> <span id="summaryLastName"></span></p>
@@ -120,9 +120,9 @@
             <p><strong>Correo:</strong> <span id="summaryEmail"></span></p>
             <p><strong>Teléfono:</strong> <span id="summaryPhone"></span></p>
         </div>
-        <div class="flex justify-end">
-            <button id="confirmButton" class="bg-[#18beaa] text-white px-4 py-2 rounded mr-2 hover:bg-[#16a89a]">Confirmar</button>
-            <button id="cancelButton" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-400">Cancelar</button>
+        <div class="flex justify-end mt-6 space-x-2">
+            <button id="confirmButton" class="bg-[#18beaa] text-white px-4 py-2 rounded-md transition-all duration-200 ease-in-out transform hover:bg-[#16a89a] hover:scale-105">Confirmar</button>
+            <button id="cancelButton" class="bg-gray-500 text-white px-4 py-2 rounded-md transition-all duration-200 ease-in-out transform hover:bg-gray-400 hover:scale-105">Cancelar</button>
         </div>
     </div>
 </div>
@@ -131,12 +131,17 @@
 <div id="accountCreatedModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
     <div class="bg-white dark:bg-gray-700 p-6 rounded-lg">
         <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">¡Cuenta creada exitosamente!</h2>
-        <p class="text-gray-700 dark:text-white mb-6">Tu cuenta ha sido creada exitosamente. Ahora puedes iniciar sesión.</p>
+        <p class="text-gray-700 dark:text-white mb-6">
+            Tu cuenta ha sido creada exitosamente. 
+            <a href="{{ url_for('login') }}" class="text-[#18beaa] hover:underline">Ahora puedes iniciar sesión.</a>
+        </p>
         <div class="flex justify-end">
             <button id="closeModalButton" class="bg-[#18beaa] text-white px-4 py-2 rounded hover:bg-[#16a89a]">Cerrar</button>
         </div>
     </div>
 </div>
+
+
 
 
 <script src="{{ url_for('static', filename='js/registration.js') }}"></script>

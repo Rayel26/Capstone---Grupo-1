@@ -60,21 +60,26 @@ def login():
         email = request.form['email']
         password = request.form['password']
         
-        # Verificar si el usuario está en la base de datos simulada
-        user = users.get(email)
-        if user and user['password'] == password:
-            session['email'] = email
-            session['role'] = user['role']
-            session['is_logged_in'] = True  # Marca que el usuario ha iniciado sesión
-            
-            # Redirigir al perfil según el rol
-            return redirect(url_for('profile') if user['role'] == 'user' else
-                            'profile_vet' if user['role'] == 'vet' else
-                            'admin_dashboard')
+        # Consultar la base de datos de Supabase
+        user_data = supabase.table('Usuario').select('id_usuario, correo, contraseña').eq('correo', email).execute()
+
+        if user_data.data:
+            user = user_data.data[0]  # Obtener el primer usuario encontrado
+
+            # Verifica la contraseña (ajusta esto si usas un método de hash)
+            if user['contraseña'] == password:  # Cambia esto por la verificación de hash si es necesario
+                session['email'] = user['correo']
+                session['is_logged_in'] = True  # Marca que el usuario ha iniciado sesión
+                
+                # Redirigir a la página principal o un dashboard
+                return redirect(url_for('home'))  # Asegúrate de tener una vista 'home'
+            else:
+                flash('Usuario o contraseña incorrectos', 'error')
         else:
             flash('Usuario o contraseña incorrectos', 'error')
-    
+
     return render_template('login.html')
+
 
 # Ruta para cerrar sesión
 @app.route('/logout')
@@ -84,11 +89,21 @@ def logout():
     return redirect(url_for('login'))
 
 # Ruta para el perfil de usuario
-@app.route('/profile')
+@app.route('/profile', methods=['GET'])
 @login_required
-@role_required('user')
 def profile():
-    return render_template('profile.html')
+    # Asumiendo que el usuario ha iniciado sesión y su correo está almacenado en la sesión
+    email = session.get('correo')  # Reemplaza esto con la forma en que guardas el email
+    password = request.form.get('contraseña')  # Obtén la contraseña del formulario (asegúrate de que sea seguro)
+
+    # Obtener los datos del usuario de Supabase
+    user_data = supabase.table('Usuario').select('*').eq('correo', email).eq('contraseña', password).execute()
+    
+    # Asumiendo que solo hay un usuario o que deseas el primero
+    user = user_data.data[0] if user_data.data else {}
+    
+    return render_template('profile.html', user=user)
+
 
 # Ruta para el perfil de veterinario
 @app.route('/profile_vet')
@@ -165,7 +180,7 @@ def register():
     if response.status_code == 201:  # Si la inserción fue exitosa
         return jsonify({"message": "Usuario creado exitosamente", "data": response.data}), 201
     else:
-     return jsonify({"error": "Error al crear el usuario", "details": response.json()}), 400
+        return jsonify({"error": "Error al crear el usuario", "details": response.json()}), 400
 
 
 
