@@ -3,7 +3,6 @@ async function toggleEditSaveProfile() {
     const emailInput = document.getElementById('email'); // Campo de correo
     const emailErrorMessage = document.getElementById('email-error-message'); // Mensaje de error de correo
     const phoneInput = document.getElementById('phone');
-    const communeSelect = document.getElementById('commune'); 
     const editIcons = document.querySelectorAll('.edit-icon');
     const passwordInput = document.getElementById('password'); // Campo de contraseña
     const passwordErrorMessage = document.getElementById('password-error-message'); // Mensaje de error de contraseña
@@ -48,11 +47,6 @@ async function toggleEditSaveProfile() {
             console.error('El elemento con ID "email" no se encontró.');
         }
 
-        if (communeSelect) {
-            communeSelect.setAttribute('disabled', 'true');
-        } else {
-            console.error('El elemento con ID "commune" no se encontró.');
-        }
 
         editIcons.forEach(icon => {
             icon.classList.add('hidden');
@@ -73,10 +67,6 @@ async function toggleEditSaveProfile() {
             emailInput.removeAttribute('readonly');
             emailInput.classList.remove('bg-gray-50');
             emailInput.classList.add('bg-white');
-        }
-
-        if (communeSelect) {
-            communeSelect.removeAttribute('disabled');
         }
 
         editIcons.forEach(icon => {
@@ -160,9 +150,8 @@ document.querySelector('#delete-modal button').addEventListener('click', () => {
 });
 
 // Función para confirmar la eliminación de la cuenta
+// Función para confirmar la eliminación de la cuenta
 function confirmDeleteAccount() {
-    hideDeleteModal();
-    
     fetch('/eliminar-cuenta', {
         method: 'POST',
         headers: {
@@ -173,14 +162,8 @@ function confirmDeleteAccount() {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            window.location.href = data.redirect;
-        } else {
-            alert(data.message);
-        }
+        // Si todo va bien, el redireccionamiento se manejará desde el backend
+        window.location.href = '/'; // Opcional, puede ser omitido
     })
     .catch(error => {
         console.error('Error:', error);
@@ -352,11 +335,6 @@ function closeDeleteModal() {
     document.getElementById('delete-modal').classList.add('hidden');
 }
 
-function confirmDeleteAccount() {
-    // Aquí puedes agregar la lógica para eliminar la cuenta
-    alert("Cuenta eliminada."); // Mensaje temporal
-    closeDeleteModal(); // Cierra el modal después de la acción
-}
 
 ////////////////////////////////////////////////////////////////
 // Mascotas

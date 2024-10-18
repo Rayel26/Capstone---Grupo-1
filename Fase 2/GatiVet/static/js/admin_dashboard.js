@@ -472,7 +472,6 @@ document.getElementById('confirmBtn').addEventListener('click', async function (
     const especialidad = document.getElementById('modalEspecialidad').value; // Nuevo campo
     const telefono = document.getElementById('modalTelefono').value;
     const correo = document.getElementById('modalCorreo').value;
-    const fechaNacimiento = document.getElementById('modalFechaNacimiento').value;
     const password = document.getElementById('modalPassword').value;
     const confirmPassword = document.getElementById('modalConfirmPassword').value;
     
@@ -717,7 +716,6 @@ function editUserModal(id_usuario) {
         document.getElementById('editModalEspecialidad').value = user.especialidad || '';
         document.getElementById('editModalTelefono').value = user.celular || ''; // Asigna el celular
         document.getElementById('editModalCorreo').value = user.correo || '';
-        document.getElementById('editModalFechaNacimiento').value = user.fechaNacimiento || '';
 
         // Limpiar campos de contraseña
         document.getElementById('editModalPassword').value = user.contraseña || '';
@@ -743,7 +741,6 @@ document.getElementById('editModalUserForm').addEventListener('submit', async fu
     const especialidad = document.getElementById('editModalEspecialidad').value;
     const telefono = document.getElementById('editModalTelefono').value;
     const correo = document.getElementById('editModalCorreo').value;
-    const fechaNacimiento = document.getElementById('editModalFechaNacimiento').value;
     const password = document.getElementById('editModalPassword').value;
     const confirmPassword = document.getElementById('editModalConfirmPassword').value;
 
@@ -766,7 +763,6 @@ document.getElementById('editModalUserForm').addEventListener('submit', async fu
         especialidad: especialidad,
         telefono: telefono,
         correo: correo,
-        fechaNacimiento: fechaNacimiento,
         password: password  // Considera encriptar la contraseña antes de enviarla
     };
     
@@ -904,7 +900,6 @@ document.getElementById('editModalUserForm').addEventListener('submit', function
     const especialidad = document.getElementById('editModalEspecialidad').value;
     const telefono = document.getElementById('editModalTelefono').value;
     const correo = document.getElementById('editModalCorreo').value;
-    const fechaNacimiento = document.getElementById('editModalFechaNacimiento').value;
     const password = document.getElementById('editModalPassword').value;
     const confirmPassword = document.getElementById('editModalConfirmPassword').value;
     const tipo = document.getElementById('editModalTipo').value;
@@ -990,7 +985,6 @@ document.getElementById('editModalUserForm').addEventListener('submit', function
             especialidad,
             telefono,
             correo,
-            fechaNacimiento,
             password, // Asegúrate de encriptar la contraseña si es necesario
             tipo,
             fechaCreacion // Mantener la fecha de creación original
