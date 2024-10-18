@@ -431,7 +431,7 @@ document.getElementById('addModalUserForm').addEventListener('submit', function 
 });
 
 // Cuando se confirme la acción en el modal de confirmación
-document.getElementById('confirmBtn').addEventListener('click', function () {
+document.getElementById('confirmBtn').addEventListener('click', async function () {
     // Obtener los valores de los inputs
     const rut = document.getElementById('addModalRut').value;
     const nombre = document.getElementById('addModalNombre').value;
@@ -443,7 +443,9 @@ document.getElementById('confirmBtn').addEventListener('click', function () {
     const fechaNacimiento = document.getElementById('modalFechaNacimiento').value;
     const password = document.getElementById('modalPassword').value;
     const confirmPassword = document.getElementById('modalConfirmPassword').value;
-    const tipo = document.getElementById('addModalTipo').value;
+    
+    // ID de tipo de usuario que se enviará
+    const tipo_usuario = 2;  // Cambiar a 2 como has solicitado
 
     // Validación de contraseñas
     if (password !== confirmPassword) {
@@ -462,28 +464,60 @@ document.getElementById('confirmBtn').addEventListener('click', function () {
         return;
     }
 
-    // Guardar los datos en el arreglo de usuarios
-    users.push({
-        rut,
-        nombre,
-        apellido,
-        domicilio,
-        especialidad, // Guardar la especialidad
-        telefono,
-        correo,
-        fechaNacimiento,
-        password,  // Puede ser que quieras encriptar esto antes de guardarlo
-        tipo,
-        fechaCreacion: new Date().toISOString().slice(0, 10)
-    });
+    // Datos para enviar a Supabase
+    const userData = {
+        id_usuario: rut,
+        nombre: nombre,
+        appaterno: apellido,
+        apmaterno: domicilio,
+        correo: correo,
+        contraseña: password, // Puedes considerar encriptar esta contraseña antes de enviarla
+        celular: telefono,
+        especialidad: especialidad,
+        tipousuarioid: tipo_usuario // Ahora se envía el ID 2 directamente
+    };
 
-    // Cerrar modal de confirmación y el modal de agregar usuario
-    closeConfirmModal();
-    closeAddUserModal();
+    try {
+        // Enviar datos a Supabase
+        const response = await fetch('/register_vet', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData)
+        });
 
-    // Renderizar la tabla de usuarios o actualizar la interfaz
-    renderUserTable();
+        // Manejar la respuesta de Supabase
+        if (response.ok) {
+            const data = await response.json();
+            console.log("Respuesta de Supabase:", data);
+            
+            // Mostrar el modal de cuenta creada
+            document.getElementById('accountCreatedModal').classList.remove('hidden');
+            
+            // Cerrar modal de confirmación y el modal de agregar usuario
+            closeConfirmModal();
+            closeAddUserModal();
+            // Renderizar la tabla de usuarios o actualizar la interfaz
+            renderUserTable();
+        } else {
+            const errorData = await response.json();
+            console.error("Error al crear el usuario:", errorData);
+            alert('Error al crear el usuario: ' + errorData.error);
+            closeConfirmModal();
+        }
+    } catch (error) {
+        console.error("Error de red:", error);
+        alert('Error de red: ' + error.message);
+        closeConfirmModal();
+    }
 });
+
+// Manejar el cierre del modal de cuenta creada
+document.getElementById('closeModalButton').addEventListener('click', function () {
+    document.getElementById('accountCreatedModal').classList.add('hidden');
+});
+
 
 //Formato Rut
 document.getElementById('addModalRut').addEventListener('input', function (event) {

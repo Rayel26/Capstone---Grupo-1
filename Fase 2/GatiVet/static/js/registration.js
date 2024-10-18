@@ -167,7 +167,8 @@ document.addEventListener("DOMContentLoaded", function () {
             id_usuario: rutInput.value.replace(/[^0-9kK]/g, ''), // Eliminar caracteres no válidos
             correo: emailInput.value,
             contraseña: passwordInput.value,
-            celular: getFullPhone()
+            celular: getFullPhone(),
+            tipousuarioid: 1
         };
 
         // Verificar longitud del RUT

@@ -61,7 +61,7 @@ def login():
         password = request.form['password']
         
         # Consultar la base de datos de Supabase
-        user_data = supabase.table('Usuario').select('id_usuario, correo, contraseña').eq('correo', email).execute()
+        user_data = supabase.table('Usuario').select('id_usuario, correo, contraseña, tipousuarioid').eq('correo', email).execute()
 
         if user_data.data:
             user = user_data.data[0]  # Obtener el primer usuario encontrado
@@ -71,6 +71,17 @@ def login():
                 session['email'] = user['correo']
                 session['is_logged_in'] = True  # Marca que el usuario ha iniciado sesión
                 
+                # Determinar el rol basado en tipousuarioid
+                if user['tipousuarioid'] == 1:
+                    session['role'] = 'user'
+                elif user['tipousuarioid'] == 2:
+                    session['role'] = 'vet'
+                elif user['tipousuarioid'] == 3:
+                    session['role'] = 'admin'
+                else:
+                    flash('Rol de usuario desconocido', 'error')
+                    return redirect(url_for('login'))
+
                 # Redirigir a la página principal o un dashboard
                 return redirect(url_for('home'))  # Asegúrate de tener una vista 'home'
             else:
@@ -79,6 +90,59 @@ def login():
             flash('Usuario o contraseña incorrectos', 'error')
 
     return render_template('login.html')
+
+@app.route('/register_vet', methods=['POST'])
+def register_vet():
+    data = request.get_json()
+
+    # Log para ver los datos recibidos
+    print("Datos recibidos:", data)
+
+    try:
+        # Extraer los datos del JSON
+        rut = data['id_usuario']
+        nombre = data['nombre']
+        appaterno = data['appaterno']
+        apmaterno = data['apmaterno']
+        correo = data['correo']
+        contraseña = data['contraseña']
+        celular = data['celular']
+        especialidad = data['especialidad']  # Nuevo campo
+        tipo_usuario = data['tipousuarioid']  # Permitir diferentes tipos de usuario
+
+        # Validaciones adicionales (si es necesario)
+        if not (rut and nombre and correo and contraseña and celular and especialidad):
+            return jsonify({"error": "Faltan campos requeridos."}), 400
+
+        # Inserta los datos en Supabase
+        response = supabase.table('Usuario').insert({
+            'id_usuario': rut,
+            'nombre': nombre,
+            'appaterno': appaterno,
+            'apmaterno': apmaterno,
+            'correo': correo,
+            'contraseña': contraseña,
+            'celular': celular,
+            'especialidad': especialidad,  # Agregar especialidad
+            'tipousuarioid': tipo_usuario  # Usar el tipo de usuario proporcionado
+        }).execute()
+
+        # Log para ver la respuesta de Supabase
+        print("Respuesta de Supabase:", response)
+
+        # Verificar la respuesta de Supabase
+        if response.data:  # Verificar si hay datos en la respuesta
+            return jsonify({"message": "Veterinario creado exitosamente", "data": response.data}), 201
+        else:
+            return jsonify({"error": "Error al crear el veterinario", "details": response.error}), 400
+
+    except KeyError as e:
+        print(f"Error: Faltando campo en los datos recibidos: {e}")
+        return jsonify({"error": f"Campo faltante: {str(e)}"}), 400
+    except Exception as e:
+        print(f"Ocurrió un error inesperado: {e}")
+        return jsonify({"error": "Error inesperado", "details": str(e)}), 500
+
 
 
 # Ruta para cerrar sesión
@@ -171,7 +235,8 @@ def register():
         'apmaterno': apmaterno,
         'correo': correo,
         'contraseña': contraseña,
-        'celular': celular
+        'celular': celular,
+        'tipousuarioid': 1 
     }).execute()
 
     # Log para ver la respuesta de Supabase
@@ -181,10 +246,6 @@ def register():
         return jsonify({"message": "Usuario creado exitosamente", "data": response.data}), 201
     else:
         return jsonify({"error": "Error al crear el usuario", "details": response.json()}), 400
-
-
-
-
 
 @app.route('/donation')
 def donation():
@@ -313,6 +374,8 @@ def update_stock(product_id):
 
     except Exception as e:
         return jsonify({"success": False, "message": f"Error interno: {str(e)}"}), 500
+
+##Usuarios vet
 
 
 
