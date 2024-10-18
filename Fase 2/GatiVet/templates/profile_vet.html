@@ -82,12 +82,6 @@
                         <input type="email" id="edit-correo" name="correo" required
                             class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
                     </div>
-                    <div>
-                        <label for="edit-fecha-nacimiento" class="block text-gray-600 text-sm">Fecha de
-                            Nacimiento</label>
-                        <input type="date" id="edit-fecha-nacimiento" name="fecha-nacimiento" required
-                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
-                    </div>
                 </div>
                 <div class="mt-4 flex justify-end">
                     <button type="button" id="closeModalBtn"
@@ -147,13 +141,6 @@
                                 <input type="email" id="correo" name="correo" disabled
                                     class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
                                     value="{{ vet.correo if vet.correo else 'correo@ejemplo.com' }}">
-                            </div>
-                            <div>
-                                <label for="fecha-nacimiento" class="block text-gray-600 text-sm">Fecha de
-                                    Nacimiento:</label>
-                                <input type="date" id="fecha-nacimiento" name="fecha-nacimiento" disabled
-                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    value="{{ vet.fecha_nacimiento if vet.fecha_nacimiento else '28-11-2002' }}">
                             </div>
                         </div>
                     </div>

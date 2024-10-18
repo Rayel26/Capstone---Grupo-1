@@ -1,5 +1,4 @@
-// Función para alternar entre edición y guardado
-function toggleEditSaveProfile() {
+async function toggleEditSaveProfile() {
     const isEditing = document.querySelector('#edit-save-button').textContent === 'Guardar';
     const emailInput = document.getElementById('email'); // Campo de correo
     const emailErrorMessage = document.getElementById('email-error-message'); // Mensaje de error de correo
@@ -34,13 +33,27 @@ function toggleEditSaveProfile() {
         }
 
         // Guardar cambios y deshabilitar campos
+        await guardarPerfil(); // Llama a la función para guardar el perfil
+
+        // Deshabilitar campos y cambiar estilos
         document.querySelectorAll('#profile-form input').forEach(input => {
             input.setAttribute('readonly', 'true');
             input.classList.add('bg-gray-50');
         });
-        emailInput.setAttribute('readonly', 'true');
-        emailInput.classList.add('bg-gray-50');
-        communeSelect.setAttribute('disabled', 'true');
+
+        if (emailInput) {
+            emailInput.setAttribute('readonly', 'true');
+            emailInput.classList.add('bg-gray-50');
+        } else {
+            console.error('El elemento con ID "email" no se encontró.');
+        }
+
+        if (communeSelect) {
+            communeSelect.setAttribute('disabled', 'true');
+        } else {
+            console.error('El elemento con ID "commune" no se encontró.');
+        }
+
         editIcons.forEach(icon => {
             icon.classList.add('hidden');
         });
@@ -55,16 +68,81 @@ function toggleEditSaveProfile() {
             input.classList.remove('bg-gray-50');
             input.classList.add('bg-white');
         });
-        emailInput.removeAttribute('readonly');
-        emailInput.classList.remove('bg-gray-50');
-        emailInput.classList.add('bg-white');
-        communeSelect.removeAttribute('disabled');
+
+        if (emailInput) {
+            emailInput.removeAttribute('readonly');
+            emailInput.classList.remove('bg-gray-50');
+            emailInput.classList.add('bg-white');
+        }
+
+        if (communeSelect) {
+            communeSelect.removeAttribute('disabled');
+        }
+
         editIcons.forEach(icon => {
             icon.classList.remove('hidden');
         });
         document.querySelector('#edit-save-button').textContent = 'Guardar';
     }
 }
+
+
+// Función para guardar el perfil
+async function guardarPerfil() {
+    const userId = sessionStorage.getItem('id_usuario'); // Asumiendo que tienes el id_usuario en sessionStorage
+
+    // Obtener los valores de los campos del formulario
+    const nombre = document.getElementById('first-name').value;
+    const appaterno = document.getElementById('last-name').value;
+    const apmaterno = document.getElementById('maternal-last-name').value;
+    const celular = document.getElementById('phone').value;
+    const correo = document.getElementById('email').value;
+    const direccion = document.getElementById('address').value;
+    const numeracion = document.getElementById('numeration').value;
+
+    // Crear el objeto de datos
+    const data = {
+        first_name: nombre,
+        last_name: appaterno,
+        maternal_last_name: apmaterno,
+        phone: celular,
+        email: correo,
+        address: direccion,
+        numeration: numeracion
+    };
+
+    try {
+        const response = await fetch('/guardar-perfil', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                'first-name': nombre,
+                'last-name': appaterno,
+                'maternal-last-name': apmaterno,
+                'phone': celular,
+                'email': correo,
+                'address': direccion,
+                'numeration': numeracion
+            })
+        });
+
+        // Comprobar la respuesta del servidor
+        const result = await response.json();
+        if (result.success) {
+            alert('Perfil guardado exitosamente.');
+            // Aquí puedes hacer algo adicional si es necesario, como redirigir al usuario
+        } else {
+            alert('Error al guardar el perfil: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error al guardar el perfil:', error);
+        alert('Error al conectar con el servidor.');
+    }
+}
+
+
 
 // Función para mostrar el modal de eliminación
 function showDeleteModal() {
@@ -83,11 +161,33 @@ document.querySelector('#delete-modal button').addEventListener('click', () => {
 
 // Función para confirmar la eliminación de la cuenta
 function confirmDeleteAccount() {
-    // Lógica para eliminar la cuenta
     hideDeleteModal();
-    // Aquí puedes agregar una alerta o un mensaje que indique que la cuenta ha sido eliminada
-    alert("Tu cuenta ha sido eliminada.");
+    
+    fetch('/eliminar-cuenta', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            window.location.href = data.redirect;
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Ocurrió un error al eliminar la cuenta.');
+    });
 }
+
 
 
 // Validar y formatear el campo de teléfono y RUT

@@ -85,7 +85,7 @@ def login():
                     return redirect(url_for('login'))
 
                 # Redirigir a la página de perfil
-                return redirect(url_for('profile'))  # Cambiado a 'profile' para ir directamente a la vista de perfil
+                return redirect(url_for('home'))  # Cambiado a 'profile' para ir directamente a la vista de perfil
             else:
                 flash('Usuario o contraseña incorrectos', 'error')
         else:
@@ -93,7 +93,7 @@ def login():
 
     return render_template('login.html')
 
-
+# Ruta para la registrar veterinario
 @app.route('/register_vet', methods=['POST'])
 def register_vet():
     data = request.get_json()
@@ -152,7 +152,6 @@ def register_vet():
         return jsonify({"error": "Error inesperado", "details": str(e)}), 500
 
 
-
 # Ruta para cerrar sesión
 @app.route('/logout')
 def logout():
@@ -174,20 +173,124 @@ def profile():
     if user_id is None:
         return "No se encontró el ID de usuario en la sesión."
 
-    # Obtener los datos del usuario de Supabase
-    user_data = supabase.table('Usuario').select('*').eq('id_usuario', user_id).execute()
+    # Obtener los datos del usuario de Supabase, incluyendo la dirección y numeración
+    user_data = supabase.table('Usuario').select('*, Domicilio(direccion, numeracion)').eq('id_usuario', user_id).execute()
     
     # Registro de la respuesta de Supabase
     print(f"User data from Supabase: {user_data.data}")  # Verifica lo que devuelve Supabase
 
     # Asumiendo que solo hay un usuario o que deseas el primero
     user = user_data.data[0] if user_data.data else {}
-    
+
     # Comprobar si se obtuvo algún usuario
     if not user:
         return "No se encontraron datos para este usuario."
 
+    # Asegúrate de incluir la dirección y numeración en el contexto
+    domicilio_info = user.get('Domicilio', {})
+    user['direccion'] = domicilio_info.get('direccion', '')  # Obtener dirección
+    user['numeracion'] = domicilio_info.get('numeracion', '')  # Obtener numeración
+
     return render_template('profile.html', user=user)
+
+
+# Ruta para guardar perfil de usuario
+@app.route('/guardar-perfil', methods=['POST'])
+def update_profile():
+    user_id = session.get('id_usuario')
+
+    if not user_id:
+        return jsonify({'success': False, 'message': 'Usuario no encontrado'}), 404
+
+    # Obtener los datos del formulario
+    nombre = request.form.get('first-name')
+    appaterno = request.form.get('last-name')
+    apmaterno = request.form.get('maternal-last-name')
+    celular = request.form.get('phone')
+    correo = request.form.get('email')
+    direccion = request.form.get('address')
+    numeracion = request.form.get('numeration')
+
+    print("Datos recibidos:", {
+        'nombre': nombre,
+        'appaterno': appaterno,
+        'apmaterno': apmaterno,
+        'celular': celular,
+        'correo': correo,
+        'direccion': direccion,
+        'numeracion': numeracion
+    })
+
+    # Actualizar los datos en Supabase
+    response_usuario = supabase.table('Usuario').update({
+        'nombre': nombre,
+        'appaterno': appaterno,
+        'apmaterno': apmaterno,
+        'celular': celular,
+        'correo': correo
+    }).eq('id_usuario', user_id).execute()
+
+    print("Respuesta de Supabase para usuario:", response_usuario)
+
+    # Comprobar si la respuesta fue exitosa
+    if not response_usuario.data:
+        error_message = response_usuario.error or 'Error desconocido al actualizar el usuario'
+        print("Error al actualizar los datos del usuario:", error_message)
+        return jsonify({'success': False, 'message': error_message}), 500
+
+    # Obtener el id_domicilio del usuario
+    response_domicilio_id = supabase.table('Usuario').select('id_domicilio').eq('id_usuario', user_id).execute()
+
+    if not response_domicilio_id.data:
+        return jsonify({'success': False, 'message': 'Domicilio no encontrado para el usuario'}), 404
+
+    # Extraer el id_domicilio
+    domicilio_id = response_domicilio_id.data[0]['id_domicilio']
+
+    # Actualizar la dirección en la tabla Domicilio
+    response_update_domicilio = supabase.table('Domicilio').update({
+        'direccion': direccion,
+        'numeracion': numeracion
+    }).eq('id_domicilio', domicilio_id).execute()
+
+    # Imprimir la respuesta de la operación de actualización de domicilio
+    print("Respuesta de Supabase para actualizar domicilio:", response_update_domicilio)
+
+    if not response_update_domicilio.data:
+        error_message = response_update_domicilio.error or 'Error desconocido al actualizar la dirección'
+        print("Error al actualizar la dirección:", error_message)
+        return jsonify({'success': False, 'message': error_message}), 500
+
+    return jsonify({'success': True, 'id_domicilio': domicilio_id})
+
+@app.route('/eliminar-cuenta', methods=['POST'])
+@login_required
+def delete_account():
+    user_id = session.get('id_usuario')
+    print(f'ID del usuario: {user_id}')  # Depuración
+
+    if not user_id:
+        return jsonify({'success': False, 'message': 'Usuario no encontrado'}), 404
+
+    # Eliminar el usuario de Supabase
+    response = supabase.table('Usuario').delete().eq('id_usuario', user_id).execute()
+    
+    # Imprimir respuesta para depuración
+    print('Response:', response)
+
+    if response.error:
+        return jsonify({'success': False, 'message': response.error}), 500
+
+    # Limpiar la sesión
+    session.pop('id_usuario', None)
+
+    # Verificar si se eliminó correctamente
+    if response.data and len(response.data) > 0:
+        return jsonify({'success': True, 'message': 'Cuenta eliminada', 'redirect': url_for('home')})
+    else:
+        return jsonify({'success': False, 'message': 'No se pudo eliminar la cuenta o la cuenta no existe'}), 500
+
+
 
 # Ruta para el perfil de veterinario
 @app.route('/profile_vet')

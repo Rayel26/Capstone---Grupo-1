@@ -64,8 +64,8 @@
                             class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Nombre:</label>
                         <div class="relative flex items-center">
                             <input type="text" name="first-name" id="first-name" value="{{ user.nombre }}"
-                            class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
-                            required readonly>
+                                class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
+                                required readonly>
                             <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
                         </div>
                     </div>
@@ -87,7 +87,8 @@
                         <label for="maternal-last-name"
                             class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Apellido Materno:</label>
                         <div class="relative flex items-center">
-                            <input type="text" name="maternal-last-name" id="maternal-last-name" value="{{ user.apmaterno }}"
+                            <input type="text" name="maternal-last-name" id="maternal-last-name"
+                                value="{{ user.apmaterno }}"
                                 class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
                                 required readonly>
                             <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
@@ -113,27 +114,96 @@
                         <label for="address"
                             class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Dirección:</label>
                         <div class="relative flex items-center">
-                            <input type="text" name="address" id="address" value="Av. Siempre Viva 123"
+                            <input type="text" name="address" id="address" value="{{ user.direccion }}"
                                 class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
-                                required readonly>
+                                required>
                             <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
                         </div>
+                        <ul id="suggestions"
+                            class="absolute z-10 bg-white border border-gray-300 mt-1 rounded-lg hidden"></ul>
                     </div>
 
-                    <!-- Comuna -->
+
+                    <script>
+                        // Función para obtener sugerencias de direcciones en Chile
+                        async function getAddressSuggestions(input) {
+                            const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&q=${input}, Chile`);
+                            const data = await response.json();
+                            return data;
+                        }
+
+                        // Manejo de eventos para el autocompletado
+                        const addressInput = document.getElementById('address');
+                        const suggestionsList = document.getElementById('suggestions');
+
+                        addressInput.addEventListener('input', async () => {
+                            const query = addressInput.value;
+
+                            // Limpia las sugerencias anteriores
+                            suggestionsList.innerHTML = '';
+
+                            if (query.length > 2) { // Mínimo 3 caracteres para buscar
+                                const suggestions = await getAddressSuggestions(query);
+
+                                // Muestra las sugerencias
+                                suggestions.forEach(suggestion => {
+                                    const li = document.createElement('li');
+                                    li.textContent = suggestion.display_name;
+                                    li.classList.add('p-2', 'cursor-pointer', 'hover:bg-gray-200');
+                                    li.onclick = () => {
+                                        addressInput.value = suggestion.display_name; // Establece la dirección seleccionada
+                                        suggestionsList.innerHTML = ''; // Limpia las sugerencias
+                                        suggestionsList.classList.add('hidden'); // Oculta la lista
+                                    };
+                                    suggestionsList.appendChild(li);
+                                });
+
+                                if (suggestions.length > 0) {
+                                    suggestionsList.classList.remove('hidden'); // Muestra la lista si hay sugerencias
+                                } else {
+                                    suggestionsList.classList.add('hidden'); // Oculta la lista si no hay sugerencias
+                                }
+                            } else {
+                                suggestionsList.classList.add('hidden'); // Oculta la lista si menos de 3 caracteres
+                            }
+                        });
+
+                        // Cierra la lista de sugerencias al hacer clic fuera
+                        document.addEventListener('click', (event) => {
+                            if (!addressInput.contains(event.target) && !suggestionsList.contains(event.target)) {
+                                suggestionsList.classList.add('hidden');
+                            }
+                        });
+                    </script>
+
+                    <style>
+                        /* Estilo para la lista de sugerencias */
+                        #suggestions {
+                            list-style: none;
+                            padding: 0;
+                            margin: 0;
+                            max-height: 200px;
+                            overflow-y: auto;
+                            width: 100%;
+                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                            z-index: 1000;
+                        }
+
+                        #suggestions li {
+                            border-bottom: 1px solid #e2e8f0;
+                            /* Línea separadora */
+                        }
+                    </style>
+
+
+                    <!-- Numeración -->
                     <div class="mb-4 relative">
-                        <label for="commune"
-                            class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Comuna:</label>
+                        <label for="numeration"
+                            class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Numeración:</label>
                         <div class="relative flex items-center">
-                            <select name="commune" id="commune"
+                            <input type="text" name="numeration" id="numeration" value="{{ user.numeracion}}"
                                 class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
-                                disabled required>
-                                <option value="puente-alto" selected>Puente Alto</option>
-                                <option value="santiago">Santiago</option>
-                                <option value="la-florida">La Florida</option>
-                                <option value="vitacura">Vitacura</option>
-                                <!-- Agrega más opciones según sea necesario -->
-                            </select>
+                                required placeholder="Ingresa un número o letra">
                             <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
                         </div>
                     </div>
@@ -143,7 +213,8 @@
                         <label for="phone"
                             class="text-sm sm:text-xs font-medium text-gray-900 block mb-1">Celular:</label>
                         <div class="relative flex items-center">
-                            <input type="text" name="phone" id="phone" value="{{ user.celular }}" pattern="\+569 \d{4} \d{4}"
+                            <input type="text" name="phone" id="phone" value="{{ user.celular }}"
+                                pattern="\+569 \d{4} \d{4}"
                                 title="Ingrese 8 dígitos después del prefijo +569, separados en dos grupos de 4 dígitos."
                                 class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 input-short input-background pr-10 w-full"
                                 readonly />
@@ -257,119 +328,117 @@
                 </div>
             </div>
         </div>
-            <!-- Fin Contenido principal de Datos -->
+        <!-- Fin Contenido principal de Datos -->
 
-            <!-- Mis mascotas -->
-            <div id="pets"
-                class="hidden step-content bg-white p-4 p-6 bg-white shadow-md rounded-lg active flex flex-col h-full">
-                <h2 class="text-2xl font-bold mb-4">Mis Mascotas</h2>
+        <!-- Mis mascotas -->
+        <div id="pets"
+            class="hidden step-content bg-white p-4 p-6 bg-white shadow-md rounded-lg active flex flex-col h-full">
+            <h2 class="text-2xl font-bold mb-4">Mis Mascotas</h2>
 
-                <!-- Contenedor del formulario en columnas -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow">
-                    <!-- Columna 1: Selección de mascota -->
-                    <div class="relative mb-4">
-                        <label for="pet-select" class="text-sm font-medium text-gray-900 block mb-2">Selecciona una
-                            mascota:</label>
-                        <div class="relative flex items-center">
-                            <select id="pet-select"
-                                class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-cyan-600 focus:border-cyan-600 text-gray-900 sm:text-sm p-2.5 pr-10 input-short input-background">
-                                <option value="">Selecciona...</option>
-                                <option value="pet1" data-name="Rex" data-age="3 años" data-species="Perro"
-                                    data-breed="Pastor Alemán" data-birthdate="2021-05-14">Rex</option>
-                                <option value="pet2" data-name="Luna" data-age="2 años" data-species="Gato"
-                                    data-breed="DPC" data-birthdate="2022-08-09">Luna</option>
-                            </select>
+            <!-- Contenedor del formulario en columnas -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-grow">
+                <!-- Columna 1: Selección de mascota -->
+                <div class="relative mb-4">
+                    <label for="pet-select" class="text-sm font-medium text-gray-900 block mb-2">Selecciona una
+                        mascota:</label>
+                    <div class="relative flex items-center">
+                        <select id="pet-select"
+                            class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-cyan-600 focus:border-cyan-600 text-gray-900 sm:text-sm p-2.5 pr-10 input-short input-background">
+                            <option value="">Selecciona...</option>
+                            <option value="pet1" data-name="Rex" data-age="3 años" data-species="Perro"
+                                data-breed="Pastor Alemán" data-birthdate="2021-05-14">Rex</option>
+                            <option value="pet2" data-name="Luna" data-age="2 años" data-species="Gato" data-breed="DPC"
+                                data-birthdate="2022-08-09">Luna</option>
+                        </select>
 
-                            <!-- Contenedor para el ícono "Agregar mascota" con tooltip -->
-                            <div class="ml-2 relative group flex items-center">
-                                <button id="add-pet-icon"
-                                    class="flex items-center p-1 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 4v16m8-8H4" />
-                                    </svg>
-                                </button>
-                                <div
-                                    class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 whitespace-no-wrap">
-                                    Agregar mascota
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Detalles de la mascota -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                            <div class="relative mb-4">
-                                <label for="pet-name"
-                                    class="text-xs font-medium text-gray-900 block mb-2">Nombre:</label>
-                                <input type="text" name="pet-name" id="pet-name" value="Selecciona una mascota"
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
-                                    required readonly>
-                            </div>
-                            <div class="relative mb-4">
-                                <label for="pet-age" class="text-xs font-medium text-gray-900 block mb-2">Edad:</label>
-                                <input type="text" name="pet-age" id="pet-age" value=""
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
-                                    required readonly>
-                            </div>
-                            <div class="relative mb-4">
-                                <label for="pet-birthdate" class="text-xs font-medium text-gray-900 block mb-2">Fecha de
-                                    nacimiento:</label>
-                                <input type="date" id="pet-birthdate" name="pet-birthdate"
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
-                                    required>
-                            </div>
-                            <div class="relative mb-4">
-                                <label for="pet-species"
-                                    class="text-xs font-medium text-gray-900 block mb-2">Especie:</label>
-                                <input type="text" name="pet-species" id="pet-species" value=""
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
-                                    required readonly>
-                            </div>
-                            <div class="relative mb-4">
-                                <label for="pet-breed"
-                                    class="text-xs font-medium text-gray-900 block mb-2">Raza:</label>
-                                <input type="text" name="pet-breed" id="pet-breed" value=""
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
-                                    required readonly>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Columna 2: Subir foto de la mascota y vista previa -->
-                    <div class="relative mb-4">
-                        <div class="flex flex-col items-center">
+                        <!-- Contenedor para el ícono "Agregar mascota" con tooltip -->
+                        <div class="ml-2 relative group flex items-center">
+                            <button id="add-pet-icon"
+                                class="flex items-center p-1 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 4v16m8-8H4" />
+                                </svg>
+                            </button>
                             <div
-                                class="relative w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 bg-white border border-gray-300 rounded-lg overflow-hidden shadow-md flex items-center justify-center mb-2">
-                                <img id="photo-preview" src="#" class="w-full h-full object-cover">
-                                <button id="edit-photo-button"
-                                    class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-200">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" class="w-5 h-5 text-gray-700">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M16.862 3.487a2.5 2.5 0 113.535 3.535l-10.61 10.61a4 4 0 01-1.414.943l-3.36 1.343a1 1 0 01-1.261-1.261l1.343-3.36a4 4 0 01.943-1.414l10.61-10.61z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 6.5L17.5 8.5" />
-                                    </svg>
-                                </button>
-                                <input type="file" name="pet-photo" id="pet-photo" accept="image/*" class="hidden">
+                                class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 whitespace-no-wrap">
+                                Agregar mascota
                             </div>
-                            <label for="pet-photo" class="text-sm font-medium text-gray-900 block mb-2">Foto de la
-                                Mascota:</label>
+                        </div>
+                    </div>
+
+                    <!-- Detalles de la mascota -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div class="relative mb-4">
+                            <label for="pet-name" class="text-xs font-medium text-gray-900 block mb-2">Nombre:</label>
+                            <input type="text" name="pet-name" id="pet-name" value="Selecciona una mascota"
+                                class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
+                                required readonly>
+                        </div>
+                        <div class="relative mb-4">
+                            <label for="pet-age" class="text-xs font-medium text-gray-900 block mb-2">Edad:</label>
+                            <input type="text" name="pet-age" id="pet-age" value=""
+                                class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
+                                required readonly>
+                        </div>
+                        <div class="relative mb-4">
+                            <label for="pet-birthdate" class="text-xs font-medium text-gray-900 block mb-2">Fecha de
+                                nacimiento:</label>
+                            <input type="date" id="pet-birthdate" name="pet-birthdate"
+                                class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
+                                required>
+                        </div>
+                        <div class="relative mb-4">
+                            <label for="pet-species"
+                                class="text-xs font-medium text-gray-900 block mb-2">Especie:</label>
+                            <input type="text" name="pet-species" id="pet-species" value=""
+                                class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
+                                required readonly>
+                        </div>
+                        <div class="relative mb-4">
+                            <label for="pet-breed" class="text-xs font-medium text-gray-900 block mb-2">Raza:</label>
+                            <input type="text" name="pet-breed" id="pet-breed" value=""
+                                class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
+                                required readonly>
                         </div>
                     </div>
                 </div>
 
-                <!-- Botón de editar al final -->
-                <div class="mt-auto flex justify-center sm:justify-start">
-                    <button id="edit-button"
-                        class="px-4 py-2 text-white rounded-md bg-[#18beaa] hover:bg-[#16a89a] transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
-                        Editar Mascota
-                    </button>
+                <!-- Columna 2: Subir foto de la mascota y vista previa -->
+                <div class="relative mb-4">
+                    <div class="flex flex-col items-center">
+                        <div
+                            class="relative w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 bg-white border border-gray-300 rounded-lg overflow-hidden shadow-md flex items-center justify-center mb-2">
+                            <img id="photo-preview" src="#" class="w-full h-full object-cover">
+                            <button id="edit-photo-button"
+                                class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-200">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                    stroke="currentColor" class="w-5 h-5 text-gray-700">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M16.862 3.487a2.5 2.5 0 113.535 3.535l-10.61 10.61a4 4 0 01-1.414.943l-3.36 1.343a1 1 0 01-1.261-1.261l1.343-3.36a4 4 0 01.943-1.414l10.61-10.61z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 6.5L17.5 8.5" />
+                                </svg>
+                            </button>
+                            <input type="file" name="pet-photo" id="pet-photo" accept="image/*" class="hidden">
+                        </div>
+                        <label for="pet-photo" class="text-sm font-medium text-gray-900 block mb-2">Foto de la
+                            Mascota:</label>
+                    </div>
                 </div>
-
             </div>
-            <!-- Fin Mis mascotas -->
-        
+
+            <!-- Botón de editar al final -->
+            <div class="mt-auto flex justify-center sm:justify-start">
+                <button id="edit-button"
+                    class="px-4 py-2 text-white rounded-md bg-[#18beaa] hover:bg-[#16a89a] transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+                    Editar Mascota
+                </button>
+            </div>
+
+        </div>
+        <!-- Fin Mis mascotas -->
+
 
         <!-- Modal para agregar una nueva mascota -->
         <div id="add-pet-modal"

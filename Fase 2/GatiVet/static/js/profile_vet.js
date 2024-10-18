@@ -132,7 +132,6 @@ editForm.addEventListener('submit', function(event) {
     document.getElementById('domicilio').value = document.getElementById('edit-domicilio').value;
     document.getElementById('telefono-dom').value = document.getElementById('edit-telefono-dom').value;
     document.getElementById('correo').value = document.getElementById('edit-correo').value;
-    document.getElementById('fecha-nacimiento').value = document.getElementById('edit-fecha-nacimiento').value;
 
     // Cerrar el modal
     editModal.classList.add('hidden');
