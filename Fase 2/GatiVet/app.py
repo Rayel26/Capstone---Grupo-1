@@ -4,6 +4,7 @@ from functools import wraps
 import requests
 from requests.auth import HTTPBasicAuth
 from supabase import create_client
+from datetime import datetime
 
 app = Flask(__name__)
 CORS(app)
@@ -69,6 +70,7 @@ def login():
             # Verifica la contraseña (ajusta esto si usas un método de hash)
             if user['contraseña'] == password:  # Cambia esto por la verificación de hash si es necesario
                 session['email'] = user['correo']
+                session['id_usuario'] = user['id_usuario']  # Almacena el id_usuario en la sesión
                 session['is_logged_in'] = True  # Marca que el usuario ha iniciado sesión
                 
                 # Determinar el rol basado en tipousuarioid
@@ -82,14 +84,15 @@ def login():
                     flash('Rol de usuario desconocido', 'error')
                     return redirect(url_for('login'))
 
-                # Redirigir a la página principal o un dashboard
-                return redirect(url_for('home'))  # Asegúrate de tener una vista 'home'
+                # Redirigir a la página de perfil
+                return redirect(url_for('profile'))  # Cambiado a 'profile' para ir directamente a la vista de perfil
             else:
                 flash('Usuario o contraseña incorrectos', 'error')
         else:
             flash('Usuario o contraseña incorrectos', 'error')
 
     return render_template('login.html')
+
 
 @app.route('/register_vet', methods=['POST'])
 def register_vet():
@@ -114,6 +117,10 @@ def register_vet():
         if not (rut and nombre and correo and contraseña and celular and especialidad):
             return jsonify({"error": "Faltan campos requeridos."}), 400
 
+        # Obtener la fecha actual en el formato "YYYY-MM-DD"
+        fecha_creacion = datetime.now().strftime("%Y-%m-%d")  # Formatear la fecha
+
+
         # Inserta los datos en Supabase
         response = supabase.table('Usuario').insert({
             'id_usuario': rut,
@@ -124,7 +131,8 @@ def register_vet():
             'contraseña': contraseña,
             'celular': celular,
             'especialidad': especialidad,  # Agregar especialidad
-            'tipousuarioid': tipo_usuario  # Usar el tipo de usuario proporcionado
+            'tipousuarioid': tipo_usuario,  # Usar el tipo de usuario proporcionado
+            'fecha_creacion': fecha_creacion  # Agregar la fecha de creación
         }).execute()
 
         # Log para ver la respuesta de Supabase
@@ -156,25 +164,50 @@ def logout():
 @app.route('/profile', methods=['GET'])
 @login_required
 def profile():
-    # Asumiendo que el usuario ha iniciado sesión y su correo está almacenado en la sesión
-    email = session.get('correo')  # Reemplaza esto con la forma en que guardas el email
-    password = request.form.get('contraseña')  # Obtén la contraseña del formulario (asegúrate de que sea seguro)
+    # Asumiendo que el usuario ha iniciado sesión y su id_usuario está almacenado en la sesión
+    user_id = session.get('id_usuario')  # Cambia 'correo' por 'id_usuario'
+    
+    # Registro para depuración
+    print(f"User ID from session: {user_id}")  # Verifica el valor de user_id
+
+    # Comprobar si user_id es None
+    if user_id is None:
+        return "No se encontró el ID de usuario en la sesión."
 
     # Obtener los datos del usuario de Supabase
-    user_data = supabase.table('Usuario').select('*').eq('correo', email).eq('contraseña', password).execute()
+    user_data = supabase.table('Usuario').select('*').eq('id_usuario', user_id).execute()
     
+    # Registro de la respuesta de Supabase
+    print(f"User data from Supabase: {user_data.data}")  # Verifica lo que devuelve Supabase
+
     # Asumiendo que solo hay un usuario o que deseas el primero
     user = user_data.data[0] if user_data.data else {}
     
-    return render_template('profile.html', user=user)
+    # Comprobar si se obtuvo algún usuario
+    if not user:
+        return "No se encontraron datos para este usuario."
 
+    return render_template('profile.html', user=user)
 
 # Ruta para el perfil de veterinario
 @app.route('/profile_vet')
 @login_required
 @role_required('vet')
 def profile_vet():
-    return render_template('profile_vet.html')
+    # Asumiendo que el usuario ha iniciado sesión y su id_usuario está almacenado en la sesión
+    user_id = session.get('id_usuario')  # Cambia 'correo' por 'id_usuario'
+
+    # Obtener los datos del veterinario de Supabase
+    vet_data = supabase.table('Usuario').select('*').eq('id_usuario', user_id).execute()
+    
+    # Asumiendo que solo hay un veterinario o que deseas el primero
+    vet = vet_data.data[0] if vet_data.data else {}
+
+    if not vet:
+        return "No se encontraron datos para este veterinario."
+
+    return render_template('profile_vet.html', vet=vet)
+
 
 # Ruta para el panel de administrador
 @app.route('/admin_dashboard')
@@ -227,6 +260,10 @@ def register():
     contraseña = data['contraseña']
     celular = data['celular']
 
+    # Obtener la fecha actual en el formato "YYYY-MM-DD"
+    fecha_creacion = datetime.now().strftime("%Y-%m-%d")  # Cambia aquí el formato de fecha
+    print("Fecha de creación:", fecha_creacion)  # Agregar un log para verificar la fecha
+
     # Inserta los datos en Supabase
     response = supabase.table('Usuario').insert({
         'id_usuario': rut,
@@ -236,7 +273,8 @@ def register():
         'correo': correo,
         'contraseña': contraseña,
         'celular': celular,
-        'tipousuarioid': 1 
+        'tipousuarioid': 1, 
+        'fecha_creacion': fecha_creacion  # Agregar la fecha de creación
     }).execute()
 
     # Log para ver la respuesta de Supabase
@@ -246,6 +284,63 @@ def register():
         return jsonify({"message": "Usuario creado exitosamente", "data": response.data}), 201
     else:
         return jsonify({"error": "Error al crear el usuario", "details": response.json()}), 400
+
+##Editar Usuarios
+@app.route('/api/update_user/<rut>', methods=['PUT'])
+def update_user(rut):
+    try:
+        # Obtener los datos actualizados del request
+        updated_data = request.json
+
+        # Verifica que appaterno y apmaterno existan en los datos
+        if 'appaterno' in updated_data and 'apmaterno' in updated_data:
+            # Crear un diccionario para los datos que se van a actualizar
+            data_to_update = {
+                'appaterno': updated_data['appaterno'],
+                'apmaterno': updated_data['apmaterno'],
+                'nombre': updated_data.get('nombre'),
+                'especialidad': updated_data.get('especialidad'),
+                'celular': updated_data.get('telefono'),
+                'correo': updated_data.get('correo'),
+                # Agrega más campos según sea necesario
+            }
+
+            # Realizar la actualización en la tabla "Usuario" en Supabase
+            response = supabase.table('Usuario').update(data_to_update).eq('id_usuario', rut).execute()
+
+            # Imprimir la respuesta para verificar su estructura
+            print("Respuesta de Supabase:", response)
+
+            # Verifica si la respuesta tiene un error
+            if hasattr(response, 'error') and response.error:
+                return jsonify({"error": response.error.message}), 400
+            
+            return jsonify({"message": "Usuario actualizado correctamente"}), 200
+        else:
+            return jsonify({"error": "appaterno y apmaterno son requeridos"}), 400
+
+    except Exception as e:
+        print(f"Ocurrió un error al actualizar el usuario: {e}")
+        return jsonify({"error": "Error al actualizar el usuario", "details": str(e)}), 500
+
+##Eliminar Usuarios
+@app.route('/api/delete_user/<user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    try:
+        # Realiza la eliminación en la tabla "Usuario" en Supabase
+        response = supabase.table('Usuario').delete().eq('id_usuario', user_id).execute()
+
+        # Verifica si la respuesta contiene un error
+        if hasattr(response, 'error') and response.error:
+            return jsonify({"error": response.error.message}), 400
+        
+        # Si no hay error, retorna un mensaje de éxito
+        return jsonify({"message": "Usuario eliminado correctamente"}), 200
+
+    except Exception as e:
+        print(f"Ocurrió un error al eliminar el usuario: {e}")
+        return jsonify({"error": "Error al eliminar el usuario", "details": str(e)}), 500
+
 
 @app.route('/donation')
 def donation():
@@ -392,6 +487,9 @@ def get_users():
         print(f"Ocurrió un error al obtener usuarios: {e}")
         return jsonify({"error": "Error al obtener usuarios", "details": str(e)}), 500
 
+@app.route('/api/get_supabase_key')
+def get_supabase_key():
+    return jsonify({'supabase_key': SUPABASE_KEY})
 
 
 

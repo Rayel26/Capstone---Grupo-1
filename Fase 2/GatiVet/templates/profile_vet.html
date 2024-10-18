@@ -109,49 +109,51 @@
                             <div>
                                 <label for="rut" class="block text-gray-600 text-sm">Rut:</label>
                                 <input type="text" id="rut" name="rut" disabled
-                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="Rut">
+                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" 
+                                    value="{{ vet.id_usuario if vet.id_usuario else 'Rut' }}">
                             </div>
                             <div>
                                 <label for="nombre-doctor" class="block text-gray-600 text-sm">Nombre:</label>
                                 <input type="text" id="nombre-doctor" name="nombre-doctor" disabled
                                     class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    value="Nombre">
+                                    value="{{ vet.nombre if vet.nombre else 'Nombre' }}">
                             </div>
                             <div>
                                 <label for="apellido" class="block text-gray-600 text-sm">Apellido:</label>
                                 <input type="text" id="apellido" name="apellido" disabled
                                     class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    value="Apellido">
+                                    value="{{ vet.appaterno if vet.appaterno else 'Apellido' }}">
                             </div>
                             <div>
                                 <label for="especialidad" class="block text-gray-600 text-sm">Especialidad:</label>
                                 <input type="text" id="especialidad" name="especialidad" disabled
                                     class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    value="Especialidad">
+                                    value="{{ vet.especialidad if vet.especialidad else 'Especialidad' }}">
                             </div>
                             <div>
                                 <label for="domicilio" class="block text-gray-600 text-sm">Domicilio:</label>
                                 <input type="text" id="domicilio" name="domicilio" disabled
                                     class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    value="Dirección">
+                                    value="{{ vet.domicilio if vet.domicilio else 'Av. Siempre viva 123' }}">
                             </div>
                             <div>
                                 <label for="telefono-dom" class="block text-gray-600 text-sm">Teléfono:</label>
                                 <input type="text" id="telefono-dom" name="telefono-dom" disabled
                                     class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    value="123456789">
+                                    value="{{ vet.celular if vet.celular else '123456789' }}">
                             </div>
                             <div>
                                 <label for="correo" class="block text-gray-600 text-sm">Correo Electrónico:</label>
                                 <input type="email" id="correo" name="correo" disabled
                                     class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    value="correo@ejemplo.com">
+                                    value="{{ vet.correo if vet.correo else 'correo@ejemplo.com' }}">
                             </div>
                             <div>
                                 <label for="fecha-nacimiento" class="block text-gray-600 text-sm">Fecha de
                                     Nacimiento:</label>
                                 <input type="date" id="fecha-nacimiento" name="fecha-nacimiento" disabled
-                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
+                                    value="{{ vet.fecha_nacimiento if vet.fecha_nacimiento else '28-11-2002' }}">
                             </div>
                         </div>
                     </div>

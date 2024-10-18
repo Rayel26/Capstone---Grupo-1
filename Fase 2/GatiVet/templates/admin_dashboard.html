@@ -235,8 +235,9 @@
                         <select id="filter" class="border rounded py-0.5 px-1 text-gray-700 text-xs"
                             onchange="renderUserTable()">
                             <option value="">Todos los tipos</option>
-                            <option value="veterinario">Veterinario</option>
-                            <option value="usuario">Usuario</option>
+                            <option value="1">Usuario</option>
+                            <option value="2">Veterinario</option>
+                            <option value="3">Administrador</option>
                         </select>
                     </div>
                 </div>
@@ -435,7 +436,7 @@
                             <label for="editModalDomicilio" class="block text-sm font-semibold">Domicilio:</label>
                             <input type="text" id="editModalDomicilio"
                                 class="mt-1 block w-full border-gray-300 rounded-md" placeholder="Ingrese el domicilio"
-                                required>
+                                >
                         </div>
                     </div>
 
@@ -465,7 +466,7 @@
                             <label for="editModalFechaNacimiento" class="block text-sm font-semibold">Fecha de
                                 Nacimiento:</label>
                             <input type="date" id="editModalFechaNacimiento"
-                                class="mt-1 block w-full border-gray-300 rounded-md" required>
+                                class="mt-1 block w-full border-gray-300 rounded-md" >
                         </div>
                     </div>
                 </div>

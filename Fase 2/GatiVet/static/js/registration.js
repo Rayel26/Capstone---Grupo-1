@@ -168,7 +168,8 @@ document.addEventListener("DOMContentLoaded", function () {
             correo: emailInput.value,
             contraseña: passwordInput.value,
             celular: getFullPhone(),
-            tipousuarioid: 1
+            tipousuarioid: 1,
+            fecha_creacion: new Date().toISOString() // Agregar la fecha actual
         };
 
         // Verificar longitud del RUT
@@ -202,6 +203,7 @@ document.addEventListener("DOMContentLoaded", function () {
             alert('Error: ' + error.message);
         });
     });
+
 
     // Cerrar el modal de "Cuenta creada"
     closeModalButton.addEventListener('click', function () {

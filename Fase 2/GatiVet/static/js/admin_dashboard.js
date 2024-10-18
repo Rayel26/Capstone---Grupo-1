@@ -342,44 +342,75 @@ function filterProducts() {
 
 
 //Fin Productos
-////
+//////////////////////////////
 
-
-////
+//////////////////////////////
 //Gestión de usuarios
+
+let users = []; // Variable global para almacenar usuarios
+let usersfilter = []; // Variable para almacenar usuarios filtrados
 
 async function fetchUsers() {
     try {
         const response = await fetch('/api/get_users');
-        console.log("Respuesta del servidor:", response); // Agrega este log
+        console.log("Respuesta del servidor:", response);
         if (!response.ok) {
             throw new Error('Error al obtener los usuarios');
         }
 
-        const data = await response.json();
-        console.log("Datos de usuarios:", data); // Agrega este log
-        populateUserTable(data);
+        users = await response.json(); // Almacena los usuarios en la variable global
+        console.log("Datos de usuarios:", users);
+        populateUserTable(users); // Llenar la tabla inicialmente
     } catch (error) {
         console.error("Error al cargar usuarios:", error);
     }
 }
 
+function renderUserTable() {
+    const searchTerm = document.getElementById('search').value.toLowerCase(); // Obtener término de búsqueda
+    const selectedType = document.getElementById('filter').value; // Obtener tipo de usuario seleccionado
 
-function populateUserTable(users) {
-    const userTableBody = document.getElementById('userTable');
+    // Filtrar usuarios
+    usersfilter = users.filter(user => {
+        const matchesSearch = user.nombre.toLowerCase().includes(searchTerm) || user.id_usuario.includes(searchTerm);
+        const matchesType = selectedType ? user.tipousuarioid.toString() === selectedType : true; // Filtrar por tipo si se seleccionó uno
+        return matchesSearch && matchesType;
+    });
+
+    populateUserTable(usersfilter); // Llenar la tabla con usuarios filtrados
+}
+
+function populateUserTable(usersToDisplay) {
+    const userTableBody = document.getElementById('userTable'); // Asegúrate de que este ID es correcto
     userTableBody.innerHTML = ''; // Limpiar la tabla antes de llenarla
 
-    users.forEach(user => {
+    usersToDisplay.forEach(user => {
         const row = document.createElement('tr');
+
+        // Asignar el rol en función del tipousuarioid
+        let userType;
+        switch (user.tipousuarioid) {
+            case 1:
+                userType = 'Usuario';
+                break;
+            case 2:
+                userType = 'Veterinario';
+                break;
+            case 3:
+                userType = 'Administrador';
+                break;
+            default:
+                userType = 'Desconocido';
+        }
 
         row.innerHTML = `
             <td class="py-1 px-2 border-b">${user.id_usuario}</td>
             <td class="py-1 px-2 border-b">${user.nombre}</td>
-            <td class="py-1 px-2 border-b">${user.tipousuarioid}</td>
-            <td class="py-1 px-2 border-b">${user.fecha_creacion || 'N/A'}</td> <!-- Asegúrate de que esta propiedad exista en tu objeto -->
+            <td class="py-1 px-2 border-b">${userType}</td>
+            <td class="py-1 px-2 border-b">${user.fecha_creacion || 'N/A'}</td>
             <td class="py-1 px-2 border-b">
-                <button class="bg-blue-500 text-white px-2 py-1 rounded">Editar</button>
-                <button class="bg-red-500 text-white px-2 py-1 rounded">Eliminar</button>
+                <button class="bg-blue-500 text-white px-2 py-1 rounded" onclick="editUserModal('${user.id_usuario}')">Editar</button>
+                <button class="bg-red-500 text-white px-2 py-1 rounded" onclick="confirmDeleteUser('${user.id_usuario}')">Eliminar</button>
             </td>
         `;
 
@@ -391,53 +422,11 @@ function populateUserTable(users) {
 fetchUsers();
 
 
+
 // Obtención de elementos del DOM
 const userTable = document.getElementById('userTable');
 const searchInput = document.getElementById('search');
 const filterSelect = document.getElementById('filter');
-
-let users = [
-    {
-        rut: "12.345.678-9",
-        nombre: "Juan Pérez",
-        tipo: "usuario",
-        fechaCreacion: "2023-01-15" // Ejemplo de fecha
-    },
-    {
-        rut: "98.765.432-1",
-        nombre: "María González",
-        tipo: "veterinario",
-        fechaCreacion: "2023-02-20" // Ejemplo de fecha
-    }
-];
-
-let editingUserRut = null; // Variable para almacenar el RUT del usuario que se está editando
-
-// Funciones para renderizar la tabla de usuarios
-function renderUserTable() {
-    userTable.innerHTML = '';
-
-    const filteredUsers = users.filter(user => {
-        const searchMatch = user.rut.includes(searchInput.value) || user.nombre.includes(searchInput.value);
-        const filterMatch = filterSelect.value === '' || user.tipo === filterSelect.value;
-        return searchMatch && filterMatch;
-    });
-
-    filteredUsers.forEach(user => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td class="py-1 px-2 border-b">${user.rut}</td>
-            <td class="py-1 px-2 border-b">${user.nombre}</td>
-            <td class="py-1 px-2 border-b">${user.tipo}</td>
-            <td class="py-1 px-2 border-b">${user.fechaCreacion}</td> <!-- Nueva columna -->
-            <td class="py-1 px-2 border-b">
-                <button class="text-blue-500 hover:underline" onclick="openEditUserModal('${user.rut}')">Editar</button>
-                <button class="text-red-500 hover:underline" onclick="confirmDeleteUser('${user.rut}')">Eliminar</button>
-            </td>
-        `;
-        userTable.appendChild(row);
-    });
-}
 
 // Funciones para abrir y cerrar modales de agregar usuario
 function openAddUserModal() {
@@ -542,7 +531,7 @@ document.getElementById('confirmBtn').addEventListener('click', async function (
             closeConfirmModal();
             closeAddUserModal();
             // Renderizar la tabla de usuarios o actualizar la interfaz
-            renderUserTable();
+            fetchUsers();
         } else {
             const errorData = await response.json();
             console.error("Error al crear el usuario:", errorData);
@@ -717,33 +706,104 @@ function togglePasswordVisibility(inputId, toggleIcon) {
 
 // Funciones para abrir y cerrar modales de editar usuario
 // Función para abrir el modal de edición
-function openEditUserModal(rut) {
-    // Buscar el usuario por RUT
-    const user = users.find(user => user.rut === rut);
+function editUserModal(id_usuario) {
+    const user = users.find(user => user.id_usuario === id_usuario);
+
     if (user) {
-        // Rellenar los campos del modal con los datos del usuario
-        document.getElementById('editModalRut').value = user.rut;
-        document.getElementById('editModalNombre').value = user.nombre;
-        document.getElementById('editModalApellido').value = user.apellido;
-        document.getElementById('editModalDomicilio').value = user.domicilio;
-        document.getElementById('editModalEspecialidad').value = user.especialidad;
-        document.getElementById('editModalTelefono').value = user.telefono;
-        document.getElementById('editModalCorreo').value = user.correo;
-        document.getElementById('editModalFechaNacimiento').value = user.fechaNacimiento;
+        document.getElementById('editModalRut').value = user.id_usuario || '';
+        document.getElementById('editModalNombre').value = user.nombre || '';
+        document.getElementById('editModalApellido').value = `${user.appaterno || ''} ${user.apmaterno || ''}`; // Combina apellidos si es necesario
+        document.getElementById('editModalDomicilio').value = user.domicilio_id || ''; // Si tienes un campo de domicilio
+        document.getElementById('editModalEspecialidad').value = user.especialidad || '';
+        document.getElementById('editModalTelefono').value = user.celular || ''; // Asigna el celular
+        document.getElementById('editModalCorreo').value = user.correo || '';
+        document.getElementById('editModalFechaNacimiento').value = user.fechaNacimiento || '';
 
         // Limpiar campos de contraseña
-        document.getElementById('editModalPassword').value = '';
-        document.getElementById('editModalConfirmPassword').value = '';
+        document.getElementById('editModalPassword').value = user.contraseña || '';
+        document.getElementById('editModalConfirmPassword').value = user.contraseña || '';
 
         // Mostrar el modal
         document.getElementById('editUserModal').classList.remove('hidden');
-        editingUserRut = rut; // Guardar el RUT del usuario que se está editando
+        editingUserRut = id_usuario; // Guardar el identificador del usuario que se está editando
+    } else {
+        console.error('Usuario no encontrado con el ID:', id_usuario);
     }
 }
 
-// Función para cerrar el modal de edición
+// Captura el evento de envío del formulario de edición
+document.getElementById('editModalUserForm').addEventListener('submit', async function (e) {
+    e.preventDefault(); // Evita el comportamiento por defecto del formulario
+
+    // Obtener los valores de los inputs del modal de edición
+    const rut = document.getElementById('editModalRut').value;
+    const nombre = document.getElementById('editModalNombre').value;
+    const apellido = document.getElementById('editModalApellido').value;
+    const domicilio = document.getElementById('editModalDomicilio').value;
+    const especialidad = document.getElementById('editModalEspecialidad').value;
+    const telefono = document.getElementById('editModalTelefono').value;
+    const correo = document.getElementById('editModalCorreo').value;
+    const fechaNacimiento = document.getElementById('editModalFechaNacimiento').value;
+    const password = document.getElementById('editModalPassword').value;
+    const confirmPassword = document.getElementById('editModalConfirmPassword').value;
+
+    // Validar que las contraseñas coincidan
+    if (password !== confirmPassword) {
+        document.getElementById('edit-confirm-password-error-message').classList.remove('hidden');
+        return;
+    } else {
+        document.getElementById('edit-confirm-password-error-message').classList.add('hidden');
+    }
+
+
+    // Crear objeto con los datos del usuario editado
+    const updatedUserData = {
+        rut: rut,
+        nombre: nombre,
+        appaterno: document.getElementById('editModalApellido').value.split(' ')[0] || '', // Asumiendo que el apellido se separa por espacio
+        apmaterno: document.getElementById('editModalApellido').value.split(' ')[1] || '', // Segunda parte del apellido
+        domicilio: domicilio,
+        especialidad: especialidad,
+        telefono: telefono,
+        correo: correo,
+        fechaNacimiento: fechaNacimiento,
+        password: password  // Considera encriptar la contraseña antes de enviarla
+    };
+    
+
+    try {
+        // Enviar los datos editados a tu backend (en este caso '/api/update_user/<rut>')
+        const response = await fetch(`/api/update_user/${rut}`, {
+            method: 'PUT', // Usar PUT o PATCH para actualizar un recurso existente
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedUserData),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Usuario actualizado:', data);
+        
+            // Actualizar la tabla de usuarios o interfaz de usuario
+            fetchUsers();
+        
+            // Cerrar el modal de edición
+            closeEditUserModal();
+        } else {
+            const errorData = await response.json();
+            console.error('Error al actualizar el usuario:', errorData);
+            alert('Error al actualizar el usuario: ' + errorData.error);
+        }        
+    } catch (error) {
+        console.error('Error de red:', error);
+        alert('Error de red: ' + error.message);
+    }
+});
+
 function closeEditUserModal() {
-    document.getElementById('editUserModal').classList.add('hidden');
+    document.getElementById('editUserModal').classList.add('hidden'); // Oculta el modal
+    // Opcional: Limpia los campos del modal
     document.getElementById('editModalUserForm').reset();
 }
 
@@ -945,31 +1005,47 @@ document.getElementById('editModalUserForm').addEventListener('submit', function
     }
 });
 
-function refreshUserList() {
-    const userTable = document.getElementById('userTable');
-    userTable.innerHTML = ''; // Limpiar la tabla actual
 
-    // Filtrar y renderizar la lista de usuarios
-    const filteredUsers = users; // Si tienes alguna lógica de filtrado, aplícala aquí
-    filteredUsers.forEach(user => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td class="py-1 px-2 border-b">${user.rut}</td>
-            <td class="py-1 px-2 border-b">${user.nombre}</td>
-            <td class="py-1 px-2 border-b">${user.tipo}</td>
-            <td class="py-1 px-2 border-b">${user.fechaCreacion}</td> <!-- Nueva columna -->
-            <td class="py-1 px-2 border-b">
-                <button class="text-blue-500 hover:underline" onclick="openEditUserModal('${user.rut}')">Editar</button>
-                <button class="text-red-500 hover:underline" onclick="confirmDeleteUser('${user.rut}')">Eliminar</button>
-            </td>
-        `;
-        userTable.appendChild(row);
-    });
+//Eliminar usuarios
+
+let userIdToDelete; // Variable para almacenar el ID del usuario a eliminar
+
+function confirmDeleteUser(userId) {
+    userIdToDelete = userId; // Establece el ID del usuario a eliminar
+    document.getElementById('confirmDeleteModal').classList.remove('hidden'); // Muestra el modal de confirmación
 }
 
+// Configura el botón de confirmación de eliminación
+document.getElementById('confirmDeleteButton').onclick = async function () {
+    console.log('ID del usuario a eliminar:', userIdToDelete);
+    try {
+        const response = await fetch(`/api/delete_user/${userIdToDelete}`, {
+            method: 'DELETE',
+        });
 
-// Cargar la tabla de usuarios al iniciar
-renderUserTable();
+        // Manejar la respuesta
+        if (response.ok) {
+            const data = await response.json(); // Solo llamamos a esto si response.ok es verdadero
+
+            // Vuelve a cargar la tabla de usuarios
+            await fetchUsers();
+            closeConfirmDeleteModal();
+        } else {
+            const errorData = await response.json();
+            console.error('Error en la respuesta:', errorData); // Agrega esto para ver el error detallado
+            throw new Error(errorData.error || 'Error desconocido');
+        }
+    } catch (error) {
+        console.error('Error al eliminar el usuario:', error);
+        alert('Error al eliminar el usuario: ' + error.message);
+    }
+};
+
+// Función para cerrar el modal de confirmación de eliminación
+function closeConfirmDeleteModal() {
+    document.getElementById('confirmDeleteModal').classList.add('hidden'); // Oculta el modal
+}
+
 
 // FinGestión de usuarios
 ////
