@@ -375,7 +375,23 @@ def update_stock(product_id):
     except Exception as e:
         return jsonify({"success": False, "message": f"Error interno: {str(e)}"}), 500
 
-##Usuarios vet
+##Obtener usuarios
+
+@app.route('/api/get_users', methods=['GET'])
+def get_users():
+    try:
+        response = supabase.table('Usuario').select('*').execute()
+        users = response.data  # Esto obtiene los datos directamente
+
+        if users:
+            return jsonify(users), 200
+        else:
+            return jsonify({"message": "No se encontraron usuarios"}), 404
+
+    except Exception as e:
+        print(f"Ocurrió un error al obtener usuarios: {e}")
+        return jsonify({"error": "Error al obtener usuarios", "details": str(e)}), 500
+
 
 
 

@@ -348,6 +348,49 @@ function filterProducts() {
 ////
 //Gestión de usuarios
 
+async function fetchUsers() {
+    try {
+        const response = await fetch('/api/get_users');
+        console.log("Respuesta del servidor:", response); // Agrega este log
+        if (!response.ok) {
+            throw new Error('Error al obtener los usuarios');
+        }
+
+        const data = await response.json();
+        console.log("Datos de usuarios:", data); // Agrega este log
+        populateUserTable(data);
+    } catch (error) {
+        console.error("Error al cargar usuarios:", error);
+    }
+}
+
+
+function populateUserTable(users) {
+    const userTableBody = document.getElementById('userTable');
+    userTableBody.innerHTML = ''; // Limpiar la tabla antes de llenarla
+
+    users.forEach(user => {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+            <td class="py-1 px-2 border-b">${user.id_usuario}</td>
+            <td class="py-1 px-2 border-b">${user.nombre}</td>
+            <td class="py-1 px-2 border-b">${user.tipousuarioid}</td>
+            <td class="py-1 px-2 border-b">${user.fecha_creacion || 'N/A'}</td> <!-- Asegúrate de que esta propiedad exista en tu objeto -->
+            <td class="py-1 px-2 border-b">
+                <button class="bg-blue-500 text-white px-2 py-1 rounded">Editar</button>
+                <button class="bg-red-500 text-white px-2 py-1 rounded">Eliminar</button>
+            </td>
+        `;
+
+        userTableBody.appendChild(row);
+    });
+}
+
+// Llamar a la función para cargar los usuarios al inicio
+fetchUsers();
+
+
 // Obtención de elementos del DOM
 const userTable = document.getElementById('userTable');
 const searchInput = document.getElementById('search');
