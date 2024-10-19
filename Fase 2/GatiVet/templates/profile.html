@@ -505,12 +505,46 @@
                             <!-- Fecha de nacimiento -->
                             <div class="mb-4 relative col-span-2">
                                 <label for="new-pet-birthdate"
-                                    class="text-sm font-medium text-gray-900 block mb-2">Fecha de
-                                    Nacimiento:</label>
-                                <input type="date" id="new-pet-birthdate" name="new-pet-birthdate"
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
-                                    required>
+                                    class="text-sm font-medium text-gray-900 block mb-2">Fecha de Nacimiento</label>
+                                <input type="date" name="new-pet-birthdate" id="new-pet-birthdate"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
+                                    required onchange="calculateAndDisplayAge()"> <!-- Evento onchange agregado -->
                             </div>
+
+                            <!-- Edad -->
+                            <div class="mb-4 relative col-span-2">
+                                <label for="new-pet-age"
+                                    class="text-sm font-medium text-gray-900 block mb-2">Edad</label>
+                                <input type="text" name="new-pet-age" id="new-pet-age" value=""
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
+                                    required readonly>
+                            </div>
+
+                            <script>
+                                // Calcular la edad de la mascota a partir de su fecha de nacimiento
+                                function calculatePetAge(birthdate) {
+                                    const birthDateObj = new Date(birthdate);
+                                    const today = new Date();
+                                    let age = today.getFullYear() - birthDateObj.getFullYear();
+                                    const monthDiff = today.getMonth() - birthDateObj.getMonth();
+                                    // Ajusta la edad si la fecha de cumpleaños no ha ocurrido este año
+                                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+                                        age--;
+                                    }
+                                    return age;
+                                }
+
+                                // Función para calcular y mostrar la edad
+                                function calculateAndDisplayAge() {
+                                    const birthdateInput = document.getElementById('new-pet-birthdate').value;
+                                    if (birthdateInput) { // Verifica que se haya ingresado una fecha
+                                        const age = calculatePetAge(birthdateInput);
+                                        document.getElementById('new-pet-age').value = age; // Muestra la edad en el campo correspondiente
+                                    } else {
+                                        document.getElementById('new-pet-age').value = ''; // Limpia el campo si no hay fecha
+                                    }
+                                }
+                            </script>
                         </div>
                         <div class="flex justify-end space-x-2">
                             <button type="submit"

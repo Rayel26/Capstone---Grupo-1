@@ -151,7 +151,6 @@ def register_vet():
         print(f"Ocurrió un error inesperado: {e}")
         return jsonify({"error": "Error inesperado", "details": str(e)}), 500
 
-
 # Ruta para cerrar sesión
 @app.route('/logout')
 def logout():
@@ -198,7 +197,6 @@ def profile():
 
 
     return render_template('profile.html', user=user)
-
 
 # Ruta para guardar perfil de usuario
 @app.route('/guardar-perfil', methods=['POST'])
@@ -293,7 +291,7 @@ def update_profile():
 
     return jsonify({'success': True, 'id_domicilio': domicilio_id, 'message': 'Domicilio actualizado exitosamente'})
 
-
+# Ruta para eliminar perfil de usuario
 @app.route('/eliminar-cuenta', methods=['POST'])
 @login_required
 def delete_account():
@@ -329,6 +327,36 @@ def delete_account():
         print(f'Error desconocido: {e}')
         return jsonify({'success': False, 'message': 'Error al procesar la solicitud'}), 500
 
+# Ruta para guardar mascota de usuario
+@app.route('/add_pet', methods=['POST'])
+def add_pet():
+    print("Petición recibida")  # Verifica si se llama la función
+
+    data = request.json  # Obtener datos JSON del cuerpo de la solicitud
+    nombre = data.get('nombre')
+    especie = data.get('especie')
+    raza = data.get('raza')
+    fecha_nacimiento = data.get('fecha_nacimiento')  # Asegúrate de que este valor esté en la solicitud
+    edad = data.get('edad')
+    id_usuario = data.get('id_usuario')  # Asegúrate de que este valor esté en la solicitud
+
+    # Inserta los datos en la tabla Mascota
+    response = supabase.table('Mascota').insert([{
+        'nombre': nombre,
+        'especie': especie,
+        'raza': raza,
+        'fecha_nacimiento': fecha_nacimiento,
+        'edad': edad,
+        'id_usuario': id_usuario  # Asegúrate de que este sea el FK correcto
+    }]).execute()
+
+    if response.status_code != 201:  
+        print("Error al insertar en Supabase:", response.error)  # Información del error
+        return jsonify({'error': response.error}), 400  
+
+    return jsonify({'data': response.data}), 201  # Devuelve los datos de la mascota agregada
+
+
 
 # Ruta para el perfil de veterinario
 @app.route('/profile_vet')
@@ -348,7 +376,6 @@ def profile_vet():
         return "No se encontraron datos para este veterinario."
 
     return render_template('profile_vet.html', vet=vet)
-
 
 # Ruta para el panel de administrador
 @app.route('/admin_dashboard')
@@ -481,7 +508,6 @@ def delete_user(user_id):
     except Exception as e:
         print(f"Ocurrió un error al eliminar el usuario: {e}")
         return jsonify({"error": "Error al eliminar el usuario", "details": str(e)}), 500
-
 
 @app.route('/donation')
 def donation():

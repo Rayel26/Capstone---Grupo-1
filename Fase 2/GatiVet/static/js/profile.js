@@ -338,6 +338,8 @@ function closeDeleteModal() {
 
 ////////////////////////////////////////////////////////////////
 // Mascotas
+
+
 document.addEventListener('DOMContentLoaded', function() {
     // Referencias a los elementos del formulario
     const petSelect = document.getElementById('pet-select');
@@ -368,10 +370,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const newPetBreedCat = document.getElementById('new-pet-breed-cat');
     const editDogBreedsDiv = document.getElementById('edit-dog-breeds');
     const editCatBreedsDiv = document.getElementById('edit-cat-breeds');
-    
-
-
-
 
     if (!petSelect || !petName || !petAge || !petSpecies || !petBreed || !petBirthdate || !editButton ||
         !addPetIcon || !closeModal || !addPetForm || !addPetModal || !editPetModal || !closeEditModal ||
@@ -381,19 +379,69 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    // Calcular la edad de la mascota a partir de su fecha de nacimiento
 
-    function calculatePetAge(birthdate) {
-        const birthDateObj = new Date(birthdate);
-        const today = new Date();
-        let age = today.getFullYear() - birthDateObj.getFullYear();
-        const monthDiff = today.getMonth() - birthDateObj.getMonth();
-        // Ajusta la edad si la fecha de cumpleaños no ha ocurrido este año
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
-            age--;
-        }
-        return age;
+    document.getElementById('add-pet-form').addEventListener('submit', async function (event) {
+    event.preventDefault(); // Evita que el formulario se envíe de la forma tradicional
+
+    // Obtiene los valores del formulario
+    const nombre = document.getElementById('new-pet-name').value;
+    const especie = document.getElementById('new-pet-species').value;
+    const raza = document.querySelector('select[name="new-pet-breed"]:not([style*="display: none"])').value; 
+    const fecha_nacimiento = document.getElementById('new-pet-birthdate').value;
+    const edad = document.getElementById('new-pet-age').value;
+
+    // Obtener el usuario autenticado
+    try {
+        const { data: user, error } = await supabase.auth.getUser();
+        if (error) throw error; // Maneja el error aquí
+
+        // Usa la información del usuario
+        console.log('Usuario:', user);
+        const id_usuario = user.id;
+
+        // Resto de tu código para enviar la mascota
+    } catch (error) {
+        console.error('Error:', error);
     }
+
+    const id_usuario = user.id; // Obtiene el ID del usuario autenticado
+
+    // Envía los datos al backend
+    try {
+        const response = await fetch('/add_pet', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                nombre,
+                especie,
+                raza,
+                fecha_nacimiento,
+                edad,
+                id_usuario
+            })
+        });
+    
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Error desconocido');
+        }
+    
+        const data = await response.json();
+        console.log('Mascota agregada:', data);
+        alert('Mascota agregada exitosamente.');
+        document.getElementById('add-pet-modal').classList.add('hidden');
+        document.getElementById('add-pet-form').reset();
+    } catch (error) {
+        console.error('Error al agregar la mascota:', error);
+        alert('Error al agregar la mascota. Inténtalo de nuevo.');
+        console.log('Supabase client:', supabase);
+
+    }
+    
+});
+
 
     // Mostrar detalles de la mascota seleccionada
     petSelect.addEventListener('change', function() {
