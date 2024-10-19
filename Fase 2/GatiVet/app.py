@@ -327,35 +327,48 @@ def delete_account():
         print(f'Error desconocido: {e}')
         return jsonify({'success': False, 'message': 'Error al procesar la solicitud'}), 500
 
-# Ruta para guardar mascota de usuario
 @app.route('/add_pet', methods=['POST'])
 def add_pet():
-    print("Petición recibida")  # Verifica si se llama la función
+    print("Petición recibida")
 
-    data = request.json  # Obtener datos JSON del cuerpo de la solicitud
-    nombre = data.get('nombre')
-    especie = data.get('especie')
-    raza = data.get('raza')
-    fecha_nacimiento = data.get('fecha_nacimiento')  # Asegúrate de que este valor esté en la solicitud
-    edad = data.get('edad')
-    id_usuario = data.get('id_usuario')  # Asegúrate de que este valor esté en la solicitud
+    try:
+        data = request.json
+        print("Datos recibidos:", data)
+        nombre = data.get('nombre')
+        especie = data.get('especie')
+        raza = data.get('raza')
+        fecha_nacimiento = data.get('fecha_nacimiento')
+        edad = data.get('edad')
+        
+        id_usuario = session.get('user_id')
+        print("ID de usuario:", id_usuario)
 
-    # Inserta los datos en la tabla Mascota
-    response = supabase.table('Mascota').insert([{
-        'nombre': nombre,
-        'especie': especie,
-        'raza': raza,
-        'fecha_nacimiento': fecha_nacimiento,
-        'edad': edad,
-        'id_usuario': id_usuario  # Asegúrate de que este sea el FK correcto
-    }]).execute()
+        if not id_usuario:
+            return jsonify({'error': 'Usuario no autenticado'}), 401
 
-    if response.status_code != 201:  
-        print("Error al insertar en Supabase:", response.error)  # Información del error
-        return jsonify({'error': response.error}), 400  
+        if not all([nombre, especie, raza, fecha_nacimiento, edad]):
+            return jsonify({'error': 'Faltan datos en la solicitud'}), 400
 
-    return jsonify({'data': response.data}), 201  # Devuelve los datos de la mascota agregada
+        response = supabase.table('Mascota').insert([{
+            'nombre': nombre,
+            'especie': especie,
+            'raza': raza,
+            'fecha_nacimiento': fecha_nacimiento,
+            'edad': edad,
+            'id_usuario': id_usuario
+        }]).execute()
 
+        print("Respuesta de Supabase:", response)
+        print("Datos de la respuesta:", response.data)
+
+        if response.status_code != 201:
+            return jsonify({'error': response.error}), 400
+    
+        return jsonify({'data': response.data}), 201
+
+    except Exception as e:
+        print("Error al procesar la solicitud:", str(e))
+        return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
 
 # Ruta para el perfil de veterinario
@@ -638,7 +651,6 @@ def update_stock(product_id):
         return jsonify({"success": False, "message": f"Error interno: {str(e)}"}), 500
 
 ##Obtener usuarios
-
 @app.route('/api/get_users', methods=['GET'])
 def get_users():
     try:

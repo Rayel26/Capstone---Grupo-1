@@ -1,3 +1,4 @@
+   
 async function toggleEditSaveProfile() {
     const isEditing = document.querySelector('#edit-save-button').textContent === 'Guardar';
     const emailInput = document.getElementById('email'); // Campo de correo
@@ -76,7 +77,6 @@ async function toggleEditSaveProfile() {
     }
 }
 
-
 // Función para guardar el perfil
 async function guardarPerfil() {
     const userId = sessionStorage.getItem('id_usuario'); // Asumiendo que tienes el id_usuario en sessionStorage
@@ -150,7 +150,6 @@ document.querySelector('#delete-modal button').addEventListener('click', () => {
 });
 
 // Función para confirmar la eliminación de la cuenta
-// Función para confirmar la eliminación de la cuenta
 function confirmDeleteAccount() {
     fetch('/eliminar-cuenta', {
         method: 'POST',
@@ -170,8 +169,6 @@ function confirmDeleteAccount() {
         alert('Ocurrió un error al eliminar la cuenta.');
     });
 }
-
-
 
 // Validar y formatear el campo de teléfono y RUT
 document.addEventListener('DOMContentLoaded', () => {
@@ -295,8 +292,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-
-
 // Mostrar la sección de perfil por defecto
 showContent('profile');
 
@@ -339,7 +334,6 @@ function closeDeleteModal() {
 ////////////////////////////////////////////////////////////////
 // Mascotas
 
-
 document.addEventListener('DOMContentLoaded', function() {
     // Referencias a los elementos del formulario
     const petSelect = document.getElementById('pet-select');
@@ -379,69 +373,52 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-
-    document.getElementById('add-pet-form').addEventListener('submit', async function (event) {
-    event.preventDefault(); // Evita que el formulario se envíe de la forma tradicional
-
-    // Obtiene los valores del formulario
-    const nombre = document.getElementById('new-pet-name').value;
-    const especie = document.getElementById('new-pet-species').value;
-    const raza = document.querySelector('select[name="new-pet-breed"]:not([style*="display: none"])').value; 
-    const fecha_nacimiento = document.getElementById('new-pet-birthdate').value;
-    const edad = document.getElementById('new-pet-age').value;
-
-    // Obtener el usuario autenticado
-    try {
-        const { data: user, error } = await supabase.auth.getUser();
-        if (error) throw error; // Maneja el error aquí
-
-        // Usa la información del usuario
-        console.log('Usuario:', user);
-        const id_usuario = user.id;
-
-        // Resto de tu código para enviar la mascota
-    } catch (error) {
-        console.error('Error:', error);
-    }
-
-    const id_usuario = user.id; // Obtiene el ID del usuario autenticado
-
-    // Envía los datos al backend
-    try {
-        const response = await fetch('/add_pet', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                nombre,
-                especie,
-                raza,
-                fecha_nacimiento,
-                edad,
-                id_usuario
-            })
-        });
+    document.getElementById('add-pet-form').addEventListener('submit', async (event) => {
+        event.preventDefault(); // Prevenir el envío por defecto del formulario
     
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Error desconocido');
+        // Capturar los datos del formulario
+        const nombre = document.getElementById('new-pet-name').value;
+        const especie = document.getElementById('new-pet-species').value;
+        const raza = document.querySelector('select[name="new-pet-breed"]:checked')?.value; // Obtener la raza seleccionada
+        const fecha_nacimiento = document.getElementById('new-pet-birthdate').value;
+        const edad = document.getElementById('new-pet-age').value;
+    
+        console.log({ nombre, especie, raza, fecha_nacimiento, edad }); // Verifica los datos capturados
+    
+        // Enviar la solicitud POST a tu servidor
+        try {
+            const response = await fetch('/add_pet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    nombre,
+                    especie,
+                    raza,
+                    fecha_nacimiento,
+                    edad,
+                
+                })
+            });
+    
+            const data = await response.json();
+            if (response.ok) {
+                console.log('Mascota agregada:', data);
+                // Aquí puedes agregar un mensaje de éxito o redireccionar a otra página
+            } else {
+                console.error('Error al agregar mascota:', data.error);
+                // Aquí puedes mostrar un mensaje de error al usuario
+            }
+        } catch (error) {
+            console.error('Error en la solicitud:', error);
+            // Manejo de errores en la solicitud
         }
+    });
     
-        const data = await response.json();
-        console.log('Mascota agregada:', data);
-        alert('Mascota agregada exitosamente.');
-        document.getElementById('add-pet-modal').classList.add('hidden');
-        document.getElementById('add-pet-form').reset();
-    } catch (error) {
-        console.error('Error al agregar la mascota:', error);
-        alert('Error al agregar la mascota. Inténtalo de nuevo.');
-        console.log('Supabase client:', supabase);
-
-    }
     
-});
 
+    
 
     // Mostrar detalles de la mascota seleccionada
     petSelect.addEventListener('change', function() {
