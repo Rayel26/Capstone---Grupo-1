@@ -1,4 +1,3 @@
-   
 async function toggleEditSaveProfile() {
     const isEditing = document.querySelector('#edit-save-button').textContent === 'Guardar';
     const emailInput = document.getElementById('email'); // Campo de correo
@@ -362,8 +361,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const newPetSpecies = document.getElementById('new-pet-species');
     const newPetBreedDog = document.getElementById('new-pet-breed-dog');
     const newPetBreedCat = document.getElementById('new-pet-breed-cat');
-    const editDogBreedsDiv = document.getElementById('edit-dog-breeds');
-    const editCatBreedsDiv = document.getElementById('edit-cat-breeds');
 
     if (!petSelect || !petName || !petAge || !petSpecies || !petBreed || !petBirthdate || !editButton ||
         !addPetIcon || !closeModal || !addPetForm || !addPetModal || !editPetModal || !closeEditModal ||
@@ -373,33 +370,55 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
+    // Muestra una vista previa de la foto seleccionada
+    document.getElementById('new-pet-photo').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                photoPreview.src = e.target.result; // Actualiza la fuente de la vista previa
+                photoPreview.style.display = 'block'; // Muestra la vista previa
+            }
+            reader.readAsDataURL(file);
+        } else {
+            photoPreview.style.display = 'none'; // Oculta la vista previa si no hay archivo
+        }
+    });
+
     document.getElementById('add-pet-form').addEventListener('submit', async (event) => {
         event.preventDefault(); // Prevenir el envío por defecto del formulario
     
-        // Capturar los datos del formulario
+        // Captura los datos del formulario
         const nombre = document.getElementById('new-pet-name').value;
         const especie = document.getElementById('new-pet-species').value;
-        const raza = document.querySelector('select[name="new-pet-breed"]:checked')?.value; // Obtener la raza seleccionada
         const fecha_nacimiento = document.getElementById('new-pet-birthdate').value;
         const edad = document.getElementById('new-pet-age').value;
+        const foto = document.getElementById('new-pet-photo').files[0]; // Captura la foto
     
-        console.log({ nombre, especie, raza, fecha_nacimiento, edad }); // Verifica los datos capturados
+        let raza = (especie === 'perro') 
+            ? document.getElementById('new-pet-breed-dog').value 
+            : (especie === 'gato' ? document.getElementById('new-pet-breed-cat').value : '');
+    
+        // Validar que la raza está definida
+        if (!raza) {
+            console.error('La raza no está definida.');
+            return; // Detener la ejecución si falta la raza
+        }
+    
+        // Crear una nueva instancia de FormData
+        const formData = new FormData();
+        formData.append('nombre', nombre);
+        formData.append('especie', especie);
+        formData.append('raza', raza);
+        formData.append('fecha_nacimiento', fecha_nacimiento);
+        formData.append('edad', edad);
+        formData.append('foto', foto); // Agregar la foto
     
         // Enviar la solicitud POST a tu servidor
         try {
             const response = await fetch('/add_pet', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    nombre,
-                    especie,
-                    raza,
-                    fecha_nacimiento,
-                    edad,
-                
-                })
+                body: formData // No se necesita establecer Content-Type
             });
     
             const data = await response.json();
@@ -416,10 +435,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    
-
-    
-
     // Mostrar detalles de la mascota seleccionada
     petSelect.addEventListener('change', function() {
         const select = this;
@@ -665,6 +680,65 @@ document.addEventListener('DOMContentLoaded', function() {
             newPetBreedCat.parentElement.style.display = 'none';
         }
     });
+});
+
+// Cargar mascotas
+async function loadPets() {
+    try {
+        const response = await fetch('/get_pets');
+        if (!response.ok) {
+            throw new Error('Error al cargar las mascotas: ' + response.statusText);
+        }
+        const pets = await response.json();
+
+        const petSelect = document.getElementById('pet-select');
+        const photoPreview = document.getElementById('photo-preview'); // Referencia al img donde se mostrará la imagen
+
+        // Limpiar las opciones anteriores
+        petSelect.innerHTML = '<option value="">Selecciona...</option>';
+
+        // Agregar las mascotas al select
+        pets.forEach(pet => {
+            const option = document.createElement('option');
+            option.value = pet.id_mascota; // Usando 'id_mascota' como el identificador
+            option.dataset.name = pet.nombre;
+            option.dataset.age = pet.edad;
+            option.dataset.species = pet.especie;
+            option.dataset.breed = pet.raza;
+            option.dataset.birthdate = pet.fecha_nacimiento;
+            option.dataset.foto = pet.foto_url; // Añade la URL de la foto como dataset
+            option.textContent = pet.nombre; // Muestra el nombre de la mascota
+            petSelect.appendChild(option);
+        });
+
+        // Escuchar el cambio de selección en el select
+        petSelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            
+            if (selectedOption.value !== "") {
+                const fotoUrl = selectedOption.dataset.foto; // Obtener la URL de la foto
+                
+                // Verificar si hay una URL de foto válida
+                if (fotoUrl) {
+                    photoPreview.src = fotoUrl; // Asignar la URL de la foto al src del img
+                } else {
+                    // Si no hay foto, asignar una imagen por defecto
+                    photoPreview.src = '/static/default-image.jpg'; // Ruta a la imagen por defecto
+                }
+            } else {
+                // Si no hay selección, mostrar la imagen por defecto
+                photoPreview.src = '/static/default-image.jpg';
+            }
+        });
+
+    } catch (error) {
+        console.error('Error al cargar las mascotas:', error);
+    }
+}
+
+// Asegúrate de que la función se llame al cargar la página
+document.addEventListener('DOMContentLoaded', () => {
+    loadPets(); // Llama a la función para cargar las mascotas
 });
 
 ////////////////////////////////////////////////////////////////

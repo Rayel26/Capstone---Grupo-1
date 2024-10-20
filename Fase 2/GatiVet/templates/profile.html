@@ -342,13 +342,8 @@
                     <label for="pet-select" class="text-sm font-medium text-gray-900 block mb-2">Selecciona una
                         mascota:</label>
                     <div class="relative flex items-center">
-                        <select id="pet-select"
-                            class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-cyan-600 focus:border-cyan-600 text-gray-900 sm:text-sm p-2.5 pr-10 input-short input-background">
+                        <select id="pet-select" class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-cyan-600 focus:border-cyan-600 text-gray-900 sm:text-sm p-2.5 pr-10 input-short input-background">
                             <option value="">Selecciona...</option>
-                            <option value="pet1" data-name="Rex" data-age="3 años" data-species="Perro"
-                                data-breed="Pastor Alemán" data-birthdate="2021-05-14">Rex</option>
-                            <option value="pet2" data-name="Luna" data-age="2 años" data-species="Gato" data-breed="DPC"
-                                data-birthdate="2022-08-09">Luna</option>
                         </select>
 
                         <!-- Contenedor para el ícono "Agregar mascota" con tooltip -->
@@ -410,7 +405,7 @@
                     <div class="flex flex-col items-center">
                         <div
                             class="relative w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 bg-white border border-gray-300 rounded-lg overflow-hidden shadow-md flex items-center justify-center mb-2">
-                            <img id="photo-preview" src="#" class="w-full h-full object-cover">
+                            <img id="photo-preview" src="ruta/a/imagen/por/defecto.jpg" class="w-full h-full object-cover" alt="Foto de la mascota">
                             <button id="edit-photo-button"
                                 class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-200">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
@@ -456,101 +451,103 @@
                 <div class="p-4 md:p-5 text-center">
                     <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Agregar Nueva
                         Mascota</h2>
-                    <form id="add-pet-form">
-                        <div class="grid grid-cols-2 gap-4">
-                            <!-- Nombre de la mascota -->
-                            <div class="mb-4 relative">
-                                <label for="new-pet-name"
-                                    class="text-sm font-medium text-gray-900 block mb-2">Nombre:</label>
-                                <input type="text" id="new-pet-name" name="new-pet-name"
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
-                                    required>
-                            </div>
-                            <!-- Especie de la mascota -->
-                            <div class="mb-4 relative">
-                                <label for="new-pet-species"
-                                    class="text-sm font-medium text-gray-900 block mb-2">Especie:</label>
-                                <select id="new-pet-species" name="new-pet-species"
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
-                                    required>
-                                    <option value="">Selecciona una especie</option>
-                                    <option value="perro">Perro</option>
-                                    <option value="gato">Gato</option>
-                                </select>
-                            </div>
-                            <!-- Raza para perros -->
-                            <div class="mb-4 relative" id="dog-breeds" style="display: none;">
-                                <label for="new-pet-breed-dog" class="text-sm font-medium text-gray-900 block mb-2">Raza
-                                    (Perro):</label>
-                                <select id="new-pet-breed-dog" name="new-pet-breed"
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background">
-                                    <option value="">Selecciona una raza</option>
-                                    <option value="labrador">Labrador</option>
-                                    <option value="beagle">Beagle</option>
-                                    <option value="pastor_aleman">Pastor Alemán</option>
-                                </select>
-                            </div>
-                            <!-- Raza para gatos -->
-                            <div class="mb-4 relative" id="cat-breeds" style="display: none;">
-                                <label for="new-pet-breed-cat" class="text-sm font-medium text-gray-900 block mb-2">Raza
-                                    (Gato):</label>
-                                <select id="new-pet-breed-cat" name="new-pet-breed"
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background">
-                                    <option value="">Selecciona una raza</option>
-                                    <option value="persa">Persa</option>
-                                    <option value="siamés">Siamés</option>
-                                    <option value="maine_coon">Maine Coon</option>
-                                </select>
-                            </div>
-                            <!-- Fecha de nacimiento -->
-                            <div class="mb-4 relative col-span-2">
-                                <label for="new-pet-birthdate"
-                                    class="text-sm font-medium text-gray-900 block mb-2">Fecha de Nacimiento</label>
-                                <input type="date" name="new-pet-birthdate" id="new-pet-birthdate"
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
-                                    required onchange="calculateAndDisplayAge()"> <!-- Evento onchange agregado -->
-                            </div>
-
-                            <!-- Edad -->
-                            <div class="mb-4 relative col-span-2">
-                                <label for="new-pet-age"
-                                    class="text-sm font-medium text-gray-900 block mb-2">Edad</label>
-                                <input type="text" name="new-pet-age" id="new-pet-age" value=""
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
-                                    required readonly>
-                            </div>
-
-                            <script>
-                                // Calcular la edad de la mascota a partir de su fecha de nacimiento
-                                function calculatePetAge(birthdate) {
-                                    const birthDateObj = new Date(birthdate);
-                                    const today = new Date();
-                                    let age = today.getFullYear() - birthDateObj.getFullYear();
-                                    const monthDiff = today.getMonth() - birthDateObj.getMonth();
-                                    // Ajusta la edad si la fecha de cumpleaños no ha ocurrido este año
-                                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
-                                        age--;
+                        <form id="add-pet-form" enctype="multipart/form-data">
+                            <div class="grid grid-cols-2 gap-4">
+                                <!-- Nombre de la mascota -->
+                                <div class="mb-4 relative">
+                                    <label for="new-pet-name" class="text-sm font-medium text-gray-900 block mb-2">Nombre:</label>
+                                    <input type="text" id="new-pet-name" name="new-pet-name"
+                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
+                                        required>
+                                </div>
+                                <!-- Especie de la mascota -->
+                                <div class="mb-4 relative">
+                                    <label for="new-pet-species" class="text-sm font-medium text-gray-900 block mb-2">Especie:</label>
+                                    <select id="new-pet-species" name="new-pet-species"
+                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
+                                        required>
+                                        <option value="">Selecciona una especie</option>
+                                        <option value="perro">Perro</option>
+                                        <option value="gato">Gato</option>
+                                    </select>
+                                </div>
+                                <!-- Raza para perros -->
+                                <div class="mb-4 relative" id="dog-breeds" style="display: none;">
+                                    <label for="new-pet-breed-dog" class="text-sm font-medium text-gray-900 block mb-2">Raza (Perro):</label>
+                                    <select id="new-pet-breed-dog" name="new-pet-breed"
+                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background">
+                                        <option value="">Selecciona una raza</option>
+                                        <option value="labrador">Labrador</option>
+                                        <option value="beagle">Beagle</option>
+                                        <option value="pastor_aleman">Pastor Alemán</option>
+                                    </select>
+                                </div>
+                                <!-- Raza para gatos -->
+                                <div class="mb-4 relative" id="cat-breeds" style="display: none;">
+                                    <label for="new-pet-breed-cat" class="text-sm font-medium text-gray-900 block mb-2">Raza (Gato):</label>
+                                    <select id="new-pet-breed-cat" name="new-pet-breed"
+                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background">
+                                        <option value="">Selecciona una raza</option>
+                                        <option value="persa">Persa</option>
+                                        <option value="siamés">Siamés</option>
+                                        <option value="maine_coon">Maine Coon</option>
+                                    </select>
+                                </div>
+                                <!-- Fecha de nacimiento -->
+                                <div class="mb-4 relative col-span-2">
+                                    <label for="new-pet-birthdate" class="text-sm font-medium text-gray-900 block mb-2">Fecha de Nacimiento</label>
+                                    <input type="date" name="new-pet-birthdate" id="new-pet-birthdate"
+                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
+                                        required onchange="calculateAndDisplayAge()"> <!-- Evento onchange agregado -->
+                                </div>
+                        
+                                <!-- Edad -->
+                                <div class="mb-4 relative col-span-2">
+                                    <label for="new-pet-age" class="text-sm font-medium text-gray-900 block mb-2">Edad</label>
+                                    <input type="text" name="new-pet-age" id="new-pet-age" value=""
+                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
+                                        required readonly>
+                                </div>
+                        
+                                <!-- Campo para subir la foto de la mascota -->
+                                <div class="mb-4 relative col-span-2">
+                                    <label for="new-pet-photo" class="text-sm font-medium text-gray-900 block mb-2">Foto de la Mascota:</label>
+                                    <input type="file" name="foto" id="new-pet-photo" accept="image/*" required
+                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background">
+                                    <img id="photo-preview" class="mt-2" style="max-width: 200px; display: none;" alt="Preview" />
+                                </div>
+                        
+                                <script>
+                                    // Calcular la edad de la mascota a partir de su fecha de nacimiento
+                                    function calculatePetAge(birthdate) {
+                                        const birthDateObj = new Date(birthdate);
+                                        const today = new Date();
+                                        let age = today.getFullYear() - birthDateObj.getFullYear();
+                                        const monthDiff = today.getMonth() - birthDateObj.getMonth();
+                                        // Ajusta la edad si la fecha de cumpleaños no ha ocurrido este año
+                                        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+                                            age--;
+                                        }
+                                        return age;
                                     }
-                                    return age;
-                                }
-
-                                // Función para calcular y mostrar la edad
-                                function calculateAndDisplayAge() {
-                                    const birthdateInput = document.getElementById('new-pet-birthdate').value;
-                                    if (birthdateInput) { // Verifica que se haya ingresado una fecha
-                                        const age = calculatePetAge(birthdateInput);
-                                        document.getElementById('new-pet-age').value = age; // Muestra la edad en el campo correspondiente
-                                    } else {
-                                        document.getElementById('new-pet-age').value = ''; // Limpia el campo si no hay fecha
+                        
+                                    // Función para calcular y mostrar la edad
+                                    function calculateAndDisplayAge() {
+                                        const birthdateInput = document.getElementById('new-pet-birthdate').value;
+                                        if (birthdateInput) { // Verifica que se haya ingresado una fecha
+                                            const age = calculatePetAge(birthdateInput);
+                                            document.getElementById('new-pet-age').value = age; // Muestra la edad en el campo correspondiente
+                                        } else {
+                                            document.getElementById('new-pet-age').value = ''; // Limpia el campo si no hay fecha
+                                        }
                                     }
-                                }
-                            </script>
-                        </div>
-                        <div class="flex justify-end space-x-2">
-                            <button type="submit"
-                                class="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition duration-300 focus:ring-4 focus:ring-teal-300 dark:focus:ring-teal-800 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">Agregar</button>
-                        </div>
-                    </form>
+                                </script>
+                            </div>
+                            <div class="flex justify-end space-x-2">
+                                <button type="submit"
+                                    class="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition duration-300 focus:ring-4 focus:ring-teal-300 dark:focus:ring-teal-800 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">Agregar</button>
+                            </div>
+                        </form>
                 </div>
             </div>
         </div>

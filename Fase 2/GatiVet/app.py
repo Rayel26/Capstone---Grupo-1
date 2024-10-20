@@ -5,6 +5,8 @@ import requests
 from requests.auth import HTTPBasicAuth
 from supabase import create_client
 from datetime import datetime
+import cloudinary
+import cloudinary.uploader  # Asegúrate de importar esto
 
 app = Flask(__name__)
 CORS(app)
@@ -14,6 +16,13 @@ app.secret_key = 'supersecretkey'  # Clave para las sesiones
 CLOUD_NAME = 'dqeideoyd'
 API_KEY = '916694628586842'
 API_SECRET = '4v36fweAMrokX64C8ciboL7o_SA'
+
+# Configurar las credenciales de Cloudinary
+cloudinary.config(
+    cloud_name=CLOUD_NAME,  # Tu nombre de nube
+    api_key=API_KEY,        # Tu API Key
+    api_secret=API_SECRET   # Tu API Secret
+)
 
 # Datos simulados para usuarios
 users = {
@@ -327,20 +336,22 @@ def delete_account():
         print(f'Error desconocido: {e}')
         return jsonify({'success': False, 'message': 'Error al procesar la solicitud'}), 500
 
-@app.route('/add_pet', methods=['POST'])
+
+@app.route('/add_pet', methods=['POST', 'GET'])
 def add_pet():
     print("Petición recibida")
 
     try:
-        data = request.json
-        print("Datos recibidos:", data)
-        nombre = data.get('nombre')
-        especie = data.get('especie')
-        raza = data.get('raza')
-        fecha_nacimiento = data.get('fecha_nacimiento')
-        edad = data.get('edad')
+        if request.method == 'GET':
+            return jsonify({'message': 'Esta es la ruta para agregar mascotas. Usa el método POST para agregar una.'}), 200
+
+        nombre = request.form.get('nombre')
+        especie = request.form.get('especie')
+        raza = request.form.get('raza')
+        fecha_nacimiento = request.form.get('fecha_nacimiento')
+        edad = request.form.get('edad')
         
-        id_usuario = session.get('user_id')
+        id_usuario = session.get('id_usuario')
         print("ID de usuario:", id_usuario)
 
         if not id_usuario:
@@ -348,6 +359,23 @@ def add_pet():
 
         if not all([nombre, especie, raza, fecha_nacimiento, edad]):
             return jsonify({'error': 'Faltan datos en la solicitud'}), 400
+        
+        if 'foto' not in request.files:
+            return jsonify({'error': 'Se requiere una foto'}), 400
+        
+        foto = request.files['foto']
+        
+        # Subir la foto a Cloudinary
+        response_upload = cloudinary.uploader.upload(foto, public_id=f"{nombre}_{id_usuario}")
+        
+        # Obtener la URL de la foto subida
+        foto_url = response_upload['secure_url']
+
+        # Verificar que el usuario existe en la tabla Usuario
+        usuario_existente = supabase.table('Usuario').select('id_usuario').eq('id_usuario', id_usuario).execute()
+        if not usuario_existente.data or len(usuario_existente.data) == 0:
+            return jsonify({'error': 'Usuario no encontrado'}), 404
+    
 
         response = supabase.table('Mascota').insert([{
             'nombre': nombre,
@@ -355,21 +383,25 @@ def add_pet():
             'raza': raza,
             'fecha_nacimiento': fecha_nacimiento,
             'edad': edad,
-            'id_usuario': id_usuario
+            'id_usuario': id_usuario,
+            'foto_url': foto_url
         }]).execute()
 
-        print("Respuesta de Supabase:", response)
-        print("Datos de la respuesta:", response.data)
+        if response.error:
+            print("Error de Supabase:", response.error)
+            return jsonify({'error': response.error}), 400
 
+
+
+        print("Respuesta de Supabase:", response)
         if response.status_code != 201:
             return jsonify({'error': response.error}), 400
-    
-        return jsonify({'data': response.data}), 201
+
+        return jsonify({'message': 'Mascota añadida con éxito', 'data': response.data}), 201
 
     except Exception as e:
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
-
 
 # Ruta para el perfil de veterinario
 @app.route('/profile_vet')
@@ -670,6 +702,28 @@ def get_users():
 def get_supabase_key():
     return jsonify({'supabase_key': SUPABASE_KEY})
 
+@app.route('/get_pets', methods=['GET'])
+def get_pets():
+    try:
+        # Obtener las mascotas de la tabla Mascota, incluyendo la URL de la foto
+        response = supabase.table('Mascota').select('id_mascota, nombre, edad, especie, raza, fecha_nacimiento, foto_url').execute()
+        
+        # Verificar si la respuesta contiene un error
+        if response.data is None:
+            print("Error en la respuesta de Supabase:", response)
+            return jsonify({'error': 'Error al obtener mascotas.'}), 500
+        
+        # Comprobar si hay datos
+        if not response.data:
+            print("No se encontraron mascotas.")
+            return jsonify({'error': 'No se encontraron mascotas.'}), 404
+
+        print("Mascotas obtenidas:", response.data)
+        return jsonify(response.data), 200
+
+    except Exception as e:
+        print("Error al procesar la solicitud:", str(e))
+        return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
 
 if __name__ == '__main__':
