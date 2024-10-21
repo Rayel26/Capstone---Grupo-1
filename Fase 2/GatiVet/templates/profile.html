@@ -406,15 +406,18 @@
                         <div
                             class="relative w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 bg-white border border-gray-300 rounded-lg overflow-hidden shadow-md flex items-center justify-center mb-2">
                             <img id="photo-preview" src="https://res.cloudinary.com/dqeideoyd/image/upload/v1729489409/pared-blanca-fondo-blanco-que-dice-palabra-cita-el_994023-371201_gtjwu1.png" class="w-full h-full object-cover" alt="Foto de la mascota">
+                            <!-- Botón para editar la foto -->
                             <button id="edit-photo-button"
-                                class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-200">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                    stroke="currentColor" class="w-5 h-5 text-gray-700">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M16.862 3.487a2.5 2.5 0 113.535 3.535l-10.61 10.61a4 4 0 01-1.414.943l-3.36 1.343a1 1 0 01-1.261-1.261l1.343-3.36a4 4 0 01.943-1.414l10.61-10.61z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 6.5L17.5 8.5" />
-                                </svg>
+                            class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                stroke="currentColor" class="w-5 h-5 text-gray-700">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.862 3.487a2.5 2.5 0 113.535 3.535l-10.61 10.61a4 4 0 01-1.414.943l-3.36 1.343a1 1 0 01-1.261-1.261l1.343-3.36a4 4 0 01.943-1.414l10.61-10.61z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 6.5L17.5 8.5" />
+                            </svg>
                             </button>
+
+                            <!-- Input de archivo para seleccionar imagen -->
                             <input type="file" name="pet-photo" id="pet-photo" accept="image/*" class="hidden">
                         </div>
                         <label for="pet-photo" class="text-sm font-medium text-gray-900 block mb-2">Foto de la
@@ -510,7 +513,6 @@
                                     <input type="file" name="file" id="new-pet-photo" accept="image/*" required
                                         class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background">
                                     <img id="photo-preview" class="mt-2" style="max-width: 200px; display: none;" alt="Preview" />
-                                    <button id="upload-button" class="mt-2 bg-cyan-600 text-white px-4 py-2 rounded">Subir Foto</button>
                                 </div>
                         
                                 <script>

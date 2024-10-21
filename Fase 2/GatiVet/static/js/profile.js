@@ -388,6 +388,67 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    document.getElementById('new-pet-species').addEventListener('change', function() {
+        const selectedSpecies = this.value;
+        const dogBreedsSelect = document.getElementById('new-pet-breed-dog');
+        const catBreedsSelect = document.getElementById('new-pet-breed-cat');
+    
+        // Limpiar las opciones de las razas
+        dogBreedsSelect.innerHTML = '<option value="">Selecciona una raza</option>';
+        catBreedsSelect.innerHTML = '<option value="">Selecciona una raza</option>';
+    
+        if (selectedSpecies === 'perro') {
+            // Mostrar el selector de razas de perro
+            document.getElementById('dog-breeds').style.display = 'block';
+            document.getElementById('cat-breeds').style.display = 'none';
+    
+            // Cargar las razas de perros
+            fetch(`/razas/perro`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al cargar las razas de perro: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    data.forEach(razaObj => {
+                        const raza = razaObj.nombre; // Asegúrate de que 'nombre' sea la propiedad correcta
+                        const option = document.createElement('option');
+                        option.value = raza.toLowerCase().replace(/ /g, '_');
+                        option.textContent = raza;
+                        dogBreedsSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error(error));
+    
+        } else if (selectedSpecies === 'gato') {
+            // Mostrar el selector de razas de gato
+            document.getElementById('cat-breeds').style.display = 'block';
+            document.getElementById('dog-breeds').style.display = 'none';
+    
+            // Cargar las razas de gatos
+            fetch(`/razas/gato`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al cargar las razas de gato: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    data.forEach(razaObj => {
+                        const raza = razaObj.nombre; // Asegúrate de que 'nombre' sea la propiedad correcta
+                        const option = document.createElement('option');
+                        option.value = raza.toLowerCase().replace(/ /g, '_');
+                        option.textContent = raza;
+                        catBreedsSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error(error));
+        }
+    });
+    
+    
+
     document.getElementById('add-pet-form').addEventListener('submit', async (event) => {
         event.preventDefault(); // Prevenir el envío por defecto del formulario
     
@@ -529,6 +590,10 @@ document.addEventListener('DOMContentLoaded', function() {
         editButton.disabled = false;
     });
 
+    // Selecciona el checkbox y el select de causa de muerte
+    const editPetDeceased = document.getElementById('pet-deceased-checkbox'); // Checkbox de fallecimiento
+    const editPetDeathCause = document.getElementById('cause-of-death'); // Select de causa de muerte
+
     // ** Abre el modal para editar la mascota
     editButton.addEventListener('click', function() {
         const selectedOption = petSelect.options[petSelect.selectedIndex];
@@ -537,6 +602,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const species = selectedOption.getAttribute('data-species');
         const breed = selectedOption.getAttribute('data-breed');
         const birthdate = selectedOption.getAttribute('data-birthdate');
+        const isDeceased = selectedOption.getAttribute('data-fallecido'); // Nuevo atributo
+        const deathCause = selectedOption.getAttribute('data-causa-fallecimiento'); // Nuevo atributo
 
         if (name) {
             // Rellenar el formulario de edición con los datos de la mascota seleccionada
@@ -567,6 +634,10 @@ document.addEventListener('DOMContentLoaded', function() {
             // Mostrar la fecha de nacimiento
             editPetBirthdate.value = birthdate;
 
+            // Rellenar el estado de fallecimiento y causa de fallecimiento
+            editPetDeceased.checked = isDeceased === 'true'; // Suponiendo que es un checkbox
+            editPetDeathCause.value = deathCause || ''; // Mostrar la causa de fallecimiento
+
             // Mostrar el modal
             editPetModal.classList.remove('hidden');
         } else {
@@ -574,28 +645,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Evento para actualizar la edad automáticamente al cambiar la fecha de nacimiento
-    editPetBirthdate.addEventListener('change', function() {
-        editPetAge.value = calculatePetAge(editPetBirthdate.value);
-    });
-
-    // Función para cerrar el modal
-    function closeEditPetModal() {
-        editPetModal.classList.add('hidden'); // Ocultar el modal
-    }
-
-    // Evento para cerrar el modal al hacer clic en el botón de cerrar
-    closeEditModalButton.addEventListener('click', closeEditPetModal);
-
     // Evento para manejar el envío del formulario de edición
     editPetForm.addEventListener('submit', async function(event) {
         event.preventDefault();
-
+    
         // Obtener valores del formulario de edición
         const name = editPetName.value;
         const updatedBirthdate = editPetBirthdate.value;
         const species = editPetSpecies.value;
-
+    
         let breed;
         if (species === 'perro') {
             breed = editPetBreedDog.value;
@@ -604,9 +662,12 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             breed = '';
         }
-
+    
+        const isDeceased = editPetDeceased.checked; // Obtener estado de fallecimiento
+        const deathCause = editPetDeathCause.value; // Obtener causa de fallecimiento
+    
         const petId = petSelect.options[petSelect.selectedIndex].value; // Asumiendo que el valor del option es el id_mascota
-
+    
         // Crear un objeto FormData
         const formData = new FormData();
         formData.append('nombre', name);
@@ -614,14 +675,27 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('raza', breed);
         formData.append('fecha_nacimiento', updatedBirthdate);
         formData.append('edad', calculatePetAge(updatedBirthdate)); // O el método que utilices
-
+        formData.append('fallecido', isDeceased); // Agregar estado de fallecimiento
+        formData.append('causa_fallecimiento', deathCause); // Agregar causa de fallecimiento
+    
+        // Imprimir los datos que se enviarán
+        console.log('Datos a enviar:', {
+            nombre: name,
+            especie: species,
+            raza: breed,
+            fecha_nacimiento: updatedBirthdate,
+            edad: calculatePetAge(updatedBirthdate),
+            fallecido: isDeceased,
+            causa_fallecimiento: deathCause,
+        });
+    
         // Enviar la solicitud PUT al servidor
         try {
             const response = await fetch(`/edit_pet/${petId}`, {
                 method: 'PUT',
                 body: formData,
             });
-
+    
             const data = await response.json();
             if (response.ok) {
                 console.log('Mascota actualizada:', data);
@@ -634,12 +708,11 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error en la solicitud:', error);
         }
     });
+    
+
+
 
     // Maneja la carga de foto
-    // Escucha el evento 'click' para abrir el selector de archivos
-    document.getElementById('edit-photo-button').addEventListener('click', function () {
-        document.getElementById('pet-photo').click();
-    });
 
     // Escucha el cambio del input cuando se selecciona un archivo
     document.getElementById('pet-photo').addEventListener('change', function (event) {
@@ -732,6 +805,7 @@ async function loadPets() {
 
         const petSelect = document.getElementById('pet-select');
         const photoPreview = document.getElementById('photo-preview'); // Referencia al img donde se mostrará la imagen
+        const editPhotoButton = document.getElementById('edit-photo-button'); // Referencia al botón de editar foto
 
         // Limpiar las opciones anteriores
         petSelect.innerHTML = '<option value="">Selecciona...</option>';
@@ -756,7 +830,11 @@ async function loadPets() {
             
             if (selectedOption.value !== "") {
                 const fotoUrl = selectedOption.dataset.foto; // Obtener la URL de la foto
-                
+                const idMascota = selectedOption.value; // Obtener el id_mascota
+
+                // Actualizar el atributo data-id-mascota del botón
+                editPhotoButton.setAttribute('data-id-mascota', idMascota);
+
                 // Verificar si hay una URL de foto válida
                 if (fotoUrl) {
                     photoPreview.src = fotoUrl; // Asignar la URL de la foto al src del img
@@ -849,6 +927,51 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', () => {
     loadPets(); // Llama a la función para cargar las mascotas
 });
+
+//Editar iamgen
+
+// Asegúrate de que este script se ejecute después de que el DOM esté completamente cargado
+document.addEventListener('DOMContentLoaded', function() {
+    const editPhotoButton = document.getElementById('edit-photo-button');
+    const petPhotoInput = document.getElementById('pet-photo');
+
+    // Al hacer clic en el botón, simula un clic en el input de tipo file
+    editPhotoButton.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevenir el comportamiento por defecto
+        petPhotoInput.click(); // Abre el selector de archivos
+    });
+
+    // Manejar el evento de cambio en el input de tipo file
+    petPhotoInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('image', file);
+            // Obtener el id_mascota del botón
+            const idMascota = editPhotoButton.getAttribute('data-id-mascota');
+            if (idMascota) {
+                formData.append('id_mascota', idMascota);
+                fetch('/upload-image', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                    
+                    } else {
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al subir la imagen:', error);
+                });
+            } else {
+                alert('No se pudo encontrar el id_mascota.');
+            }
+        }
+    });
+});
+
 
 ////////////////////////////////////////////////////////////////
 //carnet digital

@@ -24,12 +24,10 @@ cloudinary.config(
     api_secret=API_SECRET   # Tu API Secret
 )
 
-# Datos simulados para usuarios
-users = {
-    "user@example.com": {"password": "userpass", "role": "user"},
-    "vet@example.com": {"password": "vetpass", "role": "vet"},
-    "admin@example.com": {"password": "adminpass", "role": "admin"}
-}
+# Inicializa Supabase aquí
+SUPABASE_URL = 'https://wlnahmbigsbckwbdwezo.supabase.co'
+SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndsbmFobWJpZ3NiY2t3YmR3ZXpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg1MDg5MzUsImV4cCI6MjA0NDA4NDkzNX0.CP-BaGcCf-fQD-lYrbH0_B-sKVOwUb9Xgy9-nzKjtLM'
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)  # Inicializar el cliente de Supabase
 
 ##RAZAS
 
@@ -135,10 +133,6 @@ razas_perros = [
 ]
 ##FIN RAZAS
 
-# Inicializa Supabase aquí
-SUPABASE_URL = 'https://wlnahmbigsbckwbdwezo.supabase.co'
-SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndsbmFobWJpZ3NiY2t3YmR3ZXpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg1MDg5MzUsImV4cCI6MjA0NDA4NDkzNX0.CP-BaGcCf-fQD-lYrbH0_B-sKVOwUb9Xgy9-nzKjtLM'
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY)  # Inicializar el cliente de Supabase
 
 # Decorador para verificar si el usuario está logueado
 def login_required(f):
@@ -544,7 +538,6 @@ def add_pet():
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
-#Editar mascota
 @app.route('/edit_pet/<pet_id>', methods=['PUT'])
 def edit_pet(pet_id):
     try:
@@ -554,6 +547,8 @@ def edit_pet(pet_id):
         raza = request.form.get('raza')
         fecha_nacimiento = request.form.get('fecha_nacimiento')
         edad = request.form.get('edad')
+        fallecido = request.form.get('Fallecimiento')  # Nuevo campo para fallecimiento
+        causa_fallecimiento = request.form.get('causa_fallecimiento')  # Nuevo campo para causa de fallecimiento
 
         # Validar que los datos no estén vacíos
         if not all([nombre, especie, raza, fecha_nacimiento, edad]):
@@ -565,7 +560,9 @@ def edit_pet(pet_id):
             'especie': especie,
             'raza': raza,
             'fecha_nacimiento': fecha_nacimiento,
-            'edad': edad
+            'edad': edad,
+            'Fallecimiento': bool(fallecido),  # Convertir a booleano
+            'causa_fallecimiento': causa_fallecimiento  # Guardar la causa de fallecimiento
         }).eq('id_mascota', pet_id).execute()
 
         print('Respuesta de Supabase:', response)  # Imprimir la respuesta completa
@@ -579,6 +576,7 @@ def edit_pet(pet_id):
     except Exception as e:
         print(f'Error en edit_pet: {str(e)}')  # Imprimir el error en la consola del servidor
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
+
 
 #Eliminar mascota
 @app.route('/pets/<int:pet_id>', methods=['DELETE'])
@@ -943,6 +941,49 @@ def obtener_razas(especie):
         return jsonify(razas_gatos)
     else:
         return jsonify({"mensaje": "Especie no válida"}), 400
+
+##Editar imagen
+
+@app.route('/upload-image', methods=['POST'])
+def upload_image():
+    # Verifica si se envió un archivo
+    if 'image' not in request.files:
+        return jsonify({'success': False, 'message': 'No se envió ninguna imagen'}), 400
+
+    file = request.files['image']
+    
+    # Verifica si se envió el id_mascota
+    id_mascota = request.form.get('id_mascota')  # Asegúrate de enviar el id_mascota desde el frontend
+    if not id_mascota:
+        return jsonify({'success': False, 'message': 'ID de mascota no proporcionado'}), 400
+
+    try:
+        # Define un public_id basado en el id_mascota
+        public_id = f'mascota_{id_mascota}'
+
+        # Especifica la carpeta en la que deseas guardar la imagen
+        folder_name = 'Foto mascotas'  # Cambia esto por el nombre de tu carpeta
+
+        # Subir imagen a Cloudinary con el mismo public_id y en la carpeta especificada
+        upload_result = cloudinary.uploader.upload(file, public_id=public_id, folder=folder_name)
+        image_url = upload_result.get('secure_url')
+
+        if not image_url:
+            return jsonify({'success': False, 'message': 'Error al subir la imagen a Cloudinary'}), 500
+
+        # Actualizar la URL de la imagen en Supabase para la mascota correspondiente
+        response = supabase.table('Mascota').update({'foto_url': image_url}).eq('id_mascota', int(id_mascota)).execute()
+
+        # Verificar si la actualización fue exitosa
+        if response.status_code == 200:  # Este método puede variar
+            return jsonify({'success': True, 'message': 'Imagen subida y campo foto_url actualizado'}), 200
+        else:
+            # Acceder al mensaje de error de la respuesta
+            error_message = response.error or 'Error desconocido'  # Utilizamos 'or' para proporcionar un mensaje predeterminado
+            return jsonify({'success': False, 'message': f'Error al actualizar la URL de la imagen en la base de datos: {error_message}'}), 500
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
+
 
 
 if __name__ == '__main__':
