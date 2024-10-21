@@ -536,6 +536,11 @@ document.addEventListener('DOMContentLoaded', function() {
     closeModal.addEventListener('click', function() {
         addPetModal.classList.add('hidden');
     });
+
+    // Cierra el modal editar al hacer clic en el botón "Cancelar"
+    closeEditModalButton.addEventListener('click', function() {
+        editPetModal.classList.add('hidden');
+    });
     
     // Maneja el envío del formulario del modal para agregar una nueva mascota
     addPetForm.addEventListener('submit', function(event) {
@@ -663,14 +668,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Evento para manejar el envío del formulario de edición
+    // Maneja el envío del formulario de edición
     editPetForm.addEventListener('submit', async function(event) {
         event.preventDefault();
-    
+
         // Obtener valores del formulario de edición
         const name = editPetName.value;
         const updatedBirthdate = editPetBirthdate.value;
         const species = editPetSpecies.value;
-    
+
         let breed;
         if (species === 'perro') {
             breed = editPetBreedDog.value;
@@ -679,17 +685,17 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             breed = '';
         }
-    
+
         const isDeceased = editPetDeceased.checked; // Obtener estado de fallecimiento
         let deathCause = editPetDeathCause.value; // Cambiar a let para permitir la reasignación
-    
-         // Si la causa de fallecimiento es "otros", usar el valor del input
+
+        // Si la causa de fallecimiento es "otros", usar el valor del input
         if (deathCause === 'otros') {
             deathCause = otherCauseInput.value;
         }
 
         const petId = petSelect.options[petSelect.selectedIndex].value; // Asumiendo que el valor del option es el id_mascota
-    
+
         // Crear un objeto FormData
         const formData = new FormData();
         formData.append('nombre', name);
@@ -699,7 +705,7 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('edad', calculatePetAge(updatedBirthdate)); // O el método que utilices
         formData.append('fallecido', isDeceased); // Agregar estado de fallecimiento
         formData.append('causa_fallecimiento', deathCause); // Agregar causa de fallecimiento
-    
+
         // Imprimir los datos que se enviarán
         console.log('Datos a enviar:', {
             nombre: name,
@@ -717,11 +723,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 method: 'PUT',
                 body: formData,
             });
-    
+
             const data = await response.json();
             if (response.ok) {
                 console.log('Mascota actualizada:', data);
                 closeEditPetModal(); // Cierra el modal aquí
+                showConfirmationModal(); // Muestra el modal de confirmación
             } else {
                 console.error('Error al actualizar mascota:', data.error, data.details);
                 // Aquí puedes mostrar un mensaje de error al usuario
@@ -729,12 +736,26 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             console.error('Error en la solicitud:', error);
         }
-        
-        // Evento para manejar el cierre del modal
-        const closeEditModalButton = document.getElementById('close-edit-modal');
-        closeEditModalButton.addEventListener('click', closeEditPetModal);
-
     });
+
+    // Función para cerrar el modal de edición
+    function closeEditPetModal() {
+        editPetModal.classList.add('hidden'); // Cierra el modal de edición
+    }
+
+    // Función para mostrar el modal de confirmación
+    function showConfirmationModal() {
+        const confirmationModal = document.getElementById('confirmation-modal');
+        confirmationModal.classList.remove('hidden'); // Muestra el modal de confirmación
+    }
+
+    // Evento para cerrar el modal de confirmación
+    document.getElementById('close-confirmation-modal').addEventListener('click', function() {
+        const confirmationModal = document.getElementById('confirmation-modal');
+        confirmationModal.classList.add('hidden'); // Cierra el modal de confirmación
+    });
+
+
 
     // Maneja la carga de foto
     // Escucha el cambio del input cuando se selecciona un archivo

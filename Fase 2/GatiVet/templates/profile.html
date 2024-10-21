@@ -664,6 +664,20 @@
             </div>
         </div>
 
+        <!-- Modal de confirmación -->
+        <div id="confirmation-modal"
+        class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden z-50">
+            <div class="relative p-6 w-full max-w-md bg-white m-6 rounded-lg shadow-lg dark:bg-gray-800">
+            <h2 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Cambios guardados correctamente</h2>
+                <button type="button" id="close-confirmation-modal"
+                        class="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition duration-300 focus:ring-4 focus:ring-teal-300 dark:focus:ring-teal-800">
+                    Aceptar
+                </button>
+            </div>
+        </div>
+
+
+
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const deceasedCheckbox = document.getElementById('pet-deceased-checkbox');
