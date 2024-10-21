@@ -85,6 +85,33 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+document.getElementById('submitComment').addEventListener('click', async () => {
+    const titulo = document.getElementById('commentTitle').value;
+    const calificacion = document.querySelector('input[name="rating"]:checked').value;
+    const comentario = document.getElementById('commentTextArea').value;
+
+    const data = {
+        titulo: titulo,
+        calificacion: parseInt(calificacion),
+        texto: comentario
+    };
+
+    // Enviar los datos al backend
+    const response = await fetch('/api/guardarComentario', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+    } else {
+    }
+});
+
+
+
 ///////////////////////
 //Carrito
 // Función para actualizar el número de productos en el ícono del carrito

@@ -31,6 +31,87 @@ users = {
     "admin@example.com": {"password": "adminpass", "role": "admin"}
 }
 
+##RAZAS
+
+# Lista de razas de gatos
+razas_gatos = [
+    {"id": 1, "nombre": "Persa"},
+    {"id": 2, "nombre": "Siames"},
+    {"id": 3, "nombre": "Maine Coon"},
+    {"id": 4, "nombre": "Bengala"},
+    {"id": 5, "nombre": "Sphynx"},
+    {"id": 6, "nombre": "Ragdoll"},
+    {"id": 7, "nombre": "British Shorthair"},
+    {"id": 8, "nombre": "Scottish Fold"},
+    {"id": 9, "nombre": "Noruego de Bosque"},
+    {"id": 10, "nombre": "Abisinio"},
+    {"id": 11, "nombre": "Burmés"},
+    {"id": 12, "nombre": "Himalayo"},
+    {"id": 13, "nombre": "American Shorthair"},
+    {"id": 14, "nombre": "Oriental Shorthair"},
+    {"id": 15, "nombre": "Devon Rex"},
+    {"id": 16, "nombre": "Cornish Rex"},
+    {"id": 17, "nombre": "Savannah"},
+    {"id": 18, "nombre": "Chartreux"},
+    {"id": 19, "nombre": "Siamés de color punto"},
+    {"id": 20, "nombre": "Bengalí"},
+]
+
+# Lista de razas de perros (solo nombres)
+razas_perros = [
+    {"id": 1, "nombre": "Labrador Retriever"},
+    {"id": 2, "nombre": "German Shepherd"},
+    {"id": 3, "nombre": "Golden Retriever"},
+    {"id": 4, "nombre": "Bulldog"},
+    {"id": 5, "nombre": "Beagle"},
+    {"id": 6, "nombre": "Poodle"},
+    {"id": 7, "nombre": "Rottweiler"},
+    {"id": 8, "nombre": "Yorkshire Terrier"},
+    {"id": 9, "nombre": "Boxer"},
+    {"id": 10, "nombre": "Dachshund"},
+    {"id": 11, "nombre": "Siberian Husky"},
+    {"id": 12, "nombre": "Pembroke Welsh Corgi"},
+    {"id": 13, "nombre": "Doberman Pinscher"},
+    {"id": 14, "nombre": "Shih Tzu"},
+    {"id": 15, "nombre": "Great Dane"},
+    {"id": 16, "nombre": "Chihuahua"},
+    {"id": 17, "nombre": "Australian Shepherd"},
+    {"id": 18, "nombre": "Miniature Schnauzer"},
+    {"id": 19, "nombre": "Border Collie"},
+    {"id": 20, "nombre": "Cavalier King Charles Spaniel"},
+    {"id": 21, "nombre": "Pug"},
+    {"id": 22, "nombre": "Boston Terrier"},
+    {"id": 23, "nombre": "Havanese"},
+    {"id": 24, "nombre": "Akita"},
+    {"id": 25, "nombre": "Maltese"},
+    {"id": 26, "nombre": "Bichon Frise"},
+    {"id": 27, "nombre": "Pekingese"},
+    {"id": 28, "nombre": "Staffordshire Bull Terrier"},
+    {"id": 29, "nombre": "Cocker Spaniel"},
+    {"id": 30, "nombre": "Newfoundland"},
+    {"id": 31, "nombre": "Saint Bernard"},
+    {"id": 32, "nombre": "Weimaraner"},
+    {"id": 33, "nombre": "Irish Setter"},
+    {"id": 34, "nombre": "Scottish Terrier"},
+    {"id": 35, "nombre": "Whippet"},
+    {"id": 36, "nombre": "Basenji"},
+    {"id": 37, "nombre": "Bull Terrier"},
+    {"id": 38, "nombre": "American Pit Bull Terrier"},
+    {"id": 39, "nombre": "Fox Terrier"},
+    {"id": 40, "nombre": "Samoyed"},
+    {"id": 41, "nombre": "Bernese Mountain Dog"},
+    {"id": 42, "nombre": "Belgian Malinois"},
+    {"id": 43, "nombre": "Chinese Shar-Pei"},
+    {"id": 44, "nombre": "Borzoi"},
+    {"id": 45, "nombre": "Alaskan Malamute"},
+    {"id": 46, "nombre": "Old English Sheepdog"},
+    {"id": 47, "nombre": "Lhasa Apso"},
+    {"id": 48, "nombre": "Flat-Coated Retriever"},
+    {"id": 49, "nombre": "English Springer Spaniel"},
+    {"id": 50, "nombre": "Vizsla"},
+]
+##FIN RAZAS
+
 # Inicializa Supabase aquí
 SUPABASE_URL = 'https://wlnahmbigsbckwbdwezo.supabase.co'
 SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndsbmFobWJpZ3NiY2t3YmR3ZXpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg1MDg5MzUsImV4cCI6MjA0NDA4NDkzNX0.CP-BaGcCf-fQD-lYrbH0_B-sKVOwUb9Xgy9-nzKjtLM'
@@ -336,6 +417,45 @@ def delete_account():
         print(f'Error desconocido: {e}')
         return jsonify({'success': False, 'message': 'Error al procesar la solicitud'}), 500
 
+##Comentario
+
+@app.route('/api/guardarComentario', methods=['POST'])
+def guardar_comentario():
+    try:
+        # Verifica si el usuario está conectado (usa la sesión para almacenar el ID del usuario)
+        if 'id_usuario' not in session:
+            return jsonify({'error': 'Usuario no autenticado'}), 401
+        
+        # Obtener los datos del comentario desde la solicitud
+        data = request.get_json()
+        titulo = data.get('titulo')
+        calificacion = data.get('calificacion')
+        texto = data.get('texto')
+        
+        # Obtener el id_usuario desde la sesión
+        usuario_id = session['id_usuario']
+        
+        # Generar la fecha actual (formato YYYY-MM-DD)
+        fecha_actual = datetime.now().strftime('%Y-%m-%d')
+        
+        # Insertar los datos en la tabla 'Comentario'
+        response = supabase.table('Comentario').insert({
+            'titulo': titulo,
+            'calificacion': calificacion,
+            'texto': texto,
+            'usuario_id': usuario_id,  # ID del usuario conectado
+            'fecha': fecha_actual       # Fecha actual
+        }).execute()
+
+        if response.status_code == 201:
+            return jsonify({'message': 'Comentario guardado exitosamente'}), 201
+        else:
+            return jsonify({'error': 'Error al guardar el comentario'}), 400
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 
 @app.route('/add_pet', methods=['POST', 'GET'])
 def add_pet():
@@ -402,6 +522,70 @@ def add_pet():
     except Exception as e:
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
+
+
+##Editar mascota
+@app.route('/edit_pet/<pet_id>', methods=['PUT'])
+def edit_pet(pet_id):
+    try:
+        # Obtener datos del formulario
+        nombre = request.form.get('nombre')
+        especie = request.form.get('especie')
+        raza = request.form.get('raza')
+        fecha_nacimiento = request.form.get('fecha_nacimiento')
+        edad = request.form.get('edad')
+
+        # Validar que los datos no estén vacíos
+        if not all([nombre, especie, raza, fecha_nacimiento, edad]):
+            return jsonify({'error': 'Faltan datos en la solicitud'}), 400
+
+        # Actualizar la mascota en Supabase
+        response = supabase.table('Mascota').update({
+            'nombre': nombre,
+            'especie': especie,
+            'raza': raza,
+            'fecha_nacimiento': fecha_nacimiento,
+            'edad': edad
+        }).eq('id_mascota', pet_id).execute()
+
+        print('Respuesta de Supabase:', response)  # Imprimir la respuesta completa
+
+        # Verificar la respuesta
+        if response.data is None or 'error' in response:  # Verifica si hay un error
+            return jsonify({'error': 'Error al actualizar la mascota', 'details': response.error}), 400
+
+        return jsonify({'message': 'Mascota actualizada con éxito', 'data': response.data}), 200
+
+    except Exception as e:
+        print(f'Error en edit_pet: {str(e)}')  # Imprimir el error en la consola del servidor
+        return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
+
+##Eliminar mascota
+
+@app.route('/pets/<int:pet_id>', methods=['DELETE'])
+def delete_pet(pet_id):
+    # Elimina la mascota usando el ID
+    response = supabase.table('Mascota').delete().eq('id_mascota', pet_id).execute()
+
+    if response.data:
+        return jsonify({"message": "Mascota eliminada con éxito."}), 200
+    else:
+        # Manejo de errores
+        return jsonify({"message": "Error al eliminar la mascota.", "details": response}), 400
+
+
+@app.route('/comentarios', methods=['GET'])
+def obtener_comentarios():
+    # Consulta para obtener comentarios y nombres de usuario
+    comentarios = supabase.table('Comentario').select('id_comentario, texto, fecha, titulo, calificacion, Usuario(nombre, appaterno)').execute()
+
+    # Verifica si la consulta fue exitosa
+    if comentarios.data is None:  # Si no hay datos, probablemente hubo un error
+        print("Error en la consulta:", comentarios)  # Imprime el objeto de respuesta completo
+        return jsonify({"error": "Error al obtener comentarios."}), 500
+
+    return jsonify(comentarios.data)  # Devuelve los datos de comentarios en formato JSON
+
 
 # Ruta para el perfil de veterinario
 @app.route('/profile_vet')
@@ -724,6 +908,17 @@ def get_pets():
     except Exception as e:
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
+
+##Razas
+
+@app.route('/razas/<especie>', methods=['GET'])
+def obtener_razas(especie):
+    if especie == 'perro':
+        return jsonify(razas_perros)
+    elif especie == 'gato':
+        return jsonify(razas_gatos)
+    else:
+        return jsonify({"mensaje": "Especie no válida"}), 400
 
 
 if __name__ == '__main__':

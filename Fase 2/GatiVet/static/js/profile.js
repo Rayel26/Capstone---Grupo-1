@@ -346,7 +346,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeModal = document.getElementById('close-modal');
     const addPetForm = document.getElementById('add-pet-form');
     const addPetModal = document.getElementById('add-pet-modal');
-    const editPetModal = document.getElementById('edit-pet-modal');
     const closeEditModal = document.getElementById('close-edit-modal');
     const editPetForm = document.getElementById('edit-pet-form');
     const editPetName = document.getElementById('edit-pet-name');
@@ -361,6 +360,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const newPetSpecies = document.getElementById('new-pet-species');
     const newPetBreedDog = document.getElementById('new-pet-breed-dog');
     const newPetBreedCat = document.getElementById('new-pet-breed-cat');
+    const editDogBreedsDiv = document.getElementById('edit-dog-breeds');
+    const editCatBreedsDiv = document.getElementById('edit-cat-breeds');
+    const editPetModal = document.getElementById('edit-pet-modal');
+    const closeEditModalButton = document.getElementById('close-edit-modal');
 
     if (!petSelect || !petName || !petAge || !petSpecies || !petBreed || !petBirthdate || !editButton ||
         !addPetIcon || !closeModal || !addPetForm || !addPetModal || !editPetModal || !closeEditModal ||
@@ -524,7 +527,7 @@ document.addEventListener('DOMContentLoaded', function() {
         editButton.disabled = false;
     });
 
-    /// ** Abre el modal para editar la mascota
+    // ** Abre el modal para editar la mascota
     editButton.addEventListener('click', function() {
         const selectedOption = petSelect.options[petSelect.selectedIndex];
         const name = selectedOption.getAttribute('data-name');
@@ -539,9 +542,8 @@ document.addEventListener('DOMContentLoaded', function() {
             editPetAge.value = calculatePetAge(birthdate); // Calcular edad aquí
 
             // Mostrar especie y raza como texto
-            editPetSpecies.value = species; // Establece la especie en el formulario
-            // Mantener el campo de especie habilitado, pero puedes estilizarlo para que se vea diferente
-            editPetSpecies.classList.add('read-only'); // Ejemplo de clase para estilos
+            editPetSpecies.value = species;
+            editPetSpecies.classList.add('read-only'); // Estilo de solo lectura
 
             // Mostrar la raza correspondiente según la especie
             if (editDogBreedsDiv && editCatBreedsDiv) {
@@ -559,9 +561,8 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 console.error('Los elementos de razas no están disponibles.');
             }
-            
-            
-            // Mostrar el birthdate
+
+            // Mostrar la fecha de nacimiento
             editPetBirthdate.value = birthdate;
 
             // Mostrar el modal
@@ -571,65 +572,66 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Obtén el botón de cerrar el modal usando el nuevo ID
-    const closeEditModalButton = document.getElementById('close-edit-modal');
+    // Evento para actualizar la edad automáticamente al cambiar la fecha de nacimiento
+    editPetBirthdate.addEventListener('change', function() {
+        editPetAge.value = calculatePetAge(editPetBirthdate.value);
+    });
 
     // Función para cerrar el modal
     function closeEditPetModal() {
-        editPetModal.classList.add('hidden');
+        editPetModal.classList.add('hidden'); // Ocultar el modal
     }
 
     // Evento para cerrar el modal al hacer clic en el botón de cerrar
     closeEditModalButton.addEventListener('click', closeEditPetModal);
 
     // Evento para manejar el envío del formulario de edición
-    editPetForm.addEventListener('submit', function(event) {
+    editPetForm.addEventListener('submit', async function(event) {
         event.preventDefault();
-        
+
         // Obtener valores del formulario de edición
         const name = editPetName.value;
-        const updatedBirthdate = editPetBirthdate.value; // Asegúrate de que esta línea esté aquí
-        const species = editPetSpecies.value; // La especie no se puede editar, se usa el valor original
+        const updatedBirthdate = editPetBirthdate.value;
+        const species = editPetSpecies.value;
 
-        // Seleccionar la raza correcta dependiendo de la especie
         let breed;
         if (species === 'perro') {
-            breed = editPetBreedDog.value; // Raza para perros
+            breed = editPetBreedDog.value;
         } else if (species === 'gato') {
-            breed = editPetBreedCat.value; // Raza para gatos
+            breed = editPetBreedCat.value;
         } else {
-            breed = ''; // En caso de otra especie
+            breed = '';
         }
 
-        const birthdate = editPetBirthdate.value;
-        
-        // Actualizar la opción en el <select> correspondiente
-        const select = petSelect;
-        const selectedOption = select.options[select.selectedIndex];
-        selectedOption.setAttribute('data-name', name);
-        selectedOption.setAttribute('data-birthdate', updatedBirthdate); // Actualizar fecha de nacimiento
-        selectedOption.setAttribute('data-species', species); // La especie no cambia
-        selectedOption.setAttribute('data-breed', breed); // La raza no cambia
-        selectedOption.setAttribute('data-birthdate', birthdate);
+        const petId = petSelect.options[petSelect.selectedIndex].value; // Asumiendo que el valor del option es el id_mascota
 
-        // Actualizar los valores visibles en el select
-        selectedOption.textContent = name;
+        // Crear un objeto FormData
+        const formData = new FormData();
+        formData.append('nombre', name);
+        formData.append('especie', species);
+        formData.append('raza', breed);
+        formData.append('fecha_nacimiento', updatedBirthdate);
+        formData.append('edad', calculatePetAge(updatedBirthdate)); // O el método que utilices
 
-        // Limpiar el formulario y ocultar el modal
-        editPetForm.reset();
-        editPetModal.classList.add('hidden');
-        
-        // Actualizar campos de detalles de la mascota
-        petName.value = name;
-        petAge.value = calculatePetAge(updatedBirthdate); // Calcular edad aquí
-        petSpecies.value = species; // La especie se mantiene
-        petBreed.value = breed; // La raza no cambia
-        petBirthdate.value = birthdate;
+        // Enviar la solicitud PUT al servidor
+        try {
+            const response = await fetch(`/edit_pet/${petId}`, {
+                method: 'PUT',
+                body: formData,
+            });
 
-        // Habilitar el botón de editar
-        editButton.disabled = false;
+            const data = await response.json();
+            if (response.ok) {
+                console.log('Mascota actualizada:', data);
+                closeEditPetModal(); // Cierra el modal aquí
+            } else {
+                console.error('Error al actualizar mascota:', data.error, data.details);
+                // Aquí puedes mostrar un mensaje de error al usuario
+            }
+        } catch (error) {
+            console.error('Error en la solicitud:', error);
+        }
     });
-    // Fin modal editar mascota
 
     // Maneja la carga de foto
     // Escucha el evento 'click' para abrir el selector de archivos
@@ -680,6 +682,41 @@ document.addEventListener('DOMContentLoaded', function() {
             newPetBreedCat.parentElement.style.display = 'none';
         }
     });
+
+    //Inicio eliminar mascota
+
+    // Suponiendo que tienes una función para obtener el ID de la mascota seleccionada
+    function getSelectedPetId() {
+        const petSelect = document.getElementById("pet-select");
+        const selectedOption = petSelect.options[petSelect.selectedIndex];
+        return selectedOption.value; // Asegúrate de que el valor sea el ID de la mascota
+    }
+
+    // Lógica para manejar el clic en el botón de eliminar
+    document.getElementById('delete-button').addEventListener('click', function() {
+        const petId = document.getElementById('pet-select').value; // Asegúrate de que el ID de la mascota esté en el select
+    
+        if (petId) {
+            fetch(`/pets/${petId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message); // Muestra el mensaje de éxito o error
+                if (response.ok) {
+                    // Opcional: Actualiza la UI o recarga la lista de mascotas
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        } else {
+            alert("Por favor, selecciona una mascota para eliminar.");
+        }
+    });
 });
 
 // Cargar mascotas
@@ -723,11 +760,11 @@ async function loadPets() {
                     photoPreview.src = fotoUrl; // Asignar la URL de la foto al src del img
                 } else {
                     // Si no hay foto, asignar una imagen por defecto
-                    photoPreview.src = '/static/default-image.jpg'; // Ruta a la imagen por defecto
+                    photoPreview.src = 'https://res.cloudinary.com/dqeideoyd/image/upload/v1729489409/pared-blanca-fondo-blanco-que-dice-palabra-cita-el_994023-371201_gtjwu1.png'; // Ruta a la imagen por defecto
                 }
             } else {
                 // Si no hay selección, mostrar la imagen por defecto
-                photoPreview.src = '/static/default-image.jpg';
+                photoPreview.src = 'https://res.cloudinary.com/dqeideoyd/image/upload/v1729489409/pared-blanca-fondo-blanco-que-dice-palabra-cita-el_994023-371201_gtjwu1.png';
             }
         });
 
@@ -735,6 +772,74 @@ async function loadPets() {
         console.error('Error al cargar las mascotas:', error);
     }
 }
+
+//Cargar razas
+
+// Función para cargar las razas según la especie seleccionada
+function cargarRazas(especie) {
+    const dogBreedsSelect = document.getElementById('edit-pet-breed-dog');
+    const catBreedsSelect = document.getElementById('edit-pet-breed-cat');
+
+    // Limpiar las opciones de las razas
+    dogBreedsSelect.innerHTML = '<option value="">Selecciona una raza</option>';
+    catBreedsSelect.innerHTML = '<option value="">Selecciona una raza</option>';
+
+    // Ocultar ambos selectores de razas inicialmente
+    document.getElementById('edit-dog-breeds').style.display = 'none';
+    document.getElementById('edit-cat-breeds').style.display = 'none';
+
+    if (especie === 'perro') {
+        // Mostrar el selector de razas de perro
+        document.getElementById('edit-dog-breeds').style.display = 'block';
+
+        // Cargar las razas de perros
+        fetch('/razas/perro')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(raza => {
+                    const option = document.createElement('option');
+                    option.value = raza.nombre.toLowerCase().replace(/ /g, '_'); // Ajustar el valor según necesites
+                    option.textContent = raza.nombre;
+                    dogBreedsSelect.appendChild(option);
+                });
+            });
+    } else if (especie === 'gato') {
+        // Mostrar el selector de razas de gato
+        document.getElementById('edit-cat-breeds').style.display = 'block';
+
+        // Cargar las razas de gatos
+        fetch('/razas/gato')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(raza => {
+                    const option = document.createElement('option');
+                    option.value = raza.nombre.toLowerCase().replace(/ /g, '_'); // Ajustar el valor según necesites
+                    option.textContent = raza.nombre;
+                    catBreedsSelect.appendChild(option);
+                });
+            });
+    }
+}
+
+// Evento para manejar el cambio en la selección de especie
+document.getElementById('edit-pet-species').addEventListener('change', function() {
+    cargarRazas(this.value);
+});
+
+// Función para abrir el modal y cargar razas
+function abrirModal() {
+    const selectedSpecies = document.getElementById('edit-pet-species').value;
+    cargarRazas(selectedSpecies);
+}
+
+// Evento para abrir el modal
+document.getElementById('edit-button').addEventListener('click', abrirModal);
+
+// Cargar razas automáticamente al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    const selectedSpecies = document.getElementById('edit-pet-species').value;
+    cargarRazas(selectedSpecies);
+});
 
 // Asegúrate de que la función se llame al cargar la página
 document.addEventListener('DOMContentLoaded', () => {

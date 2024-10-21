@@ -118,3 +118,7 @@
   .swiper-button-prev {
     left: 100px;
   }
+
+  #keen-slider {
+    max-width: 100%; /* Ajusta esto según sea necesario */
+}

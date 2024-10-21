@@ -405,7 +405,7 @@
                     <div class="flex flex-col items-center">
                         <div
                             class="relative w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 bg-white border border-gray-300 rounded-lg overflow-hidden shadow-md flex items-center justify-center mb-2">
-                            <img id="photo-preview" src="ruta/a/imagen/por/defecto.jpg" class="w-full h-full object-cover" alt="Foto de la mascota">
+                            <img id="photo-preview" src="https://res.cloudinary.com/dqeideoyd/image/upload/v1729489409/pared-blanca-fondo-blanco-que-dice-palabra-cita-el_994023-371201_gtjwu1.png" class="w-full h-full object-cover" alt="Foto de la mascota">
                             <button id="edit-photo-button"
                                 class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-200">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
@@ -423,14 +423,17 @@
                 </div>
             </div>
 
-            <!-- Botón de editar al final -->
+            <!-- Botón de editar y eliminar al final -->
             <div class="mt-auto flex justify-center sm:justify-start">
                 <button id="edit-button"
+                    type="button"
                     class="px-4 py-2 text-white rounded-md bg-[#18beaa] hover:bg-[#16a89a] transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
                     Editar Mascota
                 </button>
+                <button id="delete-button" class="ml-4 px-4 py-2 text-white rounded-md bg-red-600 hover:bg-red-700 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+                    Eliminar Mascota
+                </button>                
             </div>
-
         </div>
         <!-- Fin Mis mascotas -->
 
@@ -463,34 +466,26 @@
                                 <!-- Especie de la mascota -->
                                 <div class="mb-4 relative">
                                     <label for="new-pet-species" class="text-sm font-medium text-gray-900 block mb-2">Especie:</label>
-                                    <select id="new-pet-species" name="new-pet-species"
-                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
-                                        required>
+                                    <select id="new-pet-species" name="new-pet-species" class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" required>
                                         <option value="">Selecciona una especie</option>
                                         <option value="perro">Perro</option>
                                         <option value="gato">Gato</option>
                                     </select>
                                 </div>
+
                                 <!-- Raza para perros -->
                                 <div class="mb-4 relative" id="dog-breeds" style="display: none;">
                                     <label for="new-pet-breed-dog" class="text-sm font-medium text-gray-900 block mb-2">Raza (Perro):</label>
-                                    <select id="new-pet-breed-dog" name="new-pet-breed"
-                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background">
+                                    <select id="new-pet-breed-dog" name="new-pet-breed" class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background">
                                         <option value="">Selecciona una raza</option>
-                                        <option value="labrador">Labrador</option>
-                                        <option value="beagle">Beagle</option>
-                                        <option value="pastor_aleman">Pastor Alemán</option>
                                     </select>
                                 </div>
+
                                 <!-- Raza para gatos -->
                                 <div class="mb-4 relative" id="cat-breeds" style="display: none;">
                                     <label for="new-pet-breed-cat" class="text-sm font-medium text-gray-900 block mb-2">Raza (Gato):</label>
-                                    <select id="new-pet-breed-cat" name="new-pet-breed"
-                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background">
+                                    <select id="new-pet-breed-cat" name="new-pet-breed" class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background">
                                         <option value="">Selecciona una raza</option>
-                                        <option value="persa">Persa</option>
-                                        <option value="siamés">Siamés</option>
-                                        <option value="maine_coon">Maine Coon</option>
                                     </select>
                                 </div>
                                 <!-- Fecha de nacimiento -->
@@ -590,8 +585,7 @@
                             </div>
                             <!-- Selección de especie -->
                             <div class="mb-4">
-                                <label for="edit-pet-species"
-                                    class="block text-sm font-medium text-gray-900 mb-2">Especie:</label>
+                                <label for="edit-pet-species" class="block text-sm font-medium text-gray-900 mb-2">Especie:</label>
                                 <select id="edit-pet-species" name="edit-pet-species"
                                     class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
                                     required>
@@ -599,28 +593,22 @@
                                     <option value="gato">Gato</option>
                                 </select>
                             </div>
+
                             <!-- Input para razas de perros -->
                             <div class="mb-4" id="edit-dog-breeds" style="display: none;">
-                                <label for="edit-pet-breed-dog"
-                                    class="block text-sm font-medium text-gray-900 mb-2">Raza (Perro):</label>
+                                <label for="edit-pet-breed-dog" class="block text-sm font-medium text-gray-900 mb-2">Raza (Perro):</label>
                                 <select id="edit-pet-breed-dog" name="edit-pet-breed"
                                     class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background">
                                     <option value="">Selecciona una raza</option>
-                                    <option value="labrador">Labrador</option>
-                                    <option value="beagle">Beagle</option>
-                                    <option value="pastor_aleman">Pastor Alemán</option>
                                 </select>
                             </div>
+
                             <!-- Input para razas de gatos -->
                             <div class="mb-4" id="edit-cat-breeds" style="display: none;">
-                                <label for="edit-pet-breed-cat"
-                                    class="block text-sm font-medium text-gray-900 mb-2">Raza (Gato):</label>
+                                <label for="edit-pet-breed-cat" class="block text-sm font-medium text-gray-900 mb-2">Raza (Gato):</label>
                                 <select id="edit-pet-breed-cat" name="edit-pet-breed"
                                     class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background">
                                     <option value="">Selecciona una raza</option>
-                                    <option value="persa">Persa</option>
-                                    <option value="siamés">Siamés</option>
-                                    <option value="maine_coon">Maine Coon</option>
                                 </select>
                             </div>
                             <!-- Input para la fecha de nacimiento -->
