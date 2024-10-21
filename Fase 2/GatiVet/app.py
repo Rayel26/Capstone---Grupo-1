@@ -33,7 +33,7 @@ users = {
 
 ##RAZAS
 
-# Lista de razas de gatos
+# Lista de razas de gatos segun la Fifé
 razas_gatos = [
     {"id": 1, "nombre": "Persa"},
     {"id": 2, "nombre": "Siames"},
@@ -55,8 +55,31 @@ razas_gatos = [
     {"id": 18, "nombre": "Chartreux"},
     {"id": 19, "nombre": "Siamés de color punto"},
     {"id": 20, "nombre": "Bengalí"},
+    {"id": 21, "nombre": "Exótico"},
+    {"id": 22, "nombre": "Birmano"},
+    {"id": 23, "nombre": "Ruso Azul"},
+    {"id": 24, "nombre": "Bosque de Siberia"},
+    {"id": 25, "nombre": "Somalí"},
+    {"id": 26, "nombre": "Ocicat"},
+    {"id": 27, "nombre": "Manx"},
+    {"id": 28, "nombre": "Selkirk Rex"},
+    {"id": 29, "nombre": "Bombay"},
+    {"id": 30, "nombre": "Tonkinés"},
+    {"id": 31, "nombre": "Van Turco"},
+    {"id": 32, "nombre": "LaPerm"},
+    {"id": 33, "nombre": "Singapura"},
+    {"id": 34, "nombre": "Burmilá"},
+    {"id": 35, "nombre": "Balinés"},
+    {"id": 36, "nombre": "Oriental de pelo largo"},
+    {"id": 37, "nombre": "Korat"},
+    {"id": 38, "nombre": "Peterbald"},
+    {"id": 39, "nombre": "Angora Turco"},
+    {"id": 40, "nombre": "Cymric"},
+    {"id": 41, "nombre": "Snowshoe"},
+    {"id": 42, "nombre": "Mau Egipcio"},
+    {"id": 43, "nombre": "Tonkinés"},
+    {"id": 44, "nombre": "Javanés"},
 ]
-
 # Lista de razas de perros (solo nombres)
 razas_perros = [
     {"id": 1, "nombre": "Labrador Retriever"},
@@ -417,8 +440,7 @@ def delete_account():
         print(f'Error desconocido: {e}')
         return jsonify({'success': False, 'message': 'Error al procesar la solicitud'}), 500
 
-##Comentario
-
+# Ruta para guardar comentarios
 @app.route('/api/guardarComentario', methods=['POST'])
 def guardar_comentario():
     try:
@@ -455,8 +477,7 @@ def guardar_comentario():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-
-
+# Ruta para crear mascotas usuario
 @app.route('/add_pet', methods=['POST', 'GET'])
 def add_pet():
     print("Petición recibida")
@@ -523,8 +544,7 @@ def add_pet():
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
-
-##Editar mascota
+#Editar mascota
 @app.route('/edit_pet/<pet_id>', methods=['PUT'])
 def edit_pet(pet_id):
     try:
@@ -560,8 +580,7 @@ def edit_pet(pet_id):
         print(f'Error en edit_pet: {str(e)}')  # Imprimir el error en la consola del servidor
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
-##Eliminar mascota
-
+#Eliminar mascota
 @app.route('/pets/<int:pet_id>', methods=['DELETE'])
 def delete_pet(pet_id):
     # Elimina la mascota usando el ID
@@ -573,7 +592,7 @@ def delete_pet(pet_id):
         # Manejo de errores
         return jsonify({"message": "Error al eliminar la mascota.", "details": response}), 400
 
-
+#Ruta para comentarios
 @app.route('/comentarios', methods=['GET'])
 def obtener_comentarios():
     # Consulta para obtener comentarios y nombres de usuario
@@ -585,7 +604,6 @@ def obtener_comentarios():
         return jsonify({"error": "Error al obtener comentarios."}), 500
 
     return jsonify(comentarios.data)  # Devuelve los datos de comentarios en formato JSON
-
 
 # Ruta para el perfil de veterinario
 @app.route('/profile_vet')
@@ -637,10 +655,12 @@ def cart():
         session['cart'] = []  # Vaciar el carrito si no está logueado
     return render_template('cart.html')
 
+#Ruta registration
 @app.route('/registration')
 def registration():
     return render_template('registration.html')
 
+#Ruta para registrar 
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -682,7 +702,7 @@ def register():
     else:
         return jsonify({"error": "Error al crear el usuario", "details": response.json()}), 400
 
-##Editar Usuarios
+#Editar Usuarios
 @app.route('/api/update_user/<rut>', methods=['PUT'])
 def update_user(rut):
     try:
@@ -720,7 +740,7 @@ def update_user(rut):
         print(f"Ocurrió un error al actualizar el usuario: {e}")
         return jsonify({"error": "Error al actualizar el usuario", "details": str(e)}), 500
 
-##Eliminar Usuarios
+#Eliminar Usuarios
 @app.route('/api/delete_user/<user_id>', methods=['DELETE'])
 def delete_user(user_id):
     try:
@@ -738,10 +758,12 @@ def delete_user(user_id):
         print(f"Ocurrió un error al eliminar el usuario: {e}")
         return jsonify({"error": "Error al eliminar el usuario", "details": str(e)}), 500
 
+#Ruta para donaciones
 @app.route('/donation')
 def donation():
     return render_template('donation.html')
 
+#Crear productos
 @app.route('/create_product', methods=['POST'])
 @login_required
 @role_required('admin')
@@ -788,12 +810,13 @@ def create_product():
         print('Error de Supabase:', response.error)
         return jsonify({'error': 'Error al crear el producto.', 'details': response.error}), 400
 
-# Ruta para obtener los productos
+#Ruta para obtener los productos
 @app.route('/get_products', methods=['GET'])
 def get_products():
     response = supabase.table('Producto').select('*').execute()
     return jsonify(response.data), 200
 
+#selecciona producto
 @app.route('/item/<int:id_producto>', methods=['GET'])
 def get_product(id_producto):
     response = supabase.table('Producto').select('*').eq('id_producto', id_producto).execute()
@@ -816,12 +839,13 @@ def get_cloudinary_images():
     else:
         return jsonify({'error': 'Error fetching images from Cloudinary'}), response.status_code
 
-# Ruta para obtener la cantidad de productos en el carrito
+#Ruta para obtener la cantidad de productos en el carrito
 @app.route('/cart_count', methods=['GET'])
 def cart_count():
     cart_items = session.get('cart', [])
     return jsonify({'count': len(cart_items)}), 200
 
+#Ruta para añadir al carrito
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
     product_id = request.json.get('id')
@@ -866,7 +890,7 @@ def update_stock(product_id):
     except Exception as e:
         return jsonify({"success": False, "message": f"Error interno: {str(e)}"}), 500
 
-##Obtener usuarios
+#Obtener usuarios
 @app.route('/api/get_users', methods=['GET'])
 def get_users():
     try:
@@ -886,6 +910,7 @@ def get_users():
 def get_supabase_key():
     return jsonify({'supabase_key': SUPABASE_KEY})
 
+#Ruta para obtener mascotas
 @app.route('/get_pets', methods=['GET'])
 def get_pets():
     try:
@@ -909,8 +934,7 @@ def get_pets():
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
-##Razas
-
+#Ruta para obtener Razas
 @app.route('/razas/<especie>', methods=['GET'])
 def obtener_razas(especie):
     if especie == 'perro':

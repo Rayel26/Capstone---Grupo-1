@@ -475,15 +475,17 @@ document.addEventListener('DOMContentLoaded', function() {
     closeModal.addEventListener('click', function() {
         addPetModal.classList.add('hidden');
     });
-
+    
     // Maneja el envío del formulario del modal para agregar una nueva mascota
     addPetForm.addEventListener('submit', function(event) {
         event.preventDefault();
+        
         
         // Obtener valores del formulario
         const name = document.getElementById('new-pet-name').value;
         const age = document.getElementById('new-pet-birthdate').value
         const species = document.getElementById('new-pet-species').value;
+
 
         // Seleccionar la raza correcta dependiendo de la especie
         let breed;
@@ -828,8 +830,10 @@ document.getElementById('edit-pet-species').addEventListener('change', function(
 
 // Función para abrir el modal y cargar razas
 function abrirModal() {
-    const selectedSpecies = document.getElementById('edit-pet-species').value;
-    cargarRazas(selectedSpecies);
+    setTimeout(function() {
+        const selectedSpecies = document.getElementById('edit-pet-species').value;
+        cargarRazas(selectedSpecies);
+    }, 100); // Esperar un pequeño tiempo antes de cargar las razas
 }
 
 // Evento para abrir el modal
