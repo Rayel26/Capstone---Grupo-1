@@ -593,6 +593,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Selecciona el checkbox y el select de causa de muerte
     const editPetDeceased = document.getElementById('pet-deceased-checkbox'); // Checkbox de fallecimiento
     const editPetDeathCause = document.getElementById('cause-of-death'); // Select de causa de muerte
+    const otherCauseContainer = document.getElementById('other-cause-container'); // Contenedor de otros
+    const otherCauseInput = document.getElementById('otherCauseInput'); // Input de otros
 
     // ** Abre el modal para editar la mascota
     editButton.addEventListener('click', function() {
@@ -604,6 +606,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const birthdate = selectedOption.getAttribute('data-birthdate');
         const isDeceased = selectedOption.getAttribute('data-fallecido'); // Nuevo atributo
         const deathCause = selectedOption.getAttribute('data-causa-fallecimiento'); // Nuevo atributo
+        
+        // Muestra u oculta el campo "Especificar" dependiendo de la selección
+        editPetDeathCause.addEventListener('change', function() {
+            if (editPetDeathCause.value === 'otros') {
+                otherCauseContainer.classList.remove('hidden');
+            } else {
+                otherCauseContainer.classList.add('hidden');
+                otherCauseInput.value = ''; // Limpiar el campo si no es necesario
+            }
+        });
 
         if (name) {
             // Rellenar el formulario de edición con los datos de la mascota seleccionada
@@ -644,7 +656,12 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('No hay una mascota seleccionada para editar.');
         }
     });
-
+    // Definir la función para cerrar el modal
+    function closeEditPetModal() {
+        const modal = document.getElementById('close-edit-modal'); // Cambia esto por el ID correcto de tu modal
+        modal.classList.add('hidden'); // Ajusta la lógica para cerrar el modal
+    }
+    
     // Evento para manejar el envío del formulario de edición
     editPetForm.addEventListener('submit', async function(event) {
         event.preventDefault();
@@ -664,8 +681,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     
         const isDeceased = editPetDeceased.checked; // Obtener estado de fallecimiento
-        const deathCause = editPetDeathCause.value; // Obtener causa de fallecimiento
+        let deathCause = editPetDeathCause.value; // Cambiar a let para permitir la reasignación
     
+         // Si la causa de fallecimiento es "otros", usar el valor del input
+        if (deathCause === 'otros') {
+            deathCause = otherCauseInput.value;
+        }
+
         const petId = petSelect.options[petSelect.selectedIndex].value; // Asumiendo que el valor del option es el id_mascota
     
         // Crear un objeto FormData
@@ -687,8 +709,8 @@ document.addEventListener('DOMContentLoaded', function() {
             edad: calculatePetAge(updatedBirthdate),
             fallecido: isDeceased,
             causa_fallecimiento: deathCause,
-        });
-    
+        }); 
+
         // Enviar la solicitud PUT al servidor
         try {
             const response = await fetch(`/edit_pet/${petId}`, {
@@ -707,13 +729,14 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             console.error('Error en la solicitud:', error);
         }
+        
+        // Evento para manejar el cierre del modal
+        const closeEditModalButton = document.getElementById('close-edit-modal');
+        closeEditModalButton.addEventListener('click', closeEditPetModal);
+
     });
-    
-
-
 
     // Maneja la carga de foto
-
     // Escucha el cambio del input cuando se selecciona un archivo
     document.getElementById('pet-photo').addEventListener('change', function (event) {
         const file = event.target.files[0]; // Obtiene el archivo seleccionado
