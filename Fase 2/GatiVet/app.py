@@ -302,7 +302,6 @@ def profile():
     user['direccion'] = domicilio_info.get('direccion', '')  # Obtener dirección
     user['numeracion'] = domicilio_info.get('numeracion', '')  # Obtener numeración
 
-
     return render_template('profile.html', user=user)
 
 # Ruta para guardar perfil de usuario
@@ -434,43 +433,6 @@ def delete_account():
         print(f'Error desconocido: {e}')
         return jsonify({'success': False, 'message': 'Error al procesar la solicitud'}), 500
 
-# Ruta para guardar comentarios
-@app.route('/api/guardarComentario', methods=['POST'])
-def guardar_comentario():
-    try:
-        # Verifica si el usuario está conectado (usa la sesión para almacenar el ID del usuario)
-        if 'id_usuario' not in session:
-            return jsonify({'error': 'Usuario no autenticado'}), 401
-        
-        # Obtener los datos del comentario desde la solicitud
-        data = request.get_json()
-        titulo = data.get('titulo')
-        calificacion = data.get('calificacion')
-        texto = data.get('texto')
-        
-        # Obtener el id_usuario desde la sesión
-        usuario_id = session['id_usuario']
-        
-        # Generar la fecha actual (formato YYYY-MM-DD)
-        fecha_actual = datetime.now().strftime('%Y-%m-%d')
-        
-        # Insertar los datos en la tabla 'Comentario'
-        response = supabase.table('Comentario').insert({
-            'titulo': titulo,
-            'calificacion': calificacion,
-            'texto': texto,
-            'usuario_id': usuario_id,  # ID del usuario conectado
-            'fecha': fecha_actual       # Fecha actual
-        }).execute()
-
-        if response.status_code == 201:
-            return jsonify({'message': 'Comentario guardado exitosamente'}), 201
-        else:
-            return jsonify({'error': 'Error al guardar el comentario'}), 400
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
 # Ruta para crear mascotas usuario
 @app.route('/add_pet', methods=['POST', 'GET'])
 def add_pet():
@@ -538,6 +500,82 @@ def add_pet():
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
+#Ruta para obtener mascotas
+@app.route('/get_pets', methods=['GET'])
+def get_pets():
+    try:
+        # Obtener las mascotas de la tabla Mascota, incluyendo la URL de la foto
+        response = supabase.table('Mascota').select('id_mascota, nombre, edad, especie, raza, fecha_nacimiento, foto_url, Fallecimiento, causa_fallecimiento').execute()
+        
+        # Verificar si la respuesta contiene un error
+        if response.data is None:
+            print("Error en la respuesta de Supabase:", response)
+            return jsonify({'error': 'Error al obtener mascotas.'}), 500
+        
+        # Comprobar si hay datos
+        if not response.data:
+            print("No se encontraron mascotas.")
+            return jsonify({'error': 'No se encontraron mascotas.'}), 404
+
+        print("Mascotas obtenidas:", response.data)
+        return jsonify(response.data), 200
+
+    except Exception as e:
+        print("Error al procesar la solicitud:", str(e))
+        return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
+
+#Ruta para obtener Razas mascota
+@app.route('/razas/<especie>', methods=['GET'])
+def obtener_razas(especie):
+    if especie == 'perro':
+        return jsonify(razas_perros)
+    elif especie == 'gato':
+        return jsonify(razas_gatos)
+    else:
+        return jsonify({"mensaje": "Especie no válida"}), 400
+
+#Editar imagen mascota
+@app.route('/upload-image', methods=['POST'])
+def upload_image():
+    # Verifica si se envió un archivo
+    if 'image' not in request.files:
+        return jsonify({'success': False, 'message': 'No se envió ninguna imagen'}), 400
+
+    file = request.files['image']
+    
+    # Verifica si se envió el id_mascota
+    id_mascota = request.form.get('id_mascota')  # Asegúrate de enviar el id_mascota desde el frontend
+    if not id_mascota:
+        return jsonify({'success': False, 'message': 'ID de mascota no proporcionado'}), 400
+
+    try:
+        # Define un public_id basado en el id_mascota
+        public_id = f'mascota_{id_mascota}'
+
+        # Especifica la carpeta en la que deseas guardar la imagen
+        folder_name = 'Foto mascotas'  # Cambia esto por el nombre de tu carpeta
+
+        # Subir imagen a Cloudinary con el mismo public_id y en la carpeta especificada
+        upload_result = cloudinary.uploader.upload(file, public_id=public_id, folder=folder_name)
+        image_url = upload_result.get('secure_url')
+
+        if not image_url:
+            return jsonify({'success': False, 'message': 'Error al subir la imagen a Cloudinary'}), 500
+
+        # Actualizar la URL de la imagen en Supabase para la mascota correspondiente
+        response = supabase.table('Mascota').update({'foto_url': image_url}).eq('id_mascota', int(id_mascota)).execute()
+
+        # Verificar si la actualización fue exitosa
+        if response.status_code == 200:  # Este método puede variar
+            return jsonify({'success': True, 'message': 'Imagen subida y campo foto_url actualizado'}), 200
+        else:
+            # Acceder al mensaje de error de la respuesta
+            error_message = response.error or 'Error desconocido'  # Utilizamos 'or' para proporcionar un mensaje predeterminado
+            return jsonify({'success': False, 'message': f'Error al actualizar la URL de la imagen en la base de datos: {error_message}'}), 500
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+#Solicitud para editar mascota
 @app.route('/edit_pet/<pet_id>', methods=['PUT'])
 def edit_pet(pet_id):
     try:
@@ -577,7 +615,6 @@ def edit_pet(pet_id):
         print(f'Error en edit_pet: {str(e)}')  # Imprimir el error en la consola del servidor
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
-
 #Eliminar mascota
 @app.route('/pets/<int:pet_id>', methods=['DELETE'])
 def delete_pet(pet_id):
@@ -603,7 +640,44 @@ def obtener_comentarios():
 
     return jsonify(comentarios.data)  # Devuelve los datos de comentarios en formato JSON
 
-# Ruta para el perfil de veterinario
+#Ruta para guardar comentarios
+@app.route('/api/guardarComentario', methods=['POST'])
+def guardar_comentario():
+    try:
+        # Verifica si el usuario está conectado (usa la sesión para almacenar el ID del usuario)
+        if 'id_usuario' not in session:
+            return jsonify({'error': 'Usuario no autenticado'}), 401
+        
+        # Obtener los datos del comentario desde la solicitud
+        data = request.get_json()
+        titulo = data.get('titulo')
+        calificacion = data.get('calificacion')
+        texto = data.get('texto')
+        
+        # Obtener el id_usuario desde la sesión
+        usuario_id = session['id_usuario']
+        
+        # Generar la fecha actual (formato YYYY-MM-DD)
+        fecha_actual = datetime.now().strftime('%Y-%m-%d')
+        
+        # Insertar los datos en la tabla 'Comentario'
+        response = supabase.table('Comentario').insert({
+            'titulo': titulo,
+            'calificacion': calificacion,
+            'texto': texto,
+            'usuario_id': usuario_id,  # ID del usuario conectado
+            'fecha': fecha_actual       # Fecha actual
+        }).execute()
+
+        if response.status_code == 201:
+            return jsonify({'message': 'Comentario guardado exitosamente'}), 201
+        else:
+            return jsonify({'error': 'Error al guardar el comentario'}), 400
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+#Ruta para el perfil de veterinario
 @app.route('/profile_vet')
 @login_required
 @role_required('vet')
@@ -622,14 +696,14 @@ def profile_vet():
 
     return render_template('profile_vet.html', vet=vet)
 
-# Ruta para el panel de administrador
+#Ruta para el panel de administrador
 @app.route('/admin_dashboard')
 @login_required
 @role_required('admin')
 def admin_dashboard():
     return render_template('admin_dashboard.html')
 
-# Otras rutas de la aplicación
+#Otras rutas de la aplicación
 @app.route('/products')
 def products():
     return render_template('products.html', show_search=True)
@@ -907,83 +981,6 @@ def get_users():
 @app.route('/api/get_supabase_key')
 def get_supabase_key():
     return jsonify({'supabase_key': SUPABASE_KEY})
-
-#Ruta para obtener mascotas
-@app.route('/get_pets', methods=['GET'])
-def get_pets():
-    try:
-        # Obtener las mascotas de la tabla Mascota, incluyendo la URL de la foto
-        response = supabase.table('Mascota').select('id_mascota, nombre, edad, especie, raza, fecha_nacimiento, foto_url').execute()
-        
-        # Verificar si la respuesta contiene un error
-        if response.data is None:
-            print("Error en la respuesta de Supabase:", response)
-            return jsonify({'error': 'Error al obtener mascotas.'}), 500
-        
-        # Comprobar si hay datos
-        if not response.data:
-            print("No se encontraron mascotas.")
-            return jsonify({'error': 'No se encontraron mascotas.'}), 404
-
-        print("Mascotas obtenidas:", response.data)
-        return jsonify(response.data), 200
-
-    except Exception as e:
-        print("Error al procesar la solicitud:", str(e))
-        return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
-
-#Ruta para obtener Razas
-@app.route('/razas/<especie>', methods=['GET'])
-def obtener_razas(especie):
-    if especie == 'perro':
-        return jsonify(razas_perros)
-    elif especie == 'gato':
-        return jsonify(razas_gatos)
-    else:
-        return jsonify({"mensaje": "Especie no válida"}), 400
-
-##Editar imagen
-
-@app.route('/upload-image', methods=['POST'])
-def upload_image():
-    # Verifica si se envió un archivo
-    if 'image' not in request.files:
-        return jsonify({'success': False, 'message': 'No se envió ninguna imagen'}), 400
-
-    file = request.files['image']
-    
-    # Verifica si se envió el id_mascota
-    id_mascota = request.form.get('id_mascota')  # Asegúrate de enviar el id_mascota desde el frontend
-    if not id_mascota:
-        return jsonify({'success': False, 'message': 'ID de mascota no proporcionado'}), 400
-
-    try:
-        # Define un public_id basado en el id_mascota
-        public_id = f'mascota_{id_mascota}'
-
-        # Especifica la carpeta en la que deseas guardar la imagen
-        folder_name = 'Foto mascotas'  # Cambia esto por el nombre de tu carpeta
-
-        # Subir imagen a Cloudinary con el mismo public_id y en la carpeta especificada
-        upload_result = cloudinary.uploader.upload(file, public_id=public_id, folder=folder_name)
-        image_url = upload_result.get('secure_url')
-
-        if not image_url:
-            return jsonify({'success': False, 'message': 'Error al subir la imagen a Cloudinary'}), 500
-
-        # Actualizar la URL de la imagen en Supabase para la mascota correspondiente
-        response = supabase.table('Mascota').update({'foto_url': image_url}).eq('id_mascota', int(id_mascota)).execute()
-
-        # Verificar si la actualización fue exitosa
-        if response.status_code == 200:  # Este método puede variar
-            return jsonify({'success': True, 'message': 'Imagen subida y campo foto_url actualizado'}), 200
-        else:
-            # Acceder al mensaje de error de la respuesta
-            error_message = response.error or 'Error desconocido'  # Utilizamos 'or' para proporcionar un mensaje predeterminado
-            return jsonify({'success': False, 'message': f'Error al actualizar la URL de la imagen en la base de datos: {error_message}'}), 500
-    except Exception as e:
-        return jsonify({'success': False, 'message': str(e)}), 500
-
 
 
 if __name__ == '__main__':
