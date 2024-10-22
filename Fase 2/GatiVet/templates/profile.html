@@ -397,6 +397,17 @@
                                 class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
                                 required readonly>
                         </div>
+                        <!-- Estado -->
+                        <div class="relative mb-4">
+                            <label for="pet-status" class="text-xs font-medium text-gray-900 block mb-2">Estado:</label>
+                            <span id="pet-status" class="block p-2 text-xs"></span> <!-- Span en lugar de input -->
+                        </div>
+
+                        <!-- Causa de fallecimiento -->
+                        <div class="relative mb-4" id="death-reason-container" style="display: none;">
+                            <label for="death-reason" class="text-xs font-medium text-gray-900 block mb-2">Causa de fallecimiento:</label>
+                            <span id="death-reason" class="block p-2 text-xs"></span> <!-- Span en lugar de input -->
+                        </div>
                     </div>
                 </div>
 
@@ -623,35 +634,6 @@
                                     required>
                             </div>
                         </div>
-                        <!-- Causa de muerte -->
-                        <div class="mt-4">
-                            <label class="inline-flex items-center">
-                                <input type="checkbox" id="pet-deceased-checkbox"
-                                    class="form-checkbox h-5 w-5 text-cyan-600">
-                                <span class="ml-2 text-sm text-gray-900">La mascota ha fallecido</span>
-                            </label>
-                        </div>
-                        <div id="cause-of-death-section" class="hidden mt-4 grid grid-cols-2 gap-4">
-                            <div>
-                                <label for="cause-of-death" class="block text-sm font-medium text-gray-900 mb-2">Causa
-                                    de
-                                    Muerte:</label>
-                                <select id="cause-of-death"
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background">
-                                    <option value="">Selecciona una causa</option>
-                                    <option value="enfermedad">Enfermedad</option>
-                                    <option value="accidente">Accidente</option>
-                                    <option value="viejo">Viejo</option>
-                                    <option value="otros">Otros</option>
-                                </select>
-                            </div>
-                            <div id="other-cause-container" class="hidden">
-                                <label for="other-cause"
-                                    class="block text-sm font-medium text-gray-900 mb-2">Especificar:</label>
-                                    <input type="text" id="otherCauseInput" 
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background">
-                            </div>
-                        </div>
                         <!-- Botón para guardar los cambios -->
                         <div class="flex justify-end space-x-2 mt-4">
                             <button type="submit"
@@ -674,53 +656,6 @@
                 </button>
             </div>
         </div>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const deceasedCheckbox = document.getElementById('pet-deceased-checkbox');
-                const causeOfDeathSection = document.getElementById('cause-of-death-section');
-                const causeOfDeathSelect = document.getElementById('cause-of-death');
-                const otherCauseContainer = document.getElementById('other-cause-container');
-
-                // Elementos de detalles de la mascota
-                const petNameInput = document.getElementById('pet-name');
-                const petAgeInput = document.getElementById('pet-age');
-                const petSpeciesInput = document.getElementById('pet-species');
-                const petBreedInput = document.getElementById('pet-breed');
-
-                // Mostrar/ocultar la sección de causa de muerte al marcar/desmarcar el checkbox
-                deceasedCheckbox.addEventListener('change', function () {
-                    if (deceasedCheckbox.checked) {
-                        causeOfDeathSection.classList.remove('hidden');
-
-                        // Aplicar estilo para indicar que la mascota ha fallecido (color gris)
-                        petNameInput.classList.add('text-gray-500'); // Cambia a gris
-                        petAgeInput.classList.add('text-gray-500');
-                        petSpeciesInput.classList.add('text-gray-500');
-                        petBreedInput.classList.add('text-gray-500');
-                    } else {
-                        causeOfDeathSection.classList.add('hidden');
-                        causeOfDeathSelect.value = ""; // Reiniciar selección
-                        otherCauseContainer.classList.add('hidden'); // Ocultar el campo de otros
-
-                        // Remover estilo
-                        petNameInput.classList.remove('text-gray-500');
-                        petAgeInput.classList.remove('text-gray-500');
-                        petSpeciesInput.classList.remove('text-gray-500');
-                        petBreedInput.classList.remove('text-gray-500');
-                    }
-                });
-
-                // Mostrar el campo para especificar otro motivo
-                causeOfDeathSelect.addEventListener('change', function () {
-                    if (causeOfDeathSelect.value === 'otros') {
-                        otherCauseContainer.classList.remove('hidden');
-                    } else {
-                        otherCauseContainer.classList.add('hidden');
-                    }
-                });
-            });
-        </script>
         <!-- Fin Mis mascotas -->
 
 

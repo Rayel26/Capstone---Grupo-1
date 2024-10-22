@@ -30,7 +30,6 @@ SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)  # Inicializar el cliente de Supabase
 
 ##RAZAS
-
 # Lista de razas de gatos segun la Fifé
 razas_gatos = [
     {"id": 1, "nombre": "Persa"},
@@ -462,18 +461,15 @@ def add_pet():
         
         foto = request.files['foto']
         
-        # Subir la foto a Cloudinary
-        response_upload = cloudinary.uploader.upload(foto, public_id=f"{nombre}_{id_usuario}")
-        
-        # Obtener la URL de la foto subida
-        foto_url = response_upload['secure_url']
+        # Imprimir información del archivo de imagen
+        print(f"Nombre del archivo: {foto.filename}, Tipo de archivo: {foto.content_type}")
 
         # Verificar que el usuario existe en la tabla Usuario
         usuario_existente = supabase.table('Usuario').select('id_usuario').eq('id_usuario', id_usuario).execute()
         if not usuario_existente.data or len(usuario_existente.data) == 0:
             return jsonify({'error': 'Usuario no encontrado'}), 404
-    
 
+        # Insertar la mascota primero para obtener su ID
         response = supabase.table('Mascota').insert([{
             'nombre': nombre,
             'especie': especie,
@@ -481,18 +477,34 @@ def add_pet():
             'fecha_nacimiento': fecha_nacimiento,
             'edad': edad,
             'id_usuario': id_usuario,
-            'foto_url': foto_url
+            'Fallecimiento': True
         }]).execute()
 
-        if response.error:
-            print("Error de Supabase:", response.error)
-            return jsonify({'error': response.error}), 400
+        # Verificar si hubo un error en la respuesta de Supabase
+        if not response.data:  # Si no hay datos, hubo un error
+            print("Error de Supabase:", response)  # Mostrar datos de la respuesta
+            return jsonify({'error': 'Error al agregar la mascota', 'details': response}), 400
 
+        # Obtener el ID de la mascota recién creada
+        id_mascota = response.data[0]['id_mascota']  # Asegúrate de que esto coincide con el nombre de la columna del ID
 
+        # Subir la foto a Cloudinary usando el id_mascota
+        folder_name = 'Foto mascotas'  # Nombre de la carpeta
+        try:
+            response_upload = cloudinary.uploader.upload(foto, public_id=f'mascota_{id_mascota}', folder=folder_name)
+            # Obtener la URL de la foto subida
+            foto_url = response_upload['secure_url']
+        except Exception as e:
+            print("Error al subir la imagen a Cloudinary:", str(e))
+            return jsonify({'error': 'Error al subir la imagen a Cloudinary', 'details': str(e)}), 500
 
-        print("Respuesta de Supabase:", response)
-        if response.status_code != 201:
-            return jsonify({'error': response.error}), 400
+        # Actualizar la URL de la foto en Supabase
+        update_response = supabase.table('Mascota').update({'foto_url': foto_url}).eq('id_mascota', id_mascota).execute()
+
+        # Verificar si hubo un error en la respuesta de actualización
+        if not update_response.data:  # Si no hay datos, hubo un error
+            print("Error al actualizar la URL de la foto:", update_response)  # Mostrar datos de la respuesta
+            return jsonify({'error': 'Error al actualizar la URL de la foto', 'details': update_response}), 400
 
         return jsonify({'message': 'Mascota añadida con éxito', 'data': response.data}), 201
 
@@ -585,8 +597,6 @@ def edit_pet(pet_id):
         raza = request.form.get('raza')
         fecha_nacimiento = request.form.get('fecha_nacimiento')
         edad = request.form.get('edad')
-        fallecido = request.form.get('Fallecimiento')  # Nuevo campo para fallecimiento
-        causa_fallecimiento = request.form.get('causa_fallecimiento')  # Nuevo campo para causa de fallecimiento
 
         # Validar que los datos no estén vacíos
         if not all([nombre, especie, raza, fecha_nacimiento, edad]):
@@ -598,9 +608,7 @@ def edit_pet(pet_id):
             'especie': especie,
             'raza': raza,
             'fecha_nacimiento': fecha_nacimiento,
-            'edad': edad,
-            'Fallecimiento': bool(fallecido),  # Convertir a booleano
-            'causa_fallecimiento': causa_fallecimiento  # Guardar la causa de fallecimiento
+            'edad': edad
         }).eq('id_mascota', pet_id).execute()
 
         print('Respuesta de Supabase:', response)  # Imprimir la respuesta completa

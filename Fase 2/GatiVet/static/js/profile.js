@@ -595,72 +595,102 @@ document.addEventListener('DOMContentLoaded', function() {
         editButton.disabled = false;
     });
 
-    // Selecciona el checkbox y el select de causa de muerte
-    const editPetDeceased = document.getElementById('pet-deceased-checkbox'); // Checkbox de fallecimiento
-    const editPetDeathCause = document.getElementById('cause-of-death'); // Select de causa de muerte
-    const otherCauseContainer = document.getElementById('other-cause-container'); // Contenedor de otros
-    const otherCauseInput = document.getElementById('otherCauseInput'); // Input de otros
+// ** Abre el modal para editar la mascota
+editButton.addEventListener('click', async function() {
+    const selectedOption = petSelect.options[petSelect.selectedIndex];
+    const name = selectedOption.getAttribute('data-name');
+    const age = selectedOption.getAttribute('data-age');
+    const species = selectedOption.getAttribute('data-species');
+    const breed = selectedOption.getAttribute('data-breed'); // La raza actual
+    const birthdate = selectedOption.getAttribute('data-birthdate');
 
-    // ** Abre el modal para editar la mascota
-    editButton.addEventListener('click', function() {
-        const selectedOption = petSelect.options[petSelect.selectedIndex];
-        const name = selectedOption.getAttribute('data-name');
-        const age = selectedOption.getAttribute('data-age');
-        const species = selectedOption.getAttribute('data-species');
-        const breed = selectedOption.getAttribute('data-breed');
-        const birthdate = selectedOption.getAttribute('data-birthdate');
-        const isDeceased = selectedOption.getAttribute('data-fallecido'); // Nuevo atributo
-        const deathCause = selectedOption.getAttribute('data-causa-fallecimiento'); // Nuevo atributo
-        
-        // Muestra u oculta el campo "Especificar" dependiendo de la selección
-        editPetDeathCause.addEventListener('change', function() {
-            if (editPetDeathCause.value === 'otros') {
-                otherCauseContainer.classList.remove('hidden');
-            } else {
-                otherCauseContainer.classList.add('hidden');
-                otherCauseInput.value = ''; // Limpiar el campo si no es necesario
+    if (name) {
+        // Rellenar el formulario de edición con los datos de la mascota seleccionada
+        editPetName.value = name;
+        editPetAge.value = calculatePetAge(birthdate); // Calcular edad aquí
+        editPetSpecies.value = species; // Establecer especie
+
+        // Mostrar especie como texto
+        editPetSpecies.classList.add('read-only'); // Estilo de solo lectura
+
+        // Llama a loadBreeds para asegurarte de que se carguen las razas
+        await loadBreeds(species); // Espera a que se carguen las razas
+
+        // Mostrar la raza correspondiente según la especie
+        if (editDogBreedsDiv && editCatBreedsDiv) {
+            if (species === 'perro') {
+                editDogBreedsDiv.style.display = 'block'; // Mostrar div de razas de perros
+                editCatBreedsDiv.style.display = 'none'; // Ocultar div de razas de gatos
+            } else if (species === 'gato') {
+                editDogBreedsDiv.style.display = 'none'; // Ocultar div de razas de perros 
+                editCatBreedsDiv.style.display = 'block'; // Mostrar div de razas de gatos
             }
-        });
-
-        if (name) {
-            // Rellenar el formulario de edición con los datos de la mascota seleccionada
-            editPetName.value = name;
-            editPetAge.value = calculatePetAge(birthdate); // Calcular edad aquí
-
-            // Mostrar especie y raza como texto
-            editPetSpecies.value = species;
-            editPetSpecies.classList.add('read-only'); // Estilo de solo lectura
-
-            // Mostrar la raza correspondiente según la especie
-            if (editDogBreedsDiv && editCatBreedsDiv) {
-                if (species === 'perro') {
-                    editPetBreedDog.value = breed; // Cargar raza si es perro
-                    editPetBreedCat.value = ''; // Limpiar raza de gato
-                    editDogBreedsDiv.style.display = 'block'; // Mostrar div de razas de perros
-                    editCatBreedsDiv.style.display = 'none'; // Ocultar div de razas de gatos
-                } else if (species === 'gato') {
-                    editPetBreedCat.value = breed; // Cargar raza si es gato
-                    editPetBreedDog.value = ''; // Limpiar raza de perro
-                    editDogBreedsDiv.style.display = 'none'; // Ocultar div de razas de perros 
-                    editCatBreedsDiv.style.display = 'block'; // Mostrar div de razas de gatos
-                }
-            } else {
-                console.error('Los elementos de razas no están disponibles.');
-            }
-
-            // Mostrar la fecha de nacimiento
-            editPetBirthdate.value = birthdate;
-
-            // Rellenar el estado de fallecimiento y causa de fallecimiento
-            editPetDeceased.checked = isDeceased === 'true'; // Suponiendo que es un checkbox
-            editPetDeathCause.value = deathCause || ''; // Mostrar la causa de fallecimiento
-
-            // Mostrar el modal
-            editPetModal.classList.remove('hidden');
         } else {
-            console.error('No hay una mascota seleccionada para editar.');
+            console.error('Los elementos de razas no están disponibles.');
         }
-    });
+
+        // Establecer la raza actual después de que las opciones se han llenado
+        setCurrentBreed(breed, species);
+
+        // Mostrar la fecha de nacimiento
+        editPetBirthdate.value = birthdate;
+
+        // Mostrar el modal
+        editPetModal.classList.remove('hidden');
+    } else {
+        console.error('No hay una mascota seleccionada para editar.');
+    }
+});
+
+// Función para actualizar las razas en función de la especie seleccionada
+async function loadBreeds(species) {
+    const response = await fetch(`/razas/${species}`);
+    const breeds = await response.json();
+
+    const breedSelectDog = document.getElementById('edit-pet-breed-dog');
+    const breedSelectCat = document.getElementById('edit-pet-breed-cat');
+
+    // Limpiar las opciones anteriores
+    breedSelectDog.innerHTML = '<option value="">Selecciona una raza</option>';
+    breedSelectCat.innerHTML = '<option value="">Selecciona una raza</option>';
+
+    // Llenar el select de razas de perros
+    if (species === 'perro') {
+        breeds.forEach(breed => {
+            const option = document.createElement('option');
+            option.value = breed.nombre; // o breed.id si prefieres usar el id
+            option.textContent = breed.nombre;
+            breedSelectDog.appendChild(option);
+        });
+        breedSelectDog.parentElement.style.display = 'block';
+        breedSelectCat.parentElement.style.display = 'none';
+    }
+    // Llenar el select de razas de gatos
+    else if (species === 'gato') {
+        breeds.forEach(breed => {
+            const option = document.createElement('option');
+            option.value = breed.nombre; // o breed.id si prefieres usar el id
+            option.textContent = breed.nombre;
+            breedSelectCat.appendChild(option);
+        });
+        breedSelectDog.parentElement.style.display = 'none';
+        breedSelectCat.parentElement.style.display = 'block';
+    }
+}
+
+// Función para establecer la raza actual
+function setCurrentBreed(breed, species) {
+    if (species === 'perro') {
+        const breedSelectDog = document.getElementById('edit-pet-breed-dog');
+        breedSelectDog.value = breed; // Cargar raza si es perro
+    } else if (species === 'gato') {
+        const breedSelectCat = document.getElementById('edit-pet-breed-cat');
+        breedSelectCat.value = breed; // Cargar raza si es gato
+    }
+}
+
+
+
     // Definir la función para cerrar el modal
     function closeEditPetModal() {
         const modal = document.getElementById('close-edit-modal'); // Cambia esto por el ID correcto de tu modal
@@ -686,14 +716,6 @@ document.addEventListener('DOMContentLoaded', function() {
             breed = '';
         }
 
-        const isDeceased = editPetDeceased.checked; // Obtener estado de fallecimiento
-        let deathCause = editPetDeathCause.value; // Cambiar a let para permitir la reasignación
-
-        // Si la causa de fallecimiento es "otros", usar el valor del input
-        if (deathCause === 'otros') {
-            deathCause = otherCauseInput.value;
-        }
-
         const petId = petSelect.options[petSelect.selectedIndex].value; // Asumiendo que el valor del option es el id_mascota
 
         // Crear un objeto FormData
@@ -703,8 +725,6 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('raza', breed);
         formData.append('fecha_nacimiento', updatedBirthdate);
         formData.append('edad', calculatePetAge(updatedBirthdate)); // O el método que utilices
-        formData.append('fallecido', isDeceased); // Agregar estado de fallecimiento
-        formData.append('causa_fallecimiento', deathCause); // Agregar causa de fallecimiento
 
         // Imprimir los datos que se enviarán
         console.log('Datos a enviar:', {
@@ -713,8 +733,6 @@ document.addEventListener('DOMContentLoaded', function() {
             raza: breed,
             fecha_nacimiento: updatedBirthdate,
             edad: calculatePetAge(updatedBirthdate),
-            fallecido: isDeceased,
-            causa_fallecimiento: deathCause,
         }); 
 
         // Enviar la solicitud PUT al servidor
@@ -850,6 +868,9 @@ async function loadPets() {
         const petSelect = document.getElementById('pet-select');
         const photoPreview = document.getElementById('photo-preview'); // Referencia al img donde se mostrará la imagen
         const editPhotoButton = document.getElementById('edit-photo-button'); // Referencia al botón de editar foto
+        const petStatus = document.getElementById('pet-status'); // Estado de la mascota (viva o fallecida)
+        const deathReasonContainer = document.getElementById('death-reason-container'); // Contenedor de la causa de fallecimiento
+        const deathReason = document.getElementById('death-reason'); // Causa de fallecimiento
 
         // Limpiar las opciones anteriores
         petSelect.innerHTML = '<option value="">Selecciona...</option>';
@@ -864,6 +885,8 @@ async function loadPets() {
             option.dataset.breed = pet.raza;
             option.dataset.birthdate = pet.fecha_nacimiento;
             option.dataset.foto = pet.foto_url; // Añade la URL de la foto como dataset
+            option.dataset.fallecimiento = pet.Fallecimiento; // Estado fallecimiento (booleano)
+            option.dataset.causaFallecimiento = pet.causa_fallecimiento; // Causa fallecimiento (si existe)
             option.textContent = pet.nombre; // Muestra el nombre de la mascota
             petSelect.appendChild(option);
         });
@@ -886,9 +909,30 @@ async function loadPets() {
                     // Si no hay foto, asignar una imagen por defecto
                     photoPreview.src = 'https://res.cloudinary.com/dqeideoyd/image/upload/v1729489409/pared-blanca-fondo-blanco-que-dice-palabra-cita-el_994023-371201_gtjwu1.png'; // Ruta a la imagen por defecto
                 }
+
+                // Actualizar el estado de la mascota
+                console.log('Estado de fallecimiento recibido:', selectedOption.dataset.fallecimiento); // Depuración
+                const fallecimiento = selectedOption.dataset.fallecimiento === 'false'; // Comparar con la cadena 'true'
+                console.log('Mascota está viva:', !fallecimiento); // Depuración
+                if (!fallecimiento) { // Si fallecimiento es 'false', la mascota está viva
+                    petStatus.textContent = "Vivo";
+                    petStatus.classList.remove('text-red-500'); // Remover clase de color rojo
+                    petStatus.classList.add('text-green-500'); // Agregar clase de color verde
+                    deathReasonContainer.style.display = 'none'; // Ocultar el campo de causa de fallecimiento
+                } else { // Si fallecimiento es 'true', la mascota está fallecida
+                    petStatus.textContent = "Fallecido";
+                    petStatus.classList.remove('text-green-500'); // Remover clase de color verde
+                    petStatus.classList.add('text-red-500'); // Agregar clase de color rojo
+                    deathReasonContainer.style.display = 'block'; // Mostrar el campo de causa de fallecimiento
+                    deathReason.textContent = selectedOption.dataset.causaFallecimiento || "No especificada";
+                }
+
             } else {
                 // Si no hay selección, mostrar la imagen por defecto
                 photoPreview.src = 'https://res.cloudinary.com/dqeideoyd/image/upload/v1729489409/pared-blanca-fondo-blanco-que-dice-palabra-cita-el_994023-371201_gtjwu1.png';
+                petStatus.textContent = ""; // Limpiar el estado de la mascota
+                deathReasonContainer.style.display = 'none'; // Ocultar el campo de causa de fallecimiento
+                deathReason.textContent = ""; // Limpiar el valor de la causa de fallecimiento
             }
         });
 
@@ -896,6 +940,9 @@ async function loadPets() {
         console.error('Error al cargar las mascotas:', error);
     }
 }
+
+
+
 
 //Cargar razas
 
