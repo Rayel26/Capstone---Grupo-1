@@ -121,21 +121,61 @@ telefonoInput.addEventListener('input', function() {
 });
 
 // Actualizar los datos después de guardar en el modal
-editForm.addEventListener('submit', function(event) {
+
+editForm.addEventListener('submit', async function (event) {
     event.preventDefault();
 
-    // Actualizar valores en la vista principal
-    document.getElementById('rut').value = document.getElementById('edit-rut').value;
-    document.getElementById('nombre-doctor').value = document.getElementById('edit-nombre-doctor').value;
-    document.getElementById('apellido').value = document.getElementById('edit-apellido').value;
-    document.getElementById('especialidad').value = document.getElementById('edit-especialidad').value;
-    document.getElementById('domicilio').value = document.getElementById('edit-domicilio').value;
-    document.getElementById('telefono-dom').value = document.getElementById('edit-telefono-dom').value;
-    document.getElementById('correo').value = document.getElementById('edit-correo').value;
+    // Recopilar los datos del formulario
+    const formData = {
+        rut: document.getElementById('edit-rut').value,
+        nombre: document.getElementById('edit-nombre-doctor').value,
+        apellido: document.getElementById('edit-apellido').value,
+        especialidad: document.getElementById('edit-especialidad').value,
+        correo: document.getElementById('edit-correo').value,
+        telefono: document.getElementById('edit-telefono-dom').value,
+        domicilio: document.getElementById('edit-domicilio').value,
+        numeracion: document.getElementById('edit-numeracion').value,
+    };
 
-    // Cerrar el modal
-    editModal.classList.add('hidden');
+    try {
+        const response = await fetch('/save_vet_data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData), // Enviar los datos del formulario
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || 'Error al guardar los datos');
+        }
+
+        const responseData = await response.json(); // Obtener la respuesta del backend
+
+        // Si todo va bien, actualiza los valores en la vista principal
+        document.getElementById('rut').value = formData.rut;
+        document.getElementById('nombre-doctor').value = formData.nombre;
+        document.getElementById('apellido').value = formData.apellido;
+        document.getElementById('especialidad').value = formData.especialidad;
+        document.getElementById('domicilio').value = formData.domicilio;
+        document.getElementById('numeracion').value = formData.numeracion;
+        document.getElementById('telefono-dom').value = formData.telefono;
+        document.getElementById('correo').value = formData.correo;
+
+        // También puedes actualizar otros campos, como el id_domicilio si fuera necesario
+        console.log('ID Domicilio creado:', responseData.id_domicilio);
+
+        // Cerrar el modal
+        document.getElementById('editModal').classList.add('hidden');
+    } catch (error) {
+        console.error('Error al guardar los datos:', error);
+        alert(`Error al guardar los datos: ${error.message}`);
+    }
 });
+
+
+
 
 
 //////////
