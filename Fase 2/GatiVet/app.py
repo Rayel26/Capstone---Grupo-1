@@ -698,7 +698,7 @@ def profile_vet():
         return "No se encontró el ID de usuario en la sesión."
 
     # Obtener los datos del veterinario de Supabase, incluyendo la dirección y numeración
-    vet_data = supabase.table('Usuario').select('*, Domicilio(direccion, numeracion)').eq('id_usuario', user_id).execute()
+    vet_data = supabase.table('Usuario').select('*').eq('id_usuario', user_id).execute()
     
     # Registro de la respuesta de Supabase
     print(f"Vet data from Supabase: {vet_data.data}")  # Verifica lo que devuelve Supabase
@@ -709,17 +709,6 @@ def profile_vet():
     # Comprobar si se obtuvo algún veterinario
     if not vet:
         return "No se encontraron datos para este veterinario."
-
-    # Asegúrate de incluir la dirección y numeración en el contexto
-    domicilio_info = vet.get('Domicilio', {})
-
-    # Comprobar si 'Domicilio' es None
-    if domicilio_info is None:
-        domicilio_info = {}  # Asignar un diccionario vacío si 'Domicilio' es None
-
-    vet['direccion'] = domicilio_info.get('direccion', '')  # Obtener dirección
-    vet['numeracion'] = domicilio_info.get('numeracion', '')  # Obtener numeración
-
     return render_template('profile_vet.html', vet=vet)
 
 #Ruta para el panel de administrador
