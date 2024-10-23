@@ -269,7 +269,7 @@ def logout():
 @login_required
 def profile():
     # Asumiendo que el usuario ha iniciado sesión y su id_usuario está almacenado en la sesión
-    user_id = session.get('id_usuario')  # Cambia 'correo' por 'id_usuario'
+    user_id = session.get('id_usuario') 
     
     # Registro para depuración
     print(f"User ID from session: {user_id}")  # Verifica el valor de user_id
@@ -685,22 +685,40 @@ def guardar_comentario():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-#Ruta para el perfil de veterinario
-@app.route('/profile_vet')
+# Ruta para el perfil de veterinario
+@app.route('/profile_vet', methods=['GET'])
 @login_required
-@role_required('vet')
+@role_required('vet')  # Asegurarse de que este decorador existe para verificar el rol del usuario
 def profile_vet():
-    # Asumiendo que el usuario ha iniciado sesión y su id_usuario está almacenado en la sesión
-    user_id = session.get('id_usuario')  # Cambia 'correo' por 'id_usuario'
+    # Asumiendo que el veterinario ha iniciado sesión y su id_usuario está almacenado en la sesión
+    user_id = session.get('id_usuario') 
 
-    # Obtener los datos del veterinario de Supabase
-    vet_data = supabase.table('Usuario').select('*').eq('id_usuario', user_id).execute()
+    # Comprobar si user_id es None
+    if user_id is None:
+        return "No se encontró el ID de usuario en la sesión."
+
+    # Obtener los datos del veterinario de Supabase, incluyendo la dirección y numeración
+    vet_data = supabase.table('Usuario').select('*, Domicilio(direccion, numeracion)').eq('id_usuario', user_id).execute()
     
+    # Registro de la respuesta de Supabase
+    print(f"Vet data from Supabase: {vet_data.data}")  # Verifica lo que devuelve Supabase
+
     # Asumiendo que solo hay un veterinario o que deseas el primero
     vet = vet_data.data[0] if vet_data.data else {}
 
+    # Comprobar si se obtuvo algún veterinario
     if not vet:
         return "No se encontraron datos para este veterinario."
+
+    # Asegúrate de incluir la dirección y numeración en el contexto
+    domicilio_info = vet.get('Domicilio', {})
+
+    # Comprobar si 'Domicilio' es None
+    if domicilio_info is None:
+        domicilio_info = {}  # Asignar un diccionario vacío si 'Domicilio' es None
+
+    vet['direccion'] = domicilio_info.get('direccion', '')  # Obtener dirección
+    vet['numeracion'] = domicilio_info.get('numeracion', '')  # Obtener numeración
 
     return render_template('profile_vet.html', vet=vet)
 
