@@ -536,6 +536,46 @@ def get_pets():
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
+# Ruta para obtener mascotas por ID de usuario
+@app.route('/get_pets_by_id', methods=['GET'])
+def get_pets_by_id():
+    id_usuario = request.args.get('id_usuario')
+
+    try:
+        if id_usuario is None or id_usuario == "":
+            return jsonify({'error': 'ID de usuario no proporcionado.'}), 400
+
+        # Obtener las mascotas asociadas al id_usuario
+        pets_response = supabase.table('Mascota').select('id_mascota, nombre, edad, especie, raza, fecha_nacimiento, foto_url, Fallecimiento, causa_fallecimiento, sexo, num_microchip, tamaño, color_pelaje').eq('id_usuario', id_usuario).execute()
+
+        # Realizar la consulta para obtener datos del usuario
+        user_response = supabase.table('Usuario').select('nombre, id_domicilio, celular, correo').eq('id_usuario', id_usuario).execute()
+
+        # Verificar si hay datos del usuario
+        if user_response.data:
+            user_data = user_response.data[0]
+            id_domicilio = user_data['id_domicilio']
+
+            # Realizar la consulta para obtener la dirección del domicilio
+            domicilio_response = supabase.table('Domicilio').select('direccion').eq('id_domicilio', id_domicilio).execute()
+
+            # Asignar la dirección al usuario
+            user_data['direccion'] = domicilio_response.data[0]['direccion'] if domicilio_response.data else "N/A"
+        else:
+            user_data = {'direccion': "N/A", 'nombre': "N/A", 'celular': "N/A", 'correo': "N/A"}  # Datos por defecto si no se encuentra el usuario
+
+        if pets_response.data is None:
+            return jsonify({'error': 'Error al obtener mascotas.'}), 500
+
+        if not pets_response.data and not user_response.data:
+            return jsonify({'pets': [], 'user': user_data}), 200
+
+        return jsonify({'pets': pets_response.data, 'user': user_data}), 200
+
+    except Exception as e:
+        print("Error al procesar la solicitud:", str(e))
+        return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
+
 #Ruta para obtener Razas mascota
 @app.route('/razas/<especie>', methods=['GET'])
 def obtener_razas(especie):
@@ -686,6 +726,7 @@ def guardar_comentario():
         return jsonify({'error': str(e)}), 500
 
 # Ruta para el perfil de veterinario
+# Ruta para el perfil de veterinario
 @app.route('/profile_vet', methods=['GET'])
 @login_required
 @role_required('vet')  # Asegurarse de que este decorador existe para verificar el rol del usuario
@@ -697,19 +738,38 @@ def profile_vet():
     if user_id is None:
         return "No se encontró el ID de usuario en la sesión."
 
-    # Obtener los datos del veterinario de Supabase, incluyendo la dirección y numeración
+    # Obtener los datos del veterinario de la tabla Usuario usando id_usuario
     vet_data = supabase.table('Usuario').select('*').eq('id_usuario', user_id).execute()
-    
-    # Registro de la respuesta de Supabase
-    print(f"Vet data from Supabase: {vet_data.data}")  # Verifica lo que devuelve Supabase
 
-    # Asumiendo que solo hay un veterinario o que deseas el primero
-    vet = vet_data.data[0] if vet_data.data else {}
-
-    # Comprobar si se obtuvo algún veterinario
-    if not vet:
+    # Verificar si se encontraron datos del veterinario
+    if not vet_data.data:
         return "No se encontraron datos para este veterinario."
+
+    vet = vet_data.data[0]
+
+    # Obtener el id_domicilio desde la tabla Usuario
+    id_domicilio = vet.get('id_domicilio')
+
+    # Verificar si existe id_domicilio
+    if id_domicilio:
+        # Obtener los datos de domicilio usando id_domicilio desde la tabla Domicilio
+        domicilio_data = supabase.table('Domicilio').select('*').eq('id_domicilio', id_domicilio).execute()
+
+        # Verificar si se encontraron datos de domicilio
+        if domicilio_data.data:
+            domicilio = domicilio_data.data[0]
+            vet['domicilio'] = domicilio.get('direccion', 'Sin dirección')
+            vet['numeracion'] = domicilio.get('numeracion', 'Sin numeración')
+        else:
+            vet['domicilio'] = 'Sin dirección'
+            vet['numeracion'] = 'Sin numeración'
+    else:
+        vet['domicilio'] = 'Sin dirección'
+        vet['numeracion'] = 'Sin numeración'
+
+    # Renderizar la plantilla con los datos del veterinario y su domicilio
     return render_template('profile_vet.html', vet=vet)
+
 
 
 @app.route('/save_vet_data', methods=['POST']) 
@@ -1072,6 +1132,111 @@ def get_users():
 @app.route('/api/get_supabase_key')
 def get_supabase_key():
     return jsonify({'supabase_key': SUPABASE_KEY})
+
+
+##Subir foto vet
+
+@app.route('/upload_photo_vet', methods=['POST'])
+@login_required  # Asegúrate de que solo usuarios autenticados puedan subir fotos
+@role_required('vet')  # Asegúrate de que solo los veterinarios puedan cambiar su foto
+def upload_photo_vet():
+    user_id = session.get('id_usuario')  # Obtener el id del usuario de la sesión
+    if not user_id:
+        return "No se encontró el ID de usuario en la sesión.", 400
+
+    # Verificar si se ha enviado un archivo
+    if 'photo' not in request.files:
+        return "No se encontró ningún archivo.", 400
+
+    photo = request.files['photo']
+    if photo.filename == '':
+        return "No se seleccionó ningún archivo.", 400
+
+    # Subir la imagen a Cloudinary
+    try:
+        # Usar el user_id como nombre de la imagen para evitar duplicados
+        upload_result = cloudinary.uploader.upload(photo, folder="Foto Veterinarios", public_id=f"vet_{user_id}", overwrite=True)
+        image_url = upload_result['secure_url']
+
+        # Actualizar la URL de la imagen en la base de datos de Supabase
+        response = supabase.table('Usuario').update({'imagen': image_url}).eq('id_usuario', user_id).execute()
+
+        if response.status_code == 200:
+            flash("Imagen subida y actualizada con éxito.", "success")
+        else:
+            flash("Hubo un error al actualizar la imagen en la base de datos.", "danger")
+        
+    except Exception as e:
+        print(f"Error al subir la imagen a Cloudinary: {str(e)}")
+        flash("Hubo un error al subir la imagen.", "danger")
+        return redirect(url_for('profile_vet'))
+
+    return redirect(url_for('profile_vet'))  # Redirigir al perfil del veterinario
+
+##actualizar estado
+
+@app.route('/update-pet-status', methods=['POST'])
+def update_pet_status():
+    data = request.json
+    
+    # Obtener el ID de la mascota desde los datos recibidos
+    pet_id = data.get('id_mascota')  # Cambia 'pet_id' por 'id_mascota'
+    
+    if not pet_id:
+        return jsonify({"success": False, "error": "ID de mascota no proporcionado"}), 400
+    
+    # Preparar los datos para actualizar en Supabase
+    updates = {
+        "reproductor": data.get('reproducer', False),
+        "tratamiento": data.get('treatment', False),
+        "esterilizado": data.get('sterilized', False),
+        "Fallecimiento": not data.get('deceased', True),  # Se invierte el valor para que `False` signifique fallecido
+        "causa_fallecimiento": data.get('causeOfDeath') if data.get('deceased', False) else None
+    }
+
+    # Actualizar la base de datos en la tabla 'Mascota' en Supabase
+    try:
+        response = supabase.table('Mascota').update(updates).eq('id_mascota', pet_id).execute()
+
+        if response.data:  # Verificamos si hay datos en la respuesta
+            return jsonify({"success": True}), 200
+        else:
+            return jsonify({"success": False, "error": "Error al actualizar la base de datos"}), 500
+
+    except Exception as e:
+        print(f"Error al actualizar la mascota: {e}")
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+##Obtener estado
+
+@app.route('/get-pet-status', methods=['GET'])
+def get_pet_status():
+    pet_id = request.args.get('pet_id') or request.args.get('id_mascota')  # Acepta ambos
+    if not pet_id:
+        return jsonify({"error": "ID de mascota no proporcionado."}), 400
+    try:
+        # Consultar la tabla "Mascota" en Supabase
+        response = supabase.table('Mascota').select('reproductor, esterilizado, tratamiento, Fallecimiento, causa_fallecimiento').eq('id_mascota', pet_id).execute()
+
+        # Verificar si hay errores en la respuesta
+        if not response.data:
+            return jsonify({'error': 'Mascota no encontrada o error en la consulta.'}), 404
+
+        # Obtener los datos de la respuesta
+        pet_data = response.data[0]  # Supongamos que solo hay un resultado
+
+        return jsonify({
+            'reproducer': pet_data.get('reproductor', False),
+            'sterilized': pet_data.get('esterilizado', False),
+            'treatment': pet_data.get('tratamiento', False),
+            'deceased': not pet_data.get('Fallecimiento', False),  # Invertimos el booleano
+            'causeOfDeath': pet_data.get('causa_fallecimiento', '') or ''
+        })
+        
+    except Exception as e:
+        print(f"Error al obtener el estado de la mascota: {str(e)}")  # Imprimir el error
+        return jsonify({"error": "Error al procesar la solicitud: " + str(e)}), 500
 
 
 if __name__ == '__main__':

@@ -70,7 +70,6 @@ input {
     width: 100%; /* Ancho completo del contenedor */
     height: auto; /* Mantener la proporción */
 }
-
 .error {
     color: red;
     font-size: 0.75rem;

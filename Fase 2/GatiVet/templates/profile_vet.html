@@ -262,12 +262,15 @@
                         <div class="flex flex-col items-center">
                             <label class="block text-gray-600 text-sm">Foto de perfil:</label>
                             <div class="w-48 h-48 border rounded-md overflow-hidden mb-2">
-                                <img id="profile-picture" src="https://games-b26f.kxcdn.com/wp-content/uploads/2024/04/james-1024x1024.jpg" alt="Foto del Doctor"
+                                <img id="profile-picture" src="{{ vet.imagen if vet.imagen else 'default_image_url.jpg' }}" alt="Foto del Doctor"
                                     class="w-full h-full object-cover">
                             </div>
-                            <input type="file" id="upload-photo" class="hidden">
-                            <label for="upload-photo" style="background-color: #18beaa; color: white;"
-                                class="py-1 px-2 rounded cursor-pointer text-sm">Cambiar Foto</label>
+                            <!-- Formulario para la subida de la imagen -->
+                            <form id="upload-form" action="/upload_photo_vet" method="POST" enctype="multipart/form-data">
+                                <input type="file" id="upload-photo" name="photo" class="hidden" accept="image/*">
+                                <label for="upload-photo" style="background-color: #18beaa; color: white;"
+                                    class="py-1 px-2 rounded cursor-pointer text-sm">Cambiar Foto</label>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -373,7 +376,7 @@
                     <input type="text" id="rut-paciente-nuevo" name="rut-paciente" required maxlength="12" placeholder="12.345.678-9"
                         class="mt-1 block w-full border border-gray-300 rounded-md text-xs py-1 px-2 pr-10" onblur="formatRUT(this)">
                 </div>
-                <button type="button" onclick="searchPetByRUT()" class="mt-4 p-2 text-white rounded-md w-full md:w-auto flex items-center justify-center"
+                <button type="button" onclick="searchPetByUserId()" class="mt-4 p-2 text-white rounded-md w-full md:w-auto flex items-center justify-center"
                     style="background-color: #69d9cd; hover: background-color: #18beaa;">
                     <i class="fas fa-search" style="font-size: 14px;"></i>
                 </button>
@@ -484,12 +487,6 @@
                                         value="Sexo">
                                 </div>
                                 <div>
-                                    <label for="weight" class="block text-gray-600 text-sm">Peso:</label>
-                                    <input type="text" id="weight" name="weight" disabled
-                                        class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                        value="Peso">
-                                </div>
-                                <div>
                                     <label for="microchip-number" class="block text-gray-600 text-sm">N°
                                         Microchip:</label>
                                     <input type="text" id="microchip-number" name="microchip-number" disabled
@@ -526,19 +523,18 @@
                             <div class="flex flex-col items-center">
                                 <label class="block text-gray-600 text-sm">Foto de perfil:</label>
                                 <div class="w-48 h-48 border rounded-md overflow-hidden mb-2">
-                                    <img id="profile-picture" src="https://media.tenor.com/zqSA5TmyIYUAAAAM/sus-cat-2-suspicious-cat.gif" alt="Foto de la Mascota"
+                                    <img id="profile-picture-mas" src="https://via.placeholder.com/150" alt="Foto de la Mascota"
                                         class="w-full h-full object-cover">
                                 </div>
                                 <input type="file" id="upload-photo" class="hidden">
                                 <label for="upload-photo" style="background-color: #18beaa; color: white;"
                                     class="py-1 px-2 rounded cursor-pointer text-sm">Cambiar Foto</label>
-                                <!-- Aquí se mostrará el estado -->
                                 <div id="status-info" class="mt-4 text-gray-600 text-sm"></div>
                             </div>
                         </div>
-                        
                     </div>
                 </div>
+
                 <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="card bg-gray-100 p-4 rounded-md shadow">
                         <div class="flex items-center">

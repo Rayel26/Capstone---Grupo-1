@@ -179,9 +179,12 @@ editForm.addEventListener('submit', async function (event) {
 });
 
 
+//Editar imagen
 
-
-
+// Cuando se selecciona una nueva foto, automáticamente se envía el formulario
+document.getElementById('upload-photo').addEventListener('change', function() {
+    document.getElementById('upload-form').submit();
+});
 
 //////////
 // Ficha Clinica:
@@ -218,122 +221,124 @@ tabButtons.forEach(tab => {
 ////////////
 // Ficha clinica
 // Ejemplo de datos de mascotas (esto normalmente vendría de una base de datos)
-const petsData = {
-    "12345678-9": [
-        {
-            id: 1,
-            name: "Firulais",
-            birthDate: "01/01/2020",
-            age: "4 años",
-            gender: "Macho",
-            weight: "10 kg",
-            microchip: "123456789",
-            species: "Perro",
-            breed: "Labrador",
-            size: "Mediano",
-            coatColor: "Amarillo",
-            clinicalHistory: "Sin antecedentes.",
-            vaccines: "Vacuna antirrábica, vacuna cuadrivalente.",
-            dewormings: "Desparacitación anual.",
-            studies: "Análisis de sangre 2023",
-            owner: {
-                name: "Juan Pérez",
-                address: "Calle Falsa 123",
-                phone: "123456789",
-                email: "juan.perez@example.com"
-            }
-        },
-        {
-            id: 2,
-            name: "Miau",
-            birthDate: "05/05/2019",
-            age: "5 años",
-            gender: "Hembra",
-            weight: "5 kg",
-            microchip: "987654321",
-            species: "Gato",
-            breed: "Siames",
-            size: "Pequeño",
-            coatColor: "Blanco",
-            clinicalHistory: "Sin antecedentes.",
-            vaccines: "Vacuna antirrábica.",
-            dewormings: "Desparacitación semestral.",
-            studies: "Análisis de sangre 2022",
-            owner: {
-                name: "Ana Gómez",
-                address: "Avenida Siempre Viva 742",
-                phone: "987654321",
-                email: "ana.gomez@example.com"
-            }
-        }
-    ]
-};
 
-// Función para buscar por RUT
-function searchPetByRUT() {
-    const rut = document.getElementById("rut-paciente-nuevo").value;
-    const pets = petsData[rut];
+// Función para buscar por ID de usuario
+function searchPetByUserId() {
+    const userId = document.getElementById("rut-paciente-nuevo").value; // Obtener el ID de usuario
 
     // Limpiar el select de mascotas
     const petSelect = document.getElementById("pet-select");
     petSelect.innerHTML = ""; // Limpiar opciones previas
 
-    if (pets) {
-        pets.forEach(pet => {
-            const option = document.createElement("option");
-            option.value = pet.id;
-            option.textContent = pet.name;
-            petSelect.appendChild(option);
+    console.log(`Buscando mascotas para el ID de usuario: ${userId}`);
+
+    // Realizar la petición a la ruta de Flask para obtener las mascotas
+    fetch(`/get_pets_by_id?id_usuario=${userId}`)
+        .then(response => {
+            console.log(`Estado de la respuesta: ${response.status}`);
+            if (!response.ok) {
+                console.error('Error en la respuesta de la API:', response);
+                throw new Error('Error al obtener mascotas');
+            }
+            return response.json();
+        })
+        .then(data => { // Cambié 'pets' a 'data' para mayor claridad
+            console.log('Datos obtenidos:', data);
+            if (data.error) {
+                alert(data.error);
+                document.getElementById("pet-data").classList.add("hidden");
+                return;
+            }
+
+            // Mostrar la información del dueño
+            const ownerData = data.user; // Asignar los datos del dueño
+
+            document.getElementById("owner-name").textContent = ownerData.nombre || "Nombre no disponible";
+            document.getElementById("owner-address").textContent = ownerData.direccion || "Dirección no disponible";
+            document.getElementById("owner-phone").textContent = ownerData.celular || "Teléfono no disponible";
+            document.getElementById("owner-email").textContent = ownerData.correo || "Correo no disponible";
+
+            // Mostrar la sección con datos del dueño
+            document.getElementById("pet-data").classList.remove("hidden");
+
+            if (data.pets && data.pets.length > 0) {
+                data.pets.forEach(pet => {
+                    const option = document.createElement("option");
+                    option.value = pet.id_mascota;
+                    option.textContent = pet.nombre; // Mostrar el nombre de la mascota
+                    petSelect.appendChild(option);
+                });
+
+                // Mostrar datos de la primera mascota por defecto
+                showPetData(data.pets[0]);
+            } else {
+                alert("No se encontraron mascotas para este ID de usuario.");
+                document.getElementById("pet-data").classList.add("hidden");
+            }
+        })
+        .catch(error => {
+            console.error("Error al obtener mascotas:", error);
+            alert("Ocurrió un error al buscar las mascotas.");
         });
-        
-        // Mostrar los datos del dueño
-        document.getElementById("owner-name").textContent = pets[0].owner.name;
-        document.getElementById("owner-address").textContent = pets[0].owner.address;
-        document.getElementById("owner-phone").textContent = pets[0].owner.phone;
-        document.getElementById("owner-email").textContent = pets[0].owner.email;
-        
-        // Mostrar la sección con datos del dueño
-        document.getElementById("pet-data").classList.remove("hidden");
-        
-        // Mostrar datos de la primera mascota por defecto
-        showPetData(pets[0]);
-    } else {
-        alert("No se encontraron mascotas para este RUT.");
-        document.getElementById("pet-data").classList.add("hidden");
-    }
 }
 
 // Función para mostrar los datos de la mascota seleccionada
 function showPetData(pet) {
-    document.getElementById("pet-name").value = pet.name;
-    document.getElementById("birth-date").value = pet.birthDate;
-    document.getElementById("age").value = pet.age;
-    document.getElementById("gender").value = pet.gender;
-    document.getElementById("weight").value = pet.weight;
-    document.getElementById("microchip-number").value = pet.microchip;
-    document.getElementById("species").value = pet.species;
-    document.getElementById("breed").value = pet.breed;
-    document.getElementById("size").value = pet.size;
-    document.getElementById("coat-color").value = pet.coatColor;
+    document.getElementById("pet-name").value = pet.nombre;
+    document.getElementById("birth-date").value = pet.fecha_nacimiento; 
+    document.getElementById("age").value = pet.edad;
+    document.getElementById("gender").value = pet.sexo;
+    document.getElementById("microchip-number").value = pet.num_microchip;
+    document.getElementById("species").value = pet.especie;
+    document.getElementById("breed").value = pet.raza;
+    document.getElementById("size").value = pet.tamaño;
+    document.getElementById("coat-color").value = pet.color_pelaje;
 
-    // Aquí deberías agregar lógica para mostrar la historia clínica, vacunas, desparasitaciones y estudios
-    document.getElementById("tab2").innerHTML = `<p>${pet.clinicalHistory}</p>`;
-    document.getElementById("tab3").innerHTML = `<p>${pet.vaccines}</p>`;
-    document.getElementById("tab4").innerHTML = `<p>${pet.dewormings}</p>`;
-    document.getElementById("tab5").innerHTML = `<p>${pet.studies}</p>`;
+    // Cargar la imagen de la mascota desde la URL
+    const profilePicture = document.getElementById("profile-picture-mas");
+    console.log("URL de la foto de la mascota:", pet.foto_url); // Verificar la URL
+
+    // Cambiar el src a la URL de la mascota
+    profilePicture.src = pet.foto_url;
+
+    // Manejo de error en caso de que la imagen no se cargue
+    profilePicture.onerror = function() {
+        console.error("No se pudo cargar la imagen desde la URL:", pet.foto_url);
+        profilePicture.src = ""; // Dejar en blanco si no se puede cargar
+    };
+
+    document.getElementById("tab2").innerHTML = `<p>${pet.historia_clinica || 'No disponible'}</p>`;
+    document.getElementById("tab3").innerHTML = `<p>${pet.vacunas || 'No disponible'}</p>`;
+    document.getElementById("tab4").innerHTML = `<p>${pet.desparasitaciones || 'No disponible'}</p>`;
+    document.getElementById("tab5").innerHTML = `<p>${pet.estudios || 'No disponible'}</p>`;
 }
 
 // Evento para cambiar la mascota seleccionada
 document.getElementById("pet-select").addEventListener("change", function() {
     const selectedPetId = this.value;
-    const rut = document.getElementById("rut-paciente-nuevo").value;
-    const pets = petsData[rut];
 
-    const selectedPet = pets.find(pet => pet.id == selectedPetId);
-    if (selectedPet) {
-        showPetData(selectedPet);
-    }
+    // Realiza otra llamada a la API si es necesario para obtener datos específicos de la mascota seleccionada
+    const userId = document.getElementById("rut-paciente-nuevo").value; // Aquí también deberías usar el ID de usuario
+
+    fetch(`/get_pets_by_id?id_usuario=${userId}`)
+        .then(response => {
+            if (!response.ok) {
+                console.error('Error al obtener mascotas:', response);
+                throw new Error('Error al obtener mascotas');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const selectedPet = data.pets.find(pet => pet.id_mascota == selectedPetId);
+            if (selectedPet) {
+                showPetData(selectedPet);
+            }
+        })
+        .catch(error => {
+            console.error("Error al obtener mascotas:", error);
+        });
 });
+
 
 /// Script para manejar el modal de detalles de la cita (historia clinica)-->
 
@@ -396,51 +401,182 @@ const treatmentCheckbox = document.getElementById('treatment');
 const sterilizedCheckbox = document.getElementById('sterilized');
 const deceasedCheckbox = document.getElementById('deceased');
 const causeOfDeathInput = document.getElementById('cause-of-death');
-const statusInfoDiv = document.getElementById('status-info');
 const saveMessage = document.getElementById('save-message');
+const petSelect = document.getElementById("pet-select"); // Para obtener el ID de la mascota seleccionada
+const statusInfo = document.getElementById('status-info'); // Contenedor para mensajes debajo de la imagen
 
-// Función que se ejecuta al presionar "Guardar Estado"
-saveStatusBtn.addEventListener('click', function() {
-    // Limpiar el área de estado
-    statusInfoDiv.innerHTML = '';
+// Función para inicializar el estado de los checkboxes según los datos de la BD
+async function inicializarEstado(petId) {
+    try {
+        console.log(`Cargando datos para la mascota con ID: ${petId}`);  // Depuración
 
-    // Crear una lista para almacenar los estados seleccionados
-    let statusList = [];
+        // Hacer una solicitud GET para obtener el estado actual de la mascota
+        const response = await fetch(`/get-pet-status?id_mascota=${petId}`);
 
-    // Verificar las casillas de verificación y agregar texto correspondiente
-    if (reproducerCheckbox.checked) {
-        statusList.push("Es reproductor.");
-    }
-    if (treatmentCheckbox.checked) {
-        statusList.push("Está en tratamiento anticonceptivo.");
-    }
-    if (sterilizedCheckbox.checked) {
-        statusList.push("Está esterilizado/castrado.");
-    }
-    if (deceasedCheckbox.checked) {
-        // Verificar si se ha proporcionado una causa de muerte
-        const causeOfDeath = causeOfDeathInput.value.trim();
-        if (causeOfDeath) {
-            statusList.push(`Falleció. Causa del deceso: ${causeOfDeath}`);
+        console.log('Respuesta recibida:', response);  // Depuración
+
+        if (!response.ok) {
+            throw new Error(`Error al obtener el estado de la mascota. Código de estado: ${response.status}`);
+        }
+
+        const petData = await response.json();
+        console.log('Datos de la mascota recibidos:', petData);  // Depuración
+
+        // Actualizar los checkboxes y campos con la información de la BD
+        reproducerCheckbox.checked = petData.reproducer;
+        treatmentCheckbox.checked = petData.treatment;
+        sterilizedCheckbox.checked = petData.sterilized;
+        deceasedCheckbox.checked = petData.deceased;
+        causeOfDeathInput.value = petData.causeOfDeath || '';
+
+        // Mostrar los mensajes debajo de la imagen automáticamente
+        mostrarEstado(petData);
+
+    } catch (error) {
+        console.error('Error al obtener los datos del estado de la mascota:', error);  // Depuración
+
+        // Si el error es un problema con el formato JSON
+        if (error instanceof SyntaxError) {
+            console.error('Error al parsear la respuesta como JSON:', error.message);
+            saveMessage.textContent = "Error inesperado en los datos de la respuesta.";
         } else {
-            statusList.push("Falleció.");
+            saveMessage.textContent = error.message;
         }
     }
+}
 
-    // Si no hay ninguna opción seleccionada, mostrar un mensaje
-    if (statusList.length === 0) {
-        statusInfoDiv.innerHTML = "No se ha seleccionado ningún estado.";
-    } else {
-        // Mostrar el estado debajo de la imagen
-        statusInfoDiv.innerHTML = statusList.join(' <br> ');
+document.addEventListener('DOMContentLoaded', function() {
+    const uploadPhotoInput = document.getElementById('upload-photo');
+    const profilePicture = document.getElementById('profile-picture-mas');
+    const statusInfo = document.getElementById('status-info');
+
+    // Cuando se cambia el archivo
+    uploadPhotoInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('image', file);
+
+            // Asegúrate de tener el id_mascota disponible en algún lugar, por ejemplo, en un atributo de datos
+            const idMascota = profilePicture.getAttribute('data-id-mascota'); // Asegúrate de que este atributo exista en tu HTML
+            if (idMascota) {
+                formData.append('id_mascota', idMascota);
+
+                fetch('/upload-image', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        profilePicture.src = data.image_url; // Cambiar la imagen mostrada
+                        statusInfo.textContent = 'Imagen actualizada con éxito.';
+                    } else {
+                        statusInfo.textContent = `Error: ${data.message}`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al subir la imagen:', error);
+                    statusInfo.textContent = 'Error al subir la imagen.';
+                });
+            } else {
+                alert('No se pudo encontrar el id_mascota.');
+            }
+        }
+    });
+});
+
+
+// Función que se ejecuta al presionar "Guardar Estado"
+saveStatusBtn.addEventListener('click', async function() {
+    // Obtener el ID de la mascota seleccionada
+    const selectedPetId = petSelect.value;
+
+    // Preparar los datos a enviar al servidor
+    const petData = {
+        id_mascota: selectedPetId,  // Mantener el uso de id_mascota
+        reproducer: reproducerCheckbox.checked,
+        treatment: treatmentCheckbox.checked,
+        sterilized: sterilizedCheckbox.checked,
+        deceased: deceasedCheckbox.checked,
+        causeOfDeath: deceasedCheckbox.checked ? causeOfDeathInput.value.trim() : null // Solo enviar si está fallecido
+    };
+
+    try {
+        console.log('Enviando datos al servidor:', petData);  // Depuración
+
+        // Hacer una solicitud POST al servidor para actualizar la base de datos
+        const response = await fetch('/update-pet-status', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(petData) // Enviar los datos con el ID de la mascota
+        });
+
+        const result = await response.json();
+        console.log('Respuesta del servidor al guardar:', result);  // Depuración
+
+        // Mostrar el mensaje de éxito o error basado en la respuesta
+        if (result.success) {
+            saveMessage.textContent = "Estado guardado correctamente.";
+            mostrarEstado(petData); // Actualizar el estado visual debajo de la imagen
+        } else {
+            saveMessage.textContent = "Hubo un error al guardar el estado.";
+        }
+
+    } catch (error) {
+        console.error('Error al guardar el estado de la mascota:', error);  // Depuración
+        saveMessage.textContent = "Error en la conexión.";
     }
 
-    // Mostrar un mensaje de éxito temporalmente
-    saveMessage.textContent = "Estado guardado correctamente.";
+    // Limpiar el mensaje después de 2 segundos
     setTimeout(() => {
         saveMessage.textContent = '';
     }, 2000);
 });
+
+
+// Función para mostrar el estado del paciente debajo de la imagen
+function mostrarEstado(petData) {
+    let mensajes = [];
+
+    // Verificar el estado de fallecido
+    if (petData.deceased) {
+        mensajes.push(`Fallecido: ${petData.causeOfDeath || 'Causa no especificada'}`);
+    } else {
+        // Verificar si está en tratamiento
+        if (petData.treatment) {
+            mensajes.push("Está en tratamiento anticonceptivo");
+        }
+        // Verificar si es reproductor
+        if (petData.reproducer) {
+            mensajes.push("Es reproductor/a");
+        }
+        // Verificar si está esterilizado/castrado
+        if (petData.sterilized) {
+            mensajes.push("Está esterilizado/castrado");
+        }
+    }
+
+    // Si no hay mensajes, mostrar "Estado no disponible"
+    if (mensajes.length === 0) {
+        mensajes.push("Estado no disponible");
+    }
+
+    // Mostrar los mensajes en el contenedor debajo de la imagen
+    statusInfo.textContent = mensajes.join(', ');
+}
+
+// Evento que se ejecuta al cambiar la selección de mascota
+petSelect.addEventListener('change', function() {
+    const selectedPetId = petSelect.value;
+    
+    if (selectedPetId) {
+        inicializarEstado(selectedPetId); // Cargar el estado de la mascota seleccionada desde la BD
+    }
+});
+
 
 //Fin de script relacionado a datos de mascotas
 
