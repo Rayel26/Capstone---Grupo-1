@@ -146,14 +146,19 @@ editForm.addEventListener('submit', async function (event) {
             body: JSON.stringify(formData), // Enviar los datos del formulario
         });
 
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.error || 'Error al guardar los datos');
+        // Verificar si la respuesta es un JSON válido
+        const contentType = response.headers.get('Content-Type');
+        if (!contentType || !contentType.includes('application/json')) {
+            throw new Error('La respuesta no es un JSON válido.');
         }
 
         const responseData = await response.json(); // Obtener la respuesta del backend
 
-        // Si todo va bien, actualiza los valores en la vista principal
+        if (!response.ok) {
+            throw new Error(responseData.error || 'Error al guardar los datos');
+        }
+
+        // Actualizar los valores en la vista principal
         document.getElementById('rut').value = formData.rut;
         document.getElementById('nombre-doctor').value = formData.nombre;
         document.getElementById('apellido').value = formData.apellido;
@@ -163,7 +168,6 @@ editForm.addEventListener('submit', async function (event) {
         document.getElementById('telefono-dom').value = formData.telefono;
         document.getElementById('correo').value = formData.correo;
 
-        // También puedes actualizar otros campos, como el id_domicilio si fuera necesario
         console.log('ID Domicilio creado:', responseData.id_domicilio);
 
         // Cerrar el modal
@@ -173,6 +177,7 @@ editForm.addEventListener('submit', async function (event) {
         alert(`Error al guardar los datos: ${error.message}`);
     }
 });
+
 
 
 

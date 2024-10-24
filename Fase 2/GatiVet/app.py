@@ -711,105 +711,80 @@ def profile_vet():
         return "No se encontraron datos para este veterinario."
     return render_template('profile_vet.html', vet=vet)
 
-#Ruta para editar veterinario
-@app.route('/edit_vet_data', methods=['POST']) 
-@login_required
-@role_required('vet')  # Verifica el rol del usuario
-def edit_vet_data():
-    data = request.get_json()  # Obtener los datos enviados desde el frontend
 
-    # Extraer los datos
-    rut = data.get('rut')
-    domicilio = data.get('domicilio')
-    numeracion = data.get('numeracion')
-
-    # Verificar si el domicilio ya existe para el usuario
-    domicilio_response = supabase.table('Domicilio').select('*').eq('id_usuario', rut).execute()
-    
-    if domicilio_response.data:
-        # Si el domicilio existe, actualiza los datos
-        domicilio_data = {
-            'direccion': domicilio,
-            'numeracion': numeracion
-        }
-        update_response = supabase.table('Domicilio').update(domicilio_data).eq('id_domicilio', domicilio_response.data[0]['id_domicilio']).execute()
-        
-        if update_response.status_code == 200:
-            return jsonify({'message': 'Domicilio actualizado correctamente'}), 200
-        else:
-            return jsonify({'error': 'Error al actualizar el domicilio'}), 500
-    else:
-        # Si no existe, crea un nuevo domicilio
-        domicilio_data = {
-            'direccion': domicilio,
-            'numeracion': numeracion,
-            'id_usuario': rut  # Asegúrate de asociar el domicilio al usuario
-        }
-        domicilio_response = supabase.table('Domicilio').insert(domicilio_data).execute()
-        
-        if domicilio_response.status_code != 201:
-            return jsonify({'error': 'Error al guardar el domicilio'}), 500
-
-        # Obtener el id_domicilio
-        id_domicilio = domicilio_response.data[0]['id_domicilio']
-
-        # Actualizar el id_domicilio en la tabla Usuario
-        usuario_response = supabase.table('Usuario').update({'id_domicilio': id_domicilio}).eq('id_usuario', rut).execute()
-
-        if usuario_response.status_code == 200:
-            return jsonify({'message': 'Domicilio creado y asociado correctamente'}), 200
-        else:
-            return jsonify({'error': 'Error al actualizar el domicilio del usuario'}), 500
-        
-# Ruta para guardar veterinario
 @app.route('/save_vet_data', methods=['POST']) 
 @login_required
 @role_required('vet')  # Verifica el rol del usuario
 def save_vet_data():
-    data = request.get_json()  # Obtener los datos enviados desde el frontend
+    try:
+        data = request.get_json()  # Obtener los datos enviados desde el frontend
 
-    # Extraer los datos
-    rut = data.get('rut')  # Asegúrate de que esto tenga un valor válido
-    nombre = data.get('nombre')
-    apellido = data.get('apellido')
-    especialidad = data.get('especialidad')
-    telefono = data.get('telefono')
-    correo = data.get('correo')
+        # Extraer los datos
+        user_id = data.get('rut')
+        nombre = data.get('nombre')
+        apellido = data.get('apellido')
+        especialidad = data.get('especialidad')
+        telefono = data.get('telefono')
+        correo = data.get('correo')
+        direccion = data.get('domicilio')  # Captura de la dirección
+        numeracion = data.get('numeracion')  # Captura de la numeración
 
-    # Verificar si el usuario ya existe
-    usuario_response = supabase.table('Usuario').select('*').eq('id_usuario', rut).execute()
+        # Verificar si el usuario ya existe
+        usuario_response = supabase.table('Usuario').select('id_domicilio').eq('id_usuario', user_id).execute()
 
-    if usuario_response.data:
-        # Si el usuario existe, actualiza sus datos
-        usuario_data = {
-            'nombre': nombre,
-            'appaterno': apellido,
-            'especialidad': especialidad,
-            'correo': correo,
-            'celular': telefono
-        }
-        update_response = supabase.table('Usuario').update(usuario_data).eq('id_usuario', rut).execute()
-        
-        if update_response.status_code == 200:
-            return jsonify({'message': 'Datos actualizados correctamente'}), 200
-        else:
-            return jsonify({'error': 'Error al actualizar el usuario'}), 500
-    else:
-        # Si el usuario no existe, inserta un nuevo registro
-        usuario_data = {
-            'id_usuario': rut,  # Este campo es crucial
-            'nombre': nombre,
-            'appaterno': apellido,
-            'especialidad': especialidad,
-            'correo': correo,
-            'celular': telefono
-        }
-        insert_response = supabase.table('Usuario').insert(usuario_data).execute()
+        if not usuario_response.data:
+            return jsonify({'success': False, 'message': 'El usuario no existe'}), 404
 
-        if insert_response.status_code == 201:
-            return jsonify({'message': 'Datos guardados correctamente'}), 200
-        else:
-            return jsonify({'error': 'Error al guardar el usuario'}), 500
+        # Obtener el id_domicilio del usuario
+        response_domicilio_id = usuario_response
+
+        # Si no existe un domicilio asociado, crear uno nuevo
+        if not response_domicilio_id.data or response_domicilio_id.data[0].get('id_domicilio') is None:
+            # Crear un nuevo registro en la tabla Domicilio
+            response_new_domicilio = supabase.table('Domicilio').insert({
+                'direccion': direccion,
+                'numeracion': numeracion
+            }).execute()
+
+            # Obtener el ID del nuevo domicilio
+            if response_new_domicilio.data:
+                new_domicilio_id = response_new_domicilio.data[0]['id_domicilio']
+
+                # Actualizar el campo id_domicilio en la tabla Usuario
+                response_update_usuario = supabase.table('Usuario').update({
+                    'id_domicilio': new_domicilio_id
+                }).eq('id_usuario', user_id).execute()
+
+                if not response_update_usuario.data:
+                    error_message = response_update_usuario.error or 'Error al actualizar el id_domicilio en Usuario'
+                    print("Error:", error_message)
+                    return jsonify({'success': False, 'message': error_message}), 500
+
+                return jsonify({'success': True, 'id_domicilio': new_domicilio_id, 'message': 'Domicilio creado y asociado al usuario'}), 200
+
+            else:
+                error_message = response_new_domicilio.error or 'Error al crear el nuevo domicilio'
+                print("Error al crear domicilio:", error_message)
+                return jsonify({'success': False, 'message': error_message}), 500
+
+        # Si existe un id_domicilio, actualizar la dirección y numeración
+        domicilio_id = response_domicilio_id.data[0]['id_domicilio']
+
+        response_update_domicilio = supabase.table('Domicilio').update({
+            'direccion': direccion,
+            'numeracion': numeracion
+        }).eq('id_domicilio', domicilio_id).execute()
+
+        if not response_update_domicilio.data:
+            error_message = response_update_domicilio.error or 'Error desconocido al actualizar la dirección'
+            print("Error al actualizar la dirección:", error_message)
+            return jsonify({'success': False, 'message': error_message}), 500
+
+        return jsonify({'success': True, 'id_domicilio': domicilio_id, 'message': 'Domicilio actualizado exitosamente'}), 200
+
+    except Exception as e:
+        print("Error:", str(e))
+        return jsonify({'success': False, 'message': str(e)}), 500
 
 
 #Ruta para el panel de administrador
