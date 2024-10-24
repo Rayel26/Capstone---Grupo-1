@@ -46,29 +46,34 @@
                     <div>
                         <label for="edit-rut" class="block text-gray-600 text-sm">RUT</label>
                         <input type="text" id="edit-rut" name="rut" placeholder="12.345.678-9" required
-                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
+                            value="{{ vet.id_usuario if vet.id_usuario else 'Rut' }}">
                         <small id="rutError" class="text-xs text-red-500 hidden">Formato incorrecto. Ej:
-                            12.345.678-9</small>
+                            12.345.678-9</small> 
                     </div>
                     <div>
                         <label for="edit-nombre-doctor" class="block text-gray-600 text-sm">Nombre</label>
                         <input type="text" id="edit-nombre-doctor" name="nombre-doctor" required
-                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
+                            value="{{ vet.nombre if vet.nombre else 'Nombre' }}">
                     </div>
                     <div>
                         <label for="edit-apellido" class="block text-gray-600 text-sm">Apellido</label>
                         <input type="text" id="edit-apellido" name="apellido" required
-                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
+                            value="{{ vet.appaterno if vet.appaterno else 'Apellido' }}">
                     </div>
                     <div>
                         <label for="edit-especialidad" class="block text-gray-600 text-sm">Especialidad</label>
                         <input type="text" id="edit-especialidad" name="especialidad" required
-                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
+                            value="{{ vet.especialidad if vet.especialidad else 'Especialidad' }}">
                     </div>
                     <div>
                         <label for="edit-domicilio" class="block text-gray-600 text-sm">Dirección</label>
                         <input type="text" id="edit-domicilio" name="domicilio" required
-                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
+                            value="{{ vet.domicilio if vet.domicilio else 'Av. Siempre viva' }}">
                     </div>
                     <ul id="suggestions" class="hidden"></ul>
                     
@@ -147,19 +152,22 @@
                     <div>
                         <label for="edit-numeracion" class="block text-gray-600 text-sm">Numeración</label>
                         <input type="text" id="edit-numeracion" name="numeracion" required
-                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
+                            value="{{ vet.numeracion if vet.numeracion else '123' }}">
                     </div>
                     <div>
                         <label for="edit-telefono-dom" class="block text-gray-600 text-sm">Teléfono</label>
                         <input type="text" id="edit-telefono-dom" name="telefono-dom" placeholder="+569-" required
-                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
+                            value="{{ vet.celular if vet.celular else '123456789' }}">
                         <small id="telefonoError" class="text-xs text-red-500 hidden">Debe comenzar con +569- y tener
                             exactamente 8 dígitos después del prefijo.</small>
                     </div>
                     <div>
                         <label for="edit-correo" class="block text-gray-600 text-sm">Correo Electrónico</label>
                         <input type="email" id="edit-correo" name="correo" required
-                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
+                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
+                            value="{{ vet.correo if vet.correo else 'correo@ejemplo.com' }}">
                     </div>
                 </div>
                 <div class="mt-4 flex justify-end">
