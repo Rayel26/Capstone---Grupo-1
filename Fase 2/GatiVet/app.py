@@ -1238,6 +1238,37 @@ def get_pet_status():
         print(f"Error al obtener el estado de la mascota: {str(e)}")  # Imprimir el error
         return jsonify({"error": "Error al procesar la solicitud: " + str(e)}), 500
 
+##Editar mascota
+
+@app.route('/update_pet/<pet_id>', methods=['POST'])
+def update_pet(pet_id):
+    data = request.json
+    nombre = data.get('nombre') 
+    edad = data.get('edad')
+    fecha_nacimiento = data.get('fecha_nacimiento')
+    especie = data.get('especie')
+    raza = data.get('raza')
+    sexo = data.get('sexo')
+    num_microchip = data.get('num_microchip')
+    tamaño = data.get('tamaño')
+    color_pelaje = data.get('color_pelaje')
+
+    # Actualiza la mascota en tu base de datos usando Supabase
+    response = supabase.table('Mascota').update({
+        'nombre': nombre,
+        'edad': edad,
+        'fecha_nacimiento': fecha_nacimiento,
+        'especie': especie,
+        'raza': raza,
+        'sexo': sexo,
+        'num_microchip': num_microchip,
+        'tamaño': tamaño,
+        'color_pelaje': color_pelaje
+    }).eq('id_mascota', pet_id).execute()  # Asegúrate de que 'id_mascota' sea el nombre correcto de tu columna de identificador
+
+    return jsonify({"message": "Mascota actualizada exitosamente."}), 200
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)  # Ejecuta la aplicación en modo depuración

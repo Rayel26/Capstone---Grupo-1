@@ -220,7 +220,7 @@ tabButtons.forEach(tab => {
 
 ////////////
 // Ficha clinica
-// Ejemplo de datos de mascotas (esto normalmente vendría de una base de datos)
+
 
 // Función para buscar por ID de usuario
 function searchPetByUserId() {
@@ -576,6 +576,170 @@ petSelect.addEventListener('change', function() {
         inicializarEstado(selectedPetId); // Cargar el estado de la mascota seleccionada desde la BD
     }
 });
+
+// Función para abrir el modal y cargar los datos de la mascota seleccionada
+function openEditPetModal() {
+    const petSelect = document.getElementById("pet-select");
+    const selectedPetId = petSelect.value; // Obtener el ID de la mascota seleccionada
+    console.log("ID de mascota seleccionada:", selectedPetId); // Depuración
+
+    // Verificar que haya una mascota seleccionada
+    if (!selectedPetId) {
+        alert("Por favor, selecciona una mascota.");
+        return;
+    }
+
+    // Realizar la petición a la API para obtener los datos de la mascota seleccionada
+    const userId = document.getElementById("rut-paciente-nuevo").value; // Obtener el ID de usuario
+    console.log("ID de usuario:", userId); // Depuración
+
+    fetch(`/get_pets_by_id?id_usuario=${userId}`)
+        .then(response => {
+            if (!response.ok) {
+                console.error('Error al obtener mascotas:', response);
+                throw new Error('Error al obtener mascotas');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Datos recibidos de la API:", data); // Depuración
+            const selectedPet = data.pets.find(pet => pet.id_mascota == selectedPetId);
+            console.log("Mascota seleccionada:", selectedPet); // Depuración
+            
+            if (selectedPet) {
+                // Llenar los campos del modal con los datos de la mascota
+                const petNameInput = document.getElementById("modal-pet-name");
+                const birthDateInput = document.getElementById("modal-birth-date");
+                const ageInput = document.getElementById("modal-age");
+                const genderInput = document.getElementById("modal-gender");
+                const microchipInput = document.getElementById("modal-microchip-number");
+                const speciesInput = document.getElementById("modal-species");
+                const breedInput = document.getElementById("modal-breed");
+                const sizeInput = document.getElementById("modal-size");
+                const coatColorInput = document.getElementById("modal-coat-color");
+
+                // Comprobamos si los elementos existen antes de establecer su valor
+                console.log("Elementos del modal:", {
+                    petNameInput,
+                    birthDateInput,
+                    ageInput,
+                    genderInput,
+                    microchipInput,
+                    speciesInput,
+                    breedInput,
+                    sizeInput,
+                    coatColorInput
+                }); // Depuración
+
+                if (petNameInput) petNameInput.value = selectedPet.nombre;
+                if (birthDateInput) birthDateInput.value = selectedPet.fecha_nacimiento; 
+                if (ageInput) ageInput.value = ""; // Dejar vacío inicialmente
+                if (genderInput) genderInput.value = selectedPet.sexo;
+                if (microchipInput) microchipInput.value = selectedPet.num_microchip;
+                if (speciesInput) speciesInput.value = selectedPet.especie;
+                if (breedInput) breedInput.value = selectedPet.raza;
+                if (sizeInput) sizeInput.value = selectedPet.tamaño;
+                if (coatColorInput) coatColorInput.value = selectedPet.color_pelaje;
+
+                // Calcular la edad después de llenar los datos
+                calculateAge();
+
+                // Mostrar el modal
+                const modal = document.getElementById("modal-edit-pet");
+                if (modal) {
+                    modal.classList.remove("hidden");
+                } else {
+                    console.error("Modal no encontrado."); // Depuración
+                }
+            } else {
+                alert("No se encontró la mascota seleccionada.");
+            }
+        })
+        .catch(error => {
+            console.error("Error al obtener datos de la mascota:", error);
+            alert("Ocurrió un error al buscar los datos de la mascota.");
+        });
+}
+
+function savePetChanges() {
+    const petSelect = document.getElementById("pet-select");
+    const selectedPetId = petSelect.value; // Obtener el ID de la mascota seleccionada
+    const userId = document.getElementById("rut-paciente-nuevo").value; // Obtener el ID de usuario
+
+    const petData = {
+        nombre: document.getElementById("modal-pet-name").value,
+        edad: document.getElementById("modal-age").value,
+        fecha_nacimiento: document.getElementById("modal-birth-date").value,
+        especie: document.getElementById("modal-species").value,
+        raza: document.getElementById("modal-breed").value,
+        sexo: document.getElementById("modal-gender").value,
+        num_microchip: document.getElementById("modal-microchip-number").value,
+        tamaño: document.getElementById("modal-size").value,
+        color_pelaje: document.getElementById("modal-coat-color").value,
+    };
+
+    fetch(`/update_pet/${selectedPetId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(petData)
+    })
+    .then(response => {
+        if (response.ok) {
+            alert("Información de mascota actualizada exitosamente.");
+            cerrarModal(); // Cerrar el modal después de actualizar
+            // Aquí podrías agregar código para refrescar la lista de mascotas, si es necesario
+        } else {
+            alert("Error al actualizar la información de la mascota.");
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("Ocurrió un error al actualizar la información de la mascota.");
+    });
+}
+
+
+// Función para calcular la edad
+function calculateAge() {
+    const birthDateInput = document.getElementById("modal-birth-date");
+    const ageInput = document.getElementById("modal-age");
+
+    if (birthDateInput && ageInput) { // Verificar si los elementos existen
+        const birthDate = new Date(birthDateInput.value);
+        const today = new Date();
+
+        console.log("Fecha de nacimiento:", birthDate); // Depuración
+        console.log("Fecha de hoy:", today); // Depuración
+
+        if (!isNaN(birthDate.getTime())) { // Asegurarse de que birthDate sea una fecha válida
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDifference = today.getMonth() - birthDate.getMonth();
+
+            // Ajustar la edad si la fecha actual es anterior al cumpleaños
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+
+            ageInput.value = age; // Establecer la edad calculada en el campo de edad
+        } else {
+            ageInput.value = ""; // Limpiar el campo si no hay fecha válida
+        }
+    } else {
+        console.error("Elementos no encontrados: birthDateInput o ageInput"); // Mensaje de error en consola
+    }
+}
+
+// Función para cerrar el modal
+function cerrarModal() {
+    const modal = document.getElementById("modal-edit-pet");
+    if (modal) {
+        modal.classList.add("hidden");
+    } else {
+        console.error("Modal no encontrado al cerrar."); // Depuración
+    }
+}
 
 
 
