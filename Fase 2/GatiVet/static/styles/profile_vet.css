@@ -209,3 +209,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
         padding: 0.25rem; /* Ajustar el padding para que ocupe aún menos espacio */
     }
 }
+
+.hidden {
+    display: none;
+}

@@ -217,6 +217,8 @@ tabButtons.forEach(tab => {
 
 
 ////////////
+// Declarar selectedPetId como una variable global
+let selectedPetId; // Esto ahora es accesible en todo el archivo
 // Fichas clinicas
 // Función para buscar por ID de usuario
 function searchPetByUserId() {
@@ -249,7 +251,9 @@ function searchPetByUserId() {
             // Mostrar la información del dueño
             const ownerData = data.user; // Asignar los datos del dueño
 
-            document.getElementById("owner-name").textContent = ownerData.nombre || "Nombre no disponible";
+            document.getElementById("owner-name").textContent = 
+    (ownerData.nombre + " " + ownerData.appaterno + " " + ownerData.apmaterno).trim() || "Nombre no disponible";
+
             document.getElementById("owner-rut").textContent = ownerData.rut || "Rut no disponible";
             document.getElementById("owner-address").textContent = ownerData.direccion || "Dirección no disponible";
             document.getElementById("owner-phone").textContent = ownerData.celular || "Teléfono no disponible";
@@ -265,8 +269,9 @@ function searchPetByUserId() {
                     option.textContent = pet.nombre; // Mostrar el nombre de la mascota
                     petSelect.appendChild(option);
                 });
-
-                // Mostrar datos de la primera mascota por defecto
+        
+                // Selecciona la primera mascota por defecto
+                selectedPetId = data.pets[0].id_mascota; // Asigna la ID de la primera mascota
                 showPetData(data.pets[0]);
             } else {
                 alert("No se encontraron mascotas para este ID de usuario.");
@@ -307,10 +312,11 @@ function showPetData(pet) {
 
 // Evento para cambiar la mascota seleccionada
 document.getElementById("pet-select").addEventListener("change", function() {
-    const selectedPetId = this.value;
+    selectedPetId = this.value; // Actualiza la variable global
+    loadMedicalHistory(); // Cargar el historial médico para la mascota seleccionada
 
     // Realiza otra llamada a la API si es necesario para obtener datos específicos de la mascota seleccionada
-    const userId = document.getElementById("rut-paciente-nuevo").value; // Aquí también deberías usar el ID de usuario
+    const userId = document.getElementById("rut-paciente-nuevo").value;
 
     fetch(`/get_pets_by_id?id_usuario=${userId}`)
         .then(response => {
@@ -331,29 +337,6 @@ document.getElementById("pet-select").addEventListener("change", function() {
         });
 });
 
-
-/// Script para manejar el modal de detalles de la cita (historia clinica)-->
-
-    function openModal(modalId) {
-        document.getElementById(modalId).classList.remove('hidden');
-        document.getElementById(modalId).classList.add('show');
-    }
-
-    function closeModal(modalId) {
-        document.getElementById(modalId).classList.remove('show');
-        document.getElementById(modalId).classList.add('hidden');
-    }
-
-    // Cerrar el modal al hacer clic fuera del contenido
-    window.onclick = function(event) {
-        const modals = document.querySelectorAll('.modal');
-        modals.forEach((modal) => {
-            if (event.target === modal) {
-                closeModal(modal.id);
-            }
-        });
-    }
-/// Fin Script para manejar el modal de detalles de la cita-->
 
 /// Script para manejar el modal de vacunas-->
 function openModal(modalId) {
@@ -720,9 +703,10 @@ function cerrarModal() {
 
 //Fin de script relacionado a datos de mascotas
 
-////////////////////////////////
+///////////////////////////////
+
+// Función para guardar la ficha médica
 document.getElementById('saveButton').addEventListener('click', async function() {
-    // Obtener los valores de los campos del formulario
     const consultationDate = document.getElementById('consultationDate').value;
     const consultationStartTime = document.getElementById('consultationStartTime').value;
     const animalTemperature = parseFloat(document.getElementById('animalTemperature').value);
@@ -734,17 +718,16 @@ document.getElementById('saveButton').addEventListener('click', async function()
     const diagnosis = document.getElementById('diagnosis').value;
     const indications = document.getElementById('indications').value;
 
-    // Validar los campos obligatorios (opcional)
-    if (!consultationDate || !consultationStartTime) {
+    // Validar campos obligatorios
+    if (!consultationDate || !consultationStartTime || !selectedPetId) {
         alert("Por favor, completa todos los campos obligatorios.");
         return;
     }
 
-    // Obtener ID de usuario y mascota de otra manera antes de enviar el formulario
-    const id_usuario = 'ID_DEL_USUARIO'; // Deberías obtenerlo dinámicamente (ej. desde el almacenamiento local o al iniciar sesión)
-    const id_mascota = 'ID_DE_LA_MASCOTA'; // Deberías obtenerlo dinámicamente
+    console.log("Mascota seleccionada para guardar (selectedPetId):", selectedPetId); // Verificación
 
-    // Crear el objeto para enviar
+    const id_usuario = document.getElementById("rut-paciente-nuevo").value;
+
     const medicalHistory = {
         fecha: consultationDate,
         hora_inicio: consultationStartTime,
@@ -756,11 +739,13 @@ document.getElementById('saveButton').addEventListener('click', async function()
         examen_fisico: physicalExam,
         diagnostico: diagnosis,
         indicaciones_tratamientos: indications,
-        id_mascota: id_mascota,
+        id_mascota: selectedPetId,
         id_usuario: id_usuario
     };
 
-    // Enviar los datos al servidor
+    console.log("ID de mascota que se va a guardar:", selectedPetId);
+
+
     try {
         const response = await fetch('http://127.0.0.1:5000/api/insertar_historial', {
             method: 'POST',
@@ -769,13 +754,11 @@ document.getElementById('saveButton').addEventListener('click', async function()
             },
             body: JSON.stringify(medicalHistory),
         });
-    
-        // Verificar la respuesta del servidor
+
         const result = await response.json();
-    
+
         if (response.ok) {
             alert("Ficha guardada correctamente!");
-            // Limpiar el formulario si es necesario
             document.getElementById('anamnesisForm').reset();
         } else {
             alert("Error al guardar la ficha: " + result.error);
@@ -786,28 +769,146 @@ document.getElementById('saveButton').addEventListener('click', async function()
     }
 });
 
+//Script ver historial medico
+function loadMedicalHistory() {
+    fetch(`/get_medical_history?id_mascota=${selectedPetId}`)
+        .then(response => {
+            if (!response.ok) {
+                console.error('Error al obtener historiales médicos:', response);
+                throw new Error('Error al obtener historiales médicos');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const tbody = document.querySelector('#tab2 tbody');
+            tbody.innerHTML = ''; // Limpiar la tabla antes de cargar nuevos datos
 
+            data.forEach(record => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="border border-gray-300 p-1">${record.fecha}</td>
+                    <td class="border border-gray-300 p-1">${record.motivo_consulta}</td>
+                    <td class="border border-gray-300 p-1">${record.examen_fisico}</td>
+                    <td class="border border-gray-300 p-1">${record.diagnostico}</td>
+                    <td class="border border-gray-300 p-1">${record.indicaciones_tratamientos}</td>
+                    <td class="border border-gray-300 p-1">
+                        <button 
+                            style="color: blue; text-decoration: underline; background: none; border: none; cursor: pointer;" 
+                            onclick="showDetailModal('${record.id_historial}')">
+                            Ver Detalles
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error("Error al cargar el historial médico:", error);
+        });
+}
 
+//Script detalle historial
 
+// Agrega el evento de clic al botón "Cerrar"
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("close-modal-detail").addEventListener("click", closeModalDetailHandler);
+});
 
+function closeModalDetailHandler() {
+    closeModalDetail('modal-detail');
+    console.log('Modal cerrado'); // Log para confirmar que se cerró
+}
 
+function closeModalDetail(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add('hidden'); // Ocultar el modal
+        modal.classList.remove('flex'); // Asegúrate de que no tenga clase flex
+    }
+}
 
+function showDetailModal(historialId) {
+    fetch(`/get_medical_record?id_historial=${historialId}`)
+        .then(response => {
+            if (!response.ok) {
+                console.error('Error al obtener detalle del historial médico:', response);
+                throw new Error('Error al obtener detalle del historial médico');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Llenar los campos del modal con los datos del historial médico
+            document.getElementById("editHoraInicio").value = data.hora_inicio;
+            document.getElementById("editTemperatura").value = data.temperatura;
+            document.getElementById("editFrecuenciaCardiaca").value = data.frecuencia_cardiaca;
+            document.getElementById("editFrecuenciaRespiratoria").value = data.frecuencia_respiratoria;
+            document.getElementById("editPeso").value = data.peso;
 
+            // Mostrar el modal
+            document.getElementById("modal-detail").classList.remove("hidden");
+            document.getElementById("modal-detail").classList.add("flex"); // Asegúrate de que tenga clase flex al mostrar
+        })
+        .catch(error => {
+            console.error("Error al cargar los detalles del historial médico:", error);
+        });
+}
 
+// Script para exportar a PDF
+function exportToPDF() {
+    const { jsPDF } = window.jspdf;
+    
+    const doc = new jsPDF({
+        orientation: "portrait", // Orientación vertical
+        unit: "mm", // Unidades en milímetros
+    });
+    
+    // Datos a incluir en el PDF (ejemplo, puedes modificar según tus necesidades)
+    const title = "Historial Clínico";
+    const author = "Veterinario: Dr. Juan Pérez";
+    const date = new Date().toLocaleDateString();
+    
+    // Configuración de las líneas
+    const line_width = 0.1; // Ancho de la línea
+    const line_color = "#000"; // Color de la línea
 
+    // Título del documento
+    doc.setFontSize(18);
+    doc.setFont("bold");
+    doc.text(title, 10, 20);
+    
+    // Detalles del autor y la fecha
+    doc.setFontSize(12);
+    doc.setFont("normal");
+    doc.text(author, 10, 30);
+    doc.text("Fecha: " + date, 10, 35);
+    
+    // Espaciado
+    doc.text("", 10, 40); // Espacio en blanco
 
+    // Añadir contenido de la tabla
+    const table = document.querySelector("#tab2 table");
+    const rows = Array.from(table.querySelectorAll("tr")).map(row => 
+        Array.from(row.querySelectorAll("td, th")).map(cell => cell.innerText)
+    );
 
+    // Añadir encabezados de la tabla
+    const headers = rows[0];
+    headers.forEach((header, index) => {
+        doc.setFont("bold");
+        doc.text(header, 10 + (index * 40), 50);
+    });
 
+    // Añadir datos de cada fila
+    doc.setFont("normal");
+    rows.slice(1).forEach((row, rowIndex) => {
+        row.forEach((cell, cellIndex) => {
+            doc.text(cell, 10 + (cellIndex * 40), 60 + (rowIndex * 10)); // Ajustar según sea necesario
+        });
+    });
 
-
-
-
-
-
-
-
-
-
+    // Guardar el documento PDF
+    doc.save("historial_clinico.pdf");
+}
 
 
 

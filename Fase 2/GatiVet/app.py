@@ -7,6 +7,7 @@ from supabase import create_client
 from datetime import datetime
 import cloudinary
 import cloudinary.uploader  # Asegúrate de importar esto
+import uuid
 
 app = Flask(__name__)
 CORS(app)
@@ -549,7 +550,7 @@ def get_pets_by_id():
         pets_response = supabase.table('Mascota').select('id_mascota, nombre, edad, especie, raza, fecha_nacimiento, foto_url, Fallecimiento, causa_fallecimiento, sexo, num_microchip, tamaño, color_pelaje').eq('id_usuario', id_usuario).execute()
 
         # Realizar la consulta para obtener datos del usuario
-        user_response = supabase.table('Usuario').select('nombre, id_usuario, id_domicilio, celular, correo').eq('id_usuario', id_usuario).execute()
+        user_response = supabase.table('Usuario').select('nombre, appaterno, apmaterno, id_usuario, id_domicilio, celular, correo').eq('id_usuario', id_usuario).execute()
 
         # Verificar si hay datos del usuario
         if user_response.data:
@@ -1396,7 +1397,7 @@ def add_dewormer():
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
-#Ruta guardar ficha
+# Ruta guardar ficha
 @app.route('/api/insertar_historial', methods=['POST'])
 def insert_medical_history():
     data = request.json
@@ -1406,19 +1407,18 @@ def insert_medical_history():
     if not id_usuario:
         return jsonify({'error': 'ID de usuario no proporcionado.'}), 400
 
-    # Obtener las mascotas asociadas al id_usuario
-    pets_response = supabase.table('Mascota').select('id_mascota').eq('id_usuario', id_usuario).execute()
-    
-    if not pets_response.data:
-        return jsonify({'error': 'No se encontraron mascotas para el usuario proporcionado.'}), 404
+    # Obtener el id_mascota directamente del JSON enviado
+    id_mascota = data.get("id_mascota")
 
-    id_mascota = pets_response.data[0]['id_mascota']
+    # Validar que id_mascota no sea None
+    if not id_mascota:
+        return jsonify({'error': 'ID de mascota no proporcionado.'}), 400
+
     id_historial = str(uuid.uuid4())
 
     medical_history = {
         "id_historial": id_historial,
         "fecha": data.get("fecha"),
-        "descripcion": data.get("descripcion"),
         "hora_inicio": data.get("hora_inicio"),
         "temperatura": data.get("temperatura"),
         "frecuencia_cardiaca": data.get("frecuencia_cardiaca"),
@@ -1434,10 +1434,24 @@ def insert_medical_history():
 
     insert_response = supabase.table('HistorialMedico').insert(medical_history).execute()
 
-    if insert_response.error:
-        return jsonify({'error': 'Error al insertar en HistorialMedico.', 'details': insert_response.error}), 500
 
     return jsonify({'message': 'Historial médico insertado con éxito!', 'id_historial': id_historial}), 201
+
+##Ruta historial medico
+@app.route('/get_medical_history', methods=['GET'])
+def get_medical_history():
+    pet_id = request.args.get('id_mascota')  # Obtiene el id_mascota de la consulta
+    data = supabase.table('HistorialMedico').select('*').eq('id_mascota', pet_id).execute()
+
+
+    return jsonify(data.data), 200  # Devuelve los datos obtenidos
+
+@app.route('/get_medical_record', methods=['GET'])
+def get_medical_record():
+    record_id = request.args.get('id_historial')
+    data = supabase.table('HistorialMedico').select('*').eq('id_historial', record_id).execute()
+
+    return jsonify(data.data[0]), 200  # Devuelve el primer resultado
 
 
 if __name__ == '__main__':

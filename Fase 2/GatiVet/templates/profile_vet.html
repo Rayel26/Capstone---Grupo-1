@@ -8,6 +8,7 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/Logo Gativet.png') }}">
     <link rel="stylesheet" href="static/styles/profile_vet.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
@@ -682,45 +683,22 @@
                             <tr class="bg-gray-100">
                                 <th class="border border-gray-300 p-1 text-left rounded-tl-lg rounded-tr-lg">Fecha</th>
                                 <th class="border border-gray-300 p-1 text-left">Motivo de Consulta</th>
+                                <th class="border border-gray-300 p-1 text-left">Examen Físico</th>
                                 <th class="border border-gray-300 p-1 text-left">Diagnóstico</th>
-                                <th class="border border-gray-300 p-1 text-left">Tratamiento</th>
+                                <th class="border border-gray-300 p-1 text-left">Indicaciones y tratamientos</th>
                                 <th class="border border-gray-300 p-1 text-left rounded-bl-lg rounded-br-lg">Detalles de
                                     la Cita</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td id="citaFecha1" class="border border-gray-300 p-1 rounded-b-lg">01/01/2024</td>
-                                <td id="citaMotivo1" class="border border-gray-300 p-1">Chequeo general</td>
-                                <td id="citaDiagnostico1" class="border border-gray-300 p-1">Salud óptima</td>
-                                <td id="citaTratamiento1" class="border border-gray-300 p-1">Vacuna aplicada</td>
-                                <td class="border border-gray-300 p-1"><button onclick="openModal('modal1')"
-                                        class="text-green-500 hover:underline">Ver detalles</button></td>
-                            </tr>
-                            <tr>
-                                <td class="border border-gray-300 p-1 rounded-b-lg">15/02/2024</td>
-                                <td class="border border-gray-300 p-1">Tos persistente</td>
-                                <td class="border border-gray-300 p-1">Infección respiratoria</td>
-                                <td class="border border-gray-300 p-1">Antibióticos recetados</td>
-                                <td class="border border-gray-300 p-1"><button onclick="openModal('modal2')"
-                                        class="text-green-500 hover:underline">Ver detalles</button></td>
-                            </tr>
-                            <tr>
-                                <td class="border border-gray-300 p-1 rounded-b-lg">10/03/2024</td>
-                                <td class="border border-gray-300 p-1">Control de parásitos</td>
-                                <td class="border border-gray-300 p-1">Parásitos detectados</td>
-                                <td class="border border-gray-300 p-1">Desparasitante administrado</td>
-                                <td class="border border-gray-300 p-1"><button onclick="openModal('modal3')"
-                                        class="text-green-500 hover:underline">Ver detalles</button></td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
+
+
                 <!-- Botón para exportar PDF -->
                 <div class="mt-4">
-                    <button onclick="openExportModal()"
-                        class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">Exportar PDF de
-                        historial clínico</button>
+                    <button onclick="exportToPDF()" class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">Exportar PDF de historial clínico</button>
                 </div>
             </div>
 
@@ -738,51 +716,37 @@
             </div>
             <!-- Fin Contenido Historia Clínica -->
 
-            <!-- Modales para detalles de la cita -->
-            <div id="modal1" class="modal hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                <div
-                    class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full transition-all duration-300 transform scale-95">
+            <div id="modal-detail" class="modal hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full transition-all duration-300 transform scale-95" onclick="event.stopPropagation();">
                     <h2 class="text-xl font-semibold mb-4">Detalles de la Cita</h2>
                     <div class="space-y-4 text-gray-600">
                         <label class="block">
-                            <strong>Fecha:</strong>
-                            <input type="date" id="editFecha1"
-                                class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300"
-                                value="2024-01-01">
+                            <strong>Hora de Inicio:</strong>
+                            <input type="time" id="editHoraInicio" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300">
                         </label>
                         <label class="block">
-                            <strong>Motivo de Consulta:</strong>
-                            <input type="text" id="editMotivo1"
-                                class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300"
-                                value="Chequeo general">
+                            <strong>Temperatura:</strong>
+                            <input type="number" id="editTemperatura" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300">
                         </label>
                         <label class="block">
-                            <strong>Diagnóstico:</strong>
-                            <input type="text" id="editDiagnostico1"
-                                class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300"
-                                value="Salud óptima">
+                            <strong>Frecuencia Cardíaca:</strong>
+                            <input type="number" id="editFrecuenciaCardiaca" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300">
                         </label>
                         <label class="block">
-                            <strong>Tratamiento:</strong>
-                            <input type="text" id="editTratamiento1"
-                                class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300"
-                                value="Vacuna aplicada">
+                            <strong>Frecuencia Respiratoria:</strong>
+                            <input type="number" id="editFrecuenciaRespiratoria" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300">
+                        </label>
+                        <label class="block">
+                            <strong>Peso:</strong>
+                            <input type="number" id="editPeso" class="block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-green-300">
                         </label>
                     </div>
-                    <button onclick="guardarCambios('1')"
-                        class="mt-4 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200"
-                        style="background-color: #69d9cd;">
-                        Guardar Cambios
-                    </button>
-                    <button onclick="closeModal('modal1')"
-                        class="mt-2 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200"
-                        style="background-color: #69d9cd;">
+                    <!-- Botón Cerrar con nuevo ID -->
+                    <button id="close-modal-detail" class="mt-4 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200" style="background-color: #69d9cd;">
                         Cerrar
                     </button>
                 </div>
             </div>
-            <!-- Fin Contenido Historia Clínica -->
-
 
             <!-- Contenido Vacunas -->
             <div id="tab3" class="hidden p-6">
