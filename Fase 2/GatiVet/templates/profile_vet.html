@@ -404,27 +404,30 @@
                 </div>
             </form>
 
-
             <!-- Contenido del paciente después de la búsqueda -->
             <div id="pet-data" class="flex justify-center mt-4 hidden">
                 <div class="w-full max-w-md">
                     <h2 class="text-lg font-bold text-center text-green-600 mb-4">Datos del Dueño</h2>
                     <div class="border border-blue-300 p-6 rounded-lg shadow-lg bg-white">
                         <p class="text-gray-700 text-sm mb-2">
-                            <strong>Nombre del Dueño:</strong> <span id="owner-name" class="text-gray-600">Nombre del
+                            <strong>Nombre:</strong> <span id="owner-name" class="text-gray-600">Nombre del
                                 Dueño</span>
                         </p>
                         <p class="text-gray-700 text-sm mb-2">
-                            <strong>Dirección del Dueño:</strong> <span id="owner-address"
-                                class="text-gray-600">Dirección del Dueño</span>
+                            <strong>Rut:</strong> <span id="owner-rut" class="text-gray-600">Rut del
+                                Dueño</span>
                         </p>
                         <p class="text-gray-700 text-sm mb-2">
-                            <strong>Teléfono del Dueño:</strong> <span id="owner-phone" class="text-gray-600">Teléfono
+                            <strong>Dirección:</strong> <span id="owner-address" class="text-gray-600">Dirección del
+                                Dueño</span>
+                        </p>
+                        <p class="text-gray-700 text-sm mb-2">
+                            <strong>Teléfono:</strong> <span id="owner-phone" class="text-gray-600">Teléfono
                                 del Dueño</span>
                         </p>
                         <p class="text-gray-700 text-sm mb-4">
-                            <strong>Correo Electrónico del Dueño:</strong> <span id="owner-email"
-                                class="text-gray-600">Correo Electrónico del Dueño</span>
+                            <strong>Correo:</strong> <span id="owner-email" class="text-gray-600">Correo Electrónico del
+                                Dueño</span>
                         </p>
                     </div>
                 </div>
@@ -809,35 +812,43 @@
             </div>
 
             <!-- Modal para añadir vacuna -->
-            <div id="addVaccineModal" class="modal hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div id="addVaccineModal"
+                class="modal hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                 <div class="bg-white rounded-lg shadow-lg p-6">
                     <h2 class="text-xl font-bold mb-4">Añadir Vacuna</h2>
                     <form id="addVaccineForm">
                         <div class="mb-4">
                             <label for="vacunaFecha" class="block mb-2">Fecha:</label>
-                            <input type="date" id="vacunaFecha" class="border border-gray-300 rounded-md p-1 w-full" required>
+                            <input type="date" id="vacunaFecha" class="border border-gray-300 rounded-md p-1 w-full"
+                                required>
                         </div>
                         <div class="mb-4">
                             <label for="vacunaNombre" class="block mb-2">Vacuna:</label>
-                            <input type="text" id="vacunaNombre" class="border border-gray-300 rounded-md p-1 w-full" required>
+                            <input type="text" id="vacunaNombre" class="border border-gray-300 rounded-md p-1 w-full"
+                                required>
                         </div>
                         <div class="mb-4">
                             <label for="vacunaDosis" class="block mb-2">Dosis:</label>
-                            <input type="text" id="vacunaDosis" class="border border-gray-300 rounded-md p-1 w-full" required>
+                            <input type="text" id="vacunaDosis" class="border border-gray-300 rounded-md p-1 w-full"
+                                required>
                         </div>
                         <div class="mb-4">
                             <label for="vacunaVeterinario" class="block mb-2">Veterinario:</label>
-                            <input type="text" id="vacunaVeterinario" class="border border-gray-300 rounded-md p-1 w-full" required>
+                            <input type="text" id="vacunaVeterinario"
+                                class="border border-gray-300 rounded-md p-1 w-full" required>
                         </div>
                         <div class="flex justify-end">
-                            <button type="button" class="mt-4 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200 mr-5" style="background-color: #69d9cd;" onclick="addVaccine()">Agregar</button>
-                            <button type="button" class="mt-4 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200" style="background-color: #f83131;" onclick="closeModal()">Cancelar</button>
+                            <button type="button"
+                                class="mt-4 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200 mr-5"
+                                style="background-color: #69d9cd;" onclick="addVaccine()">Agregar</button>
+                            <button type="button"
+                                class="mt-4 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200"
+                                style="background-color: #f83131;" onclick="closeModal()">Cancelar</button>
                         </div>
                     </form>
                 </div>
             </div>
             <!-- Fin Contenido Vacunas -->
-
 
 
             <!-- Contenido Desparasitaciones -->
@@ -862,8 +873,9 @@
                 </div>
                 <!-- Botón para añadir desparasitacion -->
                 <div class="flex justify-end mt-4">
-                    <button id="addDesparasitacionBtn" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
-                    onclick="openAddDewormerModal()">Añadir Desparasitacion</button>
+                    <button id="addDesparasitacionBtn"
+                        class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+                        onclick="openAddDewormerModal()">Añadir Desparasitacion</button>
                 </div>
 
             </div>
@@ -903,188 +915,86 @@
 
             <!-- Comienzo Ficha -->
             <div id="tab5" class="hidden p-6">
-                <h2 class="text-2xl font-bold">Ficha</h2>
-
-                <!-- Card para Datos del propietario -->
-                <section class="mt-6">
-                    <h3 class="text-lg font-semibold">Datos del propietario</h3>
-                    <div class="bg-gray-100 p-4 rounded-lg shadow-md">
-                        <form id="ownerForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <label class="block text-gray-600 text-sm mt-2">
-                                Nombre:
-                                <input type="text" id="ownerName"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" value="Juan"
-                                    disabled>
-                            </label>
-                            <label class="block mt-2">
-                                Apellido:
-                                <input type="text" id="ownerLastName"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    value="Pérez" disabled>
-                            </label>
-                            <label class="block mt-2">
-                                RUT:
-                                <input type="text" id="ownerRUT"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    value="12.345.678-9" disabled>
-                            </label>
-                            <label class="block mt-2">
-                                Cédula de Identidad:
-                                <input type="text" id="ownerID"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    value="98765432" disabled>
-                            </label>
-                            <label class="block mt-2">
-                                Dirección de residencia:
-                                <input type="text" id="ownerAddress"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    value="Av. Libertador Bernardo O'Higgins 123" disabled>
-                            </label>
-                            <label class="block mt-2">
-                                Teléfono:
-                                <input type="text" id="ownerPhone"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    value="987654321" disabled>
-                            </label>
-                            <label class="block mt-2">
-                                Correo:
-                                <input type="email" id="ownerEmail"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    value="juan.perez@example.com" disabled>
-                            </label>
-                        </form>
-                    </div>
-                </section>
-
-                <!-- Card para Reseña -->
-                <section class="mt-6">
-                    <h3 class="text-lg font-semibold">Reseña</h3>
-                    <div class="bg-gray-100 p-4 rounded-lg shadow-md">
-                        <form id="patientForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <label class="block mt-2">
-                                Nombre del paciente:
-                                <input type="text" id="patientName"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    value="Firulais" disabled>
-                            </label>
-                            <label class="block mt-2">
-                                Especie:
-                                <input type="text" id="patientSpecies"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    value="Perro" disabled>
-                            </label>
-                            <label class="block mt-2">
-                                Raza:
-                                <input type="text" id="patientBreed"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    value="Labrador" disabled>
-                            </label>
-                            <label class="block mt-2">
-                                Sexo:
-                                <input type="text" id="patientSex"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    value="Macho" disabled>
-                            </label>
-                            <label class="block mt-2">
-                                Fecha de nacimiento:
-                                <input type="date" id="patientBirthDate"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    value="2020-01-01" disabled>
-                            </label>
-                            <label class="block mt-2">
-                                Peso a ultima fecha (en kg):
-                                <input type="text" id="patientWeight"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    value="30000" disabled>
-                            </label>
-                            <label class="block mt-2">
-                                Color:
-                                <input type="text" id="patientColor"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    value="Amarillo" disabled>
-                            </label>
-                            <label class="block mt-2">
-                                Tipo de Pelaje:
-                                <input type="text" id="patientFurType"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    value="Corto" disabled>
-                            </label>
-                        </form>
-                    </div>
-                </section>
+                <h2 class="text-2xl font-bold">Ficha de:</h2>
 
                 <!-- Card para Anamnesis -->
                 <section class="mt-6">
                     <h3 class="text-lg font-semibold">Anamnesis</h3>
-                    <div class="bg-gray-100 p-4 rounded-lg shadow-md">
-                        <form id="anamnesisForm" class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <label class="block mt-2">
-                                Hora de inicio de la consulta:
-                                <input type="time" id="consultationStartTime"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm" min="09:00"
-                                    max="18:00" required>
-                            </label>
-                            <label class="block mt-2">
-                                Temperatura del animal (°C):
-                                <input type="number" id="animalTemperature"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                    placeholder="Temperatura en grados Celsius" step="0.1" min="32" max="41">
-                                <small class="text-gray-500">Usar punto (.) para decimales</small>
-                            </label>
+                    <div class="bg-gray-100 p-4 rounded-lg shadow-md w-full max-w-screen-lg mx-auto">
+                        <form id="anamnesisForm" class="grid gap-4">
+                            <!-- Fecha y hora -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <label class="block">
+                                    Fecha:
+                                    <input type="date" id="consultationDate"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
+                                        required>
+                                </label>
+                                <label class="block">
+                                    Hora de inicio de la consulta:
+                                    <input type="time" id="consultationStartTime"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
+                                        min="09:00" max="18:00" required>
+                                </label>
+                                <label class="block">
+                                    Temperatura del animal (°C):
+                                    <input type="number" id="animalTemperature"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
+                                        placeholder="Temperatura en grados Celsius" step="0.1" min="32" max="41">
+                                    <small class="text-gray-500">Usar punto (.) para decimales</small>
+                                </label>
+                            </div>
 
-                            <label class="block mt-2">
-                                Dieta:
-                                <input type="text" id="diet"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm">
-                            </label>
+                            <!-- Frecuencias y Peso -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <label class="block">
+                                    Frec. Cardíaca (latidos/min):
+                                    <input type="number" id="heartRate"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
+                                        placeholder="Latidos por minuto" step="1" min="60" max="220">
+                                </label>
+                                <label class="block">
+                                    Frec. Respiratoria (resp/min):
+                                    <input type="number" id="respiratoryRate"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
+                                        placeholder="Respiraciones por minuto" step="1" min="10" max="60">
+                                </label>
+                                <label class="block">
+                                    Peso a última fecha (en kg):
+                                    <input type="text" id="patientWeight"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
+                                        value="30000">
+                                </label>
+                            </div>
 
-                            <!-- Modificaciones realizadas aquí -->
-                            <label class="block mt-2 col-span-1 md:col-span-2">
+                            <!-- Campos de texto en ancho completo -->
+                            <label class="block w-full">
                                 Motivo de la consulta:
                                 <textarea id="consultationReason"
                                     class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
                                     rows="3"></textarea>
                             </label>
-                            <label class="block mt-2 col-span-1 md:col-span-2">
+                            <label class="block w-full">
                                 Examen físico:
                                 <textarea id="physicalExam"
                                     class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
                                     rows="3"></textarea>
                             </label>
-                            <label class="block mt-2 col-span-1 md:col-span-2">
+                            <label class="block w-full">
                                 Diagnóstico:
                                 <textarea id="diagnosis"
                                     class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
                                     rows="3"></textarea>
                             </label>
-                            <label class="block mt-2 col-span-1 md:col-span-2">
-                                Indicaciones:
+                            <label class="block w-full">
+                                Indicaciones y Tratamientos:
                                 <textarea id="indications"
                                     class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
                                     rows="3"></textarea>
                             </label>
-
-                            <!-- Select del doctor con alineación a la derecha en pantallas grandes -->
-                            <div class="col-span-1 md:col-span-2 md:col-start-2">
-                                <label for="staff-select"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccione un
-                                    doctor:</label>
-                                <select id="staff-select"
-                                    class="block w-full border border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                    onchange="updateDoctorInfoFromSelection()">
-                                    <option value="none" selected>Seleccione un doctor</option>
-                                    <option value="" disabled>-- Seleccione Dr(a) --</option>
-                                    <option value="doctor1" data-name="Dr. Nicolás Villalba"
-                                        data-image="static/img/doctor1.jpg">Dr. Nicolás Villalba</option>
-                                    <option value="doctor2" data-name="Dra. Kirito Aravena"
-                                        data-image="static/img/doctor2.jpg">Dra. Kirito Aravena</option>
-                                </select>
-                            </div>
                         </form>
                     </div>
                 </section>
-
-
 
                 <!-- Botón guardar -->
                 <button id="saveButton"

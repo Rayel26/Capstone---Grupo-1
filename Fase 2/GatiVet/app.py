@@ -549,20 +549,23 @@ def get_pets_by_id():
         pets_response = supabase.table('Mascota').select('id_mascota, nombre, edad, especie, raza, fecha_nacimiento, foto_url, Fallecimiento, causa_fallecimiento, sexo, num_microchip, tamaño, color_pelaje').eq('id_usuario', id_usuario).execute()
 
         # Realizar la consulta para obtener datos del usuario
-        user_response = supabase.table('Usuario').select('nombre, id_domicilio, celular, correo').eq('id_usuario', id_usuario).execute()
+        user_response = supabase.table('Usuario').select('nombre, id_usuario, id_domicilio, celular, correo').eq('id_usuario', id_usuario).execute()
 
         # Verificar si hay datos del usuario
         if user_response.data:
             user_data = user_response.data[0]
             id_domicilio = user_data['id_domicilio']
-
+            
+            # Asignar el rut
+            user_data['rut'] = id_usuario  # Asignamos id_usuario como rut
+            
             # Realizar la consulta para obtener la dirección del domicilio
             domicilio_response = supabase.table('Domicilio').select('direccion').eq('id_domicilio', id_domicilio).execute()
 
             # Asignar la dirección al usuario
             user_data['direccion'] = domicilio_response.data[0]['direccion'] if domicilio_response.data else "N/A"
         else:
-            user_data = {'direccion': "N/A", 'nombre': "N/A", 'celular': "N/A", 'correo': "N/A"}  # Datos por defecto si no se encuentra el usuario
+            user_data = {'rut': id_usuario, 'direccion': "N/A", 'nombre': "N/A", 'celular': "N/A", 'correo': "N/A", 'id_usuario': "N/A"}  # Datos por defecto si no se encuentra el usuario
 
         if pets_response.data is None:
             return jsonify({'error': 'Error al obtener mascotas.'}), 500
@@ -1287,7 +1290,6 @@ def get_vaccines_by_pet_id():
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
-
 # Ruta para agregar una nueva vacuna
 @app.route('/add_vaccine', methods=['POST'])
 def add_vaccine():
@@ -1393,6 +1395,50 @@ def add_dewormer():
     except Exception as e:
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
+
+#Ruta guardar ficha
+@app.route('/api/insertar_historial', methods=['POST'])
+def insert_medical_history():
+    data = request.json
+    id_usuario = data.get("id_usuario")
+
+    # Validaciones
+    if not id_usuario:
+        return jsonify({'error': 'ID de usuario no proporcionado.'}), 400
+
+    # Obtener las mascotas asociadas al id_usuario
+    pets_response = supabase.table('Mascota').select('id_mascota').eq('id_usuario', id_usuario).execute()
+    
+    if not pets_response.data:
+        return jsonify({'error': 'No se encontraron mascotas para el usuario proporcionado.'}), 404
+
+    id_mascota = pets_response.data[0]['id_mascota']
+    id_historial = str(uuid.uuid4())
+
+    medical_history = {
+        "id_historial": id_historial,
+        "fecha": data.get("fecha"),
+        "descripcion": data.get("descripcion"),
+        "hora_inicio": data.get("hora_inicio"),
+        "temperatura": data.get("temperatura"),
+        "frecuencia_cardiaca": data.get("frecuencia_cardiaca"),
+        "frecuencia_respiratoria": data.get("frecuencia_respiratoria"),
+        "peso": data.get("peso"),
+        "motivo_consulta": data.get("motivo_consulta"),
+        "examen_fisico": data.get("examen_fisico"),
+        "diagnostico": data.get("diagnostico"),
+        "indicaciones_tratamientos": data.get("indicaciones_tratamientos"),
+        "id_mascota": id_mascota,
+        "id_usuario": id_usuario
+    }
+
+    insert_response = supabase.table('HistorialMedico').insert(medical_history).execute()
+
+    if insert_response.error:
+        return jsonify({'error': 'Error al insertar en HistorialMedico.', 'details': insert_response.error}), 500
+
+    return jsonify({'message': 'Historial médico insertado con éxito!', 'id_historial': id_historial}), 201
+
 
 if __name__ == '__main__':
     app.run(debug=True)  # Ejecuta la aplicación en modo depuración

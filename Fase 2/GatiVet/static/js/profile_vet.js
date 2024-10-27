@@ -186,9 +186,7 @@ document.getElementById('upload-photo').addEventListener('change', function() {
     document.getElementById('upload-form').submit();
 });
 
-//////////
-// Ficha Clinica:
-
+//////////// Ficha Clinica://////////////
 // Script para el comportamiento de las pestañas
 
 // Lógica de navegación de pestañas
@@ -219,7 +217,7 @@ tabButtons.forEach(tab => {
 
 
 ////////////
-// Ficha clinica
+// Fichas clinicas
 // Función para buscar por ID de usuario
 function searchPetByUserId() {
     const userId = document.getElementById("rut-paciente-nuevo").value; // Obtener el ID de usuario
@@ -252,6 +250,7 @@ function searchPetByUserId() {
             const ownerData = data.user; // Asignar los datos del dueño
 
             document.getElementById("owner-name").textContent = ownerData.nombre || "Nombre no disponible";
+            document.getElementById("owner-rut").textContent = ownerData.rut || "Rut no disponible";
             document.getElementById("owner-address").textContent = ownerData.direccion || "Dirección no disponible";
             document.getElementById("owner-phone").textContent = ownerData.celular || "Teléfono no disponible";
             document.getElementById("owner-email").textContent = ownerData.correo || "Correo no disponible";
@@ -722,79 +721,95 @@ function cerrarModal() {
 //Fin de script relacionado a datos de mascotas
 
 ////////////////////////////////
-//Inicio de Script de Ficha
+document.getElementById('saveButton').addEventListener('click', async function() {
+    // Obtener los valores de los campos del formulario
+    const consultationDate = document.getElementById('consultationDate').value;
+    const consultationStartTime = document.getElementById('consultationStartTime').value;
+    const animalTemperature = parseFloat(document.getElementById('animalTemperature').value);
+    const heartRate = parseInt(document.getElementById('heartRate').value);
+    const respiratoryRate = parseInt(document.getElementById('respiratoryRate').value);
+    const patientWeight = parseFloat(document.getElementById('patientWeight').value);
+    const consultationReason = document.getElementById('consultationReason').value;
+    const physicalExam = document.getElementById('physicalExam').value;
+    const diagnosis = document.getElementById('diagnosis').value;
+    const indications = document.getElementById('indications').value;
 
-// Guardar la información
-document.getElementById('saveButton').addEventListener('click', () => {
-    document.getElementById('confirmationModal').classList.remove('hidden');
-});
-
-document.getElementById('confirmSave').addEventListener('click', () => {
-    const ownerData = {
-        ownerName: document.getElementById('ownerName').value,
-        ownerLastName: document.getElementById('ownerLastName').value,
-        ownerRUT: document.getElementById('ownerRUT').value,
-        ownerID: document.getElementById('ownerID').value,
-        ownerAddress: document.getElementById('ownerAddress').value,
-        ownerPhone: document.getElementById('ownerPhone').value,
-        ownerEmail: document.getElementById('ownerEmail').value
-    };
-
-    const patientData = {
-        patientName: document.getElementById('patientName').value,
-        patientSpecies: document.getElementById('patientSpecies').value,
-        patientBreed: document.getElementById('patientBreed').value,
-        patientSex: document.getElementById('patientSex').value,
-        patientBirthDate: document.getElementById('patientBirthDate').value,
-        patientWeight: document.getElementById('patientWeight').value,
-        patientColor: document.getElementById('patientColor').value,
-        patientFurType: document.getElementById('patientFurType').value,
-        consultationReason: document.getElementById('consultationReason').value
-    };
-
-    // Guardar en localStorage
-    localStorage.setItem('ownerData', JSON.stringify(ownerData));
-    localStorage.setItem('patientData', JSON.stringify(patientData));
-
-    // Cerrar el modal
-    document.getElementById('confirmationModal').classList.add('hidden');
-
-    alert('Ficha guardada exitosamente.');
-});
-
-document.getElementById('cancelSave').addEventListener('click', () => {
-    document.getElementById('confirmationModal').classList.add('hidden');
-});
-
-// Cargar datos guardados al abrir la pestaña
-window.onload = () => {
-    const ownerData = JSON.parse(localStorage.getItem('ownerData'));
-    const patientData = JSON.parse(localStorage.getItem('patientData'));
-
-    if (ownerData) {
-        document.getElementById('ownerName').value = ownerData.ownerName;
-        document.getElementById('ownerLastName').value = ownerData.ownerLastName;
-        document.getElementById('ownerRUT').value = ownerData.ownerRUT;
-        document.getElementById('ownerID').value = ownerData.ownerID;
-        document.getElementById('ownerAddress').value = ownerData.ownerAddress;
-        document.getElementById('ownerPhone').value = ownerData.ownerPhone;
-        document.getElementById('ownerEmail').value = ownerData.ownerEmail;
+    // Validar los campos obligatorios (opcional)
+    if (!consultationDate || !consultationStartTime) {
+        alert("Por favor, completa todos los campos obligatorios.");
+        return;
     }
 
-    if (patientData) {
-        document.getElementById('patientName').value = patientData.patientName;
-        document.getElementById('patientSpecies').value = patientData.patientSpecies;
-        document.getElementById('patientBreed').value = patientData.patientBreed;
-        document.getElementById('patientSex').value = patientData.patientSex;
-        document.getElementById('patientBirthDate').value = patientData.patientBirthDate;
-        document.getElementById('patientWeight').value = patientData.patientWeight;
-        document.getElementById('patientColor').value = patientData.patientColor;
-        document.getElementById('patientFurType').value = patientData.patientFurType;
-        document.getElementById('consultationReason').value = patientData.consultationReason;
-    }
-};
+    // Obtener ID de usuario y mascota de otra manera antes de enviar el formulario
+    const id_usuario = 'ID_DEL_USUARIO'; // Deberías obtenerlo dinámicamente (ej. desde el almacenamiento local o al iniciar sesión)
+    const id_mascota = 'ID_DE_LA_MASCOTA'; // Deberías obtenerlo dinámicamente
 
-//Fin de script de Ficha
+    // Crear el objeto para enviar
+    const medicalHistory = {
+        fecha: consultationDate,
+        hora_inicio: consultationStartTime,
+        temperatura: animalTemperature,
+        frecuencia_cardiaca: heartRate,
+        frecuencia_respiratoria: respiratoryRate,
+        peso: patientWeight,
+        motivo_consulta: consultationReason,
+        examen_fisico: physicalExam,
+        diagnostico: diagnosis,
+        indicaciones_tratamientos: indications,
+        id_mascota: id_mascota,
+        id_usuario: id_usuario
+    };
+
+    // Enviar los datos al servidor
+    try {
+        const response = await fetch('http://127.0.0.1:5000/api/insertar_historial', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(medicalHistory),
+        });
+    
+        // Verificar la respuesta del servidor
+        const result = await response.json();
+    
+        if (response.ok) {
+            alert("Ficha guardada correctamente!");
+            // Limpiar el formulario si es necesario
+            document.getElementById('anamnesisForm').reset();
+        } else {
+            alert("Error al guardar la ficha: " + result.error);
+        }
+    } catch (error) {
+        console.error('Error al enviar los datos:', error);
+        alert("Hubo un problema al enviar la solicitud. Intenta nuevamente más tarde.");
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ///////////////////////////////////////////////////////
 // Script para editar información de modals de citas
