@@ -726,7 +726,6 @@ def guardar_comentario():
         return jsonify({'error': str(e)}), 500
 
 # Ruta para el perfil de veterinario
-# Ruta para el perfil de veterinario
 @app.route('/profile_vet', methods=['GET'])
 @login_required
 @role_required('vet')  # Asegurarse de que este decorador existe para verificar el rol del usuario
@@ -770,8 +769,7 @@ def profile_vet():
     # Renderizar la plantilla con los datos del veterinario y su domicilio
     return render_template('profile_vet.html', vet=vet)
 
-
-
+#Ruta guardar datos veterinarios
 @app.route('/save_vet_data', methods=['POST']) 
 @login_required
 @role_required('vet')  # Verifica el rol del usuario
@@ -845,7 +843,6 @@ def save_vet_data():
     except Exception as e:
         print("Error:", str(e))
         return jsonify({'success': False, 'message': str(e)}), 500
-
 
 #Ruta para el panel de administrador
 @app.route('/admin_dashboard')
@@ -1133,9 +1130,7 @@ def get_users():
 def get_supabase_key():
     return jsonify({'supabase_key': SUPABASE_KEY})
 
-
 ##Subir foto vet
-
 @app.route('/upload_photo_vet', methods=['POST'])
 @login_required  # Asegúrate de que solo usuarios autenticados puedan subir fotos
 @role_required('vet')  # Asegúrate de que solo los veterinarios puedan cambiar su foto
@@ -1174,7 +1169,6 @@ def upload_photo_vet():
     return redirect(url_for('profile_vet'))  # Redirigir al perfil del veterinario
 
 ##actualizar estado
-
 @app.route('/update-pet-status', methods=['POST'])
 def update_pet_status():
     data = request.json
@@ -1207,9 +1201,7 @@ def update_pet_status():
         print(f"Error al actualizar la mascota: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
 
-
 ##Obtener estado
-
 @app.route('/get-pet-status', methods=['GET'])
 def get_pet_status():
     pet_id = request.args.get('pet_id') or request.args.get('id_mascota')  # Acepta ambos
@@ -1239,7 +1231,6 @@ def get_pet_status():
         return jsonify({"error": "Error al procesar la solicitud: " + str(e)}), 500
 
 ##Editar mascota
-
 @app.route('/update_pet/<pet_id>', methods=['POST'])
 def update_pet(pet_id):
     data = request.json
@@ -1268,7 +1259,140 @@ def update_pet(pet_id):
 
     return jsonify({"message": "Mascota actualizada exitosamente."}), 200
 
+# Ruta para obtener vacunas por ID de mascota
+@app.route('/get_vaccines_by_pet_id', methods=['GET'])
+def get_vaccines_by_pet_id():
+    id_mascota = request.args.get('id_mascota')
 
+    try:
+        # Validar que se ha proporcionado el ID de la mascota
+        if not id_mascota:
+            return jsonify({'error': 'ID de mascota no proporcionado.'}), 400
+
+        # Obtener las vacunas asociadas al id_mascota
+        vaccines_response = supabase.table('Vacuna').select('id_vacuna, fecha, nombre_vacuna, dosis, nombre_veterinario').eq('id_mascota', id_mascota).execute()
+
+        # Verificar si hay un error en la respuesta
+        if hasattr(vaccines_response, 'error') and vaccines_response.error:
+            return jsonify({'error': 'Error al obtener vacunas.', 'details': vaccines_response.error.message}), 500
+
+        # Verificar si se obtuvieron datos
+        if not vaccines_response.data:
+            return jsonify({'vaccines': []}), 200
+
+        # Retornar las vacunas obtenidas
+        return jsonify({'vaccines': vaccines_response.data}), 200
+
+    except Exception as e:
+        print("Error al procesar la solicitud:", str(e))
+        return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
+
+
+# Ruta para agregar una nueva vacuna
+@app.route('/add_vaccine', methods=['POST'])
+def add_vaccine():
+    data = request.json
+    try:
+        # Extraer los datos del cuerpo de la solicitud
+        fecha = data.get('fecha')
+        nombre_vacuna = data.get('nombre_vacuna')
+        dosis = data.get('dosis')
+        nombre_veterinario = data.get('nombre_veterinario')
+        id_mascota = data.get('id_mascota')  # Debes enviar este campo desde el frontend
+
+        # Validar que los campos no estén vacíos
+        if not all([fecha, nombre_vacuna, dosis, nombre_veterinario, id_mascota]):
+            return jsonify({'error': 'Todos los campos son requeridos.'}), 400
+
+        # Insertar la nueva vacuna en la tabla Vacuna
+        response = supabase.table('Vacuna').insert({
+            'fecha': fecha,
+            'nombre_vacuna': nombre_vacuna,
+            'dosis': dosis,
+            'nombre_veterinario': nombre_veterinario,
+            'id_mascota': id_mascota  # Establecer la FK
+        }).execute()
+
+        # Verificar si hubo un error en la respuesta
+        if isinstance(response, Exception):
+            return jsonify({'error': 'Error al agregar vacuna.', 'details': str(response)}), 500
+        
+        if response.data is None:
+            return jsonify({'error': 'No se recibió respuesta de Supabase.', 'details': str(response)}), 500
+
+        # Retornar la nueva vacuna creada (opcional)
+        return jsonify({'message': 'Vacuna añadida exitosamente.', 'data': response.data}), 201
+
+    except Exception as e:
+        print("Error al procesar la solicitud:", str(e))
+        return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
+
+# Ruta para obtener despracitaciones por ID de mascota
+@app.route('/get_dewormer_by_pet_id', methods=['GET'])
+def get_dewormer_by_pet_id():
+    id_mascota = request.args.get('id_mascota')
+
+    try:
+        # Validar que se ha proporcionado el ID de la mascota
+        if not id_mascota:
+            return jsonify({'error': 'ID de mascota no proporcionado.'}), 400
+
+        # Obtener las vacunas asociadas al id_mascota
+        dewormer_response = supabase.table('Desparacitacion').select('id_desparacitacion, fecha, nombre_desparacitador, dosis, nombre_veterinario').eq('id_mascota', id_mascota).execute()
+
+        # Verificar si hay un error en la respuesta
+        if hasattr(dewormer_response, 'error') and dewormer_response.error:
+            return jsonify({'error': 'Error al obtener desparacitaciones.', 'details': dewormer_response.error.message}), 500
+
+        # Verificar si se obtuvieron datos
+        if not dewormer_response.data:
+            return jsonify({'dewormer': []}), 200
+
+        # Retornar las vacunas obtenidas
+        return jsonify({'dewormer': dewormer_response.data}), 200
+
+    except Exception as e:
+        print("Error al procesar la solicitud:", str(e))
+        return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
+
+# Ruta para agregar una nueva vacuna
+@app.route('/add_dewormer', methods=['POST'])
+def add_dewormer():
+    data = request.json
+    try:
+        # Extraer los datos del cuerpo de la solicitud
+        fecha = data.get('fecha')
+        nombre_desparacitador = data.get('nombre_desparacitador')
+        dosis = data.get('dosis')
+        nombre_veterinario = data.get('nombre_veterinario')
+        id_mascota = data.get('id_mascota')  # Debes enviar este campo desde el frontend
+
+        # Validar que los campos no estén vacíos
+        if not all([fecha, nombre_desparacitador, dosis, nombre_veterinario, id_mascota]):
+            return jsonify({'error': 'Todos los campos son requeridos.'}), 400
+
+        # Insertar la nueva desparacitación en la tabla Desparacitacion
+        response = supabase.table('Desparacitacion').insert({
+            'fecha': fecha,
+            'nombre_desparacitador': nombre_desparacitador,
+            'dosis': dosis,
+            'nombre_veterinario': nombre_veterinario,
+            'id_mascota': id_mascota  # Establecer la FK
+        }).execute()
+
+        # Verificar si hubo un error en la respuesta
+        if isinstance(response, Exception):
+            return jsonify({'error': 'Error al agregar desparacitacion.', 'details': str(response)}), 500
+        
+        if response.data is None:
+            return jsonify({'error': 'No se recibió respuesta de Supabase.', 'details': str(response)}), 500
+
+        # Retornar la nueva desparacitacion creada (opcional)
+        return jsonify({'message': 'Desparacitación añadida exitosamente.', 'data': response.data}), 201
+
+    except Exception as e:
+        print("Error al procesar la solicitud:", str(e))
+        return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)  # Ejecuta la aplicación en modo depuración

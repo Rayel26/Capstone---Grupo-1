@@ -220,8 +220,6 @@ tabButtons.forEach(tab => {
 
 ////////////
 // Ficha clinica
-
-
 // Función para buscar por ID de usuario
 function searchPetByUserId() {
     const userId = document.getElementById("rut-paciente-nuevo").value; // Obtener el ID de usuario
@@ -306,11 +304,6 @@ function showPetData(pet) {
         console.error("No se pudo cargar la imagen desde la URL:", pet.foto_url);
         profilePicture.src = ""; // Dejar en blanco si no se puede cargar
     };
-
-    document.getElementById("tab2").innerHTML = `<p>${pet.historia_clinica || 'No disponible'}</p>`;
-    document.getElementById("tab3").innerHTML = `<p>${pet.vacunas || 'No disponible'}</p>`;
-    document.getElementById("tab4").innerHTML = `<p>${pet.desparasitaciones || 'No disponible'}</p>`;
-    document.getElementById("tab5").innerHTML = `<p>${pet.estudios || 'No disponible'}</p>`;
 }
 
 // Evento para cambiar la mascota seleccionada
@@ -373,24 +366,7 @@ function closeModal(modalId) {
 }
 /// Fin Script para manejar el modal de vacunas-->
 
-/// Script para manejar el modal de desparacitaciones-->
-function openModal(modalId) {
-    const modal = document.getElementById(modalId);
-    modal.classList.remove('hidden');
-    modal.querySelector('.transform').classList.add('scale-100');
-    modal.querySelector('.transform').classList.remove('scale-95');
-}
 
-function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    modal.querySelector('.transform').classList.add('scale-95');
-    modal.querySelector('.transform').classList.remove('scale-100');
-    setTimeout(() => {
-        modal.classList.add('hidden');
-    }, 300); // Retraso para que la animación ocurra antes de ocultar
-}
-
-/// Fin Script para manejar el modal de desparacitaciones-->
 
 //Inicio Script relacionado a datos de mascota
 
@@ -1082,103 +1058,267 @@ timeInput.addEventListener('click', function () {
 });
 
 
-/////////////////////////////////////////////
-//Script para agregar vacunas
-
+///////////vacunas////////////////////////////////// 
+// Función para abrir el modal
 function openAddVaccineModal() {
     document.getElementById('addVaccineModal').classList.remove('hidden');
 }
 
-function closeModal(modalId) {
-    document.getElementById(modalId).classList.add('hidden');
+// Función para cerrar el modal
+function closeModal() {
+    const modal = document.getElementById('addVaccineModal');
+    modal.classList.add('hidden');
 }
 
-function addVaccine() {
-    // Obtener valores de los campos del formulario
+// Función para agregar vacuna
+async function addVaccine() {
     const fecha = document.getElementById('vacunaFecha').value;
     const nombre = document.getElementById('vacunaNombre').value;
     const dosis = document.getElementById('vacunaDosis').value;
     const veterinario = document.getElementById('vacunaVeterinario').value;
+    const id_mascota = document.getElementById("pet-select").value; // Obtener el ID de la mascota seleccionada
 
-    // Verificar que los campos no estén vacíos
+    // Validación de campos vacíos
     if (!fecha || !nombre || !dosis || !veterinario) {
         alert('Por favor, completa todos los campos.');
         return;
     }
 
-    // Crear una nueva fila en la tabla
-    const tbody = document.getElementById('vacunasTableBody'); // Cambié a usar el ID
-    const newRow = document.createElement('tr');
-    newRow.innerHTML = `
-        <td class="border border-gray-300 px-2 py-1">${fecha}</td>
-        <td class="border border-gray-300 px-2 py-1">${nombre}</td>
-        <td class="border border-gray-300 px-2 py-1">${dosis}</td>
-        <td class="border border-gray-300 px-2 py-1">${veterinario}</td>
-        <td class="border border-gray-300 px-2 py-1">
-            <button class="text-green-500 hover:underline" onclick="openModal('modalVacunaN')">Ver detalles</button>
-        </td>
-    `;
-    tbody.appendChild(newRow);
+    // Crear un nuevo objeto de vacuna
+    const nuevaVacuna = {
+        fecha: fecha,
+        nombre_vacuna: nombre,
+        dosis: dosis,
+        nombre_veterinario: veterinario,
+        id_mascota: id_mascota // Agregar la FK a la tabla Mascota
+    };
 
-    // Cerrar el modal
-    closeModal();
+    try {
+        // Llamada a la ruta Flask para insertar la nueva vacuna
+        const response = await fetch('/add_vaccine', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(nuevaVacuna)
+        });
 
-    // Limpiar el formulario
-    document.getElementById('addVaccineForm').reset();
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Error al agregar la vacuna:', errorData);
+            alert('Error al agregar la vacuna. Inténtalo de nuevo.');
+            return;
+        }
+
+        const data = await response.json();
+        console.log('Vacuna añadida:', data);
+
+        // Añadir una nueva fila a la tabla
+        const tbody = document.getElementById('vacunasTableBody');
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td class="border border-gray-300 px-2 py-1">${fecha}</td>
+            <td class="border border-gray-300 px-2 py-1">${nombre}</td>
+            <td class="border border-gray-300 px-2 py-1">${dosis}</td>
+            <td class="border border-gray-300 px-2 py-1">${veterinario}</td>
+        `;
+        tbody.appendChild(newRow);
+
+        // Cerrar el modal y resetear el formulario
+        closeModal();
+        document.getElementById('addVaccineForm').reset();
+    } catch (error) {
+        console.error('Error al procesar la solicitud:', error);
+        alert('Error al procesar la solicitud. Inténtalo de nuevo.');
+    }
 }
 
-//Script para agregar desparasitaciones
+// Función para obtener las vacunas de la mascota seleccionada
+function fetchVaccinesByPetId(petId) {
+    // Realizar la petición a la ruta de Flask para obtener las vacunas
+    fetch(`/get_vaccines_by_pet_id?id_mascota=${petId}`)
+        .then(response => {
+            if (!response.ok) {
+                console.error('Error al obtener vacunas:', response);
+                throw new Error('Error al obtener vacunas');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Datos de vacunas obtenidos:', data); // Añade este log
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+            displayVaccines(data.vaccines);
+        })
+        .catch(error => {
+            console.error("Error al obtener vacunas:", error);
+            alert("Ocurrió un error al buscar las vacunas.");
+        });
+}
 
-function openDesparasitacionModal() {
+// Función para mostrar las vacunas en la interfaz
+function displayVaccines(vaccines) {
+    const tbody = document.getElementById('vacunasTableBody');
+    tbody.innerHTML = ""; // Limpiar contenido previo
+
+    if (!vaccines || vaccines.length === 0) {
+    const noVaccinesRow = document.createElement("tr");
+    noVaccinesRow.innerHTML = `<td colspan="4" class="border border-gray-300 text-center">No hay vacunas registradas para esta mascota.</td>`;
+    tbody.appendChild(noVaccinesRow);
+    return;
+}
+
+    vaccines.forEach(vaccine => {
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = `
+            <td class="border border-gray-300 px-2 py-1">${vaccine.fecha}</td>
+            <td class="border border-gray-300 px-2 py-1">${vaccine.nombre_vacuna}</td>
+            <td class="border border-gray-300 px-2 py-1">${vaccine.dosis}</td>
+            <td class="border border-gray-300 px-2 py-1">${vaccine.nombre_veterinario}</td>
+        `;
+        tbody.appendChild(newRow);
+    });
+}
+
+// Evento para cambiar la mascota seleccionada
+document.getElementById("pet-select").addEventListener("change", function() {
+    const selectedPetId = this.value;
+
+    // Mostrar datos de la mascota seleccionada
+    fetchVaccinesByPetId(selectedPetId); // Llama a la función para obtener las vacunas
+});
+
+
+///////////Desparacitaciones//////////////////////////////////
+// Función para abrir el modal de desparasitaciones
+function openAddDewormerModal() {
     document.getElementById('desparasitacionModal').classList.remove('hidden');
 }
 
-function closeModal() {
-    document.getElementById('desparasitacionModal').classList.add('hidden');
+// Función para cerrar el modal
+function closeDewormerModal() {
+    const modal = document.getElementById('desparasitacionModal');
+    modal.classList.add('hidden');
 }
 
-function addDesparasitacion() {
-    // Obtener los valores del modal
+// Función para agregar desparasitaciones
+async function addDewormer() {
     const fecha = document.getElementById('newDesparasitacionFecha').value;
     const producto = document.getElementById('newDesparasitacionProducto').value;
     const dosis = document.getElementById('newDesparasitacionDosis').value;
     const veterinario = document.getElementById('newDesparasitacionVeterinario').value;
+    const id_mascota = document.getElementById("pet-select").value; // Obtener el ID de la mascota seleccionada
 
-    // Validar que todos los campos estén llenos
+    // Validación de campos vacíos
     if (!fecha || !producto || !dosis || !veterinario) {
-        alert("Por favor, completa todos los campos.");
+        alert('Por favor, completa todos los campos.');
         return;
     }
 
-    // Crear una nueva fila en la tabla
+    // Crear un nuevo objeto de desparacitación
+    const nuevaDesparasitacion = {
+        fecha: fecha,
+        nombre_desparacitador: producto,
+        dosis: dosis,
+        nombre_veterinario: veterinario,
+        id_mascota: id_mascota // Agregar la FK a la tabla Mascota
+    };
+
+    try {
+        // Llamada a la ruta Flask para insertar la nueva desparacitación
+        const response = await fetch('/add_dewormer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(nuevaDesparasitacion)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Error al agregar la desparacitación:', errorData);
+            alert('Error al agregar la desparacitación. Inténtalo de nuevo.');
+            return;
+        }
+
+        const data = await response.json();
+        console.log('Desparacitación añadida:', data);
+
+        // Llamar a la función para obtener las desparasitaciones actualizadas
+        fetchDewormersByPetId(id_mascota); // Actualizar la lista de desparasitaciones
+
+        // Resetear el formulario
+        const form = document.getElementById('addDewormerForm'); // Asegúrate de que este sea el ID correcto
+        if (form) {
+            form.reset();
+        } else {
+            console.error("El formulario no se encontró.");
+        }
+
+        // Cerrar el modal
+        closeDewormerModal();
+    } catch (error) {
+        console.error('Error al procesar la solicitud:', error);
+        alert('Error al procesar la solicitud. Inténtalo de nuevo.');
+    }
+}
+
+
+// Función para obtener desparasitaciones de la mascota seleccionada
+function fetchDewormersByPetId(petId) {
+    // Realizar la petición a la ruta de Flask para obtener las desparasitaciones
+    fetch(`/get_dewormer_by_pet_id?id_mascota=${petId}`)
+        .then(response => {
+            if (!response.ok) {
+                console.error('Error al obtener desparasitaciones:', response);
+                throw new Error('Error al obtener desparasitaciones');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Datos de desparasitaciones obtenidos:', data);
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+            displayDewormers(data.dewormer);
+        })
+        .catch(error => {
+            console.error("Error al obtener desparasitaciones:", error);
+            alert("Ocurrió un error al buscar las desparasitaciones.");
+        });
+}
+
+// Función para mostrar las desparasitaciones en la interfaz
+function displayDewormers(dewormers) {
     const tbody = document.getElementById('desparasitacionesTableBody');
-    const newRow = document.createElement('tr');
-    
-    newRow.innerHTML = `
-        <td class="border border-gray-300 px-2 py-1">${fecha}</td>
-        <td class="border border-gray-300 px-2 py-1">${producto}</td>
-        <td class="border border-gray-300 px-2 py-1">${dosis}</td>
-        <td class="border border-gray-300 px-2 py-1">${veterinario}</td>
-        <td class="border border-gray-300 px-2 py-1">
-            <button class="text-green-500 hover:underline" onclick="openModal('modalDesparasitacionNew')">Ver detalles</button>
-        </td>
-    `;
+    tbody.innerHTML = ""; // Limpiar contenido previo
 
-    // Agregar la nueva fila al tbody
-    tbody.appendChild(newRow);
+    if (!dewormers || dewormers.length === 0) {
+        const noDewormersRow = document.createElement("tr");
+        noDewormersRow.innerHTML = `<td colspan="4" class="border border-gray-300 text-center">No hay desparasitaciones registradas para esta mascota.</td>`;
+        tbody.appendChild(noDewormersRow);
+        return;
+    }
 
-    // Limpiar los campos del modal
-    document.getElementById('newDesparasitacionFecha').value = '';
-    document.getElementById('newDesparasitacionProducto').value = '';
-    document.getElementById('newDesparasitacionDosis').value = '';
-    document.getElementById('newDesparasitacionVeterinario').value = ''
+    dewormers.forEach(dewormer => {
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = `
+            <td class="border border-gray-300 px-2 py-1">${dewormer.fecha}</td>
+            <td class="border border-gray-300 px-2 py-1">${dewormer.nombre_desparacitador}</td>
+            <td class="border border-gray-300 px-2 py-1">${dewormer.dosis}</td>
+            <td class="border border-gray-300 px-2 py-1">${dewormer.nombre_veterinario}</td>
+        `;
+        tbody.appendChild(newRow);
+    });
 }
 
-//Modal PDF
-function openExportModal() {
-    document.getElementById('exportModal').classList.remove('hidden');
-}
+// Evento para cambiar la mascota seleccionada
+document.getElementById("pet-select").addEventListener("change", function() {
+    const selectedPetId = this.value;
 
-function closeExportModal() {
-    document.getElementById('exportModal').classList.add('hidden');
-}
+    // Mostrar datos de desparasitaciones de la mascota seleccionada
+    fetchDewormersByPetId(selectedPetId); // Llama a la función para obtener las desparasitaciones
+});
