@@ -13,26 +13,24 @@
                 </div>
             </div>
             <div class="flex flex-wrap">
-                <form class="mb-12 w-full shrink-0 grow-0 basis-auto md:px-3 lg:mb-0 lg:w-5/12 lg:px-6">
+                <form method="post" action="/contact" class="mb-12 w-full shrink-0 grow-0 basis-auto md:px-3 lg:mb-0 lg:w-5/12 lg:px-6">
                     <div class="mb-3 w-full">
                         <label class="block font-medium mb-[2px] text-teal-700" for="nombre">Nombre</label>
-                        <input type="text" class="px-2 py-2 border w-full outline-none rounded-md" id="nombre" placeholder="Nombre" />
+                        <input type="text" name="nombre" class="px-2 py-2 border w-full outline-none rounded-md" id="nombre" placeholder="Nombre" required />
                     </div>
                     <div class="mb-3 w-full">
                         <label class="block font-medium mb-[2px] text-teal-700" for="correo">Correo</label>
-                        <input type="email" class="px-2 py-2 border w-full outline-none rounded-md" id="correo" placeholder="Ingresa tu correo electrónico" />
+                        <input type="email" name="correo" class="px-2 py-2 border w-full outline-none rounded-md" id="correo" placeholder="Ingresa tu correo electrónico" required />
                     </div>
                     <div class="mb-3 w-full">
                         <label class="block font-medium mb-[2px] text-teal-700" for="mensaje">Mensaje</label>
-                        <textarea class="px-2 py-2 border rounded-[5px] w-full outline-none" id="mensaje" placeholder="Escribe tu mensaje aquí"></textarea>
+                        <textarea name="mensaje" class="px-2 py-2 border rounded-[5px] w-full outline-none" id="mensaje" placeholder="Escribe tu mensaje aquí" required></textarea>
                     </div>
-                    <!-- Botón para abrir el primer modal -->
-                    <button data-modal-target="#confirm-modal" data-modal-toggle="#confirm-modal"
-                        class="mb-6 inline-block w-full rounded bg-teal-400 px-6 py-2.5 font-medium uppercase leading-normal text-white hover:shadow-md hover:bg-teal-500 focus:ring-4 focus:outline-none focus:ring-blue-300 text-center"
-                        type="button">
+                    <button type="submit" class="mb-6 inline-block w-full rounded bg-teal-400 px-6 py-2.5 font-medium uppercase leading-normal text-white hover:shadow-md hover:bg-teal-500 focus:ring-4 focus:outline-none focus:ring-blue-300 text-center">
                         Enviar
                     </button>
                 </form>
+                
 
                 <div class="w-full shrink-0 grow-0 basis-auto lg:w-7/12">
                     <div class="flex flex-wrap">

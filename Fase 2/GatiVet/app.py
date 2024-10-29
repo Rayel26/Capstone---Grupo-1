@@ -8,6 +8,7 @@ from datetime import datetime
 import cloudinary
 import cloudinary.uploader  # Asegúrate de importar esto
 import uuid
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
 CORS(app)
@@ -17,6 +18,16 @@ app.secret_key = 'supersecretkey'  # Clave para las sesiones
 CLOUD_NAME = 'dqeideoyd'
 API_KEY = '916694628586842'
 API_SECRET = '4v36fweAMrokX64C8ciboL7o_SA'
+
+# Configuración de Flask-Mail
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'gativet30@gmail.com'  # Cambia esto por tu correo
+app.config['MAIL_PASSWORD'] = 'qpby svvg fkoj qcsm'  # Cambia esto por tu contraseña
+app.config['MAIL_DEFAULT_SENDER'] = 'gativet30@gmail.com'
+
+mail = Mail(app)
 
 # Configurar las credenciales de Cloudinary
 cloudinary.config(
@@ -864,8 +875,26 @@ def products():
 def help():
     return render_template('help.html')
 
-@app.route('/contact')
+@app.route('/contact', methods=['GET', 'POST'])
 def contact():
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        correo = request.form['correo']
+        mensaje = request.form['mensaje']
+
+        # Crear el mensaje
+        msg = Message('Nuevo mensaje de contacto',
+                    recipients=['gativet30@gmail.com'])  # Tu correo
+        msg.body = f'Nombre: {nombre}\nCorreo: {correo}\nMensaje: {mensaje}'
+
+        try:
+            # Enviar el mensaje
+            mail.send(msg)
+            return redirect(url_for('contact'))  # Redirigir después de enviar
+        except Exception as e:
+            print(f'Error al enviar el correo: {e}')  # Imprimir el error en la consola
+            return 'Error al enviar el mensaje. Por favor, inténtelo más tarde.'
+
     return render_template('contact.html')
 
 @app.route('/schedule')
