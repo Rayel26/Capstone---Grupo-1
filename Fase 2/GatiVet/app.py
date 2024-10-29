@@ -25,7 +25,6 @@ app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'gativet30@gmail.com'  # Cambia esto por tu correo
 app.config['MAIL_PASSWORD'] = 'qpby svvg fkoj qcsm'  # Cambia esto por tu contraseña
-app.config['MAIL_DEFAULT_SENDER'] = 'gativet30@gmail.com'
 
 mail = Mail(app)
 
@@ -875,6 +874,8 @@ def products():
 def help():
     return render_template('help.html')
 
+
+
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     if request.method == 'POST':
@@ -882,20 +883,25 @@ def contact():
         correo = request.form['correo']
         mensaje = request.form['mensaje']
 
-        # Crear el mensaje
+        # Establece el remitente como tu correo y el reply-to como el correo del usuario
         msg = Message('Nuevo mensaje de contacto',
+                    sender='gativet30@gmail.com',  # Tu correo
+                    reply_to=correo,  # Usar el correo del usuario para respuestas
                     recipients=['gativet30@gmail.com'])  # Tu correo
         msg.body = f'Nombre: {nombre}\nCorreo: {correo}\nMensaje: {mensaje}'
 
         try:
-            # Enviar el mensaje
             mail.send(msg)
-            return redirect(url_for('contact'))  # Redirigir después de enviar
+            flash('Mensaje enviado con éxito!', 'success')  # Mensaje de éxito
         except Exception as e:
             print(f'Error al enviar el correo: {e}')  # Imprimir el error en la consola
-            return 'Error al enviar el mensaje. Por favor, inténtelo más tarde.'
+            flash('Error al enviar el mensaje. Por favor, inténtelo más tarde.', 'error')
+
+        return redirect(url_for('contact'))  # Redirigir después de enviar
 
     return render_template('contact.html')
+
+
 
 @app.route('/schedule')
 def schedule():

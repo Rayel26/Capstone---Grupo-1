@@ -3,7 +3,10 @@
 {% block title %}Contacto{% endblock %}
 
 {% block content %}
-
+<head>
+    <!-- Importa el archivo CSS específico para profile -->
+    <link rel="stylesheet" href="static/styles/contact.css?v=1.0" />
+</head>
 <body>
     <div class="container my-12 mx-auto px-2 md:px-4">
         <section class="mb-32">
@@ -13,7 +16,7 @@
                 </div>
             </div>
             <div class="flex flex-wrap">
-                <form method="post" action="/contact" class="mb-12 w-full shrink-0 grow-0 basis-auto md:px-3 lg:mb-0 lg:w-5/12 lg:px-6">
+                <form method="post" action="/contact" class="mb-12 w-full shrink-0 grow-0 basis-auto md:px-3 lg:mb-0 lg:w-5/12 lg:px-6" onsubmit="showSpinner();">
                     <div class="mb-3 w-full">
                         <label class="block font-medium mb-[2px] text-teal-700" for="nombre">Nombre</label>
                         <input type="text" name="nombre" class="px-2 py-2 border w-full outline-none rounded-md" id="nombre" placeholder="Nombre" required />
@@ -26,11 +29,16 @@
                         <label class="block font-medium mb-[2px] text-teal-700" for="mensaje">Mensaje</label>
                         <textarea name="mensaje" class="px-2 py-2 border rounded-[5px] w-full outline-none" id="mensaje" placeholder="Escribe tu mensaje aquí" required></textarea>
                     </div>
+
+                    <!-- Spinner -->
+                    <div id="spinner" class="hidden flex justify-center mb-6">
+                        <div class="loader"></div>
+                    </div>
+
                     <button type="submit" class="mb-6 inline-block w-full rounded bg-teal-400 px-6 py-2.5 font-medium uppercase leading-normal text-white hover:shadow-md hover:bg-teal-500 focus:ring-4 focus:outline-none focus:ring-blue-300 text-center">
                         Enviar
                     </button>
                 </form>
-                
 
                 <div class="w-full shrink-0 grow-0 basis-auto lg:w-7/12">
                     <div class="flex flex-wrap">
@@ -134,60 +142,44 @@
                 <!-- Modal de confirmación -->
                 <div id="confirm-modal" class="fixed inset-0 flex items-center justify-center hidden bg-gray-900 bg-opacity-50 z-50">
                     <div class="relative p-4 w-full max-w-md max-h-full bg-white rounded-lg shadow dark:bg-gray-700">
-                        <!-- Botón para cerrar el primer modal -->
-                        <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="#confirm-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                            </svg>
-                            <span class="sr-only">Cerrar modal</span>
+                        <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" onclick="document.getElementById('confirm-modal').classList.add('hidden');">
+                            <svg class="w-3 h-3" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9.293l4.293-4.293 1.414 1.414L11.414 10l4.293 4.293-1.414 1.414L10 11.414l-4.293 4.293-1.414-1.414L8.586 10 4.293 5.707 5.707 4.293 10 8.586z" clip-rule="evenodd"></path></svg>
                         </button>
-                        <!-- Contenido del primer modal -->
-                        <div class="p-4 md:p-5 text-center">
-                            <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                            </svg>
-                            <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">¿Estás seguro de que deseas enviar el mensaje?</h3>
-                            <button type="button" class="text-white bg-teal-600 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center" data-modal-toggle="#success-modal" data-success-modal>
-                                Sí, enviar
-                            </button>
-                            <button type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" data-modal-hide="#confirm-modal">
-                                No, cancelar
-                            </button>
+                        <div class="p-6 text-center">
+                            <h3 class="mb-5 text-lg font-normal text-gray-500">Tu mensaje ha sido enviado con éxito.</h3>
+                            <button type="button" class="text-white bg-teal-400 hover:bg-teal-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center" onclick="document.getElementById('confirm-modal').classList.add('hidden');">Cerrar</button>
                         </div>
                     </div>
                 </div>
-
-                <!-- Modal de éxito -->
-                <div id="success-modal" class="fixed inset-0 flex items-center justify-center hidden bg-gray-900 bg-opacity-50 z-50">
-                    <div class="relative p-4 w-full max-w-md max-h-full bg-white rounded-lg shadow dark:bg-gray-700">
-                        <!-- Botón para cerrar el modal de éxito -->
-                        <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="#success-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                            </svg>
-                            <span class="sr-only">Cerrar modal</span>
-                        </button>
-                        <!-- Contenido del modal de éxito -->
-                        <div class="p-4 md:p-5 text-center">
-                            <svg class="mx-auto mb-4 text-teal-600 w-12 h-12 dark:text-teal-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <h3 class="mb-5 text-lg font-medium text-teal-600 dark:text-teal-500">¡Mensaje enviado con éxito!</h3>
-                            <button type="button" class="text-white bg-teal-600 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center" data-modal-hide="#success-modal">
-                                Cerrar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                
-
             </div>
-            
         </section>
+        
     </div>
 
-    <script src="{{ url_for('static', filename='js/contact.js') }}">
+    
+
+    <!-- JavaScript para mostrar el modal -->
+    <script>
+        // Función para mostrar el spinner
+        function showSpinner() {
+            document.getElementById('spinner').classList.remove('hidden');
+        }
+
+        // Al cargar la página, verifica si hay mensajes
+        window.onload = function() {
+            const messages = {{ get_flashed_messages(with_categories=true) | tojson }};
+            if (messages.length > 0) {
+                document.getElementById('confirm-modal').classList.remove('hidden');
+                document.getElementById('spinner').classList.add('hidden'); // Asegúrate de ocultar el spinner si hay mensajes
+            }
+        }
     </script>
+
+    
+<script src="{{ url_for('static', filename='js/contact.js') }}"></script>
 </body>
 {% endblock %}
+
+    
+
+

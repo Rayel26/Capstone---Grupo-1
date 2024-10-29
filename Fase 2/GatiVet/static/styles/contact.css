@@ -1,0 +1,18 @@
+.loader {
+    border: 8px solid #f3f3f3; /* Color del fondo */
+    border-top: 8px solid #3498db; /* Color del spinner */
+    border-radius: 50%;
+    width: 40px; /* Tamaño del spinner */
+    height: 40px; /* Tamaño del spinner */
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.opacity-50 {
+    opacity: 0.5; /* Cambia la opacidad a 50% */
+    pointer-events: none; /* Desactiva la interacción */
+}
