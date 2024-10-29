@@ -1453,6 +1453,115 @@ def get_medical_record():
 
     return jsonify(data.data[0]), 200  # Devuelve el primer resultado
 
+##Obtener usuarios por rut
+@app.route('/api/get_user_by_id', methods=['GET'])
+def get_user_by_id():
+    # Obtener el RUT del parámetro de la solicitud
+    id_usuario = request.args.get('id_usuario')
+    
+    # Normalizar el RUT quitando puntos y guiones
+    id_usuario = id_usuario.replace('.', '').replace('-', '')
+
+    try:
+        # Consulta con el RUT normalizado
+        response = supabase.table('Usuario').select('nombre, appaterno, apmaterno, celular, id_domicilio').eq('id_usuario', id_usuario).execute()
+        
+        if response.data:
+            user_data = response.data[0]
+
+            # Concatenar nombre completo
+            full_name = f"{user_data['nombre']} {user_data['appaterno']} {user_data['apmaterno']}"
+            celular = user_data['celular']
+
+            # Obtener la dirección desde la tabla Domicilio usando id_domicilio como clave externa
+            domicilio_response = supabase.table('Domicilio').select('direccion').eq('id_domicilio', user_data['id_domicilio']).execute()
+            direccion = domicilio_response.data[0]['direccion'] if domicilio_response.data else 'Dirección no encontrada'
+
+            # Responder con los datos del usuario
+            return jsonify({
+                'name': full_name,
+                'address': direccion,
+                'phone': celular
+            }), 200
+        else:
+            return jsonify({'error': 'Usuario no encontrado'}), 404
+
+    except Exception as e:
+        print(f"Ocurrió un error al obtener el usuario: {e}")
+        return jsonify({"error": "Error al obtener usuario", "details": str(e)}), 500
+
+##Obtener doctores
+@app.route('/api/get_doctors', methods=['GET'])
+def get_doctors():
+    try:
+        # Obtener los usuarios que son doctores
+        response = supabase.table('Usuario').select('nombre, appaterno, apmaterno, id_usuario, imagen').eq('tipousuarioid', 2).execute()
+        
+        # Verifica si hay datos
+        if not response.data:
+            return jsonify([]), 200  # Retorna una lista vacía si no hay doctores
+
+        # Construir la lista de doctores
+        doctors = []
+        for user in response.data:
+            full_name = f"Dr. {user['nombre']} {user['appaterno']} {user['apmaterno']}"
+            doctors.append({
+                'name': full_name,
+                'value': user['id_usuario'],  # Asegúrate de que este campo existe
+                'image': user['imagen'] or "static/img/default-doctor.jpg"  # Usar imagen de Cloudinary o imagen por defecto
+            })
+
+        return jsonify(doctors), 200
+    except Exception as e:
+        print(f"Ocurrió un error al obtener los doctores: {e}")
+        return jsonify({"error": "Error al obtener doctores", "details": str(e)}), 500
+
+
+##Obtener mascotas de agenda
+@app.route('/api/get_pets_by_user_id', methods=['GET'])
+def get_pets_by_user_id():
+    id_usuario = request.args.get('id_usuario')
+
+    try:
+        response = supabase.table('Mascota').select('id_mascota, nombre, edad, raza, foto_url').eq('id_usuario', id_usuario).execute()
+
+        if response.data:
+            return jsonify(response.data), 200
+        else:
+            return jsonify({'error': 'No se encontraron mascotas'}), 404
+
+    except Exception as e:
+        print(f"Ocurrió un error al obtener las mascotas: {e}")
+        return jsonify({"error": "Error al obtener mascotas", "details": str(e)}), 500
+
+@app.route('/api/confirm_appointment', methods=['POST'])
+def confirm_appointment():
+    data = request.get_json()
+
+    # Extraer datos de la solicitud
+    rut = data.get('rut')
+    doctor_id = data.get('doctorId')
+    area = data.get('area')
+    service = data.get('service')
+    date = data.get('date')
+    time = data.get('time')
+    pet_id = data.get('petId')
+    details = data.get('details')
+
+    # Insertar los datos en Supabase sin id_agenda
+    response = supabase.table('Agenda').insert({
+        'id_usuario': rut,
+        'medico_veterinario_id': doctor_id,
+        'area': area,
+        'servicio': service,
+        'fecha': date,
+        'hora': time,
+        'id_mascota': pet_id,
+        'motivo': details
+    }).execute()
+
+
+    return jsonify({'message': 'Cita confirmada exitosamente!'}), 201
 
 if __name__ == '__main__':
     app.run(debug=True)  # Ejecuta la aplicación en modo depuración

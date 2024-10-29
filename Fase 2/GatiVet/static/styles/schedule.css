@@ -67,6 +67,20 @@
     width: 100%; /* Ancho completo para los botones */
 }
 
+.doctor-image-container {
+    width: 284px; /* Ajusta según sea necesario */
+    height: 284px; /* Altura igual a la anchura para mantenerlo cuadrado */
+    overflow: hidden; /* Oculta cualquier parte de la imagen que sobresalga */
+    border-radius: 8px; /* Bordes redondeados para el contenedor (opcional) */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra para el contenedor (opcional) */
+}
+
+.doctor-image {
+    width: 100%; /* Asegura que la imagen use todo el ancho del contenedor */
+    height: 100%; /* Asegura que la imagen use toda la altura del contenedor */
+    object-fit: cover; /* Asegura que la imagen cubra el área sin deformarse */
+}
+
 #next-month, #prev-month {
     font-size: 1.5rem; /* Tamaño de la flecha */
     background: none; /* Sin fondo */
