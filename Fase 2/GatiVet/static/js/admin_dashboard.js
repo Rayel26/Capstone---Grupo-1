@@ -1148,3 +1148,84 @@ function updateImagePreview() {
 
 // Cargar imágenes al cargar la página
 window.onload = loadImages;
+
+
+//Casos:
+
+// Función para obtener imágenes de Cloudinary y llenar el select
+async function fetchImages() {
+    try {
+        const response = await fetch('/api/cloudinary/images');
+        if (!response.ok) {
+            throw new Error('Error al obtener imágenes');
+        }
+        const images = await response.json();
+        const select = document.getElementById('CaseImage');
+
+        images.forEach(imageUrl => {
+            const option = document.createElement('option');
+            option.value = imageUrl; // La URL de la imagen
+            option.textContent = imageUrl.split('/').pop(); // Muestra el nombre de la imagen
+            select.appendChild(option);
+        });
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+// Función para actualizar la vista previa de la imagen
+function updateImagePreview() {
+    const select = document.getElementById('CaseImage');
+    const imagePreview = document.getElementById('imagePreview');
+    const selectedValue = select.value;
+
+    if (selectedValue) {
+        imagePreview.src = selectedValue;
+        imagePreview.classList.remove('hidden');
+    } else {
+        imagePreview.classList.add('hidden');
+    }
+}
+
+// Llama a la función para obtener imágenes cuando se cargue la página
+document.addEventListener('DOMContentLoaded', fetchImages);
+
+// Subir imagen a cloudinary
+async function uploadImageToCloudinary() {
+            const fileInput = document.getElementById('uploadImage');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Por favor, selecciona una imagen para subir.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                const response = await fetch('/upload-image-casos', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Imagen subida exitosamente: ' + data.image_url);
+                } else {
+                    alert('Error al subir la imagen: ' + data.message);
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Error al subir la imagen: ' + error.message);
+            }
+        }
+function submitCase(event) {
+    event.preventDefault(); // Evita que el formulario se envíe de manera tradicional
+
+    // Aquí puedes agregar la lógica para manejar el envío del caso
+    console.log('Formulario enviado');
+    // Puedes llamar a la función para subir imágenes aquí si es necesario
+}
+

@@ -38,9 +38,12 @@
                     <li><a href="#" onclick="showSection('usuarios')" class="hover:underline"
                             style="color: #18beaa; border-bottom: 2px solid transparent; transition: border-bottom 0.3s;">
                             Usuarios</a></li>
-                    <li><a href="#" onclick="showSection('recordatorios')" class="hover:underline"
+                    <li><a href="#" onclick="showSection('casos')" class="hover:underline"
                             style="color: #18beaa; border-bottom: 2px solid transparent; transition: border-bottom 0.3s;">
-                            Recordatorios</a></li>
+                            Casos</a></li>
+                    <li><a href="#" onclick="showSection('fundaciones')" class="hover:underline"
+                            style="color: #18beaa; border-bottom: 2px solid transparent; transition: border-bottom 0.3s;">
+                            Fundaciones</a></li>
                 </ul>
             </nav>
 
@@ -105,7 +108,6 @@
                     <!-- Aquí se mostrarán los productos filtrados -->
                 </tbody>
             </table>
-
 
             <!-- Controles de Paginación -->
             <div id="paginationControls" class="mt-4 flex justify-center items-center">
@@ -533,6 +535,73 @@
         </div>
     </div>
     <!-- Fin del Modal de confirmación de eliminación -->
+
+    <!-- Contenido Casos de Animales -->
+<div class="container mx-auto flex items-start justify-center pt-10 section hidden" id="casos">
+    <section class="p-4 w-full max-w-3xl bg-white shadow-md rounded-lg">
+        <!-- Encabezado centrado -->
+        <div class="flex justify-center mb-4">
+            <h2 class="text-xl font-bold">Gestión de Casos de Animales</h2>
+        </div>
+
+        <!-- Excel -->
+        <div class="flex justify-between mb-4">
+            <!-- Botón para exportar a Excel -->
+            <button class="text-white py-1 px-3 rounded hover:bg-teal-500 transition duration-200 text-sm"
+                style="background-color: #18beaa;" onclick="exportCasesToExcel()">
+                Exportar a Excel
+            </button>
+        </div>
+
+        <!-- Tabla de Casos de Animales -->
+        <table id="caseTable"
+            class="min-w-full bg-white border border-gray-300 shadow rounded-lg overflow-hidden text-xs mt-3">
+            <thead>
+                <tr class="text-white" style="background-color: #18beaa;">
+                    <th class="py-1 px-2 border-b">Nombre del Caso</th>
+                    <th class="py-1 px-2 border-b">Descripción</th>
+                    <th class="py-1 px-2 border-b">Fecha de Ingreso</th>
+                </tr>
+            </thead>
+        </table>
+
+        <!-- Formulario para subir Casos de Animales -->
+        <form id="caseForm" class="mt-6 bg-white p-6 shadow rounded-lg text-sm" onsubmit="submitCase(event)" enctype="multipart/form-data">
+            <h4 class="text-base font-semibold">Agregar Nuevo Caso</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                <div>
+                    <label for="caseName" class="block text-gray-700">Nombre del Caso:</label>
+                    <input type="text" id="caseName" class="border rounded w-full py-1 px-2 text-gray-700"
+                        placeholder="Nombre del caso" required>
+                </div>
+                <div class="">
+                    <label for="caseDescription" class="block text-gray-700">Descripción:</label>
+                    <textarea id="caseDescription" class="border rounded w-full py-1 px-2 text-gray-700"
+                        placeholder="Descripción del caso"></textarea>
+                </div>
+                <div>
+                    <label for="CaseImage" class="block text-gray-700">Seleccionar Imagen del Caso:</label>
+                    <select id="CaseImage" class="border rounded w-full py-1 px-2 text-gray-700" onchange="updateImagePreview()">
+                        <option value="">Seleccione una imagen</option>
+                    </select>
+                    <div id="imageError" class="error hidden">Este campo es obligatorio.</div>
+                    <div class="mt-2">
+                        <img id="imagePreview" src="" alt="Vista previa de la imagen" class="hidden w-32 h-32 border rounded mt-2"/>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <label for="uploadImage" class="block text-gray-700">Subir nueva Imagen del Caso:</label>
+                    <input type="file" id="uploadImage" accept="image/*" class="border rounded w-full py-1 px-2 text-gray-700" onchange="uploadImageToCloudinary()">
+                </div>                             
+            </div>
+            <button type="submit"
+            class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
+            style="background-color: #18beaa;">Subir Caso</button>
+        </form>
+    </section>
+</div>
+<!-- Fin Contenido Casos de Animales -->
+
     <!-- Scripts -->
     <script src="{{ url_for('static', filename='js/admin_dashboard.js') }}"> </script>
 </body>
