@@ -1151,6 +1151,101 @@ window.onload = loadImages;
 
 
 //Casos:
+
+// Función para cargar los casos en la tabla
+async function loadCases() {
+    try {
+        const response = await fetch('/api/casos');
+        if (!response.ok) {
+            throw new Error('Error al obtener los casos');
+        }
+
+        const cases = await response.json();
+        const tableBody = document.getElementById('caseTable').getElementsByTagName('tbody')[0];
+
+        // Limpia la tabla antes de llenarla
+        tableBody.innerHTML = '';
+
+        // Llena la tabla con los datos de los casos
+        cases.forEach(caseData => {
+            console.log("caseData:", caseData); // Verifica qué hay en caseData
+
+            const row = tableBody.insertRow();
+            const nameCell = row.insertCell(0);
+            const descriptionCell = row.insertCell(1);
+            const dateCell = row.insertCell(2);
+            const actionsCell = row.insertCell(3); // Nueva celda para acciones
+
+            // Asigna las clases para el estilo
+            nameCell.className = 'py-2 px-4 border-b';
+            descriptionCell.className = 'py-2 px-4 border-b';
+            dateCell.className = 'py-2 px-4 border-b';
+            actionsCell.className = 'py-2 px-4 border-b';
+
+            // Asigna el contenido a las celdas
+            nameCell.textContent = caseData.nombre_caso;
+            descriptionCell.textContent = caseData.descripcion;
+            dateCell.textContent = new Date(caseData.fecha_ingreso).toLocaleDateString();
+
+            // Botones de acción
+            const editButton = document.createElement('button');
+            editButton.textContent = 'Editar';
+            editButton.className = 'text-blue-500 hover:underline';
+            editButton.onclick = () => editCase(caseData.id_caso); // Asegúrate de usar el nombre correcto
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Eliminar';
+            deleteButton.className = 'text-red-500 hover:underline ml-2';
+            deleteButton.onclick = () => {
+                console.log("ID del caso a eliminar:", caseData.id_caso); // Verifica el ID correcto
+                deleteCase(caseData.id_caso); // Usa el nombre correcto aquí
+            };
+            actionsCell.appendChild(editButton);
+            actionsCell.appendChild(deleteButton);
+        });
+    } catch (error) {
+        console.error('Error al cargar los casos:', error);
+    }
+}
+
+
+async function deleteCase(caseId) {
+    console.log("ID del caso a eliminar en deleteCase:", caseId); // Verifica el ID aquí
+
+    if (caseId === undefined || caseId === null) {
+        console.error("El caseId es undefined o null. Verifica la asignación de ID.");
+        alert("Error: No se pudo obtener el ID del caso.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/casos/${caseId}`, {
+            method: 'DELETE',
+        });
+
+        console.log("Estado de la respuesta:", response.status); // Verifica el estado de la respuesta
+
+        if (!response.ok) {
+            const errorData = await response.json(); // Captura el error para detalles
+            console.error('Error al eliminar el caso:', errorData);
+            throw new Error('Error al eliminar el caso');
+        }
+
+        const result = await response.json();
+        alert(result.message);
+        loadCases(); // Volver a cargar la tabla
+    } catch (error) {
+        console.error('Error al eliminar el caso:', error);
+        alert('Error al eliminar el caso.');
+    }
+}
+
+
+
+
+// Llama a la función para cargar los casos cuando se cargue la página
+document.addEventListener('DOMContentLoaded', loadCases);
+
 // Función para subir la imagen a Cloudinary
 async function uploadImageToCloudinary() {
     const uploadedImageFile = document.getElementById('uploadImageCase').files[0]; // Obtiene el archivo de imagen
@@ -1166,7 +1261,7 @@ async function uploadImageToCloudinary() {
         formData.append('file', uploadedImageFile);
         formData.append('upload_preset', 'prueba'); // Cambia por tu preset
         formData.append('folder', 'Casos');
-        
+
         const response = await fetch('https://api.cloudinary.com/v1_1/dqeideoyd/image/upload', {
             method: 'POST',
             body: formData,

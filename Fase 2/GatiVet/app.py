@@ -1619,5 +1619,26 @@ def create_case():
 
     return jsonify({"message": "Caso creado exitosamente!"}), 201
 
+#Ruta visualizar datos casos administrados
+@app.route('/api/casos', methods=['GET'])
+def get_cases():
+    # Obtiene todos los casos de la tabla CasoDonacion
+    cases = supabase.table('CasoDonacion').select('*').execute()
+    
+    # Si quieres procesar los datos, puedes hacerlo aquí
+    cases_data = cases.data  # Asegúrate de que 'cases.data' contenga tus datos
+
+    return jsonify(cases_data), 200
+
+@app.route('/api/casos/<int:case_id>', methods=['DELETE'])
+def delete_case(case_id):
+    # Eliminar el caso de la tabla CasoDonacion
+    response = supabase.table('CasoDonacion').delete().eq('id_caso', case_id).execute()
+    return jsonify({"message": "Caso eliminado exitosamente!"}), 200
+
+    
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)  # Ejecuta la aplicación en modo depuración
