@@ -1597,33 +1597,27 @@ def confirm_appointment():
 
     return jsonify({'message': 'Cita confirmada exitosamente!'}), 201
 
-# Subir imagen a la carpeta 'Casos'
-@app.route('/upload-image-casos', methods=['POST'])
-def upload_image_casos():
-    # Verifica si se envió un archivo
-    if 'image' not in request.files:
-        return jsonify({'success': False, 'message': 'No se envió ninguna imagen'}), 400
+#Ruta Casos administrador
+@app.route('/api/casos', methods=['POST'])
+def create_case():
+    data = request.json
 
-    file = request.files['image']
+    # Obtener los datos del formulario
+    nombre_caso = data.get('nombre_caso')
+    descripcion = data.get('descripcion')
+    foto_url = data.get('foto_url')
+    fecha_ingreso = datetime.now().isoformat()  # Convertir a cadena ISO 8601
 
-    # Verifica si el archivo tiene un nombre
-    if file.filename == '':
-        return jsonify({'success': False, 'message': 'No se envió ninguna imagen'}), 400
+    # Aquí iría el código para guardar en Supabase
+    # Por ejemplo:
+    supabase.table('CasoDonacion').insert({
+        'nombre_caso': nombre_caso,
+        'descripcion': descripcion,
+        'foto_url': foto_url,
+        'fecha_ingreso': fecha_ingreso,
+    }).execute()
 
-    try:
-        # Especifica el public_id y la carpeta
-        public_id = f'casos/{file.filename}'
-        folder_name = 'Casos'
+    return jsonify({"message": "Caso creado exitosamente!"}), 201
 
-        # Subir imagen a Cloudinary
-        upload_result = cloudinary.uploader.upload(file, public_id=public_id, folder=folder_name)
-        image_url = upload_result.get('secure_url')
-
-        return jsonify({'success': True, 'image_url': image_url}), 200
-
-    except Exception as e:
-        return jsonify({'success': False, 'message': str(e)}), 500
-
-    
 if __name__ == '__main__':
     app.run(debug=True)  # Ejecuta la aplicación en modo depuración

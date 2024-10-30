@@ -122,84 +122,87 @@
                 </button>
             </div>
 
-        <!-- Formulario para subir productos -->
-        <form id="productForm" class="mt-6 bg-white p-6 shadow rounded-lg text-sm" onsubmit="submitProduct(event)">
-            <h4 class="text-base font-semibold">Agregar Nuevo Producto</h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                <div>
-                    <label for="productName" class="block text-gray-700">Nombre del Producto:</label>
-                    <input type="text" id="productName" class="border rounded w-full py-1 px-2 text-gray-700"
-                        placeholder="Nombre del producto" required>
-                    <div id="nameError" class="error hidden">Este campo es obligatorio.</div>
-                </div>
-                <div>
-                    <label for="productType" class="block text-gray-700">Tipo de Producto:</label>
-                    <select id="productType" class="border rounded w-full py-1 px-2 text-gray-700" required>
-                        <option value="">Seleccione un tipo</option>
-                        <option value="alimento_perro">Alimento para Perros</option>
-                        <option value="alimento_gato">Alimento para Gatos</option>
-                        <option value="medicamento">Medicamento Veterinario</option>
-                    </select>
-                    <div id="typeError" class="error">Este campo es obligatorio.</div>
-                </div>
-                <div>
-                    <label for="brand" class="block text-gray-700">Marca:</label>
-                    <select id="brand" class="border rounded w-full py-1 px-2 text-gray-700" required>
-                        <option value="">Seleccione una marca</option>
-                        <optgroup id="dogFoodBrands" label="Alimento para Perros" style="display: none;">
-                            <option value="Royal Canin">Royal Canin</option>
-                            <option value="Purina Pro Plan">Purina Pro Plan</option>
-                            <option value="Pedigree">Pedigree</option>
-                            <option value="Eukanuba">Eukanuba</option>
-                        </optgroup>
-                        <optgroup id="catFoodBrands" label="Alimento para Gatos" style="display: none;">
-                            <option value="Whiskas">Whiskas</option>
-                            <option value="Josera">Josera</option>
-                            <option value="Purina Cat Chow">Purina Cat Chow</option>
-                        </optgroup>
-                        <optgroup id="veterinaryMedicines" label="Medicamentos Veterinarios" style="display: none;">
-                            <option value="NexGard">NexGard</option>
-                            <option value="Frontline">Frontline</option>
-                            <option value="Advantage">Advantage</option>
-                        </optgroup>
-                    </select>
-                    <div id="brandError" class="error">Este campo es obligatorio.</div>
-                </div>
-                <div>
-                    <label for="price" class="block text-gray-700">Precio:</label>
-                    <input type="text" id="price" class="border rounded w-full py-1 px-2 text-gray-700"
-                        placeholder="Precio del producto" oninput="formatCurrency(this)" required>
-                    <div id="priceError" class="error hidden">Este campo es obligatorio.</div>
-                </div>
-                <div>
-                    <label for="quantity" class="block text-gray-700">Cantidad:</label>
-                    <input type="number" id="quantity" class="border rounded w-full py-1 px-2 text-gray-700"
-                        placeholder="Cantidad disponible" required>
-                    <div id="quantityError" class="error hidden">Este campo es obligatorio.</div>
-                </div>
-                <div>
-                    <label for="description" class="block text-gray-700">Descripción:</label>
-                    <textarea id="description" class="border rounded w-full py-1 px-2 text-gray-700"
-                        placeholder="Descripción del producto"></textarea>
-                </div>
-                <div>
-                    <label for="productImage" class="block text-gray-700">Seleccionar Imagen del Producto:</label>
-                    <select id="productImage" class="border rounded w-full py-1 px-2 text-gray-700" onchange="updateImagePreview()">
-                        <option value="">Seleccione una imagen</option>
-                    </select>
-                    <div id="imageError" class="error hidden">Este campo es obligatorio.</div>
+            <!-- Formulario para subir productos -->
+            <form id="productForm" class="mt-6 bg-white p-6 shadow rounded-lg text-sm" onsubmit="submitProduct(event)">
+                <h4 class="text-base font-semibold">Agregar Nuevo Producto</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                    <div>
+                        <label for="productName" class="block text-gray-700">Nombre del Producto:</label>
+                        <input type="text" id="productName" class="border rounded w-full py-1 px-2 text-gray-700"
+                            placeholder="Nombre del producto" required>
+                        <div id="nameError" class="error hidden">Este campo es obligatorio.</div>
+                    </div>
+                    <div>
+                        <label for="productType" class="block text-gray-700">Tipo de Producto:</label>
+                        <select id="productType" class="border rounded w-full py-1 px-2 text-gray-700" required>
+                            <option value="">Seleccione un tipo</option>
+                            <option value="alimento_perro">Alimento para Perros</option>
+                            <option value="alimento_gato">Alimento para Gatos</option>
+                            <option value="medicamento">Medicamento Veterinario</option>
+                        </select>
+                        <div id="typeError" class="error">Este campo es obligatorio.</div>
+                    </div>
+                    <div>
+                        <label for="brand" class="block text-gray-700">Marca:</label>
+                        <select id="brand" class="border rounded w-full py-1 px-2 text-gray-700" required>
+                            <option value="">Seleccione una marca</option>
+                            <optgroup id="dogFoodBrands" label="Alimento para Perros" style="display: none;">
+                                <option value="Royal Canin">Royal Canin</option>
+                                <option value="Purina Pro Plan">Purina Pro Plan</option>
+                                <option value="Pedigree">Pedigree</option>
+                                <option value="Eukanuba">Eukanuba</option>
+                            </optgroup>
+                            <optgroup id="catFoodBrands" label="Alimento para Gatos" style="display: none;">
+                                <option value="Whiskas">Whiskas</option>
+                                <option value="Josera">Josera</option>
+                                <option value="Purina Cat Chow">Purina Cat Chow</option>
+                            </optgroup>
+                            <optgroup id="veterinaryMedicines" label="Medicamentos Veterinarios" style="display: none;">
+                                <option value="NexGard">NexGard</option>
+                                <option value="Frontline">Frontline</option>
+                                <option value="Advantage">Advantage</option>
+                            </optgroup>
+                        </select>
+                        <div id="brandError" class="error">Este campo es obligatorio.</div>
+                    </div>
+                    <div>
+                        <label for="price" class="block text-gray-700">Precio:</label>
+                        <input type="text" id="price" class="border rounded w-full py-1 px-2 text-gray-700"
+                            placeholder="Precio del producto" oninput="formatCurrency(this)" required>
+                        <div id="priceError" class="error hidden">Este campo es obligatorio.</div>
+                    </div>
+                    <div>
+                        <label for="quantity" class="block text-gray-700">Cantidad:</label>
+                        <input type="number" id="quantity" class="border rounded w-full py-1 px-2 text-gray-700"
+                            placeholder="Cantidad disponible" required>
+                        <div id="quantityError" class="error hidden">Este campo es obligatorio.</div>
+                    </div>
+                    <div>
+                        <label for="description" class="block text-gray-700">Descripción:</label>
+                        <textarea id="description" class="border rounded w-full py-1 px-2 text-gray-700"
+                            placeholder="Descripción del producto"></textarea>
+                    </div>
+                    <div>
+                        <label for="productImage" class="block text-gray-700">Seleccionar Imagen del Producto:</label>
+                        <select id="productImage" class="border rounded w-full py-1 px-2 text-gray-700"
+                            onchange="updateImagePreview()">
+                            <option value="">Seleccione una imagen</option>
+                        </select>
+                        <div id="imageError" class="error hidden">Este campo es obligatorio.</div>
+                        <div class="mt-2">
+                            <img id="imagePreview" src="" alt="Vista previa de la imagen"
+                                class="hidden w-32 h-32 border rounded mt-2" />
+                        </div>
+                    </div>
                     <div class="mt-2">
-                        <img id="imagePreview" src="" alt="Vista previa de la imagen" class="hidden w-32 h-32 border rounded mt-2"/>
+                        <input type="file" id="uploadImage" accept="image/*"
+                            class="border rounded w-full py-1 px-2 text-gray-700" onchange="uploadImageToCloudinary()">
                     </div>
                 </div>
-                <div class="mt-2">
-                    <input type="file" id="uploadImage" accept="image/*" class="border rounded w-full py-1 px-2 text-gray-700" onchange="uploadImageToCloudinary()">
-                </div>
-            </div>
-            <button type="submit"
-            class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
-            style="background-color: #18beaa;">Subir Producto</button>
-        </form>
+                <button type="submit"
+                    class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
+                    style="background-color: #18beaa;">Subir Producto</button>
+            </form>
     </div>
     <!-- Fin Contenido Productos -->
 
@@ -381,8 +384,10 @@
             <h2 class="text-lg font-bold mb-4">Confirmar Datos</h2>
             <p>¿Está seguro de que los datos son correctos?</p>
             <div class="flex justify-end mt-4">
-                <button id="cancelConfirmBtn" class="text-gray-800 py-2 px-4 rounded hover:bg-gray-300 mr-4" style="background-color: #d1d5db;">Cancelar</button>
-                <button id="confirmBtn" class="text-white py-2 px-4 rounded hover:bg-teal-500" style="background-color: #18beaa;">Confirmar</button>
+                <button id="cancelConfirmBtn" class="text-gray-800 py-2 px-4 rounded hover:bg-gray-300 mr-4"
+                    style="background-color: #d1d5db;">Cancelar</button>
+                <button id="confirmBtn" class="text-white py-2 px-4 rounded hover:bg-teal-500"
+                    style="background-color: #18beaa;">Confirmar</button>
             </div>
         </div>
     </div>
@@ -393,11 +398,13 @@
         <div class="bg-white dark:bg-gray-700 p-6 rounded-lg">
             <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">¡Cuenta creada exitosamente!</h2>
             <p class="text-gray-700 dark:text-white mb-6">
-                La cuenta ha sido creada exitosamente. 
-                <a href="{{ url_for('login') }}" class="text-[#18beaa] hover:underline">Ahora tienes a un nuevo esclavo.</a>
+                La cuenta ha sido creada exitosamente.
+                <a href="{{ url_for('login') }}" class="text-[#18beaa] hover:underline">Ahora tienes a un nuevo
+                    esclavo.</a>
             </p>
             <div class="flex justify-end">
-                <button id="closeModalButton" class="text-white py-2 px-4 rounded hover:bg-teal-500" style="background-color: #18beaa;">Cerrar</button>
+                <button id="closeModalButton" class="text-white py-2 px-4 rounded hover:bg-teal-500"
+                    style="background-color: #18beaa;">Cerrar</button>
             </div>
         </div>
     </div>
@@ -431,8 +438,7 @@
                         <div class="mb-4">
                             <label for="editModalDomicilio" class="block text-sm font-semibold">Domicilio:</label>
                             <input type="text" id="editModalDomicilio"
-                                class="mt-1 block w-full border-gray-300 rounded-md" placeholder="Ingrese el domicilio"
-                                >
+                                class="mt-1 block w-full border-gray-300 rounded-md" placeholder="Ingrese el domicilio">
                         </div>
                     </div>
 
@@ -462,7 +468,7 @@
                             <label for="editModalFechaNacimiento" class="block text-sm font-semibold">Fecha de
                                 Nacimiento:</label>
                             <input type="date" id="editModalFechaNacimiento"
-                                class="mt-1 block w-full border-gray-300 rounded-md" >
+                                class="mt-1 block w-full border-gray-300 rounded-md">
                         </div>
                     </div>
                 </div>
@@ -537,70 +543,74 @@
     <!-- Fin del Modal de confirmación de eliminación -->
 
     <!-- Contenido Casos de Animales -->
-<div class="container mx-auto flex items-start justify-center pt-10 section hidden" id="casos">
-    <section class="p-4 w-full max-w-3xl bg-white shadow-md rounded-lg">
-        <!-- Encabezado centrado -->
-        <div class="flex justify-center mb-4">
-            <h2 class="text-xl font-bold">Gestión de Casos de Animales</h2>
-        </div>
+    <div class="container mx-auto flex items-start justify-center pt-10 section hidden" id="casos">
+        <section class="p-4 w-full max-w-3xl bg-white shadow-md rounded-lg">
+            <!-- Encabezado centrado -->
+            <div class="flex justify-center mb-4">
+                <h2 class="text-xl font-bold">Gestión de Casos de Animales</h2>
+            </div>
 
-        <!-- Excel -->
-        <div class="flex justify-between mb-4">
-            <!-- Botón para exportar a Excel -->
-            <button class="text-white py-1 px-3 rounded hover:bg-teal-500 transition duration-200 text-sm"
-                style="background-color: #18beaa;" onclick="exportCasesToExcel()">
-                Exportar a Excel
-            </button>
-        </div>
+            <!-- Excel -->
+            <div class="flex justify-between mb-4">
+                <!-- Botón para exportar a Excel -->
+                <button class="text-white py-1 px-3 rounded hover:bg-teal-500 transition duration-200 text-sm"
+                    style="background-color: #18beaa;" onclick="exportCasesToExcel()">
+                    Exportar a Excel
+                </button>
+            </div>
 
-        <!-- Tabla de Casos de Animales -->
-        <table id="caseTable"
-            class="min-w-full bg-white border border-gray-300 shadow rounded-lg overflow-hidden text-xs mt-3">
-            <thead>
-                <tr class="text-white" style="background-color: #18beaa;">
-                    <th class="py-1 px-2 border-b">Nombre del Caso</th>
-                    <th class="py-1 px-2 border-b">Descripción</th>
-                    <th class="py-1 px-2 border-b">Fecha de Ingreso</th>
-                </tr>
-            </thead>
-        </table>
+            <!-- Tabla de Casos de Animales -->
+            <table id="caseTable"
+                class="min-w-full bg-white border border-gray-300 shadow rounded-lg overflow-hidden text-xs mt-3">
+                <thead>
+                    <tr class="text-white" style="background-color: #18beaa;">
+                        <th class="py-1 px-2 border-b">Nombre del Caso</th>
+                        <th class="py-1 px-2 border-b">Descripción</th>
+                        <th class="py-1 px-2 border-b">Fecha de Ingreso</th>
+                    </tr>
+                </thead>
+            </table>
 
-        <!-- Formulario para subir Casos de Animales -->
-        <form id="caseForm" class="mt-6 bg-white p-6 shadow rounded-lg text-sm" onsubmit="submitCase(event)" enctype="multipart/form-data">
-            <h4 class="text-base font-semibold">Agregar Nuevo Caso</h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                <div>
-                    <label for="caseName" class="block text-gray-700">Nombre del Caso:</label>
-                    <input type="text" id="caseName" class="border rounded w-full py-1 px-2 text-gray-700"
-                        placeholder="Nombre del caso" required>
-                </div>
-                <div class="">
-                    <label for="caseDescription" class="block text-gray-700">Descripción:</label>
-                    <textarea id="caseDescription" class="border rounded w-full py-1 px-2 text-gray-700"
-                        placeholder="Descripción del caso"></textarea>
-                </div>
-                <div>
-                    <label for="CaseImage" class="block text-gray-700">Seleccionar Imagen del Caso:</label>
-                    <select id="CaseImage" class="border rounded w-full py-1 px-2 text-gray-700" onchange="updateImagePreview()">
-                        <option value="">Seleccione una imagen</option>
-                    </select>
-                    <div id="imageError" class="error hidden">Este campo es obligatorio.</div>
+            <!-- Formulario para subir Casos de Animales -->
+            <form id="caseForm" class="mt-6 bg-white p-6 shadow rounded-lg text-sm" onsubmit="submitCase(event)"
+                enctype="multipart/form-data">
+                <h4 class="text-base font-semibold">Agregar Nuevo Caso</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                    <div>
+                        <label for="caseName" class="block text-gray-700">Nombre del Caso:</label>
+                        <input type="text" id="caseName" class="border rounded w-full py-1 px-2 text-gray-700"
+                            placeholder="Nombre del caso" required>
+                    </div>
+                    <div class="">
+                        <label for="caseDescription" class="block text-gray-700">Descripción:</label>
+                        <textarea id="caseDescription" class="border rounded w-full py-1 px-2 text-gray-700"
+                            placeholder="Descripción del caso"></textarea>
+                    </div>
+                    <div>
+                        <label for="CaseImage" class="block text-gray-700">Seleccionar Imagen del Caso:</label>
+                        <select id="CaseImage" class="border rounded w-full py-1 px-2 text-gray-700"
+                            onchange="updateImagePreview()">
+                            <option value="">Seleccione una imagen</option>
+                        </select>
+                        <div id="imageError" class="error hidden">Este campo es obligatorio.</div>
+                        <div class="mt-2">
+                            <img id="imagePreview" src="" alt="Vista previa de la imagen"
+                                class="hidden w-32 h-32 border rounded mt-2" />
+                        </div>
+                    </div>
                     <div class="mt-2">
-                        <img id="imagePreview" src="" alt="Vista previa de la imagen" class="hidden w-32 h-32 border rounded mt-2"/>
+                        <label for="uploadImage" class="block text-gray-700">Subir nueva Imagen del Caso:</label>
+                        <input type="file" id="uploadImage" accept="image/*"
+                            class="border rounded w-full py-1 px-2 text-gray-700" onchange="uploadImageToCloudinary()">
                     </div>
                 </div>
-                <div class="mt-2">
-                    <label for="uploadImage" class="block text-gray-700">Subir nueva Imagen del Caso:</label>
-                    <input type="file" id="uploadImage" accept="image/*" class="border rounded w-full py-1 px-2 text-gray-700" onchange="uploadImageToCloudinary()">
-                </div>                             
-            </div>
-            <button type="submit"
-            class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
-            style="background-color: #18beaa;">Subir Caso</button>
-        </form>
-    </section>
-</div>
-<!-- Fin Contenido Casos de Animales -->
+                <button type="submit"
+                    class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
+                    style="background-color: #18beaa;">Subir Caso</button>
+            </form>
+        </section>
+    </div>
+    <!-- Fin Contenido Casos de Animales -->
 
     <!-- Scripts -->
     <script src="{{ url_for('static', filename='js/admin_dashboard.js') }}"> </script>

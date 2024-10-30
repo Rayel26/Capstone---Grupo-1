@@ -1151,6 +1151,49 @@ window.onload = loadImages;
 
 
 //Casos:
+// Función para enviar el formulario
+async function submitCase(event) {
+    event.preventDefault(); // Evitar el envío normal del formulario
+
+    const caseName = document.getElementById('caseName').value;
+    const caseDescription = document.getElementById('caseDescription').value;
+    const caseImage = document.getElementById('CaseImage').value; // URL de la imagen seleccionada
+
+    // Verificar que se haya seleccionado una imagen
+    if (!caseImage) {
+        alert('Por favor, selecciona una imagen.');
+        return;
+    }
+
+    const caseData = {
+        nombre_caso: caseName,
+        descripcion: caseDescription,
+        foto_url: caseImage, // URL de la imagen seleccionada
+    };
+
+    try {
+        const response = await fetch('/api/casos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(caseData),
+        });
+
+        if (response.ok) {
+            const jsonResponse = await response.json();
+            alert(jsonResponse.message); // Mensaje de éxito
+            document.getElementById('caseForm').reset(); // Resetear el formulario
+            // Aquí puedes agregar código para actualizar la tabla si es necesario
+        } else {
+            const errorResponse = await response.json();
+            alert(`Error: ${errorResponse.error}`);
+        }
+    } catch (error) {
+        console.error('Error al enviar los datos:', error);
+        alert('Error al enviar los datos. Inténtalo de nuevo.');
+    }
+}
 
 // Función para obtener imágenes de Cloudinary y llenar el select
 async function fetchImages() {
@@ -1190,42 +1233,5 @@ function updateImagePreview() {
 // Llama a la función para obtener imágenes cuando se cargue la página
 document.addEventListener('DOMContentLoaded', fetchImages);
 
-// Subir imagen a cloudinary
-async function uploadImageToCloudinary() {
-            const fileInput = document.getElementById('uploadImage');
-            const file = fileInput.files[0];
 
-            if (!file) {
-                alert('Por favor, selecciona una imagen para subir.');
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append('image', file);
-
-            try {
-                const response = await fetch('/upload-image-casos', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    alert('Imagen subida exitosamente: ' + data.image_url);
-                } else {
-                    alert('Error al subir la imagen: ' + data.message);
-                }
-            } catch (error) {
-                console.error(error);
-                alert('Error al subir la imagen: ' + error.message);
-            }
-        }
-function submitCase(event) {
-    event.preventDefault(); // Evita que el formulario se envíe de manera tradicional
-
-    // Aquí puedes agregar la lógica para manejar el envío del caso
-    console.log('Formulario enviado');
-    // Puedes llamar a la función para subir imágenes aquí si es necesario
-}
 
