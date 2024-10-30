@@ -600,8 +600,11 @@
                     </div>
                     <div class="mt-2">
                         <label for="uploadImage" class="block text-gray-700">Subir nueva Imagen del Caso:</label>
-                        <input type="file" id="uploadImage" accept="image/*"
+                        <input type="file" id="uploadImageCase" accept="image/*"
                             class="border rounded w-full py-1 px-2 text-gray-700" onchange="uploadImageToCloudinary()">
+                    </div>
+                    <div id="imagePreviewContainer" class="mt-2 hidden">
+                        <img id="imagePreview" src="" alt="Vista previa de la imagen" class="w-32 h-32 border rounded mt-2" />
                     </div>
                 </div>
                 <button type="submit"

@@ -1151,24 +1151,76 @@ window.onload = loadImages;
 
 
 //Casos:
+// Función para subir la imagen a Cloudinary
+async function uploadImageToCloudinary() {
+    const uploadedImageFile = document.getElementById('uploadImageCase').files[0]; // Obtiene el archivo de imagen
+
+    // Verifica que se haya seleccionado un archivo
+    if (!uploadedImageFile) {
+        alert('Por favor, selecciona o sube una imagen.');
+        return;
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append('file', uploadedImageFile);
+        formData.append('upload_preset', 'prueba'); // Cambia por tu preset
+        formData.append('folder', 'Casos');
+        
+        const response = await fetch('https://api.cloudinary.com/v1_1/dqeideoyd/image/upload', {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Error al cargar la imagen: ${errorData.message}`);
+        }
+
+        const uploadResult = await response.json();
+        const imageUrl = uploadResult.secure_url; // Obtén la URL de la imagen
+
+        // Muestra la vista previa de la imagen
+        document.getElementById('imagePreview').src = imageUrl;
+        document.getElementById('imagePreview').classList.remove('hidden');
+
+        return imageUrl; // Retorna la URL de la imagen subida
+    } catch (error) {
+        console.error('Error al cargar la imagen a Cloudinary:', error);
+        alert('Error al cargar la imagen. Intenta nuevamente.');
+        return null; // Devuelve null en caso de error
+    }
+}
+
 // Función para enviar el formulario
 async function submitCase(event) {
     event.preventDefault(); // Evitar el envío normal del formulario
 
     const caseName = document.getElementById('caseName').value;
     const caseDescription = document.getElementById('caseDescription').value;
-    const caseImage = document.getElementById('CaseImage').value; // URL de la imagen seleccionada
+    const uploadedImageFile = document.getElementById('uploadImageCase').files[0]; // Archivo de imagen
+    const caseImageSelect = document.getElementById('CaseImage').value; // URL de la imagen seleccionada
 
-    // Verificar que se haya seleccionado una imagen
-    if (!caseImage) {
-        alert('Por favor, selecciona una imagen.');
-        return;
+    let imageUrl = ''; // Variable para la URL de la imagen
+
+    // Verificar si se ha subido una imagen
+    if (uploadedImageFile) {
+        imageUrl = await uploadImageToCloudinary(); // Espera la carga de la imagen
+        if (!imageUrl) {
+            alert('Error al subir la imagen. Intenta nuevamente.');
+            return; // Si no hay URL, no envíes el formulario
+        }
+    } else if (caseImageSelect) {
+        imageUrl = caseImageSelect; // Asigna la URL de la imagen seleccionada
+    } else {
+        alert('Por favor, selecciona o sube una imagen.');
+        return; // Si no hay imagen seleccionada ni subida, cancela
     }
 
     const caseData = {
         nombre_caso: caseName,
         descripcion: caseDescription,
-        foto_url: caseImage, // URL de la imagen seleccionada
+        foto_url: imageUrl, // URL de la imagen
     };
 
     try {
@@ -1184,7 +1236,7 @@ async function submitCase(event) {
             const jsonResponse = await response.json();
             alert(jsonResponse.message); // Mensaje de éxito
             document.getElementById('caseForm').reset(); // Resetear el formulario
-            // Aquí puedes agregar código para actualizar la tabla si es necesario
+            document.getElementById('imagePreview').classList.add('hidden'); // Ocultar la vista previa
         } else {
             const errorResponse = await response.json();
             alert(`Error: ${errorResponse.error}`);
@@ -1216,19 +1268,6 @@ async function fetchImages() {
     }
 }
 
-// Función para actualizar la vista previa de la imagen
-function updateImagePreview() {
-    const select = document.getElementById('CaseImage');
-    const imagePreview = document.getElementById('imagePreview');
-    const selectedValue = select.value;
-
-    if (selectedValue) {
-        imagePreview.src = selectedValue;
-        imagePreview.classList.remove('hidden');
-    } else {
-        imagePreview.classList.add('hidden');
-    }
-}
 
 // Llama a la función para obtener imágenes cuando se cargue la página
 document.addEventListener('DOMContentLoaded', fetchImages);
