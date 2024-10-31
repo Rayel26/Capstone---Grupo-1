@@ -1219,17 +1219,7 @@ function editCase(caseId) {
             document.getElementById('editCaseId').value = caseData.id_caso;
             document.getElementById('editCaseName').value = caseData.nombre_caso;
             document.getElementById('editCaseDescription').value = caseData.descripcion;
-            // Si tienes imágenes, selecciona la imagen correspondiente
-            document.getElementById('editCaseImage').value = caseData.foto_url; // Asegúrate de que esto esté correctamente mapeado
-            // Mostrar la vista previa de la imagen si es necesario
-            const imagePreview = document.getElementById('editImagePreview');
-            const imageContainer = document.getElementById('editImagePreviewContainer');
-            if (caseData.foto_url) {
-                imagePreview.src = caseData.foto_url;
-                imageContainer.classList.remove('hidden');
-            } else {
-                imageContainer.classList.add('hidden');
-            }
+
             // Mostrar el modal
             document.getElementById('editCaseModal').classList.remove('hidden');
         })
@@ -1237,53 +1227,48 @@ function editCase(caseId) {
 }
 
 function updateCase(event) {
-    event.preventDefault(); // Prevenir el envío del formulario por defecto
-    const caseId = document.getElementById('editCaseId').value;
-    const nombre_caso = document.getElementById('editCaseName').value;
-    const descripcion = document.getElementById('editCaseDescription').value;
-    const foto_url = document.getElementById('editCaseImage').value;
+    event.preventDefault();
     
-    // Hacer la solicitud para actualizar el caso
+    const caseId = document.getElementById('editCaseId').value;
+    const caseName = document.getElementById('editCaseName').value;
+    const caseDescription = document.getElementById('editCaseDescription').value;
+
     fetch(`/api/casos/${caseId}`, {
         method: 'PUT',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            nombre_caso,
-            descripcion,
-            foto_url,
-        }),
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data.message);
-            // Cerrar el modal después de la actualización
-            closeModal();
-
-            // Actualizar la fila correspondiente en la tabla
-            const row = document.querySelector(`tr[data-case-id="${caseId}"]`);
-            if (row) {
-                row.cells[1].textContent = nombre_caso; // Actualiza el nombre
-                row.cells[2].textContent = descripcion; // Actualiza la descripción
-                // Si deseas actualizar la imagen también puedes hacerlo aquí
-                // row.cells[3].innerHTML = `<img src="${foto_url}" alt="Imagen" />`; // Actualizar imagen, si corresponde
-            }
+            nombre_caso: caseName,
+            descripcion: caseDescription
         })
-        .catch(error => console.error('Error al actualizar el caso:', error));
+    })
+    .then(response => {
+        if (response.ok) {
+            const successMessage = document.getElementById('successMessage');
+            successMessage.textContent = 'Caso actualizado correctamente.';
+            successMessage.classList.remove('hidden');
+            setTimeout(() => {
+                successMessage.classList.add('hidden');
+                closeModal(); // Cerrar modal después de un tiempo
+                loadCases(); // Recargar la tabla después de cerrar el modal
+            }, 2000); // Cerrar después de 2 segundos
+        } else {
+            console.error('Error al actualizar el caso');
+        }
+    })
+    .catch(error => console.error('Error:', error));
 }
+
 
 
 function closeModal() {
     document.getElementById('editCaseModal').classList.add('hidden');
 }
 
-
 // Elimina de la tabla
 async function deleteCase(caseId) {
-    console.log("ID del caso a eliminar en deleteCase:", caseId); // Verifica el ID aquí
-
-    if (caseId === undefined || caseId === null) {
+    if (!caseId) {
         console.error("El caseId es undefined o null. Verifica la asignación de ID.");
         alert("Error: No se pudo obtener el ID del caso.");
         return;
@@ -1294,10 +1279,8 @@ async function deleteCase(caseId) {
             method: 'DELETE',
         });
 
-        console.log("Estado de la respuesta:", response.status); // Verifica el estado de la respuesta
-
         if (!response.ok) {
-            const errorData = await response.json(); // Captura el error para detalles
+            const errorData = await response.json();
             console.error('Error al eliminar el caso:', errorData);
             throw new Error('Error al eliminar el caso');
         }

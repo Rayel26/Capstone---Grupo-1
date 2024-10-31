@@ -607,37 +607,30 @@
                     class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
                     style="background-color: #18beaa;">Subir Caso</button>
             </form>
-            <!-- Modal para Editar Caso -->
-            <div id="editCaseModal"
-                class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden flex items-center justify-center z-50">
+            <div id="editCaseModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden flex items-center justify-center z-50">
                 <div class="bg-white rounded-lg shadow-lg w-96 p-6">
-                    <h4 class="text-base font-semibold">Editar Caso</h4>
+                    <h4 class="text-lg font-semibold text-center mb-4">Editar Caso</h4>
                     <form id="editCaseForm" onsubmit="updateCase(event)">
                         <input type="hidden" id="editCaseId">
                         <div class="mt-2">
                             <label for="editCaseName" class="block text-gray-700">Nombre del Caso:</label>
-                            <input type="text" id="editCaseName" class="border rounded w-full py-1 px-2 text-gray-700"
-                                required>
+                            <input type="text" id="editCaseName" class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400" required>
                         </div>
                         <div class="mt-2">
                             <label for="editCaseDescription" class="block text-gray-700">Descripción:</label>
-                            <textarea id="editCaseDescription"
-                                class="border rounded w-full py-1 px-2 text-gray-700"></textarea>
+                            <textarea id="editCaseDescription" class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400" rows="3"></textarea>
                         </div>
-                        <div class="mt-2">
-                            <label for="editCaseImage" class="block text-gray-700">Seleccionar Imagen del Caso:</label>
-                            <select id="editCaseImage" class="border rounded w-full py-1 px-2 text-gray-700">
-                                <option value="">Seleccione una imagen</option>
-                            </select>
-                            <div id="editImagePreviewContainer" class="mt-2 hidden">
-                                <img id="editImagePreview" src="" alt="Vista previa de la imagen"
-                                    class="w-32 h-32 border rounded mt-2" />
-                            </div>
+                        <div id="editImagePreviewContainer" class="hidden mt-2">
+                            <img id="editImagePreview" class="w-full h-auto rounded" alt="Vista previa de la imagen">
                         </div>
-                        <button type="submit" class="mt-4 text-white py-2 px-4 rounded"
-                            style="background-color: #18beaa;">Actualizar Caso</button>
-                        <button type="button" class="mt-4 text-red-500" onclick="closeModal()">Cancelar</button>
+                        <div class="flex justify-between mt-4">
+                            <button type="submit" style="background-color: #18beaa; color: white; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.875rem;">
+                                Actualizar Caso
+                            </button>
+                            <button type="button" style="background-color: #e3342f; color: white; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.875rem;" onclick="closeModal()">Cancelar</button>
+                        </div>
                     </form>
+                    <div id="successMessage" class="mt-4 text-green-500 text-center hidden"></div>
                 </div>
             </div>
         </section>

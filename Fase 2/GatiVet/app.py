@@ -1645,13 +1645,12 @@ def update_case(case_id):
     # Obtener los datos del formulario
     nombre_caso = data.get('nombre_caso')
     descripcion = data.get('descripcion')
-    foto_url = data.get('foto_url')
 
     # Actualizar el caso en la base de datos
     response = supabase.table('CasoDonacion').update({
         'nombre_caso': nombre_caso,
         'descripcion': descripcion,
-        'foto_url': foto_url,
+        
     }).eq('id_caso', case_id).execute()
 
     return jsonify({"message": "Caso actualizado exitosamente!"}), 200
