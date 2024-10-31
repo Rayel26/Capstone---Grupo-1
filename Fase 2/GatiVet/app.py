@@ -1637,7 +1637,43 @@ def delete_case(case_id):
     return jsonify({"message": "Caso eliminado exitosamente!"}), 200
 
     
+# Ruta para crear una nueva fundación
+@app.route('/api/fundaciones', methods=['POST'])
+def create_foundation():
+    data = request.json
 
+    # Obtener los datos del formulario
+    nombre_fundacion = data.get('nombre_fundacion')
+    descripcion = data.get('descripcion')
+    foto_url = data.get('foto_url')
+    fecha_ingreso = datetime.now().isoformat()  # Convertir a cadena ISO 8601
+
+    # Aquí iría el código para guardar en Supabase
+    supabase.table('FundacionDonacion').insert({
+        'nombre_fundacion': nombre_fundacion,
+        'descripcion': descripcion,
+        'foto_url': foto_url,
+        'fecha_ingreso': fecha_ingreso,
+    }).execute()
+
+    return jsonify({"message": "Fundación creada exitosamente!"}), 201
+
+# Ruta para obtener las fundaciones
+@app.route('/api/fundaciones', methods=['GET'])
+def get_foundations():
+    # Obtiene todas las fundaciones incluyendo la fecha de ingreso
+    data = supabase.table('FundacionDonacion').select('*').execute()
+    fundaciones = data.data
+    return jsonify(fundaciones), 200
+
+
+# Ruta para eliminar una fundación
+@app.route('/api/fundaciones/<int:foundation_id>', methods=['DELETE'])
+def delete_foundation(foundation_id):
+    # Elimina la fundación según su ID
+    response = supabase.table('FundacionDonacion').delete().eq('id_fundacion', foundation_id).execute()
+
+    return jsonify({"message": "Fundación eliminada exitosamente!"}), 200
 
 
 if __name__ == '__main__':

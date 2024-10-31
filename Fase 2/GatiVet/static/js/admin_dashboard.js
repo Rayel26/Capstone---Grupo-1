@@ -1363,9 +1363,217 @@ async function fetchImages() {
     }
 }
 
-
 // Llama a la función para obtener imágenes cuando se cargue la página
 document.addEventListener('DOMContentLoaded', fetchImages);
 
+//Fundaciones
+
+// Función para cargar las fundaciones en la tabla
+async function loadFoundations() {
+    try {
+        const response = await fetch('/api/fundaciones');
+        if (!response.ok) {
+            throw new Error('Error al obtener las fundaciones');
+        }
+
+        const foundations = await response.json();
+        const tableBody = document.getElementById('foundationTable').getElementsByTagName('tbody')[0];
+
+        // Limpia la tabla antes de llenarla
+        tableBody.innerHTML = '';
+
+        // Llena la tabla con los datos de las fundaciones
+        foundations.forEach(foundationData => {
+            console.log("foundationData:", foundationData); // Verifica qué hay en foundationData
+
+            const row = tableBody.insertRow();
+            const nameCell = row.insertCell(0);
+            const descriptionCell = row.insertCell(1);
+            const dateCell = row.insertCell(2); // Nueva celda para la fecha de ingreso
+            const actionsCell = row.insertCell(3); // Nueva celda para acciones
+
+            // Asigna las clases para el estilo
+            nameCell.className = 'py-2 px-4 border-b';
+            descriptionCell.className = 'py-2 px-4 border-b';
+            dateCell.className = 'py-2 px-4 border-b'; // Clase para la celda de fecha
+            actionsCell.className = 'py-2 px-4 border-b';
+
+            // Asigna el contenido a las celdas
+            nameCell.textContent = foundationData.nombre_fundacion;
+            descriptionCell.textContent = foundationData.descripcion;
+            dateCell.textContent = new Date(foundationData.fecha_ingreso).toLocaleDateString(); // Formato de fecha
+
+            // Botones de acción
+            const editButton = document.createElement('button');
+            editButton.textContent = 'Editar';
+            editButton.className = 'text-blue-500 hover:underline';
+            editButton.onclick = () => editFoundation(foundationData.id_fundacion); // Asegúrate de usar el nombre correcto
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Eliminar';
+            deleteButton.className = 'text-red-500 hover:underline ml-2';
+            deleteButton.onclick = () => {
+                console.log("ID de la fundación a eliminar:", foundationData.id_fundacion); // Verifica el ID correcto
+                deleteFoundation(foundationData.id_fundacion); // Usa el nombre correcto aquí
+            };
+            actionsCell.appendChild(editButton);
+            actionsCell.appendChild(deleteButton);
+        });
+    } catch (error) {
+        console.error('Error al cargar las fundaciones:', error);
+    }
+}
+
+
+async function deleteFoundation(foundationId) {
+    console.log("ID de la fundación a eliminar en deleteFoundation:", foundationId); // Verifica el ID aquí
+
+    if (foundationId === undefined || foundationId === null) {
+        console.error("El foundationId es undefined o null. Verifica la asignación de ID.");
+        alert("Error: No se pudo obtener el ID de la fundación.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/fundaciones/${foundationId}`, {
+            method: 'DELETE',
+        });
+
+        console.log("Estado de la respuesta:", response.status); // Verifica el estado de la respuesta
+
+        if (!response.ok) {
+            const errorData = await response.json(); // Captura el error para detalles
+            console.error('Error al eliminar la fundación:', errorData);
+            throw new Error('Error al eliminar la fundación');
+        }
+
+        const result = await response.json();
+        alert(result.message);
+        loadFoundations(); // Volver a cargar la tabla
+    } catch (error) {
+        console.error('Error al eliminar la fundación:', error);
+        alert('Error al eliminar la fundación.');
+    }
+}
+
+// Llama a la función para cargar las fundaciones cuando se cargue la página
+document.addEventListener('DOMContentLoaded', loadFoundations);
+
+// Función para subir la imagen a Cloudinary
+async function uploadImageToCloudinary() {
+    const uploadedImageFile = document.getElementById('uploadImageFun').files[0]; // Obtiene el archivo de imagen
+
+    // Verifica que se haya seleccionado un archivo
+    if (!uploadedImageFile) {
+        alert('Por favor, selecciona o sube una imagen.');
+        return;
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append('file', uploadedImageFile);
+        formData.append('upload_preset', 'prueba'); // Cambia por tu preset
+        formData.append('folder', 'Fundaciones');
+
+        const response = await fetch('https://api.cloudinary.com/v1_1/dqeideoyd/image/upload', {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Error al cargar la imagen: ${errorData.message}`);
+        }
+
+        const uploadResult = await response.json();
+        const imageUrl = uploadResult.secure_url; // Obtén la URL de la imagen
+
+        // Muestra la vista previa de la imagen
+        document.getElementById('imagePreview').src = imageUrl;
+        document.getElementById('imagePreview').classList.remove('hidden');
+
+        return imageUrl; // Retorna la URL de la imagen subida
+    } catch (error) {
+        console.error('Error al cargar la imagen a Cloudinary:', error);
+        alert('Error al cargar la imagen. Intenta nuevamente.');
+        return null; // Devuelve null en caso de error
+    }
+}
+
+// Función para enviar el formulario
+async function submitFoundation(event) {
+    event.preventDefault(); // Evitar el envío normal del formulario
+
+    const foundationName = document.getElementById('foundationName').value;
+    const foundationDescription = document.getElementById('foundationDes').value;
+    const uploadedImageFile = document.getElementById('uploadImageFun').files[0]; // Archivo de imagen
+    const foundationImageSelect = document.getElementById('FundationImage').value; // URL de la imagen seleccionada
+
+    let imageUrl = ''; // Variable para la URL de la imagen
+
+    // Verificar si se ha subido una imagen
+    if (uploadedImageFile) {
+        imageUrl = await uploadImageToCloudinary(); // Espera la carga de la imagen
+        if (!imageUrl) {
+            alert('Error al subir la imagen. Intenta nuevamente.');
+            return; // Si no hay URL, no envíes el formulario
+        }
+    } else if (foundationImageSelect) {
+        imageUrl = foundationImageSelect; // Asigna la URL de la imagen seleccionada
+    } else {
+        alert('Por favor, selecciona o sube una imagen.');
+        return; // Si no hay imagen seleccionada ni subida, cancela
+    }
+
+    const foundationData = {
+        nombre_fundacion: foundationName,
+        descripcion: foundationDescription,
+        foto_url: imageUrl, // URL de la imagen
+    };
+
+    try {
+        const response = await fetch('/api/fundaciones', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(foundationData),
+        });
+
+        if (response.ok) {
+            const jsonResponse = await response.json();
+            alert(jsonResponse.message); // Mensaje de éxito
+            document.getElementById('foundationForm').reset(); // Resetear el formulario
+            document.getElementById('imagePreview').classList.add('hidden'); // Ocultar la vista previa
+        } else {
+            const errorResponse = await response.json();
+            alert(`Error: ${errorResponse.error}`);
+        }
+    } catch (error) {
+        console.error('Error al enviar los datos:', error);
+        alert('Error al enviar los datos. Inténtalo de nuevo.');
+    }
+}
+
+// Función para obtener imágenes de Cloudinary y llenar el select
+async function fetchFoundationImages() {
+    try {
+        const response = await fetch('/api/cloudinary/images');
+        if (!response.ok) {
+            throw new Error('Error al obtener imágenes');
+        }
+        const images = await response.json();
+        const select = document.getElementById('FundationImage');
+
+        images.forEach(imageUrl => {
+            const option = document.createElement('option');
+            option.value = imageUrl; // La URL de la imagen
+            option.textContent = imageUrl.split('/').pop(); // Muestra el nombre de la imagen
+            select.appendChild(option);
+        });
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 
