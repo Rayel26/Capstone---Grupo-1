@@ -10,6 +10,7 @@ import cloudinary.uploader  # Asegúrate de importar esto
 import uuid
 from flask_mail import Mail, Message
 from flask_cors import cross_origin
+import pytz
 
 app = Flask(__name__)
 CORS(app)
@@ -1598,7 +1599,7 @@ def confirm_appointment():
 
     return jsonify({'message': 'Cita confirmada exitosamente!'}), 201
 
-#Ruta Casos administrador
+#ruta guardar casos administrador
 @app.route('/api/casos', methods=['POST'])
 def create_case():
     data = request.json
@@ -1607,10 +1608,15 @@ def create_case():
     nombre_caso = data.get('nombre_caso')
     descripcion = data.get('descripcion')
     foto_url = data.get('foto_url')
-    fecha_ingreso = datetime.now().isoformat()  # Convertir a cadena ISO 8601
 
-    # Aquí iría el código para guardar en Supabase
-    # Por ejemplo:
+    # Obtener la fecha y hora actual en la zona horaria local
+    local_tz = pytz.timezone('America/Santiago')
+    fecha_ingreso = datetime.now(local_tz).isoformat()  # O usa strftime para formato específico
+
+    # Para depuración
+    print("Fecha y hora que se va a guardar:", fecha_ingreso)
+
+    # Guardar en Supabase
     supabase.table('CasoDonacion').insert({
         'nombre_caso': nombre_caso,
         'descripcion': descripcion,
@@ -1631,6 +1637,35 @@ def get_cases():
 
     return jsonify(cases_data), 200
 
+# Ruta para actualizar casos
+@app.route('/api/casos/<int:case_id>', methods=['PUT'])
+def update_case(case_id):
+    data = request.json
+
+    # Obtener los datos del formulario
+    nombre_caso = data.get('nombre_caso')
+    descripcion = data.get('descripcion')
+    foto_url = data.get('foto_url')
+
+    # Actualizar el caso en la base de datos
+    response = supabase.table('CasoDonacion').update({
+        'nombre_caso': nombre_caso,
+        'descripcion': descripcion,
+        'foto_url': foto_url,
+    }).eq('id_caso', case_id).execute()
+
+    return jsonify({"message": "Caso actualizado exitosamente!"}), 200
+
+# Ruta para obtener un caso por ID
+@app.route('/api/casos/<int:case_id>', methods=['GET'])
+def get_case(case_id):
+    case = supabase.table('CasoDonacion').select('*').eq('id_caso', case_id).execute()
+    if case.data:
+        return jsonify(case.data[0]), 200  # Devuelve solo el primer caso encontrado
+    return jsonify({"message": "Caso no encontrado"}), 404
+
+
+#Ruta para eliminar casos administra
 @app.route('/api/casos/<int:case_id>', methods=['DELETE'])
 def delete_case(case_id):
     # Eliminar el caso de la tabla CasoDonacion
@@ -1638,6 +1673,8 @@ def delete_case(case_id):
     return jsonify({"message": "Caso eliminado exitosamente!"}), 200
 
     
+
+
 # Ruta para crear una nueva fundación
 @app.route('/api/fundaciones', methods=['POST'])
 def create_foundation():
