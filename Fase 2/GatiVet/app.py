@@ -9,6 +9,7 @@ import cloudinary
 import cloudinary.uploader  # Asegúrate de importar esto
 import uuid
 from flask_mail import Mail, Message
+from flask_cors import cross_origin
 
 app = Flask(__name__)
 CORS(app)
@@ -1674,6 +1675,47 @@ def delete_foundation(foundation_id):
     response = supabase.table('FundacionDonacion').delete().eq('id_fundacion', foundation_id).execute()
 
     return jsonify({"message": "Fundación eliminada exitosamente!"}), 200
+
+#Ruta Agenda
+@app.route('/api/agenda', methods=['GET'])
+@cross_origin()
+def get_agenda():
+    print("API de agenda solicitada")
+    
+    # Obtener datos de la tabla Agenda, asegurándote de incluir 'area' y 'motivo'
+    agenda_response = supabase.table('Agenda').select('*').execute()
+    agenda_data = agenda_response.data
+    
+    # Obtener datos de la tabla Usuario
+    usuario_response = supabase.table('Usuario').select('*').execute()
+    usuario_data = {user['id_usuario']: user for user in usuario_response.data}
+    
+    # Obtener datos de la tabla Mascota
+    mascota_response = supabase.table('Mascota').select('*').execute()
+    mascota_data = {pet['id_mascota']: pet for pet in mascota_response.data}
+    
+    # Preparar la respuesta combinada
+    combined_data = []
+    for cita in agenda_data:
+        usuario_info = usuario_data.get(cita['id_usuario'])  # Asumiendo 'usuario_id' como FK en Agenda
+        mascota_info = mascota_data.get(cita['id_mascota'])  # Asumiendo 'mascota_id' como FK en Agenda
+        
+        # Combinar datos
+        combined_record = {
+            'fecha': cita['fecha'],           # Fecha de la cita
+            'hora': cita['hora'],             # Hora de la cita
+            'id_mascota': cita['id_mascota'], # ID de la mascota
+            'servicio': cita['servicio'],     # Servicio asignado
+            'area': cita['area'],             # Nuevo campo 'area'
+            'motivo': cita['motivo'],         # Nuevo campo 'motivo'
+            'usuario': usuario_info,          # Información del usuario
+            'mascota': mascota_info           # Información de la mascota
+        }
+        combined_data.append(combined_record)
+    
+    return jsonify(combined_data), 200
+
+
 
 
 if __name__ == '__main__':

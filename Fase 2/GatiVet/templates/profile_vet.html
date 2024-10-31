@@ -1088,9 +1088,10 @@
                 <!-- Header del modal -->
                 <div class="flex justify-between items-center mb-4 border-b pb-2">
                     <h2 class="text-xl font-bold" id="modalweek-type">Cita: Presencial</h2>
-                    <!-- Puedes cambiar a 'Online' dinámicamente -->
-                    <span class="text-gray-500 text-sm" id="modalweek-date-icon"><i class="fas fa-calendar"></i> <span
-                            id="modalweek-date">25 de Octubre 2024</span></span>
+                    <span class="text-gray-500 text-sm" id="modalweek-date-icon">
+                        <i class="fas fa-calendar"></i> 
+                        <span id="modalweek-date">25 de Octubre 2024</span>
+                    </span>
                 </div>
 
                 <!-- Información del dueño -->
@@ -1110,12 +1111,10 @@
                 <div class="flex items-center mb-4 border-b border-gray-300 pb-2">
                     <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mr-4">
                         <i id="modalweek-pet-icon" class="fas fa-dog text-2xl text-yellow-500"></i>
-                        <!-- Cambiará entre 'fas fa-cat' o 'fas fa-dog' -->
                     </div>
                     <div>
                         <p class="text-lg font-semibold" id="modalweek-pet">COOKIE</p>
                         <p class="text-sm text-gray-600" id="modalweek-breed">Yorkshire Terrier, Hembra</p>
-                        <!-- Sexo dinámico -->
                     </div>
                 </div>
 
@@ -1126,29 +1125,27 @@
                         <input id="modalweek-start-time" type="time" value="11:00" disabled />
                     </p>
                     <p>
-                        <i class="fas fa-clock mr-1"></i> Hora Fin:
-                        <input id="modalweek-end-time" type="time" value="12:00" disabled />
+                        <i class="fas fa-info-circle mr-1"></i> Servicio: 
+                        <span id="modalweek-service">Consulta General</span>
                     </p>
-                    <p><i class="fas fa-info-circle mr-1"></i> Tipo: <span id="modalweek-type-info">Consulta
-                            General</span></p>
-                    <p><i class="fas fa-file-alt mr-1"></i> Motivo: <span id="modalweek-reason">Revisión anual</span>
-                    </p>
+                    <p><i class="fas fa-info-circle mr-1"></i> Tipo: <span id="modalweek-type-info">Consulta General</span></p>
+                    <p><i class="fas fa-file-alt mr-1"></i> Motivo: <span id="modalweek-reason">Revisión anual</span></p>
                 </div>
 
                 <!-- Botones de acción -->
                 <div class="flex justify-between">
-                    <button class="bg-red-500 text-white px-4 py-2 rounded-md"
-                        onclick="cancelAppointmentWeek()">Cancelar</button>
-                    <button id="editTime" class="bg-green-400 text-white px-4 py-2 rounded-md"
-                        onclick="editAppointmentWeek()">Editar</button>
+                    <button class="bg-red-500 text-white px-4 py-2 rounded-md" onclick="cancelAppointmentWeek()">Cancelar</button>
+                    <button id="editTime" class="bg-green-400 text-white px-4 py-2 rounded-md" onclick="editAppointmentWeek()">Editar</button>
                 </div>
             </div>
         </div>
-        <!-- Fin Agenda -->
+
+    </div>
+    <!-- Fin Agenda -->
 
 
 
-        <script src="{{ url_for('static', filename='js/profile_vet.js') }}"></script>
+<script src="{{ url_for('static', filename='js/profile_vet.js') }}"></script>
 
 </body>
 

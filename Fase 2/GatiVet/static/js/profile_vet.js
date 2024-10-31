@@ -699,8 +699,6 @@ function cerrarModal() {
     }
 }
 
-
-
 //Fin de script relacionado a datos de mascotas
 
 ///////////////////////////////
@@ -808,7 +806,6 @@ function loadMedicalHistory() {
 }
 
 //Script detalle historial
-
 // Agrega el evento de clic al botón "Cerrar"
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("close-modal-detail").addEventListener("click", closeModalDetailHandler);
@@ -965,7 +962,7 @@ function guardarCambiosDesparasitacion(desparasitacionId) {
 }
 
 //////////////////////////////////////////////////
-//Script para Agenda
+// Script para Agenda
 
 // JavaScript para cambiar entre vistas
 const toggleButton = document.getElementById('toggleView');
@@ -976,27 +973,10 @@ const monthlyView = document.getElementById('monthlyView');
 const calendarDays = document.getElementById('calendarDays');
 const monthTitle = document.getElementById('monthTitle');
 
-let currentYear = 2024;
-let currentMonth = 9; // Octubre (0-indexado)
-
-// Datos de citas para mostrar en el calendario
-const appointments = {
-    7: [
-        { time: '11:00 - 12:00', pet: 'COOKIE', color: 'bg-yellow-100' },
-        { time: '13:00 - 14:00', pet: 'BELLA', color: 'bg-blue-100' }
-    ],
-    8: [
-        { time: '10:30 - 11:30', pet: 'MANDARINA', color: 'bg-green-100' },
-        { time: '15:00 - 16:00', pet: 'LUNA', color: 'bg-red-100' },
-    ],
-    9: [
-        { time: '09:00 - 10:00', pet: 'MAX', color: 'bg-purple-100' },
-    ],
-    10: [
-        { time: '14:00 - 15:00', pet: 'RUFUS', color: 'bg-orange-100' },
-    ],
-    // Agrega más citas aquí con la misma estructura
-};
+// Obtener la fecha actual
+const today = new Date();
+let currentYear = today.getFullYear();
+let currentMonth = today.getMonth(); // Mes actual (0-indexado)
 
 // Array de nombres de meses
 const monthNames = [
@@ -1004,8 +984,7 @@ const monthNames = [
     "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
 ];
 
-// Función para generar días del mes
-function generateCalendar(year, month) {
+function generateCalendar(year, month, appointments = {}) {
     // Limpiar los días del calendario
     calendarDays.innerHTML = '';
 
@@ -1033,20 +1012,49 @@ function generateCalendar(year, month) {
         if (dayOfWeek === 0 || dayOfWeek === 6) { // Domingo (0) y Sábado (6)
             dayDiv.classList.add('weekend');
         } else {
-            // Solo crear tarjetas para días de semana (lunes a viernes)
             dayDiv.textContent = day;
 
             // Mostrar citas si hay
             if (appointments[day]) {
                 const appointmentList = document.createElement('div');
                 appointmentList.className = 'mt-1'; // Margen superior para la lista de citas
-
-                appointments[day].forEach(appointment => {
-                    const appointmentDiv = document.createElement('div');
-                    appointmentDiv.className = `appointment-card rounded-md shadow-md p-1 text-xs ${appointment.color} mb-1`;
-                    appointmentDiv.textContent = `${appointment.time}: ${appointment.pet}`;
-                    appointmentList.appendChild(appointmentDiv);
-                });
+                
+                // Asegurarse de que appointments[day] sea un array
+                if (Array.isArray(appointments[day])) {
+                    appointments[day].forEach(appointment => {
+                        const appointmentDiv = document.createElement('div');
+                        appointmentDiv.className = `appointment-card rounded-md shadow-md p-1 text-xs ${appointment.color} mb-1`;
+                        appointmentDiv.textContent = `${appointment.time}: ${appointment.pet}`;
+                        
+                        appointmentDiv.addEventListener('click', () => {
+                            const appointmentObject = {
+                                type: appointment.type,
+                                fecha: `${monthNames[month]} ${day}, ${year}`,
+                                usuario: {
+                                    nombre: appointment.usuario.nombre || 'Nombre no disponible',
+                                    email: appointment.usuario.email || 'Email no disponible',
+                                    telefono: appointment.usuario.telefono || 'Teléfono no disponible'
+                                },
+                                mascota: {
+                                    nombre: appointment.mascota.nombre || 'Nombre no disponible',
+                                    raza: appointment.mascota.raza || 'Raza no disponible',
+                                    sexo: appointment.mascota.sexo || 'Sexo no disponible',
+                                    icon: appointment.mascota.icon || 'Icono no disponible'
+                                },
+                                hora: appointment.time || 'Hora no disponible',
+                                servicio: appointment.typeInfo || 'Servicio no disponible',
+                                motivo: appointment.reason || 'Motivo no disponible'
+                            };
+                        
+                            console.log('Datos de la cita antes de abrir el modal:', appointmentObject); // Para depurar
+                            openModalWeek(appointmentObject);
+                        });
+                        
+                        appointmentList.appendChild(appointmentDiv);
+                    });
+                } else {
+                    console.warn(`No se encontró un array de citas para el día ${day}:`, appointments[day]);
+                }
 
                 dayDiv.appendChild(appointmentList);
             }
@@ -1056,8 +1064,54 @@ function generateCalendar(year, month) {
     }
 }
 
-// Inicializar el calendario
-generateCalendar(currentYear, currentMonth);
+async function fetchAppointments() {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/api/agenda'); // Reemplaza con la URL real
+        const data = await response.json();
+        console.log(data); // Verifica la estructura de los datos
+
+        const appointments = {};
+        data.forEach(appointment => {
+            const day = new Date(appointment.fecha).getDate(); // Obtener el día del mes
+
+            if (!appointments[day]) {
+                appointments[day] = []; // Inicializar como array si no existe
+            }
+
+            // Validación de la cita
+            if (appointment.servicio) { // Asegúrate de que el servicio no sea undefined
+                appointments[day].push({
+                    time: appointment.hora || 'Hora no disponible', // Proporciona un valor por defecto si es undefined
+                    pet: `Mascota ID: ${appointment.id_mascota}`, 
+                    type: appointment.servicio || 'Tipo no disponible', // Proporciona un valor por defecto
+                    color: 'someColor',
+                    usuario: {
+                        nombre: appointment.usuario?.nombre || 'Nombre no disponible',
+                        email: appointment.usuario?.email || 'Email no disponible',
+                        telefono: appointment.usuario?.telefono || 'Teléfono no disponible'
+                    },
+                    mascota: {
+                        nombre: appointment.mascota?.nombre || 'Nombre no disponible',
+                        raza: appointment.mascota?.raza || 'Raza no disponible',
+                        sexo: appointment.mascota?.sexo || 'Sexo no disponible',
+                        icon: appointment.mascota?.icon || 'Icono no disponible'
+                    },
+                    fecha: appointment.fecha || 'Fecha no disponible'
+                });
+            } else {
+                console.warn(`Cita sin servicio válida: ${JSON.stringify(appointment)}`);
+            }            
+        });
+
+        // Llama a la función para generar el calendario
+        generateCalendar(currentYear, currentMonth, appointments);
+
+    } catch (error) {
+        console.error('Error fetching appointments:', error);
+    }
+}
+
+fetchAppointments();
 
 // Cambiar entre vista semanal y mensual
 toggleButton.addEventListener('click', () => {
@@ -1083,7 +1137,7 @@ prevMonthButton.addEventListener('click', () => {
         currentMonth = 11;
         currentYear--;
     }
-    generateCalendar(currentYear, currentMonth);
+    fetchAppointments(); // Actualizar citas al cambiar de mes
 });
 
 nextMonthButton.addEventListener('click', () => {
@@ -1092,43 +1146,66 @@ nextMonthButton.addEventListener('click', () => {
         currentMonth = 0;
         currentYear++;
     }
-    generateCalendar(currentYear, currentMonth);
+    fetchAppointments(); // Actualizar citas al cambiar de mes
 });
 
-//Modal de la agenda
+// Modal de la agenda
 
-// Función para abrir el modal con detalles dinámicos
-function openModalWeek(type, owner, email, phone, petIcon, pet, breed, sex, startTime, endTime, typeInfo, reason, date) {
-    document.getElementById('modalweek-type').innerText = `Cita: ${type}`;
-    document.getElementById('modalweek-owner').innerText = owner;
-    document.getElementById('modalweek-email').innerText = email;
-    document.getElementById('modalweek-phone').innerText = phone;
-    document.getElementById('modalweek-pet-icon').className = petIcon; // Icono de perro o gato
-    document.getElementById('modalweek-pet').innerText = pet;
-    document.getElementById('modalweek-breed').innerText = `${breed}, ${sex}`;
-    document.getElementById('modalweek-start-time').innerText = startTime;
-    document.getElementById('modalweek-end-time').innerText = endTime;
-    document.getElementById('modalweek-type-info').innerText = typeInfo;
-    document.getElementById('modalweek-reason').innerText = reason;
-    document.getElementById('modalweek-date').innerText = date;
-    document.getElementById('modalweek').classList.remove('hidden');
+function openModalWeek(appointment) {
+    console.log('Datos de la cita:', appointment); // Para depurar
+
+    // Verificar si appointment es un objeto válido
+    if (typeof appointment !== 'object' || appointment === null) {
+        console.error('El objeto de la cita no es válido:', appointment);
+        return; // Salir de la función si el objeto no es válido
+    }
+
+    // Completa los campos del modal con los datos de la cita
+    document.getElementById('modalweek-type').innerText = `Cita: ${appointment.type || 'Tipo no disponible'}`;
+    document.getElementById('modalweek-date').innerText = `${new Date(appointment.fecha).toLocaleDateString()}`;
+
+    // Información del dueño
+    document.getElementById('modalweek-owner').innerText = appointment.usuario?.nombre || 'Nombre no disponible';
+    document.getElementById('modalweek-email').innerText = appointment.usuario?.email || 'Email no disponible';
+    document.getElementById('modalweek-phone').innerText = appointment.usuario?.telefono || 'Teléfono no disponible';
+
+    // Información de la mascota
+    document.getElementById('modalweek-pet').innerText = appointment.mascota?.nombre || 'Nombre no disponible';
+    document.getElementById('modalweek-breed').innerText = `${appointment.mascota?.raza || 'Raza no disponible'}, ${appointment.mascota?.sexo || 'Sexo no disponible'}`;
+
+    // Detalles de la cita
+    document.getElementById('modalweek-start-time').value = appointment.hora; // Hora de inicio
+    document.getElementById('modalweek-service').innerText = appointment.servicio || 'Servicio no disponible';
+    document.getElementById('modalweek-reason').innerText = appointment.motivo || 'Motivo no disponible';
+
+    // Mostrar el modal
+    const modal = document.getElementById('modalweek');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex'); // Usar flex para mostrar el modal
 }
+
+// Función para cerrar el modal
+document.getElementById('closeModalWeek').addEventListener('click', () => {
+    const modal = document.getElementById('modalweek');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex'); // Ocultar el modal
+});
+
+// Inicializar la agenda al cargar la página
+window.onload = fetchAppointments;
+
 
 // Función para cerrar el modal
 function closeModalWeek() {
     document.getElementById('modalweek').classList.add('hidden');
 }
 
+
 // Función para cancelar la cita
 function cancelAppointmentWeek() {
-    const appointmentCard = document.querySelector('.appointment-card[onclick*="Presencial"]'); // Selecciona la tarjeta actual
-    if (appointmentCard) {
-        appointmentCard.remove(); // Elimina la tarjeta visualmente
-    }
     alert("Cita cancelada");
     closeModalWeek();
 }
-
 
 // Variables para almacenar el estado de la cita
 let isEditing = false;
@@ -1143,25 +1220,17 @@ function editAppointmentWeek() {
         const startTime = startTimeInput.value;
         const endTime = endTimeInput.value;
 
-        // Aquí podrías realizar una acción para guardar los datos, como enviar a un servidor.
         console.log("Guardando cambios:", startTime, endTime);
-
-        // Alertar que los cambios se realizaron correctamente
         alert("Los cambios se realizaron correctamente.");
-
-        // Cambiar el texto del botón de nuevo a "Editar"
         editTime.textContent = "Editar";
-        // Deshabilitar los inputs
         startTimeInput.disabled = true;
         endTimeInput.disabled = true;
     } else {
-        // Activar la edición
         editTime.textContent = "Guardar Cambios";
         startTimeInput.disabled = false;
         endTimeInput.disabled = false;
     }
 
-    // Alternar el estado de edición
     isEditing = !isEditing;
 }
 
@@ -1170,8 +1239,9 @@ const timeInput = document.getElementById('consultationStartTime');
 
 // Agrega un evento de clic al input
 timeInput.addEventListener('click', function () {
-    this.showPicker(); // Muestra el selector de tiempo (timepicker)
+    this.showPicker();
 });
+
 
 
 ///////////vacunas////////////////////////////////// 
