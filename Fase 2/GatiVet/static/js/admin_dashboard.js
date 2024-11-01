@@ -1575,6 +1575,7 @@ async function loadFoundations() {
     }
 }
 
+// Abre modal edicion
 function editFoundation(foundationId) {
     // Hacer una solicitud para obtener los datos de la fundación
     fetch(`/api/fundaciones/${foundationId}`)
@@ -1591,10 +1592,49 @@ function editFoundation(foundationId) {
         .catch(error => console.error('Error al obtener los datos de la fundación:', error));
 }
 
+function updateFoundation(event) {
+    event.preventDefault(); // Evita el envío del formulario
+
+    const foundationId = document.getElementById('editFoundationId').value; // Obtener el ID de la fundación
+    const foundationName = document.getElementById('editFoundationName').value; // Obtener el nombre de la fundación
+    const foundationDescription = document.getElementById('editFoundationDescription').value; // Obtener la descripción
+
+    fetch(`/api/fundaciones/${foundationId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            nombre_fundacion: foundationName,
+            descripcion: foundationDescription,
+        }),
+    })
+    .then(response => {
+        if (response.ok) {
+            // Mensaje de éxito
+            const successMessage = document.getElementById('successMessageFoundation');
+            successMessage.textContent = 'Fundación actualizada exitosamente.';
+            successMessage.classList.remove('hidden');
+
+            // Cerrar el modal después de un tiempo y recargar la lista de fundaciones
+            setTimeout(() => {
+                successMessage.classList.add('hidden');
+                closeModalFoundation(); // Cierra el modal
+                loadFoundations(); // Función para recargar la lista de fundaciones
+            }, 2000); // 2 segundos
+        } else {
+            // Manejo de errores
+            console.error('Error al actualizar la fundación');
+        }
+    })
+    .catch(error => console.error('Error en la solicitud:', error));
+}
+
+
+//Cierra modal edicion fundacion
 function closeModalFoundation() {
     document.getElementById('editFoundationModal').classList.add('hidden');
 }
-
 
 // Función para enviar el formulario de fundaciones
 async function submitFoundation(event) {
@@ -1663,9 +1703,6 @@ async function submitFoundation(event) {
         alert('Error al enviar los datos. Inténtalo de nuevo.');
     }
 }
-
-
-
 
 //Eliminar fundaciones
 async function deleteFoundation(foundationId) {
