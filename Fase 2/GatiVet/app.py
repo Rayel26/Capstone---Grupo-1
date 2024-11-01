@@ -1599,6 +1599,7 @@ def confirm_appointment():
 
     return jsonify({'message': 'Cita confirmada exitosamente!'}), 201
 
+#///CASOS ADMINISTRADOR ///
 #ruta guardar casos administrador
 @app.route('/api/casos', methods=['POST'])
 def create_case():
@@ -1664,17 +1665,18 @@ def get_case(case_id):
     return jsonify({"message": "Caso no encontrado"}), 404
 
 
-#Ruta para eliminar casos administra
+#Ruta para eliminar casos administrador
 @app.route('/api/casos/<int:case_id>', methods=['DELETE'])
 def delete_case(case_id):
     # Eliminar el caso de la tabla CasoDonacion
     response = supabase.table('CasoDonacion').delete().eq('id_caso', case_id).execute()
     return jsonify({"message": "Caso eliminado exitosamente!"}), 200
 
-    
+#/// FIN CASOS ADMINISTRADOR ///   
 
+#///CASOS FUNDACIONES ///
 
-# Ruta para crear una nueva fundación
+# Ruta para guardar fundaciones
 @app.route('/api/fundaciones', methods=['POST'])
 def create_foundation():
     data = request.json
@@ -1683,10 +1685,16 @@ def create_foundation():
     nombre_fundacion = data.get('nombre_fundacion')
     descripcion = data.get('descripcion')
     foto_url = data.get('foto_url')
-    fecha_ingreso = datetime.now().isoformat()  # Convertir a cadena ISO 8601
 
-    # Aquí iría el código para guardar en Supabase
-    supabase.table('FundacionDonacion').insert({
+    # Obtener la fecha y hora actual en la zona horaria local
+    local_tz = pytz.timezone('America/Santiago')
+    fecha_ingreso = datetime.now(local_tz).isoformat()  # O usa strftime para formato específico
+
+    # Para depuración
+    print("Fecha y hora que se va a guardar:", fecha_ingreso)
+
+    # Guardar en Supabase
+    supabase.table('Fundacion').insert({
         'nombre_fundacion': nombre_fundacion,
         'descripcion': descripcion,
         'foto_url': foto_url,
@@ -1695,22 +1703,52 @@ def create_foundation():
 
     return jsonify({"message": "Fundación creada exitosamente!"}), 201
 
-# Ruta para obtener las fundaciones
+# Ruta para visualizar datos de fundaciones
 @app.route('/api/fundaciones', methods=['GET'])
 def get_foundations():
-    # Obtiene todas las fundaciones incluyendo la fecha de ingreso
-    data = supabase.table('FundacionDonacion').select('*').execute()
-    fundaciones = data.data
-    return jsonify(fundaciones), 200
+    # Obtiene todas las fundaciones de la tabla Fundacion
+    foundations = supabase.table('Fundacion').select('*').execute()
+    
+    # Si quieres procesar los datos, puedes hacerlo aquí
+    foundations_data = foundations.data  # Asegúrate de que 'foundations.data' contenga tus datos
 
+    return jsonify(foundations_data), 200
 
-# Ruta para eliminar una fundación
+# Ruta para actualizar fundaciones
+@app.route('/api/fundaciones/<int:foundation_id>', methods=['PUT'])
+def update_foundation(foundation_id):
+    data = request.json
+
+    # Obtener los datos del formulario
+    nombre_fundacion = data.get('nombre_fundacion')
+    descripcion = data.get('descripcion')
+
+    # Actualizar la fundación en la base de datos
+    response = supabase.table('Fundacion').update({
+        'nombre_fundacion': nombre_fundacion,
+        'descripcion': descripcion,
+    }).eq('id_fundacion', foundation_id).execute()
+
+    return jsonify({"message": "Fundación actualizada exitosamente!"}), 200
+
+# Ruta para obtener una fundación por ID
+@app.route('/api/fundaciones/<int:foundation_id>', methods=['GET'])
+def get_foundation(foundation_id):
+    foundation = supabase.table('Fundacion').select('*').eq('id_fundacion', foundation_id).execute()
+    if foundation.data:
+        return jsonify(foundation.data[0]), 200  # Devuelve solo la primera fundación encontrada
+    return jsonify({"message": "Fundación no encontrada"}), 404
+
+# Ruta para eliminar fundaciones
 @app.route('/api/fundaciones/<int:foundation_id>', methods=['DELETE'])
 def delete_foundation(foundation_id):
-    # Elimina la fundación según su ID
-    response = supabase.table('FundacionDonacion').delete().eq('id_fundacion', foundation_id).execute()
-
+    # Eliminar la fundación de la tabla Fundacion
+    response = supabase.table('Fundacion').delete().eq('id_fundacion', foundation_id).execute()
     return jsonify({"message": "Fundación eliminada exitosamente!"}), 200
+
+#/// FIN CASOS FUNDACIONES ///
+
+
 
 #Ruta Agenda
 @app.route('/api/agenda', methods=['GET'])

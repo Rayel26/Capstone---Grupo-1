@@ -1417,6 +1417,7 @@ async function fetchImages() {
     }
 }
 
+// Previsulizacion de la imagen
 function showImagePreview() {
     const selectedImageUrl = document.getElementById('CaseImage').value; // Obtén la URL de la imagen seleccionada
     const imagePreview = document.getElementById('imagePreviewCase'); // Cambia aquí el ID a 'imagePreviewCase'
@@ -1432,3 +1433,67 @@ function showImagePreview() {
 
 // Llama a la función para obtener imágenes cuando se cargue la página
 document.addEventListener('DOMContentLoaded', fetchImages);
+
+
+/// FUNDACIONES:
+
+// Función para obtener imágenes de Cloudinary y llenar el select
+
+document.addEventListener('DOMContentLoaded', fetchFoundationImages);
+
+async function fetchFoundationImages() {
+    try {
+        const response = await fetch('/api/cloudinary/images'); // Cambia la ruta si es necesario
+        if (!response.ok) {
+            throw new Error('Error al obtener imágenes');
+        }
+        const images = await response.json();
+        const select = document.getElementById('FundationImage'); // ID del select
+
+        images.forEach(imageUrl => {
+            const option = document.createElement('option');
+            option.value = imageUrl; // La URL de la imagen
+            option.textContent = imageUrl.split('/').pop(); // Muestra el nombre de la imagen
+            select.appendChild(option);
+        });
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+// Previsualización de la imagen de la fundación
+function showFoundationImagePreview() {
+    const selectedImageUrl = document.getElementById('FundationImage').value; // Obtén la URL de la imagen seleccionada
+    const imagePreview = document.getElementById('imagePreviewFoundation'); // ID actualizado para la imagen de vista previa
+
+    if (selectedImageUrl) {
+        imagePreview.src = selectedImageUrl; // Asigna la URL de la imagen seleccionada a la vista previa
+        imagePreview.classList.remove('hidden'); // Muestra la imagen
+    } else {
+        imagePreview.classList.add('hidden'); // Oculta la imagen si no se selecciona ninguna
+    }
+}
+
+// Función para cargar la imagen a Cloudinary (actualiza según tus necesidades)
+function uploadFoundationImageToCloudinary() {
+    const fileInput = document.getElementById('uploadImageFund');
+    const file = fileInput.files[0];
+
+    if (file) {
+        // Implementa aquí tu lógica para subir la imagen a Cloudinary
+        console.log('Imagen subida:', file.name);
+        // Muestra la imagen después de cargar
+        const imagePreviewContainer = document.getElementById('imagePreviewContainerFoundation');
+        const imagePreview = document.getElementById('imagePreviewContainerFoundationImage');
+        imagePreview.src = URL.createObjectURL(file);
+        imagePreviewContainer.classList.remove('hidden'); // Muestra el contenedor de vista previa
+    } else {
+        console.error('No se ha seleccionado ninguna imagen.');
+    }
+}
+
+
+
+
+
+

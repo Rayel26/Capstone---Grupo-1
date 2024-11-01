@@ -607,6 +607,7 @@
                     class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
                     style="background-color: #18beaa;">Subir Caso</button>
             </form>
+
             <div id="editCaseModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden flex items-center justify-center z-50">
                 <div class="bg-white rounded-lg shadow-lg w-96 p-6">
                     <h4 class="text-lg font-semibold text-center mb-4">Editar Caso</h4>
@@ -645,14 +646,6 @@
                 <h2 class="text-xl font-bold">Gestión de Fundaciones Animalistas</h2>
             </div>
 
-            <div class="flex justify-between mb-4">
-                <!-- Botón para exportar a Excel -->
-                <button class="text-white py-1 px-3 rounded hover:bg-teal-500 transition duration-200 text-sm"
-                    style="background-color: #18beaa;" onclick="exportFoundationsToExcel()">
-                    Exportar a Excel
-                </button>
-            </div>
-
             <!-- Tabla de Fundaciones Animalistas -->
             <table id="foundationTable"
                 class="min-w-full bg-white border border-gray-300 shadow rounded-lg overflow-hidden text-xs mt-3">
@@ -679,34 +672,31 @@
                         <input type="text" id="foundationName" class="border rounded w-full py-1 px-2 text-gray-700"
                             placeholder="Nombre de la fundación" required>
                     </div>
-
                     <div class="">
                         <label for="foundationDes" class="block text-gray-700">Descripción:</label>
                         <textarea type="text" id="foundationDes" class="border rounded w-full py-1 px-2 text-gray-700"
                             placeholder="Descripción de la fundación" required></textarea>
                     </div>
                     <div>
-                        <label for="FundationImage" class="block text-gray-700">Seleccionar Imagen de la
-                            fundación:</label>
-                        <select id="FundationImage" class="border rounded w-full py-1 px-2 text-gray-700"
-                            onchange="updateImagePreview()">
+                        <label for="FundationImage" class="block text-gray-700">Seleccionar Imagen de la Fundación:</label>
+                        <select id="FundationImage" class="border rounded w-full py-1 px-2 text-gray-700" onchange="showFoundationImagePreview()">
                             <option value="">Seleccione una imagen</option>
+                            <!-- Las opciones se llenarán dinámicamente desde Cloudinary -->
                         </select>
-                        <div id="imageError" class="error hidden">Este campo es obligatorio.</div>
+                        <div id="fundationImageError" class="error hidden">Este campo es obligatorio.</div>
                         <div class="mt-2">
-                            <img id="imagePreview" src="" alt="Vista previa de la imagen"
-                                class="hidden w-32 h-32 border rounded mt-2" />
+                            <img id="imagePreviewFoundation" src="" alt="Vista previa de la imagen" class="hidden w-32 h-32 border rounded mt-2" />
                         </div>
-                    </div>
+                    </div>                    
                     <div class="mt-2">
-                        <label for="uploadImageFun" class="block text-gray-700">Subir nueva Imagen del Caso:</label>
-                        <input type="file" id="uploadImageFun" accept="image/*"
-                            class="border rounded w-full py-1 px-2 text-gray-700" onchange="uploadImageToCloudinary()">
+                        <label for="uploadImageFund" class="block text-gray-700">Subir nueva Imagen de la Fundación:</label>
+                        <input type="file" id="uploadImageFund" accept="image/*" class="border rounded w-full py-1 px-2 text-gray-700" onchange="uploadFoundationImageToCloudinary()">
                     </div>
-                    <div id="imagePreviewContainer" class="mt-2 hidden">
-                        <img id="imagePreview" src="" alt="Vista previa de la imagen"
-                            class="w-32 h-32 border rounded mt-2" />
+                    <div id="imagePreviewContainerFoundation" class="mt-2 hidden">
+                        <img id="imagePreviewContainerFoundationImage" src="" alt="Vista previa de la imagen" class="w-32 h-32 border rounded mt-2" />
                     </div>
+                    
+                    
                 </div>
                 <button type="submit"
                     class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
