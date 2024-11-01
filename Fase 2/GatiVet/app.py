@@ -1734,7 +1734,7 @@ def update_foundation(foundation_id):
 # Ruta para obtener una fundación por ID (editar)
 @app.route('/api/fundaciones/<int:foundation_id>', methods=['GET'])
 def get_foundation(foundation_id):
-    foundation = supabase.table('Fundacion').select('*').eq('id_fundacion', foundation_id).execute()
+    foundation = supabase.table('FundacionDonacion').select('*').eq('id_fundacion', foundation_id).execute()
     if foundation.data:
         return jsonify(foundation.data[0]), 200  # Devuelve solo la primera fundación encontrada
     return jsonify({"message": "Fundación no encontrada"}), 404

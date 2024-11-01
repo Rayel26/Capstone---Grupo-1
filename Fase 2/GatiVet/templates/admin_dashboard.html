@@ -607,7 +607,7 @@
                     class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
                     style="background-color: #18beaa;">Subir Caso</button>
             </form>
-
+            <!-- Modal para editar Casos de Animales -->
             <div id="editCaseModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden flex items-center justify-center z-50">
                 <div class="bg-white rounded-lg shadow-lg w-96 p-6">
                     <h4 class="text-lg font-semibold text-center mb-4">Editar Caso</h4>
@@ -701,6 +701,30 @@
                     class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
                     style="background-color: #18beaa;">Subir Fundación</button>
             </form>
+            <!-- Modal para editar Fundaciones -->
+            <div id="editFoundationModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden flex items-center justify-center z-50">
+                <div class="bg-white rounded-lg shadow-lg w-96 p-6">
+                    <h4 class="text-lg font-semibold text-center mb-4">Editar Fundación</h4>
+                    <form id="editFoundationForm" onsubmit="updateFoundation(event)">
+                        <input type="hidden" id="editFoundationId">
+                        <div class="mt-2">
+                            <label for="editFoundationName" class="block text-gray-700">Nombre de la Fundación:</label>
+                            <input type="text" id="editFoundationName" class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400" required>
+                        </div>
+                        <div class="mt-2">
+                            <label for="editFoundationDescription" class="block text-gray-700">Descripción:</label>
+                            <textarea id="editFoundationDescription" class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400" rows="3" required></textarea>
+                        </div>
+                        <div class="flex justify-between mt-4">
+                            <button type="submit" style="background-color: #18beaa; color: white; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.875rem;">
+                                Actualizar Fundación
+                            </button>
+                            <button type="button" style="background-color: #e3342f; color: white; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.875rem;" onclick="closeModal()">Cancelar</button>
+                        </div>
+                    </form>
+                    <div id="successMessageFoundation" class="mt-4 text-green-500 text-center hidden"></div>
+                </div>
+            </div>
         </section>
     </div>
     <!-- Fin Contenido Fundaciones -->

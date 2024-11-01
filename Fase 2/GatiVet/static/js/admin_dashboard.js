@@ -1260,8 +1260,6 @@ function updateCase(event) {
     .catch(error => console.error('Error:', error));
 }
 
-
-
 function closeModal() {
     document.getElementById('editCaseModal').classList.add('hidden');
 }
@@ -1559,8 +1557,8 @@ async function loadFoundations() {
             const editButton = document.createElement('button');
             editButton.textContent = 'Editar';
             editButton.className = 'text-blue-500 hover:underline';
-            editButton.onclick = () => editFoundation(foundationData.id_fundacion);
-            
+            editButton.onclick = () => editFoundation(foundationData.id_fundacion); // Llama a la función editFoundation
+
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Eliminar';
             deleteButton.className = 'text-red-500 hover:underline ml-2';
@@ -1576,6 +1574,23 @@ async function loadFoundations() {
         console.error('Error al cargar las fundaciones:', error);
     }
 }
+
+function editFoundation(foundationId) {
+    // Hacer una solicitud para obtener los datos de la fundación
+    fetch(`/api/fundaciones/${foundationId}`)
+        .then(response => response.json())
+        .then(foundationData => {
+            // Llenar los campos del formulario con los datos de la fundación
+            document.getElementById('editFoundationId').value = foundationData.id_fundacion;
+            document.getElementById('editFoundationName').value = foundationData.nombre_fundacion;
+            document.getElementById('editFoundationDescription').value = foundationData.descripcion;
+
+            // Mostrar el modal
+            document.getElementById('editFoundationModal').classList.remove('hidden');
+        })
+        .catch(error => console.error('Error al obtener los datos de la fundación:', error));
+}
+
 
 
 // Función para enviar el formulario de fundaciones
@@ -1645,6 +1660,9 @@ async function submitFoundation(event) {
         alert('Error al enviar los datos. Inténtalo de nuevo.');
     }
 }
+
+
+
 
 //Eliminar fundaciones
 async function deleteFoundation(foundationId) {
