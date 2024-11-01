@@ -1694,7 +1694,7 @@ def create_foundation():
     print("Fecha y hora que se va a guardar:", fecha_ingreso)
 
     # Guardar en Supabase
-    supabase.table('Fundacion').insert({
+    supabase.table('FundacionDonacion').insert({
         'nombre_fundacion': nombre_fundacion,
         'descripcion': descripcion,
         'foto_url': foto_url,
@@ -1707,7 +1707,7 @@ def create_foundation():
 @app.route('/api/fundaciones', methods=['GET'])
 def get_foundations():
     # Obtiene todas las fundaciones de la tabla Fundacion
-    foundations = supabase.table('Fundacion').select('*').execute()
+    foundations = supabase.table('FundacionDonacion').select('*').execute()
     
     # Si quieres procesar los datos, puedes hacerlo aquí
     foundations_data = foundations.data  # Asegúrate de que 'foundations.data' contenga tus datos
@@ -1724,14 +1724,14 @@ def update_foundation(foundation_id):
     descripcion = data.get('descripcion')
 
     # Actualizar la fundación en la base de datos
-    response = supabase.table('Fundacion').update({
+    response = supabase.table('FundacionDonacion').update({
         'nombre_fundacion': nombre_fundacion,
         'descripcion': descripcion,
     }).eq('id_fundacion', foundation_id).execute()
 
     return jsonify({"message": "Fundación actualizada exitosamente!"}), 200
 
-# Ruta para obtener una fundación por ID
+# Ruta para obtener una fundación por ID (editar)
 @app.route('/api/fundaciones/<int:foundation_id>', methods=['GET'])
 def get_foundation(foundation_id):
     foundation = supabase.table('Fundacion').select('*').eq('id_fundacion', foundation_id).execute()
