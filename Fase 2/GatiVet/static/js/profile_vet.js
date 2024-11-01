@@ -1005,56 +1005,54 @@ function generateCalendar(year, month, appointments = {}) {
     // Agregar días del mes
     for (let day = 1; day <= totalDays; day++) {
         const dayDiv = document.createElement('div');
-        dayDiv.className = 'border p-1 relative'; // Hacer que el padding sea más pequeño
+        dayDiv.className = 'border p-1 relative';
 
-        // Tachado solo para sábados y domingos
-        const dayOfWeek = (startDay + day - 1) % 7; // Obtener el índice del día de la semana
-        if (dayOfWeek === 0 || dayOfWeek === 6) { // Domingo (0) y Sábado (6)
+        // Verificar el día de la semana para tachar fines de semana
+        const dayOfWeek = (startDay + day - 1) % 7;
+        if (dayOfWeek === 0 || dayOfWeek === 6) { 
             dayDiv.classList.add('weekend');
         } else {
             dayDiv.textContent = day;
 
-            // Mostrar citas si hay
-            if (appointments[day]) {
+            // Crear clave en formato 'YYYY-MM-DD' para el día actual
+            const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+            // Mostrar citas si hay en la fecha específica
+            if (appointments[dateKey]) {
                 const appointmentList = document.createElement('div');
-                appointmentList.className = 'mt-1'; // Margen superior para la lista de citas
+                appointmentList.className = 'mt-1';
                 
-                // Asegurarse de que appointments[day] sea un array
-                if (Array.isArray(appointments[day])) {
-                    appointments[day].forEach(appointment => {
-                        const appointmentDiv = document.createElement('div');
-                        appointmentDiv.className = `appointment-card rounded-md shadow-md p-1 text-xs ${appointment.color} mb-1`;
-                        appointmentDiv.textContent = `${appointment.time}: ${appointment.pet}`;
-                        
-                        appointmentDiv.addEventListener('click', () => {
-                            const appointmentObject = {
-                                type: appointment.type,
-                                fecha: `${monthNames[month]} ${day}, ${year}`,
-                                usuario: {
-                                    nombre: appointment.usuario.nombre || 'Nombre no disponible',
-                                    email: appointment.usuario.email || 'Email no disponible',
-                                    telefono: appointment.usuario.telefono || 'Teléfono no disponible'
-                                },
-                                mascota: {
-                                    nombre: appointment.mascota.nombre || 'Nombre no disponible',
-                                    raza: appointment.mascota.raza || 'Raza no disponible',
-                                    sexo: appointment.mascota.sexo || 'Sexo no disponible',
-                                    icon: appointment.mascota.icon || 'Icono no disponible'
-                                },
-                                hora: appointment.time || 'Hora no disponible',
-                                servicio: appointment.typeInfo || 'Servicio no disponible',
-                                motivo: appointment.reason || 'Motivo no disponible'
-                            };
-                        
-                            console.log('Datos de la cita antes de abrir el modal:', appointmentObject); // Para depurar
-                            openModalWeek(appointmentObject);
-                        });
-                        
-                        appointmentList.appendChild(appointmentDiv);
-                    });
-                } else {
-                    console.warn(`No se encontró un array de citas para el día ${day}:`, appointments[day]);
-                }
+                appointments[dateKey].forEach(appointment => {
+                    const appointmentDiv = document.createElement('div');
+                    appointmentDiv.className = `appointment-card rounded-md shadow-md p-1 text-xs ${appointment.color} mb-1`;
+                    appointmentDiv.textContent = `${appointment.time}: ${appointment.pet}`;
+                    
+                    appointmentDiv.addEventListener('click', () => {
+                        const appointmentObject = {
+                            type: appointment.type,
+                            fecha: `${monthNames[month]} ${day}, ${year}`,
+                            usuario: {
+                                nombre: appointment.usuario.nombre || 'Nombre no disponible',
+                                correo: appointment.usuario.correo || 'Email no disponible',
+                                celular: appointment.usuario.celular || 'Teléfono no disponible'
+                            },
+                            mascota: {
+                                nombre: appointment.mascota.nombre || 'Nombre no disponible',
+                                raza: appointment.mascota.raza || 'Raza no disponible',
+                                sexo: appointment.mascota.sexo || 'Sexo no disponible',
+                                foto_url: appointment.mascota.foto_url || 'Icono no disponible' // Cambiar esto para usar foto_url
+                            },
+                            hora: appointment.time || 'Hora no disponible',
+                            servicio: appointment.type || 'Servicio no disponible',
+                            motivo: appointment.motivo || 'Motivo no disponible'
+                        };
+                    
+                        console.log('Datos de la cita antes de abrir el modal:', appointmentObject);
+                        openModalWeek(appointmentObject);
+                    });                    
+                    
+                    appointmentList.appendChild(appointmentDiv);
+                });
 
                 dayDiv.appendChild(appointmentList);
             }
@@ -1072,35 +1070,54 @@ async function fetchAppointments() {
 
         const appointments = {};
         data.forEach(appointment => {
-            const day = new Date(appointment.fecha).getDate(); // Obtener el día del mes
+            // Verificar si la fecha existe y es válida
+            if (appointment.fecha) {
+                // Crear el objeto Date directamente desde el formato ISO recibido
+                const appointmentDate = new Date(appointment.fecha);
+                
+                // Verificar si la fecha es válida
+                if (isNaN(appointmentDate)) {
+                    console.error(`Fecha inválida: ${appointment.fecha}`);
+                    return; // Saltar esta cita si la fecha es inválida
+                }
 
-            if (!appointments[day]) {
-                appointments[day] = []; // Inicializar como array si no existe
-            }
+                const day = appointmentDate.getUTCDate(); // Cambiar a getUTCDate() para obtener el día correcto
+                const month = appointmentDate.getUTCMonth(); // Cambiar a getUTCMonth() para obtener el mes correcto
+                const year = appointmentDate.getUTCFullYear(); // Cambiar a getUTCFullYear() para obtener el año correcto
 
-            // Validación de la cita
-            if (appointment.servicio) { // Asegúrate de que el servicio no sea undefined
-                appointments[day].push({
-                    time: appointment.hora || 'Hora no disponible', // Proporciona un valor por defecto si es undefined
-                    pet: `Mascota ID: ${appointment.id_mascota}`, 
-                    type: appointment.servicio || 'Tipo no disponible', // Proporciona un valor por defecto
-                    color: 'someColor',
-                    usuario: {
-                        nombre: appointment.usuario?.nombre || 'Nombre no disponible',
-                        email: appointment.usuario?.email || 'Email no disponible',
-                        telefono: appointment.usuario?.telefono || 'Teléfono no disponible'
-                    },
-                    mascota: {
-                        nombre: appointment.mascota?.nombre || 'Nombre no disponible',
-                        raza: appointment.mascota?.raza || 'Raza no disponible',
-                        sexo: appointment.mascota?.sexo || 'Sexo no disponible',
-                        icon: appointment.mascota?.icon || 'Icono no disponible'
-                    },
-                    fecha: appointment.fecha || 'Fecha no disponible'
-                });
+                // Usamos el año, el mes (ajustado) y el día como clave
+                const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+                if (!appointments[key]) {
+                    appointments[key] = []; // Inicializar como array si no existe
+                }
+
+                if (appointment.servicio) {
+                    appointments[key].push({
+                        time: appointment.hora || 'Hora no disponible',
+                        pet: `Mascota ID: ${appointment.id_mascota}`,
+                        type: appointment.servicio || 'Tipo no disponible',
+                        color: 'someColor', // Asegúrate de que se define un color
+                        usuario: {
+                            nombre: `${appointment.usuario.nombre} ${appointment.usuario.appaterno} ${appointment.usuario.apmaterno}`.trim() || 'Nombre no disponible',
+                            correo: appointment.usuario?.correo || 'Email no disponible',
+                            celular: appointment.usuario?.celular || 'Teléfono no disponible'
+                        },
+                        mascota: {
+                            nombre: appointment.mascota?.nombre || 'Nombre no disponible',
+                            raza: appointment.mascota?.raza || 'Raza no disponible',
+                            sexo: appointment.mascota?.sexo || 'Sexo no disponible',
+                            foto_url: appointment.mascota?.foto_url || 'Icono no disponible'
+                        },
+                        motivo: appointment.motivo || 'Motivo no disponible',
+                        fecha: appointment.fecha || 'Fecha no disponible' // Usar el formato original
+                    });                    
+                } else {
+                    console.warn(`Cita sin servicio válida: ${JSON.stringify(appointment)}`);
+                }
             } else {
-                console.warn(`Cita sin servicio válida: ${JSON.stringify(appointment)}`);
-            }            
+                console.error(`Cita sin fecha válida: ${JSON.stringify(appointment)}`);
+            }
         });
 
         // Llama a la función para generar el calendario
@@ -1154,10 +1171,9 @@ nextMonthButton.addEventListener('click', () => {
 function openModalWeek(appointment) {
     console.log('Datos de la cita:', appointment); // Para depurar
 
-    // Verificar si appointment es un objeto válido
-    if (typeof appointment !== 'object' || appointment === null) {
+    if (!appointment || typeof appointment !== 'object') {
         console.error('El objeto de la cita no es válido:', appointment);
-        return; // Salir de la función si el objeto no es válido
+        return;
     }
 
     // Completa los campos del modal con los datos de la cita
@@ -1166,15 +1182,16 @@ function openModalWeek(appointment) {
 
     // Información del dueño
     document.getElementById('modalweek-owner').innerText = appointment.usuario?.nombre || 'Nombre no disponible';
-    document.getElementById('modalweek-email').innerText = appointment.usuario?.email || 'Email no disponible';
-    document.getElementById('modalweek-phone').innerText = appointment.usuario?.telefono || 'Teléfono no disponible';
+    document.getElementById('modalweek-email').innerText = appointment.usuario?.correo || 'Email no disponible';
+    document.getElementById('modalweek-phone').innerText = appointment.usuario?.celular || 'Teléfono no disponible';
 
     // Información de la mascota
+    document.getElementById('modalweek-pet-icon').src = appointment.mascota?.foto_url || 'url-de-imagen-de-prueba.jpg';
     document.getElementById('modalweek-pet').innerText = appointment.mascota?.nombre || 'Nombre no disponible';
     document.getElementById('modalweek-breed').innerText = `${appointment.mascota?.raza || 'Raza no disponible'}, ${appointment.mascota?.sexo || 'Sexo no disponible'}`;
 
     // Detalles de la cita
-    document.getElementById('modalweek-start-time').value = appointment.hora; // Hora de inicio
+    document.getElementById('modalweek-start-time').value = appointment.hora || 'Hora no disponible'; // Hora de inicio
     document.getElementById('modalweek-service').innerText = appointment.servicio || 'Servicio no disponible';
     document.getElementById('modalweek-reason').innerText = appointment.motivo || 'Motivo no disponible';
 
@@ -1183,16 +1200,6 @@ function openModalWeek(appointment) {
     modal.classList.remove('hidden');
     modal.classList.add('flex'); // Usar flex para mostrar el modal
 }
-
-// Función para cerrar el modal
-document.getElementById('closeModalWeek').addEventListener('click', () => {
-    const modal = document.getElementById('modalweek');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex'); // Ocultar el modal
-});
-
-// Inicializar la agenda al cargar la página
-window.onload = fetchAppointments;
 
 
 // Función para cerrar el modal
