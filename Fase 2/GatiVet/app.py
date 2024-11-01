@@ -876,8 +876,6 @@ def products():
 def help():
     return render_template('help.html')
 
-
-
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     if request.method == 'POST':
@@ -902,8 +900,6 @@ def contact():
         return redirect(url_for('contact'))  # Redirigir después de enviar
 
     return render_template('contact.html')
-
-
 
 @app.route('/schedule')
 def schedule():
@@ -1747,8 +1743,6 @@ def delete_foundation(foundation_id):
     return jsonify({"message": "Fundación eliminada exitosamente!"}), 200
 
 #/// FIN CASOS FUNDACIONES ///
-
-
 
 #Ruta Agenda
 @app.route('/api/agenda', methods=['GET'])
