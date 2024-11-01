@@ -1743,7 +1743,7 @@ def get_foundation(foundation_id):
 @app.route('/api/fundaciones/<int:foundation_id>', methods=['DELETE'])
 def delete_foundation(foundation_id):
     # Eliminar la fundación de la tabla Fundacion
-    response = supabase.table('Fundacion').delete().eq('id_fundacion', foundation_id).execute()
+    response = supabase.table('FundacionDonacion').delete().eq('id_fundacion', foundation_id).execute()
     return jsonify({"message": "Fundación eliminada exitosamente!"}), 200
 
 #/// FIN CASOS FUNDACIONES ///

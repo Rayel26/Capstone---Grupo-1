@@ -1274,6 +1274,11 @@ async function deleteCase(caseId) {
         return;
     }
 
+    // Confirmación antes de eliminar el caso
+    if (!confirm('¿Estás seguro de que quieres eliminar este caso?')) {
+        return;
+    }
+
     try {
         const response = await fetch(`/api/casos/${caseId}`, {
             method: 'DELETE',
@@ -1293,6 +1298,7 @@ async function deleteCase(caseId) {
         alert('Error al eliminar el caso.');
     }
 }
+
 
 // Llama a la función para cargar los casos cuando se cargue la página
 document.addEventListener('DOMContentLoaded', loadCases);
@@ -1639,6 +1645,34 @@ async function submitFoundation(event) {
         alert('Error al enviar los datos. Inténtalo de nuevo.');
     }
 }
+
+//Eliminar fundaciones
+async function deleteFoundation(foundationId) {
+    if (!confirm('¿Estás seguro de que quieres eliminar esta fundación?')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/fundaciones/${foundationId}`, {
+            method: 'DELETE',
+        });
+
+        if (response.ok) {
+            const jsonResponse = await response.json();
+            alert(jsonResponse.message);
+
+            // Recarga la lista de fundaciones para reflejar los cambios
+            loadFoundations();
+        } else {
+            const errorResponse = await response.json();
+            alert(`Error: ${errorResponse.error}`);
+        }
+    } catch (error) {
+        console.error('Error al eliminar la fundación:', error);
+        alert('Error al eliminar la fundación. Intenta nuevamente.');
+    }
+}
+
 
 
 
