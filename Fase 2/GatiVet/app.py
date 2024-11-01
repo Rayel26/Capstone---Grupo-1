@@ -1020,6 +1020,7 @@ def delete_user(user_id):
 def donation():
     return render_template('donation.html')
 
+#/// PRODUCTOS //
 #Crear productos
 @app.route('/create_product', methods=['POST'])
 @login_required
@@ -1096,6 +1097,20 @@ def get_cloudinary_images():
     else:
         return jsonify({'error': 'Error fetching images from Cloudinary'}), response.status_code
 
+# Ruta para eliminar un producto
+@app.route('/delete_product/<int:id_producto>', methods=['DELETE'])
+@login_required
+@role_required('admin')
+def delete_product(id_producto):
+    response = supabase.table('Producto').delete().eq('id_producto', id_producto).execute()
+
+    if response.data:
+        return jsonify({'message': 'Producto eliminado exitosamente.'}), 200
+    else:
+        print('Error de Supabase:', response.error)
+        return jsonify({'error': 'Error al eliminar el producto.', 'details': response.error}), 400
+
+
 #Ruta para obtener la cantidad de productos en el carrito
 @app.route('/cart_count', methods=['GET'])
 def cart_count():
@@ -1146,6 +1161,7 @@ def update_stock(product_id):
 
     except Exception as e:
         return jsonify({"success": False, "message": f"Error interno: {str(e)}"}), 500
+#/// fIN PRODUCTOS //
 
 #Obtener usuarios
 @app.route('/api/get_users', methods=['GET'])

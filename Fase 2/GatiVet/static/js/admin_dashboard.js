@@ -201,8 +201,6 @@ document.getElementById('productForm').addEventListener('submit', async function
     }
 });
 
-
-
 // Función para filtrar por mes
 function filterByMonth() {
     const monthFilter = document.getElementById('monthFilter').value; // Formato YYYY-MM
@@ -215,7 +213,6 @@ function filterByMonth() {
     console.log(products);
     console.log(filteredProducts);
 }
-
 
 // Mapeo de IDs a nombres de productos
 const tipoProductoMap = {
@@ -257,11 +254,34 @@ function updateTable() {
             <td class="py-2 px-4 border-b">${product.valor ? product.valor.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' }) : 'N/A'}</td>
             <td class="py-2 px-4 border-b">${product.stock}</td>
             <td class="py-2 px-4 border-b">${product.fecha_ingreso}</td>
+            <td class="py-2 px-4 border-b"></td> <!-- Celda vacía donde se agregarán los botones -->
         `;
+
+        // Crear botones de acción
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Editar';
+        editButton.className = 'text-blue-500 hover:underline';
+        editButton.onclick = () => editProduct(product.id); // Llama a la función editProduct
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Eliminar';
+        deleteButton.className = 'text-red-500 hover:underline';
+        deleteButton.onclick = () => {
+            console.log("ID del producto a eliminar:", product.id);
+            deleteProduct(product.id);
+        };
+
+        // Agregar los botones a la celda correspondiente
+        const actionCell = row.querySelector('td:last-child'); // Seleccionar la última celda (Acción)
+        actionCell.appendChild(editButton);
+        actionCell.appendChild(deleteButton);
+
+        // Agregar la fila a la tabla
         table.appendChild(row);
     });
     updatePaginationControls();
 }
+
 
 // Función para actualizar la paginación
 function updatePagination() {
@@ -1575,7 +1595,7 @@ async function loadFoundations() {
     }
 }
 
-// Abre modal edicion
+// Abre modal edición
 function editFoundation(foundationId) {
     // Hacer una solicitud para obtener los datos de la fundación
     fetch(`/api/fundaciones/${foundationId}`)
