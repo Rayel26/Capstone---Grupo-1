@@ -1591,6 +1591,9 @@ function editFoundation(foundationId) {
         .catch(error => console.error('Error al obtener los datos de la fundación:', error));
 }
 
+function closeModalFoundation() {
+    document.getElementById('editFoundationModal').classList.add('hidden');
+}
 
 
 // Función para enviar el formulario de fundaciones
