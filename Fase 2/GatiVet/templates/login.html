@@ -7,8 +7,11 @@
     <link href="{{ url_for('static', filename='styles/output.css') }}" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <!-- Importa el archivo CSS específico-->
-    <link rel="stylesheet" href="static/styles/login.css?v=1.0">  
+    <link rel="stylesheet" href="static/styles/login.css?v=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> 
 </head>
+<!-- Incluir el script de Supabase desde el CDN -->
+
 <body>
     <section class="min-h-screen flex items-stretch text-white relative">
         <a href="/" class="absolute top-4 left-4 bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4 rounded z-20 rounded-full focus:outline-none transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer inline-flex items-center">
@@ -44,8 +47,12 @@
                 {% endwith %}
 
                 <div class="py-6 space-x-2">
-                    <span class="w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white">G+</span>
+                    <button id="googleLoginBtn" class="w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white cursor-pointer">
+                        G+
+                    </button>
+                    
                 </div>
+                
                 <p class="text-gray-600">
                     Usa tu correo o alguna cuenta
                 </p>
@@ -68,6 +75,7 @@
                     <button type="submit" class="block w-full p-4 text-lg rounded-full bg-[#18beaa] hover:bg-[#16a89a] focus:outline-none text-white transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
                         Iniciar Sesión
                     </button>  
+                    
                 </form>
             </div>
         </div>
