@@ -1,71 +1,55 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Inicializar Supabase después de que el DOM esté completamente cargado
     const supabaseUrl = 'https://wlnahmbigsbckwbdwezo.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndsbmFobWJpZ3NiY2t3YmR3ZXpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg1MDg5MzUsImV4cCI6MjA0NDA4NDkzNX0.CP-BaGcCf-fQD-lYrbH0_B-sKVOwUb9Xgy9-nzKjtLM'; 
-    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey); // Usa window.supabase.createClient
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndsbmFobWJpZ3NiY2t3YmR3ZXpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg1MDg5MzUsImV4cCI6MjA0NDA4NDkzNX0.CP-BaGcCf-fQD-lYrbH0_B-sKVOwUb9Xgy9-nzKjtLM'; // Asegúrate de que esto sea seguro
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    // Evento del botón de Google
     const googleLoginBtn = document.getElementById('googleLoginBtn');
     if (googleLoginBtn) {
+        // Login con Google
         googleLoginBtn.addEventListener('click', async () => {
-            // Iniciar sesión con Google
-            const { user, session, error } = await supabase.auth.signInWithOAuth({
+            const { user, error } = await supabase.auth.signInWithOAuth({
                 provider: 'google',
             });
-        
+
             if (error) {
                 console.error("Error en el inicio de sesión con Google:", error.message);
-                return; // Salir si hay un error
+                alert("Error en el inicio de sesión. Intenta nuevamente.");
+                return;
             }
-        
-            console.log("Inicio de sesión exitoso", user);
-        
-            // Guardar en la tabla `Usuario` si es un nuevo usuario
+
             if (user) {
-                const { data, error: upsertError } = await supabase.from('Usuario').upsert({
-                    id_usuario: user.id,
+                const userData = {
+                    id_usuario: user.id,  // Usar el ID de usuario proporcionado por Google
                     nombre: user.user_metadata.full_name || '',
-                    correo: user.email,
-                    tipousuario: 1, // ID por defecto para usuarios de Google
-                    fecha_creacion: new Date().toISOString(),
-                });
-        
-                if (upsertError) {
-                    console.error("Error al guardar usuario en la tabla:", upsertError.message);
+                    correo: user.email || '',
+                };
+
+                console.log("Datos a enviar al servidor:", userData);
+
+                try {
+                    const response = await fetch('/google_register', { // Cambié el endpoint a '/google_register'
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(userData),
+                    });
+
+                    const responseData = await response.json();
+                    if (!response.ok) {
+                        console.error("Error al guardar el usuario:", responseData.error);
+                        alert("Error al guardar el usuario. Intenta nuevamente.");
+                    } else {
+                        console.log("Usuario guardado exitosamente:", responseData.data);
+                        alert("Usuario registrado exitosamente. Bienvenido!");
+                        // Aquí puedes redirigir al usuario o hacer otra acción
+                        // window.location.href = '/dashboard'; // Ejemplo de redirección
+                    }
+                } catch (error) {
+                    console.error("Error en la solicitud al servidor:", error);
+                    alert("Error en la comunicación con el servidor. Intenta nuevamente.");
                 }
             }
-        
-            // Redirigir a la página de inicio o dashboard solo si hay una sesión activa
-            if (session) {
-                window.location.href = "/";
-            }
-        });
-    }
-
-    // Eventos para el modal de "Recuperar contraseña"
-    const forgotPasswordLink = document.getElementById('forgot-password-link');
-    const closeModal = document.getElementById('close-modal');
-    const submitEmail = document.getElementById('submit-email');
-    const closeConfirmationModal = document.getElementById('close-confirmation-modal');
-
-    if (forgotPasswordLink && closeModal && submitEmail && closeConfirmationModal) {
-        forgotPasswordLink.addEventListener('click', function (event) {
-            event.preventDefault();
-            document.getElementById('forgot-password-modal').classList.remove('hidden');
-        });
-
-        closeModal.addEventListener('click', function () {
-            document.getElementById('forgot-password-modal').classList.add('hidden');
-        });
-
-        submitEmail.addEventListener('click', function (event) {
-            event.preventDefault();
-            document.getElementById('forgot-password-modal').classList.add('hidden');
-            document.getElementById('confirmation-modal').classList.remove('hidden');
-        });
-
-        closeConfirmationModal.addEventListener('click', function () {
-            document.getElementById('confirmation-modal').classList.add('hidden');
         });
     }
 });

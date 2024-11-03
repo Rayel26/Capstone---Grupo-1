@@ -146,6 +146,102 @@ razas_perros = [
 ##FIN RAZAS
 
 
+@app.route('/google_register', methods=['POST'])
+def google_register():
+    data = request.json
+    print("Datos recibidos para el registro:", data)  # Para verificar los datos recibidos
+
+    # Obtener los datos del usuario
+    user_id = data.get('id_usuario')
+    nombre = data.get('nombre')
+    correo = data.get('correo')
+
+    # Verificar si falta algún dato esencial
+    if not user_id or not nombre or not correo:
+        print("Datos incompletos recibidos para el registro.")
+        return jsonify({"error": "Datos incompletos"}), 400
+
+    # Intentar la consulta de existencia de usuario y manejar errores
+    try:
+        existing_user = supabase.table('Usuario').select('*').eq('id_usuario', user_id).execute()
+        print("Usuario existente:", existing_user.data)  # Verifica si el usuario ya existe
+
+        if existing_user.data:
+            print("El usuario ya existe en la base de datos:", existing_user.data)
+            return jsonify({"message": "El usuario ya existe", "user": existing_user.data}), 200
+
+        # Intentar insertar el nuevo usuario
+        response = supabase.table('Usuario').insert({
+            'id_usuario': user_id,
+            'nombre': nombre,
+            'correo': correo,
+            'tipousuarioid': 1,
+            'fecha_creacion': datetime.utcnow().isoformat()
+        }).execute()
+
+        # Verificar si hubo un error en la inserción
+        if response.error:
+            print("Error al guardar el usuario:", response.error.message)
+            return jsonify({"error": response.error.message}), 400
+
+        print("Usuario guardado exitosamente:", response.data)
+        return jsonify({"message": "Usuario creado", "data": response.data}), 201
+
+    except Exception as e:
+        print("Error al verificar o guardar el usuario:", str(e))
+        return jsonify({"error": "Error al procesar la solicitud"}), 500
+
+
+@app.route('/auth/google/callback')
+def google_callback():
+    try:
+        # Obtener los datos del usuario autenticado por Google
+        user = supabase.auth.get_user()
+        
+        if user:
+            print("Usuario autenticado con Google:", user)
+            
+            # Construir los datos del usuario para la tabla `Usuario`
+            user_data = {
+                'id_usuario': user['id'],  # UID proporcionado por Google
+                'nombre': user['user_metadata'].get('full_name', ''),  # Nombre
+                'correo': user['email'],  # Correo electrónico
+                'tipousuarioid': 1  # Tipo de usuario 1 para usuarios autenticados por Google
+            }
+
+            # Verificar si el usuario ya existe en la tabla `Usuario`
+            existing_user = supabase.table('Usuario').select('*').eq('id_usuario', user['id']).execute()
+
+            if existing_user.data:
+                print("El usuario ya existe en la base de datos:", existing_user.data)
+            else:
+                # Intentar insertar el nuevo usuario en la tabla `Usuario`
+                response = supabase.table('Usuario').insert(user_data).execute()
+                if response.error:
+                    print("Error al guardar el usuario en la base de datos:", response.error.message)
+                else:
+                    print("Usuario guardado exitosamente:", response.data)
+
+            # Configurar las variables de sesión para el usuario autenticado
+            session['is_logged_in'] = True
+            session['id_usuario'] = user['id']
+            session['role'] = 'user'  # Asignar el rol por defecto
+
+            print("Datos de sesión establecidos:", session)
+
+            # Redirigir a la página de inicio
+            return redirect(url_for('home'))
+        else:
+            print("Error al obtener el usuario de Supabase.")
+            return redirect(url_for('login'))
+    
+    except Exception as e:
+        print("Error durante la autenticación con Google:", str(e))
+        return redirect(url_for('login'))
+
+
+
+
 # Decorador para verificar si el usuario está logueado
 def login_required(f):
     @wraps(f)
@@ -168,10 +264,11 @@ def role_required(role):
         return wrapped
     return wrapper
 
-# Ruta para la página de inicio
 @app.route('/')
 def home():
-    return render_template('home.html')
+    print("Estado de sesión:", session)
+    return render_template('home.html', is_logged_in=session.get('is_logged_in'), role=session.get('role'))
+
 
 # Ruta para la página de login
 @app.route('/login', methods=['GET', 'POST'])
