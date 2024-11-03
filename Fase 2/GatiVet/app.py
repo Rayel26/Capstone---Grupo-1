@@ -11,6 +11,9 @@ import uuid
 from flask_mail import Mail, Message
 from flask_cors import cross_origin
 import pytz
+import jwt
+import smtplib
+from email.mime.text import MIMEText
 
 app = Flask(__name__)
 CORS(app)
@@ -29,6 +32,8 @@ app.config['MAIL_USERNAME'] = 'gativet30@gmail.com'  # Cambia esto por tu correo
 app.config['MAIL_PASSWORD'] = 'qpby svvg fkoj qcsm'  # Cambia esto por tu contraseña
 
 mail = Mail(app)
+
+
 
 # Configurar las credenciales de Cloudinary
 cloudinary.config(
@@ -277,13 +282,18 @@ def login():
         email = request.form['email']
         password = request.form['password']
         
-        # Consultar la base de datos de Supabase
-        user_data = supabase.table('Usuario').select('id_usuario, correo, contraseña, tipousuarioid').eq('correo', email).execute()
+        # Consultar la base de datos de Supabase, incluyendo el campo 'email_verified'
+        user_data = supabase.table('Usuario').select('id_usuario, correo, contraseña, tipousuarioid, confirmacion').eq('correo', email).execute()
 
         if user_data.data:
             user = user_data.data[0]  # Obtener el primer usuario encontrado
 
-            # Verifica la contraseña (ajusta esto si usas un método de hash)
+            # Verificar si el correo ha sido confirmado
+            if not user.get('confirmacion'):
+                flash('Debe confirmar su correo electrónico para iniciar sesión', 'error')
+                return redirect(url_for('login'))
+            
+            # Verificar la contraseña (ajusta esto si usas un método de hash)
             if user['contraseña'] == password:  # Cambia esto por la verificación de hash si es necesario
                 session['email'] = user['correo']
                 session['id_usuario'] = user['id_usuario']  # Almacena el id_usuario en la sesión
@@ -301,7 +311,7 @@ def login():
                     return redirect(url_for('login'))
 
                 # Redirigir a la página de perfil
-                return redirect(url_for('home'))  # Cambiado a 'profile' para ir directamente a la vista de perfil
+                return redirect(url_for('home'))
             else:
                 flash('Usuario o contraseña incorrectos', 'error')
         else:
@@ -1014,15 +1024,11 @@ def cart():
 def registration():
     return render_template('registration.html')
 
-#Ruta para registrar 
+
+# Ruta para registrar
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
-    
-    # Log para ver los datos recibidos
-    print("Datos recibidos:", data)
-
-    # Extraer los datos del JSON
     rut = data['id_usuario']
     nombre = data['nombre']
     appaterno = data['appaterno']
@@ -1030,12 +1036,9 @@ def register():
     correo = data['correo']
     contraseña = data['contraseña']
     celular = data['celular']
-
-    # Obtener la fecha actual en el formato "YYYY-MM-DD"
-    fecha_creacion = datetime.now().strftime("%Y-%m-%d")  # Cambia aquí el formato de fecha
-    print("Fecha de creación:", fecha_creacion)  # Agregar un log para verificar la fecha
-
-    # Inserta los datos en Supabase
+    fecha_creacion = datetime.now().strftime("%Y-%m-%d")
+    
+    # Crear usuario en la base de datos
     response = supabase.table('Usuario').insert({
         'id_usuario': rut,
         'nombre': nombre,
@@ -1044,17 +1047,66 @@ def register():
         'correo': correo,
         'contraseña': contraseña,
         'celular': celular,
-        'tipousuarioid': 1, 
-        'fecha_creacion': fecha_creacion  # Agregar la fecha de creación
+        'tipousuarioid': 1,
+        'fecha_creacion': fecha_creacion,
+        'confirmacion': False  # Campo para verificar el email
     }).execute()
 
-    # Log para ver la respuesta de Supabase
-    print("Respuesta de Supabase:", response)
-
-    if response.status_code == 201:  # Si la inserción fue exitosa
-        return jsonify({"message": "Usuario creado exitosamente", "data": response.data}), 201
+    if response.status_code == 201:
+        # Generar un token de confirmación de correo
+        token = jwt.encode({'correo': correo}, app.config['SECRET_KEY'], algorithm='HS256')
+        
+        # Construir la URL de confirmación
+        confirmation_url = url_for('confirm_email', token=token, _external=True)
+        print(f"Confirmation URL: {confirmation_url}")
+        
+        # Enviar el correo de confirmación
+        send_confirmation_email(correo, confirmation_url)
+        
+        return jsonify({"message": "Usuario creado exitosamente, confirme su correo", "data": response.data}), 201
     else:
         return jsonify({"error": "Error al crear el usuario", "details": response.json()}), 400
+
+def send_confirmation_email(to_email, confirmation_url):
+    try:
+        sender_email = "gativet30@gmail.com"  # Cambia a tu correo de Gmail
+        password = "kiritoynico30"  # Usa la contraseña de aplicación generada para Gmail
+        msg = MIMEText(f"Follow this link to confirm your email: {confirmation_url}")
+        msg['Subject'] = "Confirm your signup"
+        msg['From'] = sender_email
+        msg['To'] = to_email
+
+        # Configuración del servidor SMTP de Gmail
+        with smtplib.SMTP('smtp.gmail.com', 587) as server:
+            server.starttls()  # Inicia la conexión TLS
+            server.login(sender_email, password)  # Inicia sesión con tu correo y contraseña de aplicación
+            server.sendmail(sender_email, to_email, msg.as_string())  # Envía el correo
+        print("Correo de confirmación enviado exitosamente")
+    except Exception as e:
+        print(f"Error al enviar el correo: {e}")
+
+
+@app.route('/confirm_email/<token>', methods=['GET'])
+def confirm_email(token):
+    try:
+        # Decodificar el token para obtener el correo
+        data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+        correo = data['correo']
+
+        # Actualizar la verificación en la base de datos
+        response = supabase.table('Usuario').update({
+            'confirmacion': True
+        }).eq('correo', correo).execute()
+
+        if response.status_code == 200:
+            return jsonify({"message": "Correo confirmado exitosamente"}), 200
+        else:
+            return jsonify({"error": "No se pudo confirmar el correo"}), 400
+    except jwt.ExpiredSignatureError:
+        return jsonify({"error": "El enlace de confirmación ha expirado"}), 400
+    except jwt.InvalidTokenError:
+        return jsonify({"error": "Token de confirmación inválido"}), 400
+
 
 #Editar Usuarios
 @app.route('/api/update_user/<rut>', methods=['PUT'])
