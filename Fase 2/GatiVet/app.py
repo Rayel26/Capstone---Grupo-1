@@ -539,12 +539,23 @@ def add_pet():
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
-#Ruta para obtener mascotas
+# Ruta para obtener mascotas
 @app.route('/get_pets', methods=['GET'])
+@login_required
 def get_pets():
     try:
-        # Obtener las mascotas de la tabla Mascota, incluyendo la URL de la foto
-        response = supabase.table('Mascota').select('id_mascota, nombre, edad, especie, raza, fecha_nacimiento, foto_url, Fallecimiento, causa_fallecimiento').execute()
+        # Obtener el id_usuario de la sesión
+        user_id = session.get('id_usuario')
+        
+        # Comprobar si user_id es None
+        if user_id is None:
+            return jsonify({'error': 'No se encontró el ID de usuario en la sesión.'}), 403
+
+        # Obtener las mascotas de la tabla Mascota para el usuario específico
+        response = supabase.table('Mascota') \
+            .select('id_mascota, nombre, edad, especie, raza, fecha_nacimiento, foto_url, Fallecimiento, causa_fallecimiento') \
+            .eq('id_usuario', user_id) \
+            .execute()
         
         # Verificar si la respuesta contiene un error
         if response.data is None:
@@ -553,7 +564,7 @@ def get_pets():
         
         # Comprobar si hay datos
         if not response.data:
-            print("No se encontraron mascotas.")
+            print("No se encontraron mascotas para el usuario.")
             return jsonify({'error': 'No se encontraron mascotas.'}), 404
 
         print("Mascotas obtenidas:", response.data)
@@ -562,6 +573,7 @@ def get_pets():
     except Exception as e:
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
+
 
 # Ruta para obtener mascotas por ID de usuario
 @app.route('/get_pets_by_id', methods=['GET'])
