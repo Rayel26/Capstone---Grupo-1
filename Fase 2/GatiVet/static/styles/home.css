@@ -122,3 +122,17 @@
   #keen-slider {
     max-width: 100%; /* Ajusta esto según sea necesario */
 }
+
+.flashes {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.success {
+  color: green;
+}
+
+.error {
+  color: red;
+}

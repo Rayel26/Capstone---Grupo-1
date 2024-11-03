@@ -154,103 +154,6 @@ razas_perros = [
 ]
 ##FIN RAZAS
 
-
-@app.route('/google_register', methods=['POST'])
-def google_register():
-    data = request.json
-    print("Datos recibidos para el registro:", data)  # Para verificar los datos recibidos
-
-    # Obtener los datos del usuario
-    user_id = data.get('id_usuario')
-    nombre = data.get('nombre')
-    correo = data.get('correo')
-
-    # Verificar si falta algún dato esencial
-    if not user_id or not nombre or not correo:
-        print("Datos incompletos recibidos para el registro.")
-        return jsonify({"error": "Datos incompletos"}), 400
-
-    # Intentar la consulta de existencia de usuario y manejar errores
-    try:
-        existing_user = supabase.table('Usuario').select('*').eq('id_usuario', user_id).execute()
-        print("Usuario existente:", existing_user.data)  # Verifica si el usuario ya existe
-
-        if existing_user.data:
-            print("El usuario ya existe en la base de datos:", existing_user.data)
-            return jsonify({"message": "El usuario ya existe", "user": existing_user.data}), 200
-
-        # Intentar insertar el nuevo usuario
-        response = supabase.table('Usuario').insert({
-            'id_usuario': user_id,
-            'nombre': nombre,
-            'correo': correo,
-            'tipousuarioid': 1,
-            'fecha_creacion': datetime.utcnow().isoformat()
-        }).execute()
-
-        # Verificar si hubo un error en la inserción
-        if response.error:
-            print("Error al guardar el usuario:", response.error.message)
-            return jsonify({"error": response.error.message}), 400
-
-        print("Usuario guardado exitosamente:", response.data)
-        return jsonify({"message": "Usuario creado", "data": response.data}), 201
-
-    except Exception as e:
-        print("Error al verificar o guardar el usuario:", str(e))
-        return jsonify({"error": "Error al procesar la solicitud"}), 500
-
-
-@app.route('/auth/google/callback')
-def google_callback():
-    try:
-        # Obtener los datos del usuario autenticado por Google
-        user = supabase.auth.get_user()
-        
-        if user:
-            print("Usuario autenticado con Google:", user)
-            
-            # Construir los datos del usuario para la tabla `Usuario`
-            user_data = {
-                'id_usuario': user['id'],  # UID proporcionado por Google
-                'nombre': user['user_metadata'].get('full_name', ''),  # Nombre
-                'correo': user['email'],  # Correo electrónico
-                'tipousuarioid': 1  # Tipo de usuario 1 para usuarios autenticados por Google
-            }
-
-            # Verificar si el usuario ya existe en la tabla `Usuario`
-            existing_user = supabase.table('Usuario').select('*').eq('id_usuario', user['id']).execute()
-
-            if existing_user.data:
-                print("El usuario ya existe en la base de datos:", existing_user.data)
-            else:
-                # Intentar insertar el nuevo usuario en la tabla `Usuario`
-                response = supabase.table('Usuario').insert(user_data).execute()
-                if response.error:
-                    print("Error al guardar el usuario en la base de datos:", response.error.message)
-                else:
-                    print("Usuario guardado exitosamente:", response.data)
-
-            # Configurar las variables de sesión para el usuario autenticado
-            session['is_logged_in'] = True
-            session['id_usuario'] = user['id']
-            session['role'] = 'user'  # Asignar el rol por defecto
-
-            print("Datos de sesión establecidos:", session)
-
-            # Redirigir a la página de inicio
-            return redirect(url_for('home'))
-        else:
-            print("Error al obtener el usuario de Supabase.")
-            return redirect(url_for('login'))
-    
-    except Exception as e:
-        print("Error durante la autenticación con Google:", str(e))
-        return redirect(url_for('login'))
-
-
-
-
 # Decorador para verificar si el usuario está logueado
 def login_required(f):
     @wraps(f)
@@ -1029,7 +932,7 @@ def registration():
     return render_template('registration.html')
 
 
-@app.route('/register', methods=['POST'])
+@app.route('/register', methods=['POST']) 
 def register():
     data = request.get_json()
     rut = data['id_usuario']
@@ -1040,6 +943,14 @@ def register():
     contraseña = data['contraseña']
     celular = data['celular']
     fecha_creacion = datetime.now().strftime("%Y-%m-%d")
+
+    # Imprimir datos recibidos para diagnóstico
+    print(f"Datos recibidos: {data}")
+
+    # Verificar si el correo es válido
+    if not correo:
+        print("Error: El correo no es válido o está vacío.")
+        return jsonify({"error": "El correo es inválido o está vacío"}), 400
 
     # Crear usuario en la base de datos
     response = supabase.table('Usuario').insert({
@@ -1055,68 +966,60 @@ def register():
         'confirmacion': False
     }).execute()
 
-    if response.status_code == 201:
-        # Generar un token de confirmación de correo
-        token = jwt.encode({'correo': correo}, app.config['SECRET_KEY'], algorithm='HS256')
-        
-        # Construir la URL de confirmación
-        confirmation_url = url_for('confirm_email', token=token, _external=True)
-        print(f"URL de confirmación generada: {confirmation_url}")  # Verifica que se muestra en consola
-        
-        # Enviar el correo de confirmación
+    # Imprimir el estado de la respuesta para verificar
+    print(f"Estado de respuesta de la creación de usuario: {response}")
+
+    # Cambiar la verificación del estado de respuesta
+    if response.data:  # Comprueba si hay datos en la respuesta
+        # Enviar un correo de prueba al usuario registrado
         try:
-            send_confirmation_email(correo, confirmation_url)
-            return jsonify({"message": "Usuario creado exitosamente, confirme su correo", "data": response.data}), 201
+            # Imprimir el correo al que se enviará
+            print(f"Enviando correo de prueba al usuario: {correo}")
+            
+            # Crear y enviar el mensaje de prueba
+            confirmation_link = f"http://localhost:5000/confirm/{rut}"  # Cambia esto a tu dominio en producción
+            msg = Message("Confirma tu correo",
+                        sender=app.config['MAIL_USERNAME'],
+                        recipients=[correo])
+            msg.html = f"""
+                <p>Hola {nombre} {appaterno} {apmaterno}, de RUT {rut}:</p>
+                <p>Este es un correo para verificar la configuración de Flask-Mail al registrarse.</p>
+                <p>Por favor, confirma tu correo haciendo clic en el siguiente enlace: 
+                <a href="{confirmation_link}">Confirma tu correo aquí</a>
+                </p>
+            """
+            
+            # Enviar el correo
+            mail.send(msg)
+            print("Correo de prueba enviado exitosamente al usuario registrado.")
+            
+            return jsonify({"message": "Usuario creado exitosamente y correo de prueba enviado", "data": response.data}), 201
         except Exception as e:
-            print(f"Error al intentar enviar el correo de confirmación: {e}")  # Verifica si hay algún error en envío
-            return jsonify({"error": "Usuario creado, pero no se pudo enviar el correo de confirmación"}), 500
-        
+            # Imprimir error detallado si el envío falla
+            print(f"Error al enviar el correo de prueba al usuario registrado: {e}")
+            return jsonify({"error": "Usuario creado, pero no se pudo enviar el correo de prueba", "details": str(e)}), 500
+
     else:
-        return jsonify({"error": "Error al crear el usuario", "details": response.json()}), 400
-
-def send_confirmation_email(to_email, confirmation_url):
-    try:
-        msg = Message(subject="Confirma tu registro",
-                    sender=app.config['MAIL_USERNAME'],
-                    recipients=[to_email])
-        msg.body = f"Por favor, sigue este enlace para confirmar tu correo: {confirmation_url}"
-        
-        mail.send(msg)
-        print("Correo de confirmación enviado exitosamente")
-    except Exception as e:
-        print(f"Error al enviar el correo: {e}")
-
-@app.route('/confirm_email/<token>', methods=['GET'])
-def confirm_email(token):
-    try:
-        data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
-        correo = data['correo']
-
-        # Actualizar la confirmación en la base de datos
-        response = supabase.table('Usuario').update({
-            'confirmacion': True
-        }).eq('correo', correo).execute()
-
-        if response.status_code == 200:
-            return jsonify({"message": "Correo confirmado exitosamente"}), 200
-        else:
-            return jsonify({"error": "No se pudo confirmar el correo"}), 400
-    except jwt.ExpiredSignatureError:
-        return jsonify({"error": "El enlace de confirmación ha expirado"}), 400
-    except jwt.InvalidTokenError:
-        return jsonify({"error": "Token de confirmación inválido"}), 400
+        # Imprimir detalles del error al crear el usuario
+        print(f"Error al crear el usuario: {response.error}")  # Verifica si hay un error en la respuesta
+        return jsonify({"error": "Error al crear el usuario", "details": response.error}), 400
 
 
-@app.route('/test_email')
-def test_email():
-    try:
-        msg = Message("Correo de prueba", sender=app.config['MAIL_USERNAME'], recipients=['rayel2201@gmail.com'])
-        msg.body = "Este es un correo de prueba para verificar la configuración de Flask-Mail."
-        mail.send(msg)
-        return "Correo de prueba enviado con éxito."
-    except Exception as e:
-        print(f"Error al enviar el correo de prueba: {e}")
-        return f"Error: {e}"
+@app.route('/confirm/<string:rut>', methods=['GET'])
+def confirm_user(rut):
+    # Actualizar el estado de confirmación en la base de datos
+    response = supabase.table('Usuario').update({'confirmacion': True}).eq('id_usuario', rut).execute()
+
+    if response.data:
+        # Agregar mensaje flash para la confirmación exitosa
+        flash("Usuario confirmado con éxito, ya puedes iniciar sesión.", "success")
+    else:
+        flash("Error al confirmar el correo.", "error")
+
+    # Redirigir a la pantalla de inicio
+    return redirect(url_for('home'))  # Asegúrate de que 'home' es el nombre correcto de tu función
+
+
 
 #Editar Usuarios
 @app.route('/api/update_user/<rut>', methods=['PUT'])

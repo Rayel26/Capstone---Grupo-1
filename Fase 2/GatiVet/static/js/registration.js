@@ -27,8 +27,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const summaryPhone = document.getElementById('summaryPhone');
 
     // Configuración de Supabase
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndsbmFobWJpZ3NiY2t3YmR3ZXpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg1MDg5MzUsImV4cCI6MjA0NDA4NDkzNX0.CP-BaGcCf-fQD-lYrbH0_B-sKVOwUb9Xgy9-nzKjtLM'
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndsbmFobWJpZ3NiY2t3YmR3ZXpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg1MDg5MzUsImV4cCI6MjA0NDA4NDkzNX0.CP-BaGcCf-fQD-lYrbH0_B-sKVOwUb9Xgy9-nzKjtLM';
     const endpoint = 'https://wlnahmbigsbckwbdwezo.supabase.co/rest/v1/Usuario';
+    const registerEndpoint = '/register'; // Cambia esto si es necesario
 
     // Validación de campos
     function areFieldsFilled() {
@@ -178,32 +179,32 @@ document.addEventListener("DOMContentLoaded", function () {
             return; // Salir si el RUT es demasiado largo
         }
 
-        // Hacer la solicitud fetch
-        fetch(endpoint, {
+        // Hacer la solicitud fetch a la ruta de registro
+        fetch(registerEndpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'apikey': SUPABASE_KEY,
-                'Authorization': `Bearer ${SUPABASE_KEY}`
             },
             body: JSON.stringify(userData)
         })
         .then(response => {
+            console.log('Respuesta del servidor:', response);
             if (response.ok) {
-                hideModal(confirmModal); // Ocultar modal de confirmación
-                showModal(accountCreatedModal); // Mostrar modal de cuenta creada
-                registrationForm.reset(); // Limpiar formulario
+                hideModal(confirmModal);
+                showModal(accountCreatedModal);
+                registrationForm.reset();
             } else {
                 return response.json().then(data => {
+                    console.error('Error en la respuesta:', data);
                     throw new Error(data.message || 'Error al crear la cuenta.');
                 });
             }
         })
         .catch(error => {
+            console.error('Error en el fetch:', error);
             alert('Error: ' + error.message);
-        });
+        });        
     });
-
 
     // Cerrar el modal de "Cuenta creada"
     closeModalButton.addEventListener('click', function () {
