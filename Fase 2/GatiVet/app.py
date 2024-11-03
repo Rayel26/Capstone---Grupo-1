@@ -1016,10 +1016,8 @@ def confirm_user(rut):
     else:
         flash("Error al confirmar el correo.", "error")
 
-    # Redirigir a la pantalla de inicio
-    return redirect(url_for('home'))  # Asegúrate de que 'home' es el nombre correcto de tu función
-
-
+    # Redirigir a la página de inicio de sesión
+    return redirect(url_for('login'))
 
 #Editar Usuarios
 @app.route('/api/update_user/<rut>', methods=['PUT'])

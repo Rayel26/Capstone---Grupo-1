@@ -12,17 +12,6 @@
 </head>
 <!--Body-->
 <!--Banner-->
-
-{% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <ul class="flashes">
-                {% for category, message in messages %}
-                    <li class="{{ category }}">{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-{% endwith %}
-
 <section class="relative bg-cover bg-center bg-no-repeat mb-12 mx-6 sm:mx-8 lg:mx-12 rounded-lg"
   style="background-image: url('{{ url_for('static', filename='img/banner.png') }}'); background-size: contain; background-color: rgb(129, 188, 209);">
   <div class="absolute inset-0 bg-gradient-to-r from-white/70 to-transparent"></div>
@@ -429,14 +418,6 @@
   </div>
 </section>
 <!-- Fin Comentarios -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script>
-        // Muestra las alertas y las elimina después de un tiempo
-        $(document).ready(function() {
-            $('.flashes').fadeIn().delay(3000).fadeOut();
-        });
-</script>
 
 <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 {% endblock %}
