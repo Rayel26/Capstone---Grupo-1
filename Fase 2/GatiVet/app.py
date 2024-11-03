@@ -14,6 +14,7 @@ import pytz
 import jwt
 import smtplib
 from email.mime.text import MIMEText
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -30,6 +31,9 @@ app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'gativet30@gmail.com'  # Cambia esto por tu correo
 app.config['MAIL_PASSWORD'] = 'qpby svvg fkoj qcsm'  # Cambia esto por tu contraseña
+app.config['MAIL_DEFAULT_SENDER'] = app.config['MAIL_USERNAME']
+app.config['SECRET_KEY'] = '5d6a9c2c3f18af5d9e23c26be9d4c5a3'
+app.config['SECRET_KEY'] = os.environ.get('FLASK_SECRET_KEY', 'valor_por_defecto_si_no_existe')
 
 mail = Mail(app)
 
@@ -1025,7 +1029,6 @@ def registration():
     return render_template('registration.html')
 
 
-# Ruta para registrar
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -1037,7 +1040,7 @@ def register():
     contraseña = data['contraseña']
     celular = data['celular']
     fecha_creacion = datetime.now().strftime("%Y-%m-%d")
-    
+
     # Crear usuario en la base de datos
     response = supabase.table('Usuario').insert({
         'id_usuario': rut,
@@ -1049,7 +1052,7 @@ def register():
         'celular': celular,
         'tipousuarioid': 1,
         'fecha_creacion': fecha_creacion,
-        'confirmacion': False  # Campo para verificar el email
+        'confirmacion': False
     }).execute()
 
     if response.status_code == 201:
@@ -1058,42 +1061,38 @@ def register():
         
         # Construir la URL de confirmación
         confirmation_url = url_for('confirm_email', token=token, _external=True)
-        print(f"Confirmation URL: {confirmation_url}")
+        print(f"URL de confirmación generada: {confirmation_url}")  # Verifica que se muestra en consola
         
         # Enviar el correo de confirmación
-        send_confirmation_email(correo, confirmation_url)
+        try:
+            send_confirmation_email(correo, confirmation_url)
+            return jsonify({"message": "Usuario creado exitosamente, confirme su correo", "data": response.data}), 201
+        except Exception as e:
+            print(f"Error al intentar enviar el correo de confirmación: {e}")  # Verifica si hay algún error en envío
+            return jsonify({"error": "Usuario creado, pero no se pudo enviar el correo de confirmación"}), 500
         
-        return jsonify({"message": "Usuario creado exitosamente, confirme su correo", "data": response.data}), 201
     else:
         return jsonify({"error": "Error al crear el usuario", "details": response.json()}), 400
 
 def send_confirmation_email(to_email, confirmation_url):
     try:
-        sender_email = "gativet30@gmail.com"  # Cambia a tu correo de Gmail
-        password = "kiritoynico30"  # Usa la contraseña de aplicación generada para Gmail
-        msg = MIMEText(f"Follow this link to confirm your email: {confirmation_url}")
-        msg['Subject'] = "Confirm your signup"
-        msg['From'] = sender_email
-        msg['To'] = to_email
-
-        # Configuración del servidor SMTP de Gmail
-        with smtplib.SMTP('smtp.gmail.com', 587) as server:
-            server.starttls()  # Inicia la conexión TLS
-            server.login(sender_email, password)  # Inicia sesión con tu correo y contraseña de aplicación
-            server.sendmail(sender_email, to_email, msg.as_string())  # Envía el correo
+        msg = Message(subject="Confirma tu registro",
+                    sender=app.config['MAIL_USERNAME'],
+                    recipients=[to_email])
+        msg.body = f"Por favor, sigue este enlace para confirmar tu correo: {confirmation_url}"
+        
+        mail.send(msg)
         print("Correo de confirmación enviado exitosamente")
     except Exception as e:
         print(f"Error al enviar el correo: {e}")
 
-
 @app.route('/confirm_email/<token>', methods=['GET'])
 def confirm_email(token):
     try:
-        # Decodificar el token para obtener el correo
         data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
         correo = data['correo']
 
-        # Actualizar la verificación en la base de datos
+        # Actualizar la confirmación en la base de datos
         response = supabase.table('Usuario').update({
             'confirmacion': True
         }).eq('correo', correo).execute()
@@ -1107,6 +1106,17 @@ def confirm_email(token):
     except jwt.InvalidTokenError:
         return jsonify({"error": "Token de confirmación inválido"}), 400
 
+
+@app.route('/test_email')
+def test_email():
+    try:
+        msg = Message("Correo de prueba", sender=app.config['MAIL_USERNAME'], recipients=['rayel2201@gmail.com'])
+        msg.body = "Este es un correo de prueba para verificar la configuración de Flask-Mail."
+        mail.send(msg)
+        return "Correo de prueba enviado con éxito."
+    except Exception as e:
+        print(f"Error al enviar el correo de prueba: {e}")
+        return f"Error: {e}"
 
 #Editar Usuarios
 @app.route('/api/update_user/<rut>', methods=['PUT'])
