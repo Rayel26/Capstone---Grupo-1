@@ -943,23 +943,47 @@ def save_sale():
     if not session.get('is_logged_in'):
         return jsonify({"success": False, "message": "Usuario no autenticado."}), 401
 
-    user_id = session['id_usuario']  # Suponiendo que el ID del usuario se almacena en la sesión
+    user_id = session['id_usuario']  # ID del usuario en la sesión
     cart = request.json.get('cart', [])
     
-    # Aquí iteramos sobre el carrito para guardar cada producto vendido
+    # Primero, crear la transacción y obtener el id_venta
+    total = sum(item['cantidad'] * item['precio'] for item in cart)  # Calcular el total de la venta
+
+    # Obtener la fecha y hora actual en la zona horaria local de Santiago
+    local_tz = pytz.timezone('America/Santiago')
+    fecha_ingreso = datetime.now(local_tz).isoformat()  # Obtiene la fecha y hora en formato ISO
+
+    transaction_data = {
+        "fecha": fecha_ingreso,  # Usar la fecha en formato ISO
+        "total": str(total),  # Asegúrate de que el total sea del tipo correcto
+        "id_usuario": user_id
+    }
+
+    # Inserta en la tabla Transaccion
+    response = supabase.table("Transaccion").insert(transaction_data).execute()
+    
+    if not response.data or 'id_venta' not in response.data[0]:
+        return jsonify({"success": False, "message": "Error al crear la transacción."}), 500
+    
+    id_venta = response.data[0]['id_venta']  # Obtener el id_venta de la transacción creada
+
+    # Ahora iteramos sobre el carrito para guardar cada producto vendido
     for item in cart:
         # Datos de la venta
-        data = {
+        detalle_data = {
             "nombre_producto": item['nombre_producto'],
             "cantidad": item['cantidad'],
             "precio": item['precio'],
             "id_producto": item['id_producto'],
+            "id_venta": id_venta,  # Usar el id_venta creado
             "id_usuario": user_id
         }
         
-        # Inserta en la tabla Venta
-        response = supabase.table("Venta").insert(data).execute()
+        # Inserta en la tabla DetalleVenta
+        detalle_response = supabase.table("DetalleVenta").insert(detalle_data).execute()
         
+        if not detalle_response.data:
+            return jsonify({"success": False, "message": "Error al guardar el detalle de la venta."}), 500
 
     return jsonify({"success": True, "message": "Venta guardada exitosamente."}), 200
 
