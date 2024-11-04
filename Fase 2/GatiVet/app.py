@@ -938,6 +938,31 @@ def cart():
         session['cart'] = []  # Vaciar el carrito si no está logueado
     return render_template('cart.html')
 
+@app.route('/save_sale', methods=['POST'])
+def save_sale():
+    if not session.get('is_logged_in'):
+        return jsonify({"success": False, "message": "Usuario no autenticado."}), 401
+
+    user_id = session['id_usuario']  # Suponiendo que el ID del usuario se almacena en la sesión
+    cart = request.json.get('cart', [])
+    
+    # Aquí iteramos sobre el carrito para guardar cada producto vendido
+    for item in cart:
+        # Datos de la venta
+        data = {
+            "nombre_producto": item['nombre_producto'],
+            "cantidad": item['cantidad'],
+            "precio": item['precio'],
+            "id_producto": item['id_producto'],
+            "id_usuario": user_id
+        }
+        
+        # Inserta en la tabla Venta
+        response = supabase.table("Venta").insert(data).execute()
+        
+
+    return jsonify({"success": True, "message": "Venta guardada exitosamente."}), 200
+
 #Ruta registration
 @app.route('/registration')
 def registration():

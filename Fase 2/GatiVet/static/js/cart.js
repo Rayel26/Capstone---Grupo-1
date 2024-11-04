@@ -301,3 +301,51 @@ function validateEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
 }
+
+payNowBtn.addEventListener('click', function(event) {
+    event.preventDefault(); // Evita que el formulario se envíe inmediatamente
+    let isValid = true;
+
+    // Validar que el carrito no esté vacío
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    if (cart.length === 0) {
+        alert("El carrito está vacío.");
+        return;
+    }
+
+    // (Validaciones previas omitidas por brevedad...)
+
+    if (isValid) {
+        // Preparar los datos para enviar
+        const orderData = cart.map(item => ({
+            id_producto: item.id_producto,
+            cantidad: item.cantidad,
+            nombre_producto: item.nombre_producto, // Agregamos el nombre del producto
+            precio: item.valor // Asegúrate de que "valor" es el precio
+        }));
+
+        // Hacer la solicitud al backend para guardar la venta
+        fetch('/save_sale', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ cart: orderData })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Mostrar el modal en lugar de una alerta
+                cartModal.classList.remove('hidden'); // Mostrar el modal
+                localStorage.removeItem('cart');
+                renderCartItems([]); // Actualizar la UI con el carrito vacío
+            } else {
+                alert(`Error: ${data.message}`);
+            }
+        })
+        .catch(error => {
+            console.error("Error al guardar la venta:", error);
+            alert(`Ocurrió un error al guardar la venta: ${error.message}`);
+        });
+    }
+});
