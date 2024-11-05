@@ -1339,13 +1339,17 @@ def update_product(product_id):
 @login_required
 @role_required('admin')
 def delete_product(id_producto):
-    response = supabase.table('Producto').delete().eq('id_producto', id_producto).execute()
+    try:
+        response = supabase.table('Producto').delete().eq('id_producto', id_producto).execute()
 
-    if response.data:
-        return jsonify({'message': 'Producto eliminado exitosamente.'}), 200
-    else:
-        print('Error de Supabase:', response.error)
-        return jsonify({'error': 'Error al eliminar el producto.', 'details': response.error}), 400
+        if response.data:
+            return jsonify({'message': 'Producto eliminado exitosamente.'}), 200
+        else:
+            print('Error de Supabase:', response.error)
+            return jsonify({'error': 'Error al eliminar el producto.', 'details': response.error}), 400
+    except Exception as e:
+        print(f'Excepción al eliminar el producto: {str(e)}')  # Log de la excepción
+        return jsonify({'error': 'Error interno del servidor.'}), 500
 
 #Ruta para obtener la cantidad de productos en el carrito
 @app.route('/cart_count', methods=['GET'])

@@ -276,7 +276,7 @@ function updateTable() {
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Eliminar';
         deleteButton.className = 'text-red-500 hover:underline';
-        deleteButton.onclick = () => openDeleteModal(product.id_producto, product.nombre_producto); // Asegúrate de que 'product.nombre_producto' exista
+        deleteButton.onclick = () => deleteProduct(product.id_producto);
 
         // Agregar los botones a la celda correspondiente
         const actionCell = row.querySelector('td:last-child'); // Seleccionar la última celda (Acción)
@@ -327,8 +327,10 @@ async function saveEditProduct() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updatedProductData)
         });
-        if (!response.ok) throw new Error('Error al actualizar el producto');
-        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Error al actualizar el producto: ${errorData.error || response.statusText}`);
+        }
         closeEditModal();
         loadProducts(); // Recargar productos después de editar
     } catch (error) {
@@ -337,31 +339,29 @@ async function saveEditProduct() {
     }
 }
 
+// Eliminar productos
+async function deleteProduct(productId) {
+    console.log('ID del producto a eliminar:', productId); // Verificar el ID del producto
+    if (!confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+        return; // Si el usuario cancela, no hacemos nada
+    }
 
-
-// Funciones para el Modal de Eliminar Producto
-function openDeleteModal(productId, productName) {
-    currentDeleteProductId = productId; // Guarda el ID del producto que se va a eliminar
-    document.getElementById('deleteProductName').innerText = productName; // Muestra el nombre del producto en el modal
-    document.getElementById('deleteProductModal').classList.remove('hidden');
-}
-
-function closeDeleteModal() {
-    document.getElementById('deleteProductModal').classList.add('hidden');
-}
-
-async function confirmDeleteProduct() {
     try {
-        const response = await fetch(`/delete_product/${currentDeleteProductId}`, {
-            method: 'DELETE'
+        const response = await fetch(`/delete_product/${productId}`, {
+            method: 'DELETE',
         });
-        if (!response.ok) throw new Error('Error al eliminar el producto');
-        
-        closeDeleteModal();
-        loadProducts(); // Recargar productos después de eliminar
+
+        if (response.ok) {
+            const jsonResponse = await response.json();
+            alert(jsonResponse.message); // Mostrar mensaje de éxito
+            loadProducts(); // Recargar la lista de productos
+        } else {
+            const errorResponse = await response.json();
+            alert(`Error: ${errorResponse.error}`);
+        }
     } catch (error) {
-        console.error('Error en la eliminación:', error);
-        alert(`Error al eliminar el producto: ${error.message}`);
+        console.error('Error al eliminar el producto:', error);
+        alert('Error al eliminar el producto. Intenta nuevamente.');
     }
 }
 
