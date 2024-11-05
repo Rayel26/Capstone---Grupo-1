@@ -1,5 +1,4 @@
 // Productos
-
 // Función para subir la imagen a Cloudinary
 async function uploadImageToCloudinary(file) {
     const cloudName = 'dqeideoyd'; // Reemplaza con tu Cloud Name
@@ -257,6 +256,12 @@ function updateTable() {
         const row = document.createElement('tr');
         const tipoProductoNombre = tipoProductoMap[product.tipo_producto_id] || 'Tipo desconocido';
 
+        // Aplicar estilo gris si el producto está inactivo
+        if (!product.is_active) {
+            row.style.backgroundColor = '#f0f0f0'; // Cambiar a gris claro
+            product.stock = 0; // Establecer cantidad a 0
+        }
+
         row.innerHTML = `
             <td class="py-2 px-4 border-b">${product.nombre_producto}</td>
             <td class="py-2 px-4 border-b">${tipoProductoNombre}</td>
@@ -273,21 +278,28 @@ function updateTable() {
         editButton.className = 'text-blue-500 hover:underline';
         editButton.onclick = () => openEditModal(product);
         
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Eliminar';
-        deleteButton.className = 'text-red-500 hover:underline';
-        deleteButton.onclick = () => deleteProduct(product.id_producto);
+        const actionButton = document.createElement('button');
+        actionButton.textContent = product.is_active ? 'Desactivar' : 'Activar';
+        actionButton.className = product.is_active ? 'text-red-500 hover:underline' : 'text-green-500 hover:underline';
+        actionButton.onclick = () => {
+            if (product.is_active) {
+                deleteProduct(product.id_producto);
+            } else {
+                activateProduct(product.id_producto);
+            }
+        };
 
         // Agregar los botones a la celda correspondiente
         const actionCell = row.querySelector('td:last-child'); // Seleccionar la última celda (Acción)
         actionCell.appendChild(editButton);
-        actionCell.appendChild(deleteButton);
+        actionCell.appendChild(actionButton);
 
         // Agregar la fila a la tabla
         table.appendChild(row);
     });
     updatePaginationControls();
 }
+
 
 // Variables globales para el producto en edición o eliminación
 let currentEditProductId = null;
@@ -342,7 +354,7 @@ async function saveEditProduct() {
 // Eliminar productos
 async function deleteProduct(productId) {
     console.log('ID del producto a eliminar:', productId); // Verificar el ID del producto
-    if (!confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+    if (!confirm('¿Estás seguro de que quieres desactivar este producto?')) {
         return; // Si el usuario cancela, no hacemos nada
     }
 
@@ -364,6 +376,46 @@ async function deleteProduct(productId) {
         alert('Error al eliminar el producto. Intenta nuevamente.');
     }
 }
+async function activateProduct(productId) {
+    try {
+        const response = await fetch(`/activate_product/${productId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const responseData = await response.json();
+
+        // Si el producto se activó correctamente
+        if (response.status === 200) {
+            console.log(responseData.message);
+
+            // Aquí actualizas el producto en el DOM para que se vea reflejado sin recargar la página
+            const productElement = document.getElementById(`product-${productId}`);
+            if (productElement) {
+                // Si el producto estaba inactivo, lo activamos
+                if (responseData.is_active) {
+                    productElement.classList.remove('inactive');
+                    productElement.classList.add('active');
+                    productElement.querySelector('.status-text').innerText = 'Activo';  // Actualiza el texto de estado
+                } else {
+                    productElement.classList.remove('active');
+                    productElement.classList.add('inactive');
+                    productElement.querySelector('.status-text').innerText = 'Inactivo';  // Actualiza el texto de estado
+                }
+            }
+        } else {
+            console.error('Error al activar el producto:', responseData.error);
+            alert(`Error al activar el producto: ${responseData.error}`);
+        }
+    } catch (error) {
+        console.error('Error al activar el producto:', error);
+        alert(`Error al activar el producto: ${error.message}`);
+    }
+}
+
+
 
 // Función para actualizar la paginación
 function updatePagination() {
@@ -441,7 +493,6 @@ function filterProducts() {
     currentPage = 1; // Reiniciar la paginación a la primera página después del filtrado
     updateTable(); // Llamar a la función para actualizar la tabla
 }
-
 
 //Fin Productos
 //////////////////////////////

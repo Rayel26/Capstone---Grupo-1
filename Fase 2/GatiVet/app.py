@@ -1252,7 +1252,8 @@ def create_product():
         'stock': data['quantity'],
         'tipo_producto_id': tipo_producto_id,
         'fecha_ingreso': data['fecha_ingreso'],
-        'imagen_url': data['image_url']
+        'imagen_url': data['image_url'],
+        'is_active': True
     }).execute()
 
     # Verificar si la inserción fue exitosa
@@ -1334,22 +1335,59 @@ def update_product(product_id):
         print('Error de Supabase:', response.error)
         return jsonify({'error': 'Error al actualizar el producto.', 'details': response.error}), 400
 
-# Ruta para eliminar un producto
+# Ruta para eliminar un producto (marcar como inactivo)
 @app.route('/delete_product/<int:id_producto>', methods=['DELETE'])
 @login_required
 @role_required('admin')
 def delete_product(id_producto):
     try:
-        response = supabase.table('Producto').delete().eq('id_producto', id_producto).execute()
+        # Actualizar el estado del producto a inactivo
+        response = supabase.table('Producto').update({'is_active': False}).eq('id_producto', id_producto).execute()
 
         if response.data:
-            return jsonify({'message': 'Producto eliminado exitosamente.'}), 200
+            return jsonify({'message': 'Producto marcado como inactivo exitosamente.'}), 200
         else:
             print('Error de Supabase:', response.error)
-            return jsonify({'error': 'Error al eliminar el producto.', 'details': response.error}), 400
+            return jsonify({'error': 'Error al marcar el producto como inactivo.', 'details': response.error}), 400
     except Exception as e:
-        print(f'Excepción al eliminar el producto: {str(e)}')  # Log de la excepción
+        print(f'Excepción al marcar el producto como inactivo: {str(e)}')  # Log de la excepción
         return jsonify({'error': 'Error interno del servidor.'}), 500
+
+@app.route('/activate_product/<int:id_producto>', methods=['PUT'])
+@login_required
+@role_required('admin')
+def activate_product(id_producto):
+    try:
+        # Obtener el producto de la base de datos
+        response = supabase.table('Producto').select('*').eq('id_producto', id_producto).execute()
+
+        if not response.data:
+            return jsonify({'error': 'Producto no encontrado.'}), 404
+
+        # Activar el producto
+        producto = response.data[0]
+        producto['is_active'] = True  # Cambiar el estado a activo
+        producto['stock'] = 1  # Establecer stock a 1 o el valor que desees
+
+        # Guardar los cambios en Supabase
+        update_response = supabase.table('Producto').update({
+            'is_active': producto['is_active'],
+            'stock': producto['stock']
+        }).eq('id_producto', id_producto).execute()
+        
+        # Verifica si hay un error
+        if update_response.error:
+            print(f"Error al activar el producto: {update_response.error}")
+            return jsonify({'error': f"Error al activar el producto: {update_response.error['message']}"}), 500
+        else:
+            print("Producto activado correctamente:", update_response.data)
+
+        # Devolver el estado actualizado del producto para reflejarlo en la UI
+        return jsonify({'message': 'Producto activado correctamente.', 'is_active': producto['is_active']}), 200
+    except Exception as e:
+        print(f'Error al activar el producto: {str(e)}')
+        return jsonify({'error': 'Error interno del servidor.'}), 500
+
 
 #Ruta para obtener la cantidad de productos en el carrito
 @app.route('/cart_count', methods=['GET'])
