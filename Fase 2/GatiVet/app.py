@@ -1266,14 +1266,16 @@ def create_product():
 @app.route('/get_products', methods=['GET'])
 def get_products():
     response = supabase.table('Producto').select('*').execute()
+    print(response.data)  # Verificar el formato de los datos
     
     # Verifica si el usuario está logeado
     is_logged_in = session.get('is_logged_in', False)
     
     return jsonify({
-        'products': response.data,
+        'products': response.data if isinstance(response.data, list) else [],
         'is_logged_in': is_logged_in
     }), 200
+
 
 
 #selecciona producto

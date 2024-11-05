@@ -204,15 +204,22 @@ document.getElementById('productForm').addEventListener('submit', async function
 // Función para filtrar por mes
 function filterByMonth() {
     const monthFilter = document.getElementById('monthFilter').value; // Formato YYYY-MM
+    
+    if (!Array.isArray(products)) {
+        console.error("El valor de 'products' no es un array.");
+        return;
+    }
+
     filteredProducts = products.filter(product => {
-        // Asegúrate de que product.fecha_ingreso esté definido antes de llamar a substring
         const rowMonth = product.fecha_ingreso ? product.fecha_ingreso.substring(0, 7) : null; // Extraer YYYY-MM del producto
         return monthFilter === "" || rowMonth === monthFilter;
     });
+
     updatePagination(); // Actualiza paginación con productos filtrados
     console.log(products);
     console.log(filteredProducts);
 }
+
 
 // Mapeo de IDs a nombres de productos
 const tipoProductoMap = {
@@ -224,14 +231,17 @@ const tipoProductoMap = {
 // Función para cargar los productos
 function loadProducts() {
     fetch('/get_products')
-        .then(response => response.json())
-        .then(data => {
-            products = data;
-            filterByMonth(); // Filtrar productos por mes si aplica
-        })
-        .catch(error => {
-            console.error('Error al cargar los productos:', error);
-        });
+    .then(response => response.json())
+    .then(data => {
+        if (Array.isArray(data.products)) {
+            products = data.products;
+            filterByMonth();  // Llama a la función para aplicar filtros si es necesario
+        } else {
+            console.error("Error: Los datos de 'products' no son un array.");
+        }
+    })
+    .catch(error => console.error('Error al cargar los productos:', error));
+
 }
 
 // Función para actualizar la tabla con productos
