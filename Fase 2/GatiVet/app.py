@@ -1276,8 +1276,6 @@ def get_products():
         'is_logged_in': is_logged_in
     }), 200
 
-
-
 #selecciona producto
 @app.route('/item/<int:id_producto>', methods=['GET'])
 @login_required
@@ -1302,6 +1300,40 @@ def get_cloudinary_images():
     else:
         return jsonify({'error': 'Error fetching images from Cloudinary'}), response.status_code
 
+# Ruta para actualizar producto
+@app.route('/update_product/<int:product_id>', methods=['PUT'])
+@login_required
+@role_required('admin')
+def update_product(product_id):
+    data = request.get_json()
+    print("Datos recibidos:", data)
+
+    # Comprobar si se recibieron datos
+    if not data:
+        return jsonify({'error': 'No se recibió ningún dato.'}), 400
+
+    # Verificar claves necesarias
+    required_keys = ['name', 'description', 'price', 'quantity']
+    for key in required_keys:
+        if key not in data:
+            return jsonify({'error': f'Falta el campo: {key}'}), 400
+
+    # Actualizar el producto en Supabase sin cambiar marca, tipo y URL de la imagen
+    response = supabase.table('Producto').update({
+        'nombre_producto': data['name'],
+        'descripcion': data['description'],
+        'valor': data['price'],
+        'stock': data['quantity'],
+    }).eq('id_producto', product_id).execute()  # Cambiar 'id' a 'id_producto'
+
+
+    # Verificar si la actualización fue exitosa
+    if response.data:
+        return jsonify({'message': 'Producto actualizado exitosamente.', 'data': response.data}), 200
+    else:
+        print('Error de Supabase:', response.error)
+        return jsonify({'error': 'Error al actualizar el producto.', 'details': response.error}), 400
+
 # Ruta para eliminar un producto
 @app.route('/delete_product/<int:id_producto>', methods=['DELETE'])
 @login_required
@@ -1314,7 +1346,6 @@ def delete_product(id_producto):
     else:
         print('Error de Supabase:', response.error)
         return jsonify({'error': 'Error al eliminar el producto.', 'details': response.error}), 400
-
 
 #Ruta para obtener la cantidad de productos en el carrito
 @app.route('/cart_count', methods=['GET'])

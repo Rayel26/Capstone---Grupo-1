@@ -271,15 +271,12 @@ function updateTable() {
         const editButton = document.createElement('button');
         editButton.textContent = 'Editar';
         editButton.className = 'text-blue-500 hover:underline';
-        editButton.onclick = () => editProduct(product.id); // Llama a la función editProduct
-
+        editButton.onclick = () => openEditModal(product);
+        
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Eliminar';
         deleteButton.className = 'text-red-500 hover:underline';
-        deleteButton.onclick = () => {
-            console.log("ID del producto a eliminar:", product.id);
-            deleteProduct(product.id);
-        };
+        deleteButton.onclick = () => openDeleteModal(product.id_producto, product.nombre_producto); // Asegúrate de que 'product.nombre_producto' exista
 
         // Agregar los botones a la celda correspondiente
         const actionCell = row.querySelector('td:last-child'); // Seleccionar la última celda (Acción)
@@ -292,6 +289,81 @@ function updateTable() {
     updatePaginationControls();
 }
 
+// Variables globales para el producto en edición o eliminación
+let currentEditProductId = null;
+let currentDeleteProductId = null;
+
+// Funciones para el Modal de Editar Producto
+function openEditModal(product) {
+    document.getElementById('editProductModal').classList.remove('hidden');
+    document.getElementById('editProductId').value = product.id_producto; // Cambiar a id_producto
+    document.getElementById('editProductName').value = product.nombre_producto;
+    document.getElementById('editProductPrice').value = product.valor;
+    document.getElementById('editProductQuantity').value = product.stock;
+    document.getElementById('editProductDescription').value = product.descripcion; // Agregar descripción
+}
+
+function closeEditModal() {
+    document.getElementById('editProductModal').classList.add('hidden');
+}
+
+document.getElementById('editProductForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    saveEditProduct(); // Llama a saveEditProduct en lugar de updateProduct
+});
+
+async function saveEditProduct() {
+    const productId = document.getElementById('editProductId').value;
+    const updatedProductData = {
+        name: document.getElementById('editProductName').value,
+        price: parseFloat(document.getElementById('editProductPrice').value),
+        quantity: parseInt(document.getElementById('editProductQuantity').value),
+        description: document.getElementById('editProductDescription').value,
+    };
+
+    try {
+        const response = await fetch(`/update_product/${productId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedProductData)
+        });
+        if (!response.ok) throw new Error('Error al actualizar el producto');
+        
+        closeEditModal();
+        loadProducts(); // Recargar productos después de editar
+    } catch (error) {
+        console.error('Error en la actualización:', error);
+        alert(`Error al actualizar el producto: ${error.message}`);
+    }
+}
+
+
+
+// Funciones para el Modal de Eliminar Producto
+function openDeleteModal(productId, productName) {
+    currentDeleteProductId = productId; // Guarda el ID del producto que se va a eliminar
+    document.getElementById('deleteProductName').innerText = productName; // Muestra el nombre del producto en el modal
+    document.getElementById('deleteProductModal').classList.remove('hidden');
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteProductModal').classList.add('hidden');
+}
+
+async function confirmDeleteProduct() {
+    try {
+        const response = await fetch(`/delete_product/${currentDeleteProductId}`, {
+            method: 'DELETE'
+        });
+        if (!response.ok) throw new Error('Error al eliminar el producto');
+        
+        closeDeleteModal();
+        loadProducts(); // Recargar productos después de eliminar
+    } catch (error) {
+        console.error('Error en la eliminación:', error);
+        alert(`Error al eliminar el producto: ${error.message}`);
+    }
+}
 
 // Función para actualizar la paginación
 function updatePagination() {
