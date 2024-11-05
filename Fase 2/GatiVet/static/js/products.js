@@ -55,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 //Carga de productos BD
-
 // Mapeo de IDs a nombres de productos
 const tipoProductoMap = {
     1: 'Alimento para Perros',
@@ -70,13 +69,17 @@ let selectedFilters = {
     sortBy: ''  // Nuevo filtro para la ordenación
 };
 
+let products = [];  // Almacena productos cargados
+
 // Función para cargar los productos
 function loadProducts() {
-    fetch('/get_products')  // Este endpoint debería devolver todos los productos
+    fetch('/get_products')
         .then(response => response.json())
         .then(data => {
-            products = data;
-            updateProductCards(); // Actualizar las cards de productos
+            console.log(data);  // Agrega esto para ver qué se está recibiendo
+            products = data.products;  // Asegúrate de que esto esté correcto
+            const isLoggedIn = data.is_logged_in;
+            updateProductCards(isLoggedIn);
         })
         .catch(error => {
             console.error('Error al cargar los productos:', error);
@@ -84,7 +87,7 @@ function loadProducts() {
 }
 
 // Función para actualizar las cards con productos filtrados
-function updateProductCards() {
+function updateProductCards(isLoggedIn) {
     const productList = document.getElementById('productList');
 
     if (!productList) {
@@ -138,49 +141,79 @@ function updateProductCards() {
                         <h3 class="marcaProducto ml-4 text-xs text-gray-500 group-hover:underline group-hover:underline-offset-4">
                             ${product.marca}
                         </h3>
-                        <h3 class="marcaProducto ml-4 text-xs text-gray-500 group-hover:underline group-hover:underline-offset-4">
+                        <h3 class="stockProducto ml-4 text-xs text-gray-500 group-hover:underline group-hover:underline-offset-4">
                             Stock: ${product.stock}
                         </h3>
-                        <div class="mt-3 flex justify-center text-center mb-2">
-                            <button class="agregar-carrito-btn block rounded-md mb-6 bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4" data-product-id="${product.id_producto}">
-                                Agregar al carrito
-                            </button>
-                        </div>
+                        ${isLoggedIn ? `
+                            <div class="mt-3 flex justify-center text-center mb-2">
+                                <button class="agregar-carrito-btn block rounded-md mb-6 bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4" data-product-id="${product.id_producto}">
+                                    Agregar al carrito
+                                </button>
+                            </div>
+                        ` : `
+                            <div class="mt-3 flex justify-center text-center mb-2">
+                                <button class="login-btn block rounded-md mb-6 bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4">
+                                    Agregar al carrito
+                                </button>
+                            </div>
+                        `}
                     </div>
                 </a>
             </li>
-            `;
+        `;
 
-        
         productList.insertAdjacentHTML('beforeend', cardHTML);
-
-// Agregar evento al botón "Agregar al carrito"
-const addToCartBtn = productList.querySelector(`button[data-product-id="${product.id_producto}"]`);
-addToCartBtn.addEventListener('click', (e) => {
-    e.preventDefault();  // Evitar que se redirija al enlace del producto
-    addToCart(product);  // Agregar el producto al carrito
-    
-    // Mostrar el modal al agregar producto
-    const cartModal = document.getElementById('cartModal');
-    cartModal.classList.remove('hidden');
-});
-
-// Cerrar el modal al hacer clic en el botón de cerrar
-const closeModalBtn = document.getElementById('closeModalBtn');
-closeModalBtn.addEventListener('click', () => {
-    const cartModal = document.getElementById('cartModal');
-    cartModal.classList.add('hidden');
-});
-
-// Cerrar el modal al hacer clic en "Aceptar"
-const acceptModalBtn = document.getElementById('acceptModalBtn');
-acceptModalBtn.addEventListener('click', () => {
-    const cartModal = document.getElementById('cartModal');
-    cartModal.classList.add('hidden');
-});
-
+        
+        // Agregar evento al botón "Agregar al carrito" solo si el usuario está conectado
+        if (isLoggedIn) {
+            const addToCartBtn = productList.querySelector(`button[data-product-id="${product.id_producto}"]`);
+            if (addToCartBtn) {
+                addToCartBtn.addEventListener('click', (e) => {
+                    e.preventDefault();  // Evitar que se redirija al enlace del producto
+                    addToCart(product);  // Agregar el producto al carrito
+                    
+                    // Mostrar el modal al agregar producto
+                    const cartModal = document.getElementById('cartModal');
+                    if (cartModal) {
+                        cartModal.classList.remove('hidden');
+                    } else {
+                        console.error("No se pudo encontrar el elemento con ID 'cartModal'");
+                    }
+                });
+            }
+        } else {
+            // Agregar evento al botón "Iniciar Sesión"
+            const loginBtn = productList.querySelector('.login-btn');
+            if (loginBtn) {
+                loginBtn.addEventListener('click', (e) => {
+                    e.preventDefault();  // Evitar que se redirija al enlace del producto
+                    window.location.href = '/login';  // Redirigir a la página de inicio de sesión
+                });
+            }
+        }
     });
 
+    // Cerrar el modal al hacer clic en el botón de cerrar
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', () => {
+            const cartModal = document.getElementById('cartModal');
+            if (cartModal) {
+                cartModal.classList.add('hidden');
+            }
+        });
+    }
+
+    // Cerrar el modal al hacer clic en "Aceptar"
+    const acceptModalBtn = document.getElementById('acceptModalBtn');
+    if (acceptModalBtn) {
+        acceptModalBtn.addEventListener('click', () => {
+            const cartModal = document.getElementById('cartModal');
+            if (cartModal) {
+                cartModal.classList.add('hidden');
+            }
+        });
+    }
 }
 
 // Event listener para el selector de ordenar
@@ -234,14 +267,12 @@ document.querySelectorAll('#FilterType1, #FilterType2, #FilterType3').forEach(ch
 
 // Event listeners para los filtros de precio
 document.getElementById('minPrice').addEventListener('input', event => {
-    const minValue = parseFloat(event.target.value);
-    selectedFilters.precio.min = isNaN(minValue) ? null : minValue;
+    selectedFilters.precio.min = parseFloat(event.target.value) || null;  // Obtener precio mínimo
     updateProductCards();
 });
 
 document.getElementById('maxPrice').addEventListener('input', event => {
-    const maxValue = parseFloat(event.target.value);
-    selectedFilters.precio.max = isNaN(maxValue) ? null : maxValue;
+    selectedFilters.precio.max = parseFloat(event.target.value) || null;  // Obtener precio máximo
     updateProductCards();
 });
 
@@ -259,10 +290,10 @@ document.querySelectorAll('.product-item').forEach(item => {
     });
 });
 
+// Cargar los productos al cargar la página
+document.addEventListener('DOMContentLoaded', loadProducts);
 
-document.addEventListener('DOMContentLoaded', () => {
-    loadProducts();
-});
+
 
 ///////////////////////////
 //Carrito

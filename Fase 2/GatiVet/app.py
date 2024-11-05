@@ -932,6 +932,7 @@ def schedule():
     return render_template('schedule.html')
 
 @app.route('/cart')
+@login_required
 def cart():
     # Verificar si el usuario está logueado
     if not session.get('is_logged_in'):
@@ -943,56 +944,128 @@ def save_sale():
     if not session.get('is_logged_in'):
         return jsonify({"success": False, "message": "Usuario no autenticado."}), 401
 
-    user_id = session['id_usuario']  # ID del usuario en la sesión
+    user_id = session['id_usuario']
     cart = request.json.get('cart', [])
     
-    # Primero, crear la transacción y obtener el id_venta
-    total = sum(item['cantidad'] * item['precio'] for item in cart)  # Calcular el total de la venta
-
-    # Obtener la fecha y hora actual en la zona horaria local de Santiago
+    # Calcular el total y obtener la fecha actual en zona horaria de Santiago
+    total = sum(item['cantidad'] * item['precio'] for item in cart)
     local_tz = pytz.timezone('America/Santiago')
-    fecha_ingreso = datetime.now(local_tz).isoformat()  # Obtiene la fecha y hora en formato ISO
+    fecha_actual = datetime.now(local_tz)
+    fecha_formateada = fecha_actual.strftime("%d-%m-%Y")
+    hora_formateada = fecha_actual.strftime("%H:%M")
 
     transaction_data = {
-        "fecha": fecha_ingreso,  # Usar la fecha en formato ISO
-        "total": str(total),  # Asegúrate de que el total sea del tipo correcto
+        "fecha": fecha_actual.isoformat(),
+        "total": str(total),
         "id_usuario": user_id
     }
 
-    # Inserta en la tabla Transaccion
+    # Insertar en la tabla Transaccion
     response = supabase.table("Transaccion").insert(transaction_data).execute()
     
     if not response.data or 'id_venta' not in response.data[0]:
         return jsonify({"success": False, "message": "Error al crear la transacción."}), 500
     
-    id_venta = response.data[0]['id_venta']  # Obtener el id_venta de la transacción creada
+    id_venta = response.data[0]['id_venta']
 
-    # Ahora iteramos sobre el carrito para guardar cada producto vendido
+    # Insertar cada producto del carrito en DetalleVenta
     for item in cart:
-        # Datos de la venta
         detalle_data = {
             "nombre_producto": item['nombre_producto'],
             "cantidad": item['cantidad'],
             "precio": item['precio'],
             "id_producto": item['id_producto'],
-            "id_venta": id_venta,  # Usar el id_venta creado
+            "id_venta": id_venta,
             "id_usuario": user_id
         }
         
-        # Inserta en la tabla DetalleVenta
         detalle_response = supabase.table("DetalleVenta").insert(detalle_data).execute()
         
         if not detalle_response.data:
             return jsonify({"success": False, "message": "Error al guardar el detalle de la venta."}), 500
 
-    return jsonify({"success": True, "message": "Venta guardada exitosamente."}), 200
+    # Recuperar el correo del usuario desde la base de datos
+    usuario_response = supabase.table("Usuario").select("correo").eq("id_usuario", user_id).single().execute()
+    if not usuario_response.data:
+        return jsonify({"success": False, "message": "No se pudo recuperar el correo del usuario."}), 500
+    
+    correo_usuario = usuario_response.data['correo']
+
+    # Función para formato de precio en CLP
+    def formato_clp(valor):
+        return f"${valor:,.0f}".replace(",", ".")
+
+    # Crear el contenido HTML del correo con el resumen de la compra
+    productos_detalle_html = "".join([
+        f"""
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;">{item['nombre_producto']}</td>
+            <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">{item['cantidad']}</td>
+            <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">{formato_clp(item['precio'])}</td>
+            <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">{formato_clp(item['cantidad'] * item['precio'])}</td>
+        </tr>
+        """
+        for item in cart
+    ])
+    
+    mensaje_correo_html = f"""
+    <html>
+    <body style="font-family: Arial, sans-serif; color: #333;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <img src="https://res.cloudinary.com/dqeideoyd/image/upload/v1728506204/shrotm1w6az7voy7fgfg.png" alt="Gativer Logo" style="width: 150px; height: auto;">
+            <div style="text-align: left;">
+                <h2 style="margin: 0; color: #4CAF50;">Gracias por comprar en Gativet!</h2>
+                <p style="margin: 0;">Aquí tienes tu resumen de compra:</p>
+            </div>
+        </div>
+
+        <p><strong>Número de transacción:</strong> {id_venta}</p>
+        <p><strong>Fecha:</strong> {fecha_formateada}<br><strong>Hora:</strong> {hora_formateada}</p>
+
+        <h3 style="color: #333;">Productos</h3>
+        <table style="border-collapse: collapse; width: 100%; font-size: 14px;">
+            <thead>
+                <tr style="background-color: #f2f2f2;">
+                    <th style="padding: 8px; border: 1px solid #ddd;">Producto</th>
+                    <th style="padding: 8px; border: 1px solid #ddd;">Cantidad</th>
+                    <th style="padding: 8px; border: 1px solid #ddd;">Precio Unidad</th>
+                    <th style="padding: 8px; border: 1px solid #ddd;">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {productos_detalle_html}
+            </tbody>
+        </table>
+
+        <p style="font-size: 1.2em; margin-top: 20px;">
+            <strong>Total:</strong> {formato_clp(total)}
+        </p>
+
+        <p>Esperamos verte pronto de nuevo en Gativet!</p>
+    </body>
+    </html>
+    """
+
+    # Enviar el correo con el resumen de compra
+    try:
+        msg = Message("Resumen de tu compra en Gativet",
+                    sender=app.config['MAIL_USERNAME'],
+                    recipients=[correo_usuario])
+        msg.html = mensaje_correo_html  # Configurar el contenido HTML
+        mail.send(msg)
+        print("Correo de resumen de compra enviado exitosamente.")
+    except Exception as e:
+        print(f"Error al enviar el correo de resumen de compra: {e}")
+        return jsonify({"success": True, "message": "Venta guardada, pero no se pudo enviar el correo de resumen."}), 500
+
+    return jsonify({"success": True, "message": "Venta guardada exitosamente y correo enviado."}), 200
 
 #Ruta registration
 @app.route('/registration')
 def registration():
     return render_template('registration.html')
 
-
+#Ruta Registro
 @app.route('/register', methods=['POST']) 
 def register():
     data = request.get_json()
@@ -1189,14 +1262,23 @@ def create_product():
         print('Error de Supabase:', response.error)
         return jsonify({'error': 'Error al crear el producto.', 'details': response.error}), 400
 
-#Ruta para obtener los productos
+# Ruta para obtener los productos
 @app.route('/get_products', methods=['GET'])
 def get_products():
     response = supabase.table('Producto').select('*').execute()
-    return jsonify(response.data), 200
+    
+    # Verifica si el usuario está logeado
+    is_logged_in = session.get('is_logged_in', False)
+    
+    return jsonify({
+        'products': response.data,
+        'is_logged_in': is_logged_in
+    }), 200
+
 
 #selecciona producto
 @app.route('/item/<int:id_producto>', methods=['GET'])
+@login_required
 def get_product(id_producto):
     response = supabase.table('Producto').select('*').eq('id_producto', id_producto).execute()
     
