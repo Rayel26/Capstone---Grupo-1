@@ -942,8 +942,6 @@ async function loadPets() {
 }
 
 
-
-
 //Cargar razas
 
 // Función para cargar las razas según la especie seleccionada
