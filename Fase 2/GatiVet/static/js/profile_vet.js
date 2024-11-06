@@ -767,7 +767,7 @@ document.getElementById('saveButton').addEventListener('click', async function()
     }
 });
 
-//Script ver historial medico
+// Script ver historial medico
 function loadMedicalHistory() {
     fetch(`/get_medical_history?id_mascota=${selectedPetId}`)
         .then(response => {
@@ -789,6 +789,7 @@ function loadMedicalHistory() {
                     <td class="border border-gray-300 p-1">${record.examen_fisico}</td>
                     <td class="border border-gray-300 p-1">${record.diagnostico}</td>
                     <td class="border border-gray-300 p-1">${record.indicaciones_tratamientos}</td>
+                    
                     <td class="border border-gray-300 p-1">
                         <button 
                             style="color: blue; text-decoration: underline; background: none; border: none; cursor: pointer;" 
@@ -804,6 +805,7 @@ function loadMedicalHistory() {
             console.error("Error al cargar el historial médico:", error);
         });
 }
+
 
 //Script detalle historial
 // Agrega el evento de clic al botón "Cerrar"
@@ -926,23 +928,6 @@ function guardarCambios(id) {
 
     // Cerrar el modal después de guardar los cambios
     closeModal('modal' + id);
-}
-
-// Función para guardar cambios de vacunas
-function guardarCambiosVacuna(vacunaId) {
-    const vacufecha = document.getElementById(`editVacunaFecha${vacunaId}`).value;
-    const producto = document.getElementById(`editVacunaNombre${vacunaId}`).value;
-    const dosis = document.getElementById(`editVacunaDosis${vacunaId}`).value;
-    const veterinario = document.getElementById(`editVacunaVeterinario${vacunaId}`).value;
-
-    // Aquí puedes agregar el código para guardar estos cambios en el servidor o en una base de datos
-    // Actualizar los valores en la tabla correspondiente
-    document.getElementById(`vacunaFecha${vacunaId}`).textContent = vacufecha;
-    document.getElementById(`vacunaNombre${vacunaId}`).textContent = producto;
-    document.getElementById(`vacunaDosis${vacunaId}`).textContent = dosis;
-    document.getElementById(`vacunaVeterinario${vacunaId}`).textContent = veterinario;
-    // Por ejemplo, simplemente mostrar una alerta como confirmación
-    closeModal(`modalVacuna${vacunaId}`); // Cerrar el modal
 }
 
 // Función para guardar cambios de desparasitaciones
@@ -1266,13 +1251,14 @@ function closeModal() {
 // Función para agregar vacuna
 async function addVaccine() {
     const fecha = document.getElementById('vacunaFecha').value;
+    const proxFecha = document.getElementById('vacunaProxFecha').value;
     const nombre = document.getElementById('vacunaNombre').value;
     const dosis = document.getElementById('vacunaDosis').value;
     const veterinario = document.getElementById('vacunaVeterinario').value;
-    const id_mascota = document.getElementById("pet-select").value; // Obtener el ID de la mascota seleccionada
+    const id_mascota = document.getElementById("pet-select").value;
 
     // Validación de campos vacíos
-    if (!fecha || !nombre || !dosis || !veterinario) {
+    if (!fecha || !proxFecha || !nombre || !dosis || !veterinario) {
         alert('Por favor, completa todos los campos.');
         return;
     }
@@ -1280,10 +1266,11 @@ async function addVaccine() {
     // Crear un nuevo objeto de vacuna
     const nuevaVacuna = {
         fecha: fecha,
+        prox_fecha: proxFecha,  // Enviar la fecha de la próxima vacuna
         nombre_vacuna: nombre,
         dosis: dosis,
         nombre_veterinario: veterinario,
-        id_mascota: id_mascota // Agregar la FK a la tabla Mascota
+        id_mascota: id_mascota
     };
 
     try {
@@ -1312,6 +1299,7 @@ async function addVaccine() {
         newRow.innerHTML = `
             <td class="border border-gray-300 px-2 py-1">${fecha}</td>
             <td class="border border-gray-300 px-2 py-1">${nombre}</td>
+            <td class="border border-gray-300 px-2 py-1">${proxFecha}</td>
             <td class="border border-gray-300 px-2 py-1">${dosis}</td>
             <td class="border border-gray-300 px-2 py-1">${veterinario}</td>
         `;
@@ -1325,6 +1313,7 @@ async function addVaccine() {
         alert('Error al procesar la solicitud. Inténtalo de nuevo.');
     }
 }
+
 
 // Función para obtener las vacunas de la mascota seleccionada
 function fetchVaccinesByPetId(petId) {
@@ -1358,7 +1347,7 @@ function displayVaccines(vaccines) {
 
     if (!vaccines || vaccines.length === 0) {
     const noVaccinesRow = document.createElement("tr");
-    noVaccinesRow.innerHTML = `<td colspan="4" class="border border-gray-300 text-center">No hay vacunas registradas para esta mascota.</td>`;
+    noVaccinesRow.innerHTML = `<td colspan="5" class="border border-gray-300 text-center">No hay vacunas registradas para esta mascota.</td>`;
     tbody.appendChild(noVaccinesRow);
     return;
 }
@@ -1368,6 +1357,7 @@ function displayVaccines(vaccines) {
         newRow.innerHTML = `
             <td class="border border-gray-300 px-2 py-1">${vaccine.fecha}</td>
             <td class="border border-gray-300 px-2 py-1">${vaccine.nombre_vacuna}</td>
+            <td class="border border-gray-300 px-2 py-1">${vaccine.prox_fecha}</td>
             <td class="border border-gray-300 px-2 py-1">${vaccine.dosis}</td>
             <td class="border border-gray-300 px-2 py-1">${vaccine.nombre_veterinario}</td>
         `;
@@ -1400,12 +1390,13 @@ function closeDewormerModal() {
 async function addDewormer() {
     const fecha = document.getElementById('newDesparasitacionFecha').value;
     const producto = document.getElementById('newDesparasitacionProducto').value;
+    const proximaFecha = document.getElementById('newDesparasitacionProximaFecha').value;
     const dosis = document.getElementById('newDesparasitacionDosis').value;
     const veterinario = document.getElementById('newDesparasitacionVeterinario').value;
     const id_mascota = document.getElementById("pet-select").value; // Obtener el ID de la mascota seleccionada
 
     // Validación de campos vacíos
-    if (!fecha || !producto || !dosis || !veterinario) {
+    if (!fecha || !producto || !proximaFecha || !dosis || !veterinario) {
         alert('Por favor, completa todos los campos.');
         return;
     }
@@ -1414,6 +1405,7 @@ async function addDewormer() {
     const nuevaDesparasitacion = {
         fecha: fecha,
         nombre_desparacitador: producto,
+        prox_fecha: proximaFecha,
         dosis: dosis,
         nombre_veterinario: veterinario,
         id_mascota: id_mascota // Agregar la FK a la tabla Mascota
@@ -1439,25 +1431,16 @@ async function addDewormer() {
         const data = await response.json();
         console.log('Desparacitación añadida:', data);
 
-        // Llamar a la función para obtener las desparasitaciones actualizadas
-        fetchDewormersByPetId(id_mascota); // Actualizar la lista de desparasitaciones
+        // Actualizar la lista de desparasitaciones
+        fetchDewormersByPetId(id_mascota);
 
         // Resetear el formulario
-        const form = document.getElementById('addDewormerForm'); // Asegúrate de que este sea el ID correcto
-        if (form) {
-            form.reset();
-        } else {
-            console.error("El formulario no se encontró.");
-        }
-
-        // Cerrar el modal
         closeDewormerModal();
     } catch (error) {
         console.error('Error al procesar la solicitud:', error);
         alert('Error al procesar la solicitud. Inténtalo de nuevo.');
     }
 }
-
 
 // Función para obtener desparasitaciones de la mascota seleccionada
 function fetchDewormersByPetId(petId) {
@@ -1491,7 +1474,7 @@ function displayDewormers(dewormers) {
 
     if (!dewormers || dewormers.length === 0) {
         const noDewormersRow = document.createElement("tr");
-        noDewormersRow.innerHTML = `<td colspan="4" class="border border-gray-300 text-center">No hay desparasitaciones registradas para esta mascota.</td>`;
+        noDewormersRow.innerHTML = `<td colspan="5" class="border border-gray-300 text-center">No hay desparasitaciones registradas para esta mascota.</td>`;
         tbody.appendChild(noDewormersRow);
         return;
     }
@@ -1501,6 +1484,7 @@ function displayDewormers(dewormers) {
         newRow.innerHTML = `
             <td class="border border-gray-300 px-2 py-1">${dewormer.fecha}</td>
             <td class="border border-gray-300 px-2 py-1">${dewormer.nombre_desparacitador}</td>
+            <td class="border border-gray-300 px-2 py-1">${dewormer.prox_fecha}</td>
             <td class="border border-gray-300 px-2 py-1">${dewormer.dosis}</td>
             <td class="border border-gray-300 px-2 py-1">${dewormer.nombre_veterinario}</td>
         `;

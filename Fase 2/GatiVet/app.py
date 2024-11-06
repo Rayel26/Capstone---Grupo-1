@@ -1606,7 +1606,7 @@ def get_vaccines_by_pet_id():
             return jsonify({'error': 'ID de mascota no proporcionado.'}), 400
 
         # Obtener las vacunas asociadas al id_mascota
-        vaccines_response = supabase.table('Vacuna').select('id_vacuna, fecha, nombre_vacuna, dosis, nombre_veterinario').eq('id_mascota', id_mascota).execute()
+        vaccines_response = supabase.table('Vacuna').select('*').eq('id_mascota', id_mascota).execute()
 
         # Verificar si hay un error en la respuesta
         if hasattr(vaccines_response, 'error') and vaccines_response.error:
@@ -1628,34 +1628,28 @@ def get_vaccines_by_pet_id():
 def add_vaccine():
     data = request.json
     try:
-        # Extraer los datos del cuerpo de la solicitud
         fecha = data.get('fecha')
+        prox_fecha = data.get('prox_fecha')  # Nueva fecha de la próxima vacuna
         nombre_vacuna = data.get('nombre_vacuna')
         dosis = data.get('dosis')
         nombre_veterinario = data.get('nombre_veterinario')
-        id_mascota = data.get('id_mascota')  # Debes enviar este campo desde el frontend
+        id_mascota = data.get('id_mascota')
 
-        # Validar que los campos no estén vacíos
-        if not all([fecha, nombre_vacuna, dosis, nombre_veterinario, id_mascota]):
+        if not all([fecha, prox_fecha, nombre_vacuna, dosis, nombre_veterinario, id_mascota]):
             return jsonify({'error': 'Todos los campos son requeridos.'}), 400
 
-        # Insertar la nueva vacuna en la tabla Vacuna
         response = supabase.table('Vacuna').insert({
             'fecha': fecha,
+            'prox_fecha': prox_fecha,  # Almacenar en la base de datos
             'nombre_vacuna': nombre_vacuna,
             'dosis': dosis,
             'nombre_veterinario': nombre_veterinario,
-            'id_mascota': id_mascota  # Establecer la FK
+            'id_mascota': id_mascota
         }).execute()
 
-        # Verificar si hubo un error en la respuesta
         if isinstance(response, Exception):
             return jsonify({'error': 'Error al agregar vacuna.', 'details': str(response)}), 500
         
-        if response.data is None:
-            return jsonify({'error': 'No se recibió respuesta de Supabase.', 'details': str(response)}), 500
-
-        # Retornar la nueva vacuna creada (opcional)
         return jsonify({'message': 'Vacuna añadida exitosamente.', 'data': response.data}), 201
 
     except Exception as e:
@@ -1673,7 +1667,7 @@ def get_dewormer_by_pet_id():
             return jsonify({'error': 'ID de mascota no proporcionado.'}), 400
 
         # Obtener las vacunas asociadas al id_mascota
-        dewormer_response = supabase.table('Desparacitacion').select('id_desparacitacion, fecha, nombre_desparacitador, dosis, nombre_veterinario').eq('id_mascota', id_mascota).execute()
+        dewormer_response = supabase.table('Desparacitacion').select('*').eq('id_mascota', id_mascota).execute()
 
         # Verificar si hay un error en la respuesta
         if hasattr(dewormer_response, 'error') and dewormer_response.error:
@@ -1690,25 +1684,27 @@ def get_dewormer_by_pet_id():
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
-# Ruta para agregar una nueva vacuna
+# Ruta para agregar desparasitacion
 @app.route('/add_dewormer', methods=['POST'])
 def add_dewormer():
     data = request.json
     try:
         # Extraer los datos del cuerpo de la solicitud
         fecha = data.get('fecha')
+        prox_fecha = data.get('prox_fecha')  # Nueva fecha de la próxima vacuna
         nombre_desparacitador = data.get('nombre_desparacitador')
         dosis = data.get('dosis')
         nombre_veterinario = data.get('nombre_veterinario')
         id_mascota = data.get('id_mascota')  # Debes enviar este campo desde el frontend
 
         # Validar que los campos no estén vacíos
-        if not all([fecha, nombre_desparacitador, dosis, nombre_veterinario, id_mascota]):
+        if not all([fecha, prox_fecha , nombre_desparacitador, dosis, nombre_veterinario, id_mascota]):
             return jsonify({'error': 'Todos los campos son requeridos.'}), 400
 
         # Insertar la nueva desparacitación en la tabla Desparacitacion
         response = supabase.table('Desparacitacion').insert({
             'fecha': fecha,
+            'prox_fecha': prox_fecha,  # Almacenar en la base de datos
             'nombre_desparacitador': nombre_desparacitador,
             'dosis': dosis,
             'nombre_veterinario': nombre_veterinario,

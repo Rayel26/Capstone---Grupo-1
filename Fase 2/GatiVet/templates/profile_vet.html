@@ -760,7 +760,7 @@
                                 <th class="border border-gray-300 px-2 py-1 text-left rounded-tl-lg rounded-tr-lg">Fecha
                                 </th>
                                 <th class="border border-gray-300 px-2 py-1 text-left">Vacuna</th>
-                                <th class="border border-gray-300 px-2 py-1 text-left">Dosis</th>
+                                <th class="border border-gray-300 px-2 py-1 text-left">Fecha Proxima</th>                                <th class="border border-gray-300 px-2 py-1 text-left">Dosis</th>
                                 <th class="border border-gray-300 px-2 py-1 text-left">Veterinario</th>
                             </tr>
                         </thead>
@@ -783,23 +783,23 @@
                     <form id="addVaccineForm">
                         <div class="mb-4">
                             <label for="vacunaFecha" class="block mb-2">Fecha:</label>
-                            <input type="date" id="vacunaFecha" class="border border-gray-300 rounded-md p-1 w-full"
-                                required>
+                            <input type="date" id="vacunaFecha" class="border border-gray-300 rounded-md p-1 w-full">
+                        </div>
+                        <div class="mb-4">
+                            <label for="vacunaProxFecha" class="block mb-2">Próxima Fecha:</label>
+                            <input type="date" id="vacunaProxFecha" class="border border-gray-300 rounded-md p-1 w-full" required>
                         </div>
                         <div class="mb-4">
                             <label for="vacunaNombre" class="block mb-2">Vacuna:</label>
-                            <input type="text" id="vacunaNombre" class="border border-gray-300 rounded-md p-1 w-full"
-                                required>
+                            <input type="text" id="vacunaNombre" class="border border-gray-300 rounded-md p-1 w-full" required>
                         </div>
                         <div class="mb-4">
                             <label for="vacunaDosis" class="block mb-2">Dosis:</label>
-                            <input type="text" id="vacunaDosis" class="border border-gray-300 rounded-md p-1 w-full"
-                                required>
+                            <input type="text" id="vacunaDosis" class="border border-gray-300 rounded-md p-1 w-full" required>
                         </div>
                         <div class="mb-4">
                             <label for="vacunaVeterinario" class="block mb-2">Veterinario:</label>
-                            <input type="text" id="vacunaVeterinario"
-                                class="border border-gray-300 rounded-md p-1 w-full" required>
+                            <input type="text" id="vacunaVeterinario" class="border border-gray-300 rounded-md p-1 w-full" required>
                         </div>
                         <div class="flex justify-end">
                             <button type="button"
@@ -812,6 +812,7 @@
                     </form>
                 </div>
             </div>
+
             <!-- Fin Contenido Vacunas -->
 
 
@@ -824,9 +825,9 @@
                     <table class="min-w-full border border-gray-300 rounded-lg text-xs">
                         <thead>
                             <tr class="bg-gray-100">
-                                <th class="border border-gray-300 px-2 py-1 text-left rounded-tl-lg rounded-tr-lg">Fecha
-                                </th>
+                                <th class="border border-gray-300 px-2 py-1 text-left rounded-tl-lg rounded-tr-lg">Fecha</th>
                                 <th class="border border-gray-300 px-2 py-1 text-left">Producto</th>
+                                <th class="border border-gray-300 px-2 py-1 text-left">Fecha Proxima</th>
                                 <th class="border border-gray-300 px-2 py-1 text-left">Dosis</th>
                                 <th class="border border-gray-300 px-2 py-1 text-left">Veterinario</th>
                             </tr>
@@ -841,7 +842,6 @@
                         class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
                         onclick="openAddDewormerModal()">Añadir Desparasitacion</button>
                 </div>
-
             </div>
 
             <!-- Modal para agregar nueva desparasitacion -->
@@ -856,13 +856,15 @@
                         <label class="block mb-2">Producto:</label>
                         <input type="text" id="newDesparasitacionProducto"
                             class="border border-gray-300 rounded-md w-full mb-4 p-1" placeholder="Nombre del producto">
+                        <label class="block mb-2">Fecha Proxima:</label>
+                        <input type="date" id="newDesparasitacionProximaFecha"
+                            class="border border-gray-300 rounded-md w-full mb-4 p-1">
                         <label class="block mb-2">Dosis:</label>
                         <input type="text" id="newDesparasitacionDosis"
                             class="border border-gray-300 rounded-md w-full mb-4 p-1" placeholder="Dosis (ml/tabletas)">
                         <label class="block mb-2">Veterinario:</label>
                         <input type="text" id="newDesparasitacionVeterinario"
-                            class="border border-gray-300 rounded-md w-full mb-4 p-1"
-                            placeholder="Nombre del veterinario">
+                            class="border border-gray-300 rounded-md w-full mb-4 p-1" placeholder="Nombre del veterinario">
                         <div class="flex justify-end">
                             <button
                                 class="mt-4 w-full text-white font-bold py-2 px-4 rounded-full shadow-md transition-all duration-200 mr-5"
@@ -874,6 +876,7 @@
                     </div>
                 </div>
             </div>
+
             <!-- Fin Contenido Desparasitaciones -->
 
 
