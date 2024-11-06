@@ -232,6 +232,34 @@ function searchPetByUserId() {
 
     // Realizar la petición a la ruta de Flask para obtener las mascotas
     fetch(`/get_pets_by_id?id_usuario=${userId}`)
+    .then(response => response.json())
+    .then(data => {
+        const ownerName = data.user.nombre; // Nombre del dueño
+        const petName = data.pets[0].nombre; // Nombre de la primera mascota (si hay más, puedes adaptar esto)
+
+        // Guardamos los datos del dueño y la mascota en el formulario para usarlos luego
+        document.getElementById("owner-name").textContent = ownerName;
+        document.getElementById("pet-name").textContent = petName;
+
+        // Llenamos el select de mascotas
+        const petSelect = document.getElementById("pet-select");
+        data.pets.forEach(pet => {
+            const option = document.createElement("option");
+            option.value = pet.id_mascota;
+            option.textContent = pet.nombre; // Mostrar el nombre de la mascota
+            petSelect.appendChild(option);
+        });
+
+        // Seleccionar la primera mascota por defecto
+        if (data.pets && data.pets.length > 0) {
+            const selectedPetId = data.pets[0].id_mascota;
+            // Puedes actualizar alguna lógica aquí si deseas preseleccionar la mascota
+        }
+    })
+    .catch(error => {
+        console.error("Error al obtener mascotas:", error);
+        alert("Ocurrió un error al buscar las mascotas.");
+    })
         .then(response => {
             console.log(`Estado de la respuesta: ${response.status}`);
             if (!response.ok) {
@@ -852,62 +880,148 @@ function showDetailModal(historialId) {
         });
 }
 
-// Script para exportar a PDF
 function exportToPDF() {
     const { jsPDF } = window.jspdf;
-    
+
     const doc = new jsPDF({
         orientation: "portrait", // Orientación vertical
         unit: "mm", // Unidades en milímetros
     });
-    
-    // Datos a incluir en el PDF (ejemplo, puedes modificar según tus necesidades)
+
+    // Definir márgenes
+    const leftMargin = 10;  // Margen izquierdo
+    const rightMargin = 10; // Margen derecho
+    const pageWidth = doc.internal.pageSize.width;
+    const pageHeight = doc.internal.pageSize.height;
+
+    // Calcular el ancho disponible para el contenido (sin márgenes izquierdo y derecho)
+    const contentWidth = pageWidth - leftMargin - rightMargin;
+
+    // Obtener los datos del dueño y la mascota del DOM
+    const ownerName = document.getElementById("owner-name").textContent;
+    const petName = document.getElementById("pet-name").textContent;
+
     const title = "Historial Clínico";
     const author = "Veterinario: Dr. Juan Pérez";
     const date = new Date().toLocaleDateString();
-    
-    // Configuración de las líneas
-    const line_width = 0.1; // Ancho de la línea
-    const line_color = "#000"; // Color de la línea
 
-    // Título del documento
+    // Define la ruta de la imagen
+    const imageUrl = "/static/img/Logo%20Gativet.png";
+
+    // Agregar la imagen a la parte superior derecha
+    doc.addImage(imageUrl, "PNG", pageWidth - 40, 10, 30, 30); // Ajusta la posición y el tamaño
+
+    // Título del documento centrado
+    const titleWidth = doc.getTextWidth(title);
+    const titleX = (pageWidth - titleWidth) / 2; // Calcula la posición horizontal para centrar el texto
     doc.setFontSize(18);
     doc.setFont("bold");
-    doc.text(title, 10, 20);
-    
-    // Detalles del autor y la fecha
+    doc.text(title, titleX, 20);
+
+    // Ajustar la posición de los datos del dueño, mascota y fecha
+    const dataStartY = 40; // Aumentar la separación del título a 40
+
     doc.setFontSize(12);
     doc.setFont("normal");
-    doc.text(author, 10, 30);
-    doc.text("Fecha: " + date, 10, 35);
-    
-    // Espaciado
-    doc.text("", 10, 40); // Espacio en blanco
+    doc.text("Dueño: " + ownerName, leftMargin, dataStartY);
 
-    // Añadir contenido de la tabla
-    const table = document.querySelector("#tab2 table");
-    const rows = Array.from(table.querySelectorAll("tr")).map(row => 
-        Array.from(row.querySelectorAll("td, th")).map(cell => cell.innerText)
-    );
+    // Ajustar la posición del nombre de la mascota para que quede debajo del dueño
+    const petNameY = dataStartY + 10; // Asegura que el nombre de la mascota quede debajo del dueño
+    doc.text("Mascota: " + petName, leftMargin, petNameY); 
 
-    // Añadir encabezados de la tabla
-    const headers = rows[0];
-    headers.forEach((header, index) => {
-        doc.setFont("bold");
-        doc.text(header, 10 + (index * 40), 50);
-    });
+    doc.text("Fecha: " + date, leftMargin + 160, dataStartY); // Ajusta la posición
 
-    // Añadir datos de cada fila
-    doc.setFont("normal");
-    rows.slice(1).forEach((row, rowIndex) => {
-        row.forEach((cell, cellIndex) => {
-            doc.text(cell, 10 + (cellIndex * 40), 60 + (rowIndex * 10)); // Ajustar según sea necesario
+    // Espaciado adicional antes de la tabla
+    const tableStartY = petNameY + 10; // Añadir 10mm de separación entre los datos y la tabla
+
+    // Verificar si la tabla existe antes de intentar leerla
+    const table = document.querySelector("#clinical-history-table");
+    if (table) {
+        const rows = Array.from(table.querySelectorAll("tr")).map(row =>
+            Array.from(row.querySelectorAll("td, th")).map(cell => cell.innerText)
+        );
+
+        // Obtener los encabezados de las columnas desde el <thead>
+        const headers = rows[0];
+
+        // Excluir la columna de "Detalles de la Cita"
+        const excludedColumnIndex = headers.indexOf("Detalles de la Cita");
+
+        // Filtrar los encabezados y datos excluyendo la columna "Detalles de la Cita"
+        const filteredHeaders = headers.filter((_, index) => index !== excludedColumnIndex);
+        const filteredRows = rows.slice(1).map(row => row.filter((_, index) => index !== excludedColumnIndex));
+
+        // Definir la altura de las filas y las columnas
+        const rowHeight = 8; // Reduce la altura de las filas para que no haya mucho espacio
+        const cellPadding = 2;
+        const cellWidth = contentWidth / filteredHeaders.length; // Ajustar automáticamente el ancho de las celdas según la cantidad de columnas
+
+        // Añadir encabezados de la tabla con líneas
+        doc.setLineWidth(0.1); // Establecer el grosor de la línea (más pequeño para líneas más finas)
+        filteredHeaders.forEach((header, index) => {
+            const x = leftMargin + (index * cellWidth);
+            doc.setFont("bold");
+            doc.text(header, x + cellPadding, tableStartY + rowHeight / 2); // Texto dentro de la celda
+            doc.rect(x, tableStartY, cellWidth, rowHeight); // Línea alrededor de la celda
         });
-    });
+
+        // Añadir datos de cada fila con líneas
+        doc.setFont("normal");
+        filteredRows.forEach((row, rowIndex) => {
+            row.forEach((cell, cellIndex) => {
+                const x = leftMargin + (cellIndex * cellWidth);
+                const y = tableStartY + (rowIndex + 1) * rowHeight;
+
+                // Añadir el texto de la celda
+                doc.text(cell, x + cellPadding, y + rowHeight / 2);
+                
+                // Dibuja las líneas alrededor de cada celda
+                doc.rect(x, y, cellWidth, rowHeight);
+            });
+        });
+
+        // Línea de separación después de la tabla
+        doc.line(leftMargin, tableStartY + filteredRows.length * rowHeight, pageWidth - rightMargin, tableStartY + filteredRows.length * rowHeight);
+    } else {
+        console.error("La tabla de historial clínico no se encuentra en el DOM.");
+    }
+
+    // Línea para la firma y el timbre del veterinario
+    const signatureLineY = pageHeight - 30; // Y position para la línea de firma, ajusta según sea necesario
+    const signatureLineXStart = pageWidth - rightMargin - 60; // Ajusta la posición para que la línea no quede pegada al margen
+    const signatureLineXEnd = pageWidth - rightMargin - 9; // Ajusta la longitud de la línea
+
+    // Dibuja la línea de firma
+    doc.setLineWidth(0.5); // Grosor de la línea
+    doc.line(signatureLineXStart, signatureLineY, signatureLineXEnd, signatureLineY); // Dibuja la línea
+
+    // Añadir texto para indicar que es para la firma (debajo de la línea)
+    // Asegúrate de que el texto esté alineado y tenga el mismo largo que la línea
+    const signatureText = "Firma y Timbre del Veterinario";
+
+    // Establecer la posición del texto para que se ajuste al mismo largo que la línea
+    const textXStart = signatureLineXStart; // Inicia el texto al principio de la línea
+    const textXEnd = signatureLineXEnd; // Finaliza el texto al final de la línea
+
+    // Centrar el texto en el área de la línea
+    const textWidth = doc.getTextWidth(signatureText);
+    const textX = (textXStart + textXEnd) / 2 - (textWidth / 2); // Centra el texto entre los márgenes de la línea
+
+    // Añadir texto debajo de la línea
+    doc.setFontSize(12);
+    doc.setFont("normal");
+    doc.text(signatureText, textX, signatureLineY + 5); // Ajusta la posición para que el texto quede debajo de la línea
 
     // Guardar el documento PDF
     doc.save("historial_clinico.pdf");
 }
+
+
+
+
+
+
+
 
 
 

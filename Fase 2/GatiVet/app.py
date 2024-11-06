@@ -590,6 +590,13 @@ def get_pets_by_id():
         # Realizar la consulta para obtener datos del usuario
         user_response = supabase.table('Usuario').select('nombre, appaterno, apmaterno, id_usuario, id_domicilio, celular, correo').eq('id_usuario', id_usuario).execute()
 
+        if user_response.data:
+            user_data = user_response.data[0]
+            user_data['nombre_completo'] = f"{user_data['nombre']} {user_data['appaterno']}"  # Concatenar nombre y apellido
+        else:
+            user_data = {'rut': id_usuario, 'direccion': "N/A", 'nombre_completo': "N/A", 'celular': "N/A", 'correo': "N/A", 'id_usuario': "N/A"}
+
+        
         # Verificar si hay datos del usuario
         if user_response.data:
             user_data = user_response.data[0]
