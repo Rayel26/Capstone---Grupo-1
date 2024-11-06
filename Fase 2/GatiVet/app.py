@@ -1353,6 +1353,7 @@ def delete_product(id_producto):
         print(f'Excepción al marcar el producto como inactivo: {str(e)}')  # Log de la excepción
         return jsonify({'error': 'Error interno del servidor.'}), 500
 
+#Ruta activar producto
 @app.route('/activate_product/<int:id_producto>', methods=['PUT'])
 @login_required
 @role_required('admin')
@@ -1366,27 +1367,31 @@ def activate_product(id_producto):
 
         # Activar el producto
         producto = response.data[0]
-        producto['is_active'] = True  # Cambiar el estado a activo
-        producto['stock'] = 1  # Establecer stock a 1 o el valor que desees
+        producto['is_active'] = True
+        producto['stock'] = 0  # O el valor deseado
 
         # Guardar los cambios en Supabase
         update_response = supabase.table('Producto').update({
             'is_active': producto['is_active'],
             'stock': producto['stock']
         }).eq('id_producto', id_producto).execute()
-        
-        # Verifica si hay un error
-        if update_response.error:
-            print(f"Error al activar el producto: {update_response.error}")
-            return jsonify({'error': f"Error al activar el producto: {update_response.error['message']}"}), 500
-        else:
-            print("Producto activado correctamente:", update_response.data)
 
-        # Devolver el estado actualizado del producto para reflejarlo en la UI
-        return jsonify({'message': 'Producto activado correctamente.', 'is_active': producto['is_active']}), 200
+        if not update_response.data:
+            return jsonify({'error': 'Error al activar el producto.'}), 500
+
+        # Devolver el producto actualizado para reflejarlo en la UI
+        return jsonify({
+            'message': 'Producto activado correctamente.',
+            'product': {
+                'id_producto': id_producto,
+                'is_active': producto['is_active'],
+                'stock': producto['stock']
+            }
+        }), 200
     except Exception as e:
         print(f'Error al activar el producto: {str(e)}')
         return jsonify({'error': 'Error interno del servidor.'}), 500
+
 
 
 #Ruta para obtener la cantidad de productos en el carrito
@@ -1861,6 +1866,7 @@ def get_pets_by_user_id():
         print(f"Ocurrió un error al obtener las mascotas: {e}")
         return jsonify({"error": "Error al obtener mascotas", "details": str(e)}), 500
 
+#Ruta confirmar agenda
 @app.route('/api/confirm_appointment', methods=['POST'])
 def confirm_appointment():
     data = request.get_json()
@@ -1887,7 +1893,42 @@ def confirm_appointment():
         'motivo': details
     }).execute()
 
-    return jsonify({'message': 'Cita confirmada exitosamente!'}), 201
+    # Obtener la información del doctor desde la tabla Usuario (tipousuarioid = 2)
+    doctor_response = supabase.table('Usuario').select('nombre, appaterno, apmaterno').eq('id_usuario', doctor_id).eq('tipousuarioid', 2).execute()
+
+    if doctor_response.data:
+        # Concatenar los nombres
+        doctor_name = f"{doctor_response.data[0]['nombre']} {doctor_response.data[0]['appaterno']} {doctor_response.data[0]['apmaterno']}"
+    else:
+        doctor_name = 'Desconocido'
+
+
+    # Obtener la información de la mascota
+    pet_response = supabase.table('Mascota').select('nombre').eq('id_mascota', pet_id).execute()
+    pet_name = pet_response.data[0]['nombre'] if pet_response.data else 'Desconocida'
+
+    # Obtener el id_domicilio del usuario
+    user_response = supabase.table('Usuario').select('id_domicilio').eq('id_usuario', rut).execute()
+    user_address_id = user_response.data[0]['id_domicilio'] if user_response.data else None
+
+    # Si el id_domicilio existe, obtener la dirección y la numeración desde la tabla Domicilio
+    user_address = 'Dirección no disponible'
+    if user_address_id:
+        address_response = supabase.table('Domicilio').select('direccion', 'numeracion').eq('id_domicilio', user_address_id).execute()
+        if address_response.data:
+            # Concatenar la dirección y la numeración
+            user_address = f"{address_response.data[0]['direccion']} {address_response.data[0]['numeracion']}"
+        else:
+            user_address = 'Dirección no disponible'
+
+    # Devolver la respuesta con los datos necesarios
+    return jsonify({
+        'message': 'Cita confirmada exitosamente!',
+        'doctorName': doctor_name,
+        'petName': pet_name,
+        'userAddress': user_address
+    }), 201
+
 
 #///CASOS ADMINISTRADOR ///
 #ruta guardar casos administrador

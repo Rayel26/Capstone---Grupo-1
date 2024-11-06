@@ -97,7 +97,7 @@ function updateProductCards(isLoggedIn) {
 
     productList.innerHTML = '';  // Limpiar las cards existentes
 
-    // Filtrar los productos según los filtros seleccionados
+    // Filtrar los productos según los filtros seleccionados y agregar verificación de stock e is_active
     let filteredProducts = products.filter(product => {
         const matchesMarca = selectedFilters.marca.length === 0 || selectedFilters.marca.includes(product.marca);
         const matchesTipo = selectedFilters.tipo.length === 0 || selectedFilters.tipo.includes(product.tipo_producto_id);
@@ -105,7 +105,10 @@ function updateProductCards(isLoggedIn) {
             (selectedFilters.precio.min === null || product.valor >= selectedFilters.precio.min) &&
             (selectedFilters.precio.max === null || product.valor <= selectedFilters.precio.max)
         );
-        return matchesMarca && matchesTipo && matchesPrecio;
+        const hasStock = product.stock > 0;  // Verificar que el stock sea mayor a 0
+        const isActive = product.is_active === true;  // Verificar que el producto esté activo
+        
+        return matchesMarca && matchesTipo && matchesPrecio && hasStock && isActive;
     });
 
     // Ordenar los productos según el valor seleccionado
@@ -215,6 +218,7 @@ function updateProductCards(isLoggedIn) {
         });
     }
 }
+
 
 // Event listener para el selector de ordenar
 document.getElementById('SortBy').addEventListener('change', event => {

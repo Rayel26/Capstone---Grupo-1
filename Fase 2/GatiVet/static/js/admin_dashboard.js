@@ -376,6 +376,8 @@ async function deleteProduct(productId) {
         alert('Error al eliminar el producto. Intenta nuevamente.');
     }
 }
+
+
 async function activateProduct(productId) {
     try {
         const response = await fetch(`/activate_product/${productId}`, {
@@ -393,6 +395,7 @@ async function activateProduct(productId) {
 
             // Aquí actualizas el producto en el DOM para que se vea reflejado sin recargar la página
             const productElement = document.getElementById(`product-${productId}`);
+            
             if (productElement) {
                 // Si el producto estaba inactivo, lo activamos
                 if (responseData.is_active) {
@@ -405,6 +408,7 @@ async function activateProduct(productId) {
                     productElement.querySelector('.status-text').innerText = 'Inactivo';  // Actualiza el texto de estado
                 }
             }
+            loadProducts();
         } else {
             console.error('Error al activar el producto:', responseData.error);
             alert(`Error al activar el producto: ${responseData.error}`);
@@ -562,8 +566,8 @@ function populateUserTable(usersToDisplay) {
             <td class="py-1 px-2 border-b">${userType}</td>
             <td class="py-1 px-2 border-b">${user.fecha_creacion || 'N/A'}</td>
             <td class="py-1 px-2 border-b">
-                <button class="bg-blue-500 text-white px-2 py-1 rounded" onclick="editUserModal('${user.id_usuario}')">Editar</button>
-                <button class="bg-red-500 text-white px-2 py-1 rounded" onclick="confirmDeleteUser('${user.id_usuario}')">Eliminar</button>
+                <button class="text-blue-500 hover:underline" onclick="editUserModal('${user.id_usuario}')">Editar</button>
+                <button class="text-red-500 hover:underline ml-2" onclick="confirmDeleteUser('${user.id_usuario}')">Eliminar</button>
             </td>
         `;
 

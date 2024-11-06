@@ -627,11 +627,11 @@ async function confirmAppointment() {
         console.log('Cita confirmada:', result);
 
         // Actualizar la tarjeta de resumen de cita
-        document.getElementById('summary-date').innerText = `Fecha: ${selectedDate}`;
-        document.getElementById('summary-time').innerText = `Hora: ${formattedTime}`;
-        document.getElementById('summary-doctor').innerText = `Doctor: ${result.doctorName}`; // Asegúrate de que esto provenga de la respuesta
-        document.getElementById('summary-pet').innerText = `Mascota: ${result.petName}`; // Asegúrate de que esto provenga de la respuesta
-        document.getElementById('summary-address').innerText = `Dirección: ${result.userAddress}`; // Asegúrate de que esto provenga de la respuesta
+        document.getElementById('summary-date').innerHTML = `<strong class="font-bold">Fecha:</strong> <span class="text-gray-700">${selectedDate}</span>`;
+        document.getElementById('summary-time').innerHTML = `<strong class="font-bold">Hora:</strong> <span class="text-gray-700">${formattedTime}</span>`;
+        document.getElementById('summary-doctor').innerHTML = `<strong class="font-bold">Doctor:</strong> <span class="text-gray-700">${result.doctorName}</span>`; 
+        document.getElementById('summary-pet').innerHTML = `<strong class="font-bold">Mascota:</strong> <span class="text-gray-700">${result.petName}</span>`;
+        document.getElementById('summary-address').innerHTML = `<strong class="font-bold">Domicilio:</strong> <span class="text-gray-700">${result.userAddress}</span>`;
 
         // Mostrar la tarjeta de éxito
         goToStep('step-success', 'success-icon');
