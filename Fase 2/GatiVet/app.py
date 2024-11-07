@@ -37,8 +37,6 @@ app.config['SECRET_KEY'] = os.environ.get('FLASK_SECRET_KEY', 'valor_por_defecto
 
 mail = Mail(app)
 
-
-
 # Configurar las credenciales de Cloudinary
 cloudinary.config(
     cloud_name=CLOUD_NAME,  # Tu nombre de nube
@@ -2186,6 +2184,18 @@ def get_agenda():
     return jsonify(combined_data), 200
 
 
+#Obtener servicios desde Supabase
+@app.route('/obtener_servicios', methods=['GET'])
+def obtener_servicios():
+    # Obtener los servicios desde la tabla TipoCita
+    response = supabase.table('TipoCita').select('descripcion').execute()
+
+    # Verificar si se obtuvieron los datos correctamente
+    if response.data:  # Si hay datos en la respuesta
+        servicios = response.data
+        return jsonify(servicios)
+    else:
+        return jsonify({"error": "Error al obtener los servicios"}), 500
 
 
 if __name__ == '__main__':

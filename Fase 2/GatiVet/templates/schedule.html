@@ -85,16 +85,6 @@
                                     1234 5678</span></p>
                         </div>
 
-
-                        <!-- Selección de Área -->
-                        <h3 class="text-xl font-semibold text-gray-700 mt-6 mb-3">Seleccionar área:</h3>
-                        <select id="area-select"
-                            class="block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                            <option value="" disabled selected>-- Seleccione Área</option>
-                            <option value="general">Consulta General</option>
-                            <option value="especialidad">Consulta Especialidad Felina</option>
-                            <option value="telemedicina">Consulta Telemedicina</option>
-                        </select>
                     </div>
 
                     <!-- Contenedor para Divisor Vertical y Buscar por -->
@@ -128,21 +118,9 @@
                                 <!-- Selección de Servicio -->
                                 <div class="w-full mb-4">
                                     <h3 class="text-xl font-semibold text-gray-700 mt-6 mb-3">Seleccionar servicio:</h3>
-                                    <select id="service-select" onchange="updateServiceValue()"
-                                        class="block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                    <select id="service-select" class="block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                                         <option value="" disabled selected>-- Seleccione servicio</option>
-                                        <option value="desparacitaciones" data-price="15000">Desparacitaciones</option>
-                                        <option value="vacunas" data-price="20000">Vacunas</option>
-                                        <option value="control_sano" data-price="25000">Control sano</option>
-                                        <option value="examenes_laboratorio" data-price="30000">Exámenes de laboratorio
-                                        </option>
-                                        <option value="microchip" data-price="18000">Microchip</option>
                                     </select>
-                                </div>
-
-                                <!-- Estilo para el valor del servicio -->
-                                <div id="service-value-display" class="mt-2" style="font-size: 0.75rem; color: gray;">
-                                    Seleccione un servicio para ver el precio.
                                 </div>
 
 
@@ -162,9 +140,8 @@
                 <div class="text-center mt-6">
                     <button onclick="
                             const serviceSelected = document.getElementById('service-select').value;
-                            const areaSelected = document.getElementById('area-select').value;
                             const doctorSelected = document.getElementById('staff-select').value;
-                            if (areaSelected === '' || doctorSelected === '' || serviceSelected === '') {
+                            if (doctorSelected === '' || serviceSelected === '') {
                                 alert('Por favor, complete todos los campos antes de continuar.');
                                 return;
                             }

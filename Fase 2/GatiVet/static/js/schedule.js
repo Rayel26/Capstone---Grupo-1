@@ -34,9 +34,8 @@ function handleStepClick(stepId, iconId) {
 
     // Validación de campos de selección de servicio, área y doctor
     const serviceSelected = document.getElementById('service-select').value;
-    const areaSelected = document.getElementById('area-select').value;
     const doctorSelected = document.getElementById('staff-select').value;
-    if (areaSelected === '' || doctorSelected === '' || serviceSelected === '') {
+    if (doctorSelected === '' || serviceSelected === '') {
         alert('Por favor, complete todos los campos del servicio antes de continuar.');
         return;
     }
@@ -205,8 +204,12 @@ function loadDoctors() {
         });
 }
 
-// Llamar a la función al cargar la página
-window.onload = loadDoctors;
+// Llamar ambas funciones al cargar la página
+window.onload = function() {
+    loadDoctors();   // Llamar a la función loadDoctors
+    cargarServicios();  // Llamar a la función cargarServicios
+};
+
 
 
 // Cambiar entre búsqueda por staff y servicio
@@ -221,28 +224,6 @@ function toggleSearch(searchType) {
     }
 }
 
-// Muestra precio por servicio
-function updateServiceValue() {
-    const serviceSelect = document.getElementById('service-select');
-    const serviceValueDisplay = document.getElementById('service-value-display');
-
-    // Obtener la opción seleccionada
-    const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
-
-    // Verificar si hay un valor seleccionado
-    if (selectedOption && selectedOption.getAttribute('data-price')) {
-        const price = selectedOption.getAttribute('data-price');
-        serviceValueDisplay.textContent = "Precio: $" + formatCurrency(price) + " CLP";
-    } else {
-        serviceValueDisplay.textContent = "Seleccione un servicio para ver el precio.";
-    }
-}
-
-// Función auxiliar para formatear números como moneda
-function formatCurrency(value) {
-    return parseInt(value).toLocaleString('es-CL');
-}
-
 // Actualizar la información del doctor seleccionado
 function updateDoctorInfoFromSelection() {
     const selectedOption = document.querySelector('#staff-select option:checked');
@@ -252,6 +233,24 @@ function updateDoctorInfoFromSelection() {
     if (doctorName) {
         document.getElementById('doctor-name').innerText = doctorName;
         document.getElementById('doctor-image').src = doctorImage;
+    }
+}
+
+// Función para cargar los servicios desde el backend
+async function cargarServicios() {
+    try {
+        const response = await fetch('/obtener_servicios');
+        const servicios = await response.json();
+
+        const select = document.getElementById('service-select');
+        servicios.forEach(servicio => {
+            const option = document.createElement('option');
+            option.value = servicio.descripcion;
+            option.textContent = servicio.descripcion;
+            select.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error al cargar los servicios:', error);
     }
 }
 
@@ -581,7 +580,6 @@ async function confirmAppointment() {
     const formattedTime = convertTo24HourFormat(selectedTime);
 
     const doctorId = document.getElementById('staff-select').value;
-    const area = document.getElementById('area-select').value;
     const service = document.getElementById('service-select').value;
     const rut = normalizeRut(document.getElementById('rut-input').value);
 
@@ -595,7 +593,6 @@ async function confirmAppointment() {
             body: JSON.stringify({
                 rut: rut,
                 doctorId: doctorId,
-                area: area,
                 service: service,
                 date: selectedDate,
                 time: formattedTime, // Usa la hora en formato 24 horas
@@ -608,7 +605,6 @@ async function confirmAppointment() {
         console.log({
             rut: rut,
             doctorId: doctorId,
-            area: area,
             service: service,
             date: selectedDate,
             time: formattedTime,
