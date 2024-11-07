@@ -131,8 +131,6 @@ async function guardarPerfil() {
     }
 }
 
-
-
 // Función para mostrar el modal de eliminación
 function showDeleteModal() {
     document.getElementById('delete-modal').classList.remove('hidden');
@@ -941,9 +939,7 @@ async function loadPets() {
     }
 }
 
-
 //Cargar razas
-
 // Función para cargar las razas según la especie seleccionada
 function cargarRazas(especie) {
     const dogBreedsSelect = document.getElementById('edit-pet-breed-dog');
@@ -1063,8 +1059,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 ////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
-// carnet digital
 // carnet digital
 function showTab(tabId) {
     // Ocultar todas las secciones
@@ -1079,7 +1073,6 @@ function showTab(tabId) {
     document.querySelector(`button[onclick="showTab('${tabId}')"]`).classList.add('active');
 }
 
-// Cargar datos de la mascota seleccionada
 // Cargar datos de la mascota seleccionada
 function loadPetData(id_mascota) {
     fetch(`/get_pet_vaccines/${id_mascota}`)
@@ -1125,8 +1118,6 @@ function loadPetData(id_mascota) {
         .catch(error => console.error('Error al cargar controles:', error));
 }
 
-
-
 // Función para limpiar las tablas
 function clearTables() {
     const tableSections = ['vacunas', 'desparasitaciones', 'controles'];
@@ -1136,22 +1127,79 @@ function clearTables() {
     });
 }
 
-// Mostrar datos en las tablas
 function displayDataInTable(data, sectionId) {
     const tableBody = document.querySelector(`#${sectionId} tbody`);
     tableBody.innerHTML = '';
 
-    data.forEach(item => {
-        const row = document.createElement('tr');
-        Object.values(item).forEach(cellData => {
-            const cell = document.createElement('td');
-            cell.classList.add('px-6', 'py-4', 'whitespace-nowrap');
-            cell.textContent = cellData;
-            row.appendChild(cell);
+    // Define los órdenes específicos para cada tabla
+    let columnOrder = [];
+
+    if (sectionId === 'desparasitaciones') {
+        // Orden específico para la tabla de desparasitaciones
+        columnOrder = [
+            'fecha',               // Fecha de Administración
+            'nombre_desparacitador', // Nombre del Desparasitante
+            'dosis',               // Dosis
+            'nombre_veterinario',  // Veterinario
+            'prox_fecha'           // Próxima Fecha de Administración
+        ];
+    } else if (sectionId === 'vacunas') {
+        // Orden específico para la tabla de vacunas
+        columnOrder = [
+            'fecha',               // Fecha de Administración
+            'nombre_vacuna',       // Nombre de la Vacuna
+            'nombre_veterinario',  // Veterinario
+            'prox_fecha'           // Próxima Fecha de Administración
+        ];
+    } else if (sectionId === 'controles') {
+        // Orden específico para la tabla de controles (citas)
+        columnOrder = [
+            'TipoCita.descripcion',  // Descripción de TipoCita
+            'fecha',                 // Fecha
+            'id_medico.nombre',      // Nombre del Médico
+            'descripcion',           // Descripción de la Cita
+            'prox_fecha'             // Próxima Fecha
+        ];
+    }
+
+    // Verifica que columnOrder no esté vacío antes de continuar
+    if (columnOrder.length > 0) {
+        data.forEach(item => {
+            const row = document.createElement('tr');
+
+            // Iterar sobre columnOrder para colocar los datos en el orden adecuado
+            columnOrder.forEach(column => {
+                const cell = document.createElement('td');
+                cell.classList.add('px-6', 'py-4', 'whitespace-nowrap');
+
+                // Extrae el valor de las propiedades del objeto anidado
+                const keys = column.split('.');
+                let value = item;
+                keys.forEach(key => {
+                    value = value ? value[key] : '';
+                });
+
+                // Verifica si la columna es "prox_fecha" y no existe el valor
+                if (column === 'prox_fecha' && (!value || value === '')) {
+                    value = 'No existe fecha próxima para la cita';
+                }
+
+                // Aplicar el estilo de ajuste de texto si es "descripcion"
+                if (column === 'descripcion' && value) {
+                    cell.classList.add('wrap-text'); // Aplica el estilo para ajustar el texto
+                }
+
+                cell.textContent = value !== undefined ? value : ''; // Asegura que exista el dato
+                row.appendChild(cell);
+            });
+
+            tableBody.appendChild(row);
         });
-        tableBody.appendChild(row);
-    });
+    } else {
+        console.warn(`Orden de columnas no definido para la sección: ${sectionId}`);
+    }
 }
+
 
 // Inicializar la selección de mascotas
 document.addEventListener('DOMContentLoaded', () => {
@@ -1178,23 +1226,6 @@ document.addEventListener('DOMContentLoaded', () => {
         loadPetData(selectedPetId);
     });
 });
-
-// Descripciones para los modales
-const descriptions = {
-    'descripcion1': 'Revisión completa de salud. Chequeo de peso, temperatura y estado general. Se verificó la condición física general, se realizaron pruebas de diagnóstico para detectar posibles problemas y se ofrecieron recomendaciones para el cuidado continuo. Este control es fundamental para asegurar que la mascota se mantenga en óptimas condiciones de salud a lo largo del tiempo.',
-    'descripcion2': 'Limpieza dental y revisión de encías. Se realizó una limpieza exhaustiva de los dientes y se examinaron las encías para detectar signos de enfermedades dentales. El veterinario también proporcionó consejos sobre cómo mantener una buena higiene dental en el hogar. La salud dental es crucial para prevenir problemas futuros y mantener la boca de la mascota en buen estado.'
-};
-
-// Función para mostrar el modal con la descripción completa
-function openModal(descriptionKey) {
-    document.getElementById('modal-description').textContent = descriptions[descriptionKey];
-    document.getElementById('modal').classList.remove('hidden');
-}
-
-// Función para cerrar el modal
-function closeModal() {
-    document.getElementById('modal').classList.add('hidden');
-}
 
 // Efecto hover para filas de la tabla
 document.querySelectorAll('table tbody tr').forEach(row => {
@@ -1256,89 +1287,4 @@ document.addEventListener('DOMContentLoaded', () => {
     paginateTable('vacunas', rowsPerPage);
     paginateTable('desparasitaciones', rowsPerPage);
     paginateTable('controles', rowsPerPage);
-});
-
-
-////////////////////////////////////////////////////////////////
-////certificados
-document.addEventListener('DOMContentLoaded', () => {
-    const submitBtn = document.getElementById('submit-btn');
-    const notificationModal = document.getElementById('notification-modal');
-    const modalClose = document.getElementById('modal-close');
-    const modalCloseBtn = document.getElementById('modal-close-btn');
-    const petSelect = document.getElementById('mascota-select');
-    const modalPet = document.getElementById('modal-pet');
-    const modalCertificates = document.getElementById('modal-certificates');
-
-    function showModal(modal) {
-        modal.classList.remove('hidden');
-    }
-
-    function hideModal(modal) {
-        modal.classList.add('hidden');
-    }
-
-    function showCertificatesConfirmation() {
-        const selectedCertificates = [];
-        document.querySelectorAll('input[name="certificates"]:checked').forEach((checkbox) => {
-            selectedCertificates.push(checkbox.nextSibling.textContent.trim());
-        });
-
-        if (selectedCertificates.length === 0) {
-            alert("Por favor, seleccione al menos un certificado.");
-            return;
-        }
-
-        modalCertificates.innerHTML = `<strong>Certificados seleccionados:</strong> ${selectedCertificates.join(', ')}`;
-        showModal(notificationModal);
-    }
-
-    function showConfirmation() {
-        const selectedPet = petSelect.options[petSelect.selectedIndex].text;
-
-        if (selectedPet === "-- Seleccione una mascota --") {
-            alert("Por favor, seleccione una mascota.");
-            return;
-        }
-
-        modalPet.innerHTML = `<strong>Mascota seleccionada:</strong> ${selectedPet}`;
-        showCertificatesConfirmation();
-    }
-
-    submitBtn.addEventListener('click', () => {
-        showConfirmation();
-    });
-
-    modalClose.addEventListener('click', () => {
-        hideModal(notificationModal);
-    });
-
-    modalCloseBtn.addEventListener('click', () => {
-        hideModal(notificationModal);
-        // Aquí puedes agregar lógica para mostrar otro modal si es necesario
-    });
-});
-
-// Selecciona el input de fecha
-const dateInput = document.getElementById('pet-birthdate');
-
-// Añade un evento click al input de fecha
-dateInput.addEventListener('click', function() {
-    this.showPicker(); // Muestra el selector de fecha
-});
-
-// Selecciona el input de fecha
-const newDateInput = document.getElementById('new-pet-birthdate');
-
- // Añade un evento click al input de fecha
-newDateInput.addEventListener('click', function() {
-    this.showPicker(); // Muestra el selector de fecha
-});
-
-// Selecciona el input de fecha
-const editDateInput = document.getElementById('edit-pet-birthdate');
-
-// Añade un evento click al input de fecha
-editDateInput.addEventListener('click', function() {
-    this.showPicker(); // Muestra el selector de fecha
 });

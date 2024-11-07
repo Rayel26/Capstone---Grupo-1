@@ -4,6 +4,14 @@
     width: 80px;
 }
 
+.wrap-text {
+    white-space: normal; /* Permite que el texto se ajuste a múltiples líneas */
+    word-wrap: break-word; /* Rompe las palabras largas cuando sea necesario */
+    word-break: break-word; /* Rompe las palabras largas para ajustarse */
+}
+
+
+
 /* Iconos y texto */
 .step-icon {
     font-size: 1.5rem;

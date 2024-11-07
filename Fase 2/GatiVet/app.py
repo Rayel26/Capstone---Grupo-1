@@ -574,13 +574,14 @@ def get_pets():
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
-##Obtener vacunas
+# Obtener vacunas
 @app.route('/get_pet_vaccines/<int:id_mascota>', methods=['GET'])
 @login_required
 def get_pet_vaccines(id_mascota):
     try:
+        # Selecciona solo los campos específicos de la base de datos
         response = supabase.table('Vacuna') \
-            .select('*') \
+            .select('fecha, nombre_vacuna, prox_fecha, nombre_veterinario') \
             .eq('id_mascota', id_mascota) \
             .execute()
         
@@ -589,6 +590,7 @@ def get_pet_vaccines(id_mascota):
         if response.data is None:
             return jsonify({'error': 'Error al obtener vacunas.'}), 500
 
+        # Enviar solo los datos específicos al cliente
         return jsonify(response.data), 200
 
     except Exception as e:
@@ -601,7 +603,7 @@ def get_pet_vaccines(id_mascota):
 def get_pet_deworming(id_mascota):
     try:
         response = supabase.table('Desparacitacion') \
-            .select('*') \
+            .select('fecha, nombre_desparacitador, dosis, nombre_veterinario, prox_fecha') \
             .eq('id_mascota', id_mascota) \
             .execute()
         
@@ -616,15 +618,17 @@ def get_pet_deworming(id_mascota):
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
 
-##Obtener citas
+# Obtener citas
 @app.route('/get_pet_checkups/<int:id_mascota>', methods=['GET'])
 @login_required
 def get_pet_checkups(id_mascota):
     try:
+        # Consulta con join para traer la columna descripcion de TipoCita
         response = supabase.table('Cita') \
-            .select('id_cita, descripcion, prox_fecha , fecha, id_medico(nombre)') \
-            .eq('id_mascota', id_mascota) \
-            .execute()
+        .select('id_cita, descripcion, prox_fecha, fecha, id_medico(nombre), TipoCita(descripcion)') \
+        .eq('id_mascota', id_mascota) \
+        .execute()
+
         
         print("Respuesta de Supabase:", response)
         
@@ -1940,7 +1944,6 @@ def confirm_appointment():
     # Extraer datos de la solicitud
     rut = data.get('rut')
     doctor_id = data.get('doctorId')
-    area = data.get('area')
     service = data.get('service')
     date = data.get('date')
     time = data.get('time')
@@ -1951,7 +1954,6 @@ def confirm_appointment():
     response = supabase.table('Agenda').insert({
         'id_usuario': rut,
         'medico_veterinario_id': doctor_id,
-        'area': area,
         'servicio': service,
         'fecha': date,
         'hora': time,
@@ -2175,7 +2177,6 @@ def get_agenda():
             'hora': cita['hora'],             # Hora de la cita
             'id_mascota': cita['id_mascota'], # ID de la mascota
             'servicio': cita['servicio'],     # Servicio asignado
-            'area': cita['area'],             # Nuevo campo 'area'
             'motivo': cita['motivo'],         # Nuevo campo 'motivo'
             'usuario': usuario_info,          # Información del usuario
             'mascota': mascota_info           # Información de la mascota
