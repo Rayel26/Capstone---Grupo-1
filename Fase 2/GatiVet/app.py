@@ -574,6 +574,69 @@ def get_pets():
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
+##Obtener vacunas
+@app.route('/get_pet_vaccines/<int:id_mascota>', methods=['GET'])
+@login_required
+def get_pet_vaccines(id_mascota):
+    try:
+        response = supabase.table('Vacuna') \
+            .select('*') \
+            .eq('id_mascota', id_mascota) \
+            .execute()
+        
+        print("Respuesta de Supabase:", response)
+
+        if response.data is None:
+            return jsonify({'error': 'Error al obtener vacunas.'}), 500
+
+        return jsonify(response.data), 200
+
+    except Exception as e:
+        return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
+
+
+##Obtener desparacitaciones
+@app.route('/get_pet_deworming/<int:id_mascota>', methods=['GET'])
+@login_required
+def get_pet_deworming(id_mascota):
+    try:
+        response = supabase.table('Desparacitacion') \
+            .select('*') \
+            .eq('id_mascota', id_mascota) \
+            .execute()
+        
+        print("Respuesta de Supabase:", response)
+
+        if response.data is None:
+            return jsonify({'error': 'Error al obtener desparasitaciones.'}), 500
+
+        return jsonify(response.data), 200
+
+    except Exception as e:
+        return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
+
+
+##Obtener citas
+@app.route('/get_pet_checkups/<int:id_mascota>', methods=['GET'])
+@login_required
+def get_pet_checkups(id_mascota):
+    try:
+        response = supabase.table('Cita') \
+            .select('id_cita, descripcion, prox_fecha , fecha, id_medico(nombre)') \
+            .eq('id_mascota', id_mascota) \
+            .execute()
+        
+        print("Respuesta de Supabase:", response)
+        
+        if response.data is None:
+            return jsonify({'error': 'Error al obtener controles.'}), 500
+
+        return jsonify(response.data), 200
+
+    except Exception as e:
+        return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
+
+
 
 # Ruta para obtener mascotas por ID de usuario
 @app.route('/get_pets_by_id', methods=['GET'])

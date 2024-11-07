@@ -342,7 +342,8 @@
                     <label for="pet-select" class="text-sm font-medium text-gray-900 block mb-2">Selecciona una
                         mascota:</label>
                     <div class="relative flex items-center">
-                        <select id="pet-select" class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-cyan-600 focus:border-cyan-600 text-gray-900 sm:text-sm p-2.5 pr-10 input-short input-background">
+                        <select id="pet-select"
+                            class="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-cyan-600 focus:border-cyan-600 text-gray-900 sm:text-sm p-2.5 pr-10 input-short input-background">
                             <option value="">Selecciona...</option>
                         </select>
 
@@ -403,9 +404,10 @@
                                 <label for="pet-status" class="text-xs font-medium text-gray-900 mr-2">Estado:</label>
                                 <span id="pet-status" class="text-xs"></span> <!-- Span en línea -->
                             </div>
-                            
+
                             <div class="flex items-center mt-2" id="death-reason-container" style="display: none;">
-                                <label for="death-reason" class="text-xs font-medium text-gray-900 mr-2">Causa de fallecimiento:</label>
+                                <label for="death-reason" class="text-xs font-medium text-gray-900 mr-2">Causa de
+                                    fallecimiento:</label>
                                 <span id="death-reason" class="text-xs"></span> <!-- Span en línea -->
                             </div>
                         </div>
@@ -419,16 +421,18 @@
                     <div class="flex flex-col items-center">
                         <div
                             class="relative w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 bg-white border border-gray-300 rounded-lg overflow-hidden shadow-md flex items-center justify-center mb-2">
-                            <img id="photo-preview" src="https://res.cloudinary.com/dqeideoyd/image/upload/v1729489409/pared-blanca-fondo-blanco-que-dice-palabra-cita-el_994023-371201_gtjwu1.png" class="w-full h-full object-cover" alt="Foto de la mascota">
+                            <img id="photo-preview"
+                                src="https://res.cloudinary.com/dqeideoyd/image/upload/v1729489409/pared-blanca-fondo-blanco-que-dice-palabra-cita-el_994023-371201_gtjwu1.png"
+                                class="w-full h-full object-cover" alt="Foto de la mascota">
                             <!-- Botón para editar la foto -->
                             <button id="edit-photo-button"
-                            class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-200">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                stroke="currentColor" class="w-5 h-5 text-gray-700">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M16.862 3.487a2.5 2.5 0 113.535 3.535l-10.61 10.61a4 4 0 01-1.414.943l-3.36 1.343a1 1 0 01-1.261-1.261l1.343-3.36a4 4 0 01.943-1.414l10.61-10.61z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 6.5L17.5 8.5" />
-                            </svg>
+                                class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-200">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                    stroke="currentColor" class="w-5 h-5 text-gray-700">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M16.862 3.487a2.5 2.5 0 113.535 3.535l-10.61 10.61a4 4 0 01-1.414.943l-3.36 1.343a1 1 0 01-1.261-1.261l1.343-3.36a4 4 0 01.943-1.414l10.61-10.61z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 6.5L17.5 8.5" />
+                                </svg>
                             </button>
 
                             <!-- Input de archivo para seleccionar imagen -->
@@ -442,14 +446,14 @@
 
             <!-- Botón de editar y eliminar al final -->
             <div class="mt-auto flex justify-center sm:justify-start">
-                <button id="edit-button"
-                    type="button"
+                <button id="edit-button" type="button"
                     class="px-4 py-2 text-white rounded-md bg-[#18beaa] hover:bg-[#16a89a] transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
                     Editar Mascota
                 </button>
-                <button id="delete-button" class="ml-4 px-4 py-2 text-white rounded-md bg-red-600 hover:bg-red-700 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+                <button id="delete-button"
+                    class="ml-4 px-4 py-2 text-white rounded-md bg-red-600 hover:bg-red-700 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">
                     Eliminar Mascota
-                </button>                
+                </button>
             </div>
         </div>
         <!-- Fin Mis mascotas -->
@@ -470,95 +474,107 @@
                 <div class="p-4 md:p-5 text-center">
                     <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-200">Agregar Nueva
                         Mascota</h2>
-                        <form id="add-pet-form" enctype="multipart/form-data">
-                            <div class="grid grid-cols-2 gap-4">
-                                <!-- Nombre de la mascota -->
-                                <div class="mb-4 relative">
-                                    <label for="new-pet-name" class="text-sm font-medium text-gray-900 block mb-2">Nombre:</label>
-                                    <input type="text" id="new-pet-name" name="new-pet-name"
-                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
-                                        required>
-                                </div>
-                                <!-- Especie de la mascota -->
-                                <div class="mb-4 relative">
-                                    <label for="new-pet-species" class="text-sm font-medium text-gray-900 block mb-2">Especie:</label>
-                                    <select id="new-pet-species" name="new-pet-species" class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background" required>
-                                        <option value="">Selecciona una especie</option>
-                                        <option value="perro">Perro</option>
-                                        <option value="gato">Gato</option>
-                                    </select>
-                                </div>
-
-                                <!-- Raza para perros -->
-                                <div class="mb-4 relative" id="dog-breeds" style="display: none;">
-                                    <label for="new-pet-breed-dog" class="text-sm font-medium text-gray-900 block mb-2">Raza (Perro):</label>
-                                    <select id="new-pet-breed-dog" name="new-pet-breed" class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background">
-                                        <option value="">Selecciona una raza</option>
-                                    </select>
-                                </div>
-
-                                <!-- Raza para gatos -->
-                                <div class="mb-4 relative" id="cat-breeds" style="display: none;">
-                                    <label for="new-pet-breed-cat" class="text-sm font-medium text-gray-900 block mb-2">Raza (Gato):</label>
-                                    <select id="new-pet-breed-cat" name="new-pet-breed" class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background">
-                                        <option value="">Selecciona una raza</option>
-                                    </select>
-                                </div>
-                                <!-- Fecha de nacimiento -->
-                                <div class="mb-4 relative col-span-2">
-                                    <label for="new-pet-birthdate" class="text-sm font-medium text-gray-900 block mb-2">Fecha de Nacimiento</label>
-                                    <input type="date" name="new-pet-birthdate" id="new-pet-birthdate"
-                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
-                                        required onchange="calculateAndDisplayAge()"> <!-- Evento onchange agregado -->
-                                </div>
-                        
-                                <!-- Edad -->
-                                <div class="mb-4 relative col-span-2">
-                                    <label for="new-pet-age" class="text-sm font-medium text-gray-900 block mb-2">Edad</label>
-                                    <input type="text" name="new-pet-age" id="new-pet-age" value=""
-                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
-                                        required readonly>
-                                </div>
-                        
-                                <!-- Campo para subir la foto de la mascota -->
-                                <div class="mb-4 relative col-span-2">
-                                    <label for="new-pet-photo" class="text-sm font-medium text-gray-900 block mb-2">Foto de la Mascota:</label>
-                                    <input type="file" name="file" id="new-pet-photo" accept="image/*" required
-                                        class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background">
-                                    <img id="photo-preview" class="mt-2" style="max-width: 200px; display: none;" alt="Preview" />
-                                </div>
-                        
-                                <script>
-                                    // Calcular la edad de la mascota a partir de su fecha de nacimiento
-                                    function calculatePetAge(birthdate) {
-                                        const birthDateObj = new Date(birthdate);
-                                        const today = new Date();
-                                        let age = today.getFullYear() - birthDateObj.getFullYear();
-                                        const monthDiff = today.getMonth() - birthDateObj.getMonth();
-                                        // Ajusta la edad si la fecha de cumpleaños no ha ocurrido este año
-                                        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
-                                            age--;
-                                        }
-                                        return age;
-                                    }
-                        
-                                    // Función para calcular y mostrar la edad
-                                    function calculateAndDisplayAge() {
-                                        const birthdateInput = document.getElementById('new-pet-birthdate').value;
-                                        if (birthdateInput) { // Verifica que se haya ingresado una fecha
-                                            const age = calculatePetAge(birthdateInput);
-                                            document.getElementById('new-pet-age').value = age; // Muestra la edad en el campo correspondiente
-                                        } else {
-                                            document.getElementById('new-pet-age').value = ''; // Limpia el campo si no hay fecha
-                                        }
-                                    }
-                                </script>
+                    <form id="add-pet-form" enctype="multipart/form-data">
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Nombre de la mascota -->
+                            <div class="mb-4 relative">
+                                <label for="new-pet-name"
+                                    class="text-sm font-medium text-gray-900 block mb-2">Nombre:</label>
+                                <input type="text" id="new-pet-name" name="new-pet-name"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
+                                    required>
                             </div>
-                            <div class="flex justify-end space-x-2">
-                                <button type="submit"
-                                    class="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition duration-300 focus:ring-4 focus:ring-teal-300 dark:focus:ring-teal-800 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">Agregar</button>
+                            <!-- Especie de la mascota -->
+                            <div class="mb-4 relative">
+                                <label for="new-pet-species"
+                                    class="text-sm font-medium text-gray-900 block mb-2">Especie:</label>
+                                <select id="new-pet-species" name="new-pet-species"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
+                                    required>
+                                    <option value="">Selecciona una especie</option>
+                                    <option value="perro">Perro</option>
+                                    <option value="gato">Gato</option>
+                                </select>
                             </div>
-                        </form>
+
+                            <!-- Raza para perros -->
+                            <div class="mb-4 relative" id="dog-breeds" style="display: none;">
+                                <label for="new-pet-breed-dog" class="text-sm font-medium text-gray-900 block mb-2">Raza
+                                    (Perro):</label>
+                                <select id="new-pet-breed-dog" name="new-pet-breed"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background">
+                                    <option value="">Selecciona una raza</option>
+                                </select>
+                            </div>
+
+                            <!-- Raza para gatos -->
+                            <div class="mb-4 relative" id="cat-breeds" style="display: none;">
+                                <label for="new-pet-breed-cat" class="text-sm font-medium text-gray-900 block mb-2">Raza
+                                    (Gato):</label>
+                                <select id="new-pet-breed-cat" name="new-pet-breed"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background">
+                                    <option value="">Selecciona una raza</option>
+                                </select>
+                            </div>
+                            <!-- Fecha de nacimiento -->
+                            <div class="mb-4 relative col-span-2">
+                                <label for="new-pet-birthdate"
+                                    class="text-sm font-medium text-gray-900 block mb-2">Fecha de Nacimiento</label>
+                                <input type="date" name="new-pet-birthdate" id="new-pet-birthdate"
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
+                                    required onchange="calculateAndDisplayAge()"> <!-- Evento onchange agregado -->
+                            </div>
+
+                            <!-- Edad -->
+                            <div class="mb-4 relative col-span-2">
+                                <label for="new-pet-age"
+                                    class="text-sm font-medium text-gray-900 block mb-2">Edad</label>
+                                <input type="text" name="new-pet-age" id="new-pet-age" value=""
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
+                                    required readonly>
+                            </div>
+
+                            <!-- Campo para subir la foto de la mascota -->
+                            <div class="mb-4 relative col-span-2">
+                                <label for="new-pet-photo" class="text-sm font-medium text-gray-900 block mb-2">Foto de
+                                    la Mascota:</label>
+                                <input type="file" name="file" id="new-pet-photo" accept="image/*" required
+                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background">
+                                <img id="photo-preview" class="mt-2" style="max-width: 200px; display: none;"
+                                    alt="Preview" />
+                            </div>
+
+                            <script>
+                                // Calcular la edad de la mascota a partir de su fecha de nacimiento
+                                function calculatePetAge(birthdate) {
+                                    const birthDateObj = new Date(birthdate);
+                                    const today = new Date();
+                                    let age = today.getFullYear() - birthDateObj.getFullYear();
+                                    const monthDiff = today.getMonth() - birthDateObj.getMonth();
+                                    // Ajusta la edad si la fecha de cumpleaños no ha ocurrido este año
+                                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+                                        age--;
+                                    }
+                                    return age;
+                                }
+
+                                // Función para calcular y mostrar la edad
+                                function calculateAndDisplayAge() {
+                                    const birthdateInput = document.getElementById('new-pet-birthdate').value;
+                                    if (birthdateInput) { // Verifica que se haya ingresado una fecha
+                                        const age = calculatePetAge(birthdateInput);
+                                        document.getElementById('new-pet-age').value = age; // Muestra la edad en el campo correspondiente
+                                    } else {
+                                        document.getElementById('new-pet-age').value = ''; // Limpia el campo si no hay fecha
+                                    }
+                                }
+                            </script>
+                        </div>
+                        <div class="flex justify-end space-x-2">
+                            <button type="submit"
+                                class="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition duration-300 focus:ring-4 focus:ring-teal-300 dark:focus:ring-teal-800 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer">Agregar</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -601,7 +617,8 @@
                             </div>
                             <!-- Selección de especie -->
                             <div class="mb-4">
-                                <label for="edit-pet-species" class="block text-sm font-medium text-gray-900 mb-2">Especie:</label>
+                                <label for="edit-pet-species"
+                                    class="block text-sm font-medium text-gray-900 mb-2">Especie:</label>
                                 <select id="edit-pet-species" name="edit-pet-species"
                                     class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background"
                                     required>
@@ -612,7 +629,8 @@
 
                             <!-- Input para razas de perros -->
                             <div class="mb-4" id="edit-dog-breeds" style="display: none;">
-                                <label for="edit-pet-breed-dog" class="block text-sm font-medium text-gray-900 mb-2">Raza (Perro):</label>
+                                <label for="edit-pet-breed-dog"
+                                    class="block text-sm font-medium text-gray-900 mb-2">Raza (Perro):</label>
                                 <select id="edit-pet-breed-dog" name="edit-pet-breed"
                                     class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background">
                                     <option value="">Selecciona una raza</option>
@@ -621,7 +639,8 @@
 
                             <!-- Input para razas de gatos -->
                             <div class="mb-4" id="edit-cat-breeds" style="display: none;">
-                                <label for="edit-pet-breed-cat" class="block text-sm font-medium text-gray-900 mb-2">Raza (Gato):</label>
+                                <label for="edit-pet-breed-cat"
+                                    class="block text-sm font-medium text-gray-900 mb-2">Raza (Gato):</label>
                                 <select id="edit-pet-breed-cat" name="edit-pet-breed"
                                     class="shadow-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2.5 input-short input-background">
                                     <option value="">Selecciona una raza</option>
@@ -650,11 +669,12 @@
 
         <!-- Modal de confirmación -->
         <div id="confirmation-modal"
-        class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden z-50">
+            class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden z-50">
             <div class="relative p-6 w-full max-w-md bg-white m-6 rounded-lg shadow-lg dark:bg-gray-800">
-            <h2 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Cambios guardados correctamente</h2>
+                <h2 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">Cambios guardados correctamente
+                </h2>
                 <button type="button" id="close-confirmation-modal"
-                        class="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition duration-300 focus:ring-4 focus:ring-teal-300 dark:focus:ring-teal-800">
+                    class="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition duration-300 focus:ring-4 focus:ring-teal-300 dark:focus:ring-teal-800">
                     Aceptar
                 </button>
             </div>
@@ -666,20 +686,15 @@
         <div id="carnet"
             class="hidden step-content p-4 rounded-lg shadow-md relative p-6 bg-white shadow-md rounded-lg active">
             <!-- Contenedor para fecha de emisión y logo -->
-            <div class="absolute top-4 right-4 flex flex-col items-center">
-                <p class="text-sm font-medium mb-2">Fecha de emisión: 15-09-2024</p> <!-- Fecha de emisión -->
-            </div>
+
 
             <h2 class="text-2xl font-bold mb-4">Carnet Digital</h2>
 
             <!-- Selector de mascota -->
             <div class="mb-4">
                 <label for="mascota" class="block text-lg font-medium mb-2">Selecciona una mascota:</label>
-                <select id="mascota" name="mascota"
+                <select id="mascota" name="mascota" onchange="loadPetData(this.value)"
                     class="w-64 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-                    <option value="rex">Rex</option>
-                    <option value="milo">Milo</option>
-                    <option value="luna">Luna</option>
                     <!-- Agrega más opciones según tus necesidades -->
                 </select>
             </div>
@@ -702,40 +717,19 @@
                 </ul>
             </div>
 
-            <!-- Sección de Vacunas -->
             <div id="vacunas" class="tab-content hidden">
                 <div class="table-container">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
                             <tr>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Nombre de Vacuna</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Fecha de Administración</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Próxima Fecha de Administración</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Veterinario</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre de Vacuna</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha de Administración</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Próxima Fecha de Administración</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Veterinario</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">Triple Felina</td>
-                                <td class="px-6 py-4 whitespace-nowrap">15/01/2024</td>
-                                <td class="px-6 py-4 whitespace-nowrap">15/01/2025</td>
-                                <td class="px-6 py-4 whitespace-nowrap">Dr. Pérez</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">Anti-rábica</td>
-                                <td class="px-6 py-4 whitespace-nowrap">15/07/2024</td>
-                                <td class="px-6 py-4 whitespace-nowrap">15/07/2025</td>
-                                <td class="px-6 py-4 whitespace-nowrap">Dr. Soto</td>
-                            </tr>
-                            <!-- Agrega más filas según sea necesario -->
+                        <tbody id="vacunas-tbody" class="bg-white divide-y divide-gray-200">
+                            <!-- Las filas serán insertadas aquí por JavaScript -->
                         </tbody>
                     </table>
                 </div>
@@ -743,40 +737,20 @@
                 <div id="vacunas-pagination" class="pagination"></div>
             </div>
 
-            <!-- Sección de Desparasitaciones -->
+            <!-- Seccion Desparacitaciones -->
             <div id="desparasitaciones" class="tab-content hidden">
                 <div class="table-container">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
                             <tr>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Nombre del Desparasitante</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Fecha de Administración</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Próxima Fecha de Administración</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Veterinario</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre del Desparasitante</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha de Administración</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Próxima Fecha de Administración</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Veterinario</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">Desparasitante Interno</td>
-                                <td class="px-6 py-4 whitespace-nowrap">20/02/2024</td>
-                                <td class="px-6 py-4 whitespace-nowrap">20/02/2025</td>
-                                <td class="px-6 py-4 whitespace-nowrap">Dr. Gómez</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">Desparasitante Externo</td>
-                                <td class="px-6 py-4 whitespace-nowrap">20/08/2024</td>
-                                <td class="px-6 py-4 whitespace-nowrap">20/08/2025</td>
-                                <td class="px-6 py-4 whitespace-nowrap">Dr. López</td>
-                            </tr>
-                            <!-- Agrega más filas según sea necesario -->
+                        <tbody id="desparasitaciones-tbody" class="bg-white divide-y divide-gray-200">
+                            <!-- Las filas serán insertadas aquí por JavaScript -->
                         </tbody>
                     </table>
                 </div>
@@ -790,42 +764,14 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
                             <tr>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Tipo de Control</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Fecha del Control</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Veterinario</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Descripción</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo de Control</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha del Control</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Veterinario</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripción</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">Control General</td>
-                                <td class="px-6 py-4 whitespace-nowrap">01/03/2024</td>
-                                <td class="px-6 py-4 whitespace-nowrap">Dr. Ruiz</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="truncate w-48 cursor-pointer"
-                                        onclick="openModal('descripcion1')">Revisión completa de salud. Chequeo de peso,
-                                        temperatura y estado general.</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap">Control Dental</td>
-                                <td class="px-6 py-4 whitespace-nowrap">01/09/2024</td>
-                                <td class="px-6 py-4 whitespace-nowrap">Dr. Martínez</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="truncate w-48 cursor-pointer"
-                                        onclick="openModal('descripcion2')">Revisión de dientes y encías. Limpieza
-                                        dental recomendada.</span>
-                                </td>
-                            </tr>
-                            <!-- Agrega más filas según sea necesario -->
+                        <tbody id="controles-tbody" class="bg-white divide-y divide-gray-200">
+                            <!-- Las filas serán insertadas aquí por JavaScript -->
                         </tbody>
                     </table>
                 </div>
@@ -974,8 +920,6 @@
             <!-- Fin Modal de éxito -->
         </div>
         <!-- Fin Certificados -->
-    </div>
-    </div>
     </div>
 
     <script src="{{ url_for('static', filename='js/profile.js') }}"></script>

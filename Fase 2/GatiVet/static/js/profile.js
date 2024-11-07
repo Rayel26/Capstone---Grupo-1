@@ -1063,7 +1063,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 ////////////////////////////////////////////////////////////////
-//carnet digital
+////////////////////////////////////////////////////////////////
+// carnet digital
+// carnet digital
 function showTab(tabId) {
     // Ocultar todas las secciones
     document.querySelectorAll('.tab-content').forEach(function(tab) {
@@ -1071,31 +1073,127 @@ function showTab(tabId) {
     });
     // Mostrar la sección seleccionada
     document.getElementById(tabId).classList.remove('hidden');
+
+    // Estilo para pestañas activas
+    document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
+    document.querySelector(`button[onclick="showTab('${tabId}')"]`).classList.add('active');
 }
+
+// Cargar datos de la mascota seleccionada
+// Cargar datos de la mascota seleccionada
+function loadPetData(id_mascota) {
+    fetch(`/get_pet_vaccines/${id_mascota}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Respuesta de vacunas:', data);
+            if (data.error) {
+                console.error('Error en la respuesta de vacunas:', data.error);
+            } else if (Array.isArray(data)) {
+                displayDataInTable(data, 'vacunas');
+            } else {
+                console.error('La respuesta de vacunas no es un array', data);
+            }
+        })
+        .catch(error => console.error('Error al cargar vacunas:', error));
+
+    fetch(`/get_pet_deworming/${id_mascota}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Respuesta de desparasitaciones:', data);
+            if (data.error) {
+                console.error('Error en la respuesta de desparasitaciones:', data.error);
+            } else if (Array.isArray(data)) {
+                displayDataInTable(data, 'desparasitaciones');
+            } else {
+                console.error('La respuesta de desparasitaciones no es un array', data);
+            }
+        })
+        .catch(error => console.error('Error al cargar desparasitaciones:', error));
+
+    fetch(`/get_pet_checkups/${id_mascota}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Respuesta de controles:', data);
+            if (data.error) {
+                console.error('Error en la respuesta de controles:', data.error);
+            } else if (Array.isArray(data)) {
+                displayDataInTable(data, 'controles');
+            } else {
+                console.error('La respuesta de controles no es un array', data);
+            }
+        })
+        .catch(error => console.error('Error al cargar controles:', error));
+}
+
+
+
+// Función para limpiar las tablas
+function clearTables() {
+    const tableSections = ['vacunas', 'desparasitaciones', 'controles'];
+    tableSections.forEach(sectionId => {
+        const tableBody = document.querySelector(`#${sectionId} tbody`);
+        tableBody.innerHTML = '';
+    });
+}
+
+// Mostrar datos en las tablas
+function displayDataInTable(data, sectionId) {
+    const tableBody = document.querySelector(`#${sectionId} tbody`);
+    tableBody.innerHTML = '';
+
+    data.forEach(item => {
+        const row = document.createElement('tr');
+        Object.values(item).forEach(cellData => {
+            const cell = document.createElement('td');
+            cell.classList.add('px-6', 'py-4', 'whitespace-nowrap');
+            cell.textContent = cellData;
+            row.appendChild(cell);
+        });
+        tableBody.appendChild(row);
+    });
+}
+
+// Inicializar la selección de mascotas
+document.addEventListener('DOMContentLoaded', () => {
+    fetch('/get_pets')
+        .then(response => response.json())
+        .then(data => {
+            const mascotaSelect = document.getElementById('mascota');
+            data.forEach(mascota => {
+                const option = document.createElement('option');
+                option.value = mascota.id_mascota;
+                option.textContent = mascota.nombre;
+                mascotaSelect.appendChild(option);
+            });
+
+            // Cargar datos de la primera mascota seleccionada al inicio
+            if (data.length > 0) {
+                loadPetData(data[0].id_mascota);  // Cambia este índice según la lógica de inicio
+            }
+        });
+
+    // Evento para cargar datos cuando se selecciona una nueva mascota
+    document.getElementById('mascota').addEventListener('change', (event) => {
+        const selectedPetId = event.target.value;
+        loadPetData(selectedPetId);
+    });
+});
+
+// Descripciones para los modales
 const descriptions = {
     'descripcion1': 'Revisión completa de salud. Chequeo de peso, temperatura y estado general. Se verificó la condición física general, se realizaron pruebas de diagnóstico para detectar posibles problemas y se ofrecieron recomendaciones para el cuidado continuo. Este control es fundamental para asegurar que la mascota se mantenga en óptimas condiciones de salud a lo largo del tiempo.',
     'descripcion2': 'Limpieza dental y revisión de encías. Se realizó una limpieza exhaustiva de los dientes y se examinaron las encías para detectar signos de enfermedades dentales. El veterinario también proporcionó consejos sobre cómo mantener una buena higiene dental en el hogar. La salud dental es crucial para prevenir problemas futuros y mantener la boca de la mascota en buen estado.'
 };
 
+// Función para mostrar el modal con la descripción completa
 function openModal(descriptionKey) {
     document.getElementById('modal-description').textContent = descriptions[descriptionKey];
     document.getElementById('modal').classList.remove('hidden');
 }
 
+// Función para cerrar el modal
 function closeModal() {
     document.getElementById('modal').classList.add('hidden');
-}
-
-//carnet digital
-function showTab(tabId) {
-    // Oculta todas las pestañas
-    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
-    // Muestra la pestaña seleccionada
-    document.getElementById(tabId).classList.remove('hidden');
-
-    // Estilo para pestañas activas
-    document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
-    document.querySelector(`button[onclick="showTab('${tabId}')"]`).classList.add('active');
 }
 
 // Efecto hover para filas de la tabla
@@ -1107,23 +1205,6 @@ document.querySelectorAll('table tbody tr').forEach(row => {
         row.style.backgroundColor = ''; // Restaurar el color de fondo original
     });
 });
-
-// Función para mostrar el modal con la descripción completa
-function openModal(descriptionId) {
-    const descriptions = {
-        'descripcion1': 'Revisión completa de salud. Chequeo de peso, temperatura y estado general. Se verificó la condición física general, se realizaron pruebas de diagnóstico para detectar posibles problemas y se ofrecieron recomendaciones para el cuidado continuo. Este control es fundamental para asegurar que la mascota se mantenga en óptimas condiciones de salud a lo largo del tiempo.',
-        'descripcion2': 'Limpieza dental y revisión de encías. Se realizó una limpieza exhaustiva de los dientes y se examinaron las encías para detectar signos de enfermedades dentales. El veterinario también proporcionó consejos sobre cómo mantener una buena higiene dental en el hogar. La salud dental es crucial para prevenir problemas futuros y mantener la boca de la mascota en buen estado.'
-        // Agrega más descripciones según sea necesario
-    };
-    
-    document.getElementById('modal-description').textContent = descriptions[descriptionId];
-    document.getElementById('modal').classList.remove('hidden');
-}
-
-// Función para cerrar el modal
-function closeModal() {
-    document.getElementById('modal').classList.add('hidden');
-}
 
 // Configuración de paginación
 const rowsPerPage = 5;
@@ -1176,6 +1257,7 @@ document.addEventListener('DOMContentLoaded', () => {
     paginateTable('desparasitaciones', rowsPerPage);
     paginateTable('controles', rowsPerPage);
 });
+
 
 ////////////////////////////////////////////////////////////////
 ////certificados
