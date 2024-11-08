@@ -1960,11 +1960,11 @@ def confirm_appointment():
     }).execute()
 
     # Obtener la información del doctor desde la tabla Usuario (tipousuarioid = 2)
-    doctor_response = supabase.table('Usuario').select('nombre, appaterno, apmaterno').eq('id_usuario', doctor_id).eq('tipousuarioid', 2).execute()
+    doctor_response = supabase.table('Usuario').select('nombre, appaterno').eq('id_usuario', doctor_id).eq('tipousuarioid', 2).execute()
 
     if doctor_response.data:
         # Concatenar los nombres
-        doctor_name = f"{doctor_response.data[0]['nombre']} {doctor_response.data[0]['appaterno']} {doctor_response.data[0]['apmaterno']}"
+        doctor_name = f"{doctor_response.data[0]['nombre']} {doctor_response.data[0]['appaterno']}"
     else:
         doctor_name = 'Desconocido'
 
@@ -2196,7 +2196,6 @@ def obtener_servicios():
         return jsonify(servicios)
     else:
         return jsonify({"error": "Error al obtener los servicios"}), 500
-
-
+    
 if __name__ == '__main__':
     app.run(debug=True)  # Ejecuta la aplicación en modo depuración

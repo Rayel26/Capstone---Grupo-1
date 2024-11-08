@@ -92,15 +92,94 @@ input {
     text-decoration: line-through;
     color: gray;
 }
+
+/* Estilo base de la tarjeta de la cita */
 .appointment-card {
-    padding: 4px;
+    background-color: #f9fafb; /* Color de fondo suave */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
     cursor: pointer;
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Animaciones suaves */
+    font-family: 'Arial', sans-serif; /* Tipografía clara */
+    color: #333; /* Texto oscuro para buena legibilidad */
+    margin: 5px 0;
+    display: block;
+    width: 100%; /* Asegura que las tarjetas ocupen todo el ancho disponible */
 }
 
+/* Efecto hover: aumenta la sombra y el tamaño */
 .appointment-card:hover {
     transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Aumentar la sombra al hacer hover */
 }
+
+/* Estilo de la hora */
+.appointment-card strong {
+    margin-left: 2px;
+    color: #4CAF50; /* Color verde para la hora */
+    display: block;
+    margin-bottom: 6px;
+}
+
+/* Nombre del dueño */
+.appointment-card .owner-name {
+    margin-left: 2px;
+    font-weight: bold; /* Nombre del dueño en negrita */
+    font-size: 1em;
+    color: #555; /* Gris oscuro para la legibilidad */
+}
+
+/* Nombre de la mascota */
+.appointment-card .pet-name {
+    margin-left: 2px;
+    font-style: italic; /* Nombre de la mascota en cursiva */
+    font-size: 0.95em;
+    color: #777; /* Gris suave */
+}
+
+/* Tipo de consulta */
+.appointment-card .service-type {
+    margin-left: 2px;
+    font-size: 0.9em; /* Tipo de servicio más pequeño */
+    color: #FF9800; /* Color naranjo para el tipo de consulta */
+    margin-top: 4px;
+}
+
+/* Responsividad: asegurarse de que se vea bien en pantallas pequeñas */
+@media (max-width: 768px) {
+    .appointment-card {
+        margin: 5px;
+        font-size: 0.9em; /* Reducir ligeramente el tamaño de fuente */
+    }
+
+    .appointment-card strong {
+        font-size: 1.1em; /* Ajustar tamaño de la hora */
+    }
+
+    .appointment-card .owner-name,
+    .appointment-card .pet-name,
+    .appointment-card .service-type {
+        font-size: 0.85em; /* Hacer el texto más pequeño en pantallas pequeñas */
+    }
+}
+
+/* Responsividad adicional para dispositivos móviles pequeños */
+@media (max-width: 480px) {
+    .appointment-card {
+        font-size: 0.8em; /* Reducir más el tamaño de fuente en pantallas muy pequeñas */
+    }
+
+    .appointment-card strong {
+        font-size: 1em; /* Reducir aún más el tamaño de la hora */
+    }
+
+    .appointment-card .owner-name,
+    .appointment-card .pet-name,
+    .appointment-card .service-type {
+        font-size: 0.8em; /* Reducir más los tamaños en móviles pequeños */
+    }
+}
+
 
 /* Ocultar el icono del reloj en el input */
 input[type="time"]::-webkit-inner-spin-button,
@@ -169,44 +248,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     #modalweek button {
         padding: 6px 10px; /* Reducir tamaño de botones */
         font-size: 0.7rem;
-    }
-}
-
-/* Para pantallas de hasta 600px */
-@media (max-width: 600px) {
-    .appointment-card p {
-        font-size: 8px; /* Tamaño del texto general aún más pequeño */
-    }
-    .appointment-card .font-semibold {
-        font-size: 9px; /* Reducir aún más el tamaño de la fuente del nombre de la mascota */
-    }
-    .appointment-card .font-bold {
-        font-size: 9px; /* Reducir aún más el tamaño de la fuente del horario */
-    }
-    .appointment-card .flex p {
-        font-size: 8px; /* Reducir aún más el texto del nombre del dueño */
-    }
-    .appointment-card {
-        padding: 0.25rem; /* Ajustar el padding para que ocupe aún menos espacio */
-    }
-}
-
-/* Para pantallas de hasta 360px */
-@media (max-width: 360px) {
-    .appointment-card p {
-        font-size: 8px; /* Tamaño del texto general aún más pequeño */
-    }
-    .appointment-card .font-semibold {
-        font-size: 9px; /* Reducir aún más el tamaño de la fuente del nombre de la mascota */
-    }
-    .appointment-card .font-bold {
-        font-size: 9px; /* Reducir aún más el tamaño de la fuente del horario */
-    }
-    .appointment-card .flex p {
-        font-size: 8px; /* Reducir aún más el texto del nombre del dueño */
-    }
-    .appointment-card {
-        padding: 0.25rem; /* Ajustar el padding para que ocupe aún menos espacio */
     }
 }
 

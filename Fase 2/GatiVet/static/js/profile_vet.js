@@ -1064,7 +1064,6 @@ function guardarCambiosDesparasitacion(desparasitacionId) {
 // Script para Agenda
 
 // JavaScript para cambiar entre vistas
-const toggleButton = document.getElementById('toggleView');
 const prevMonthButton = document.getElementById('prevMonth');
 const nextMonthButton = document.getElementById('nextMonth');
 const weeklyView = document.getElementById('weeklyView');
@@ -1083,6 +1082,31 @@ const monthNames = [
     "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
 ];
 
+// Función que devuelve un color pastel según la hora
+function getAppointmentColor(time) {
+    // Extraemos solo la hora (primer valor antes de los dos puntos)
+    const hour = parseInt(time.split(':')[0], 10); 
+
+    // Asignar colores para horas específicas
+    if (hour === 2) {
+        return '#D2F1E4'; // Verde pastel más claro para la hora 02:30:00
+    } else if (hour === 4) {
+        return '#D1C6FF'; // Lavanda pastel más claro para la hora 04:30:00
+    }
+
+    // Asignar colores para el rango de horas general
+    if (hour >= 8 && hour < 10) {
+        return '#FFD1D1'; // Rosa pastel más claro
+    } else if (hour >= 10 && hour < 12) {
+        return '#FFE1C1'; // Durazno pastel más claro
+    } else if (hour >= 12 && hour < 14) {
+        return '#FFFCB3'; // Amarillo pastel más claro
+    } else {
+        return '#f9fafb'; // Color predeterminado para horas fuera del rango
+    }
+}
+
+// Modificación de la función generateCalendar
 function generateCalendar(year, month, appointments = {}) {
     // Limpiar los días del calendario
     calendarDays.innerHTML = '';
@@ -1108,7 +1132,7 @@ function generateCalendar(year, month, appointments = {}) {
 
         // Verificar el día de la semana para tachar fines de semana
         const dayOfWeek = (startDay + day - 1) % 7;
-        if (dayOfWeek === 0 || dayOfWeek === 6) { 
+        if (dayOfWeek === 0 || dayOfWeek === 6) {
             dayDiv.classList.add('weekend');
         } else {
             dayDiv.textContent = day;
@@ -1120,12 +1144,29 @@ function generateCalendar(year, month, appointments = {}) {
             if (appointments[dateKey]) {
                 const appointmentList = document.createElement('div');
                 appointmentList.className = 'mt-1';
-                
+
                 appointments[dateKey].forEach(appointment => {
                     const appointmentDiv = document.createElement('div');
-                    appointmentDiv.className = `appointment-card rounded-md shadow-md p-1 text-xs ${appointment.color} mb-1`;
-                    appointmentDiv.textContent = `${appointment.time}: ${appointment.pet}`;
                     
+                    // Asignar el color pastel a la cita
+                    const appointmentColor = getAppointmentColor(appointment.time);
+                    appointmentDiv.className = `appointment-card mb-1`;
+                    appointmentDiv.style.backgroundColor = appointmentColor; // Aplicar el color de fondo
+
+                    // Formato solicitado para la tarjeta de la cita
+                    const hora = appointment.time.split(':').slice(0, 2).join(':'); // Formato de hora sin segundos
+                    const nombreDueño = appointment.usuario?.nombre || 'Nombre no disponible';
+                    const nombreMascota = appointment.mascota?.nombre || 'Nombre no disponible';
+                    const tipoConsulta = appointment.type || 'Servicio no disponible';
+
+                    appointmentDiv.innerHTML = `
+                        <strong>${hora}</strong>
+                        <div class="owner-name">${nombreDueño}</div>
+                        <div class="pet-name">${nombreMascota}</div>
+                        <div class="service-type">${tipoConsulta}</div>
+                    `;
+
+                    // Agregar el evento de clic para abrir el modal
                     appointmentDiv.addEventListener('click', () => {
                         const appointmentObject = {
                             type: appointment.type,
@@ -1139,17 +1180,17 @@ function generateCalendar(year, month, appointments = {}) {
                                 nombre: appointment.mascota.nombre || 'Nombre no disponible',
                                 raza: appointment.mascota.raza || 'Raza no disponible',
                                 sexo: appointment.mascota.sexo || 'Sexo no disponible',
-                                foto_url: appointment.mascota.foto_url || 'Icono no disponible' // Cambiar esto para usar foto_url
+                                foto_url: appointment.mascota.foto_url || 'Icono no disponible'
                             },
-                            hora: appointment.time || 'Hora no disponible',
-                            servicio: appointment.type || 'Servicio no disponible',
+                            hora: hora || 'Hora no disponible',
+                            servicio: tipoConsulta || 'Servicio no disponible',
                             motivo: appointment.motivo || 'Motivo no disponible'
                         };
-                    
+
                         console.log('Datos de la cita antes de abrir el modal:', appointmentObject);
                         openModalWeek(appointmentObject);
-                    });                    
-                    
+                    });
+
                     appointmentList.appendChild(appointmentDiv);
                 });
 
@@ -1160,6 +1201,7 @@ function generateCalendar(year, month, appointments = {}) {
         calendarDays.appendChild(dayDiv);
     }
 }
+
 
 async function fetchAppointments() {
     try {
@@ -1198,7 +1240,7 @@ async function fetchAppointments() {
                         type: appointment.servicio || 'Tipo no disponible',
                         color: 'someColor', // Asegúrate de que se define un color
                         usuario: {
-                            nombre: `${appointment.usuario.nombre} ${appointment.usuario.appaterno} ${appointment.usuario.apmaterno}`.trim() || 'Nombre no disponible',
+                            nombre: `${appointment.usuario.nombre} ${appointment.usuario.appaterno}`.trim() || 'Nombre no disponible',
                             correo: appointment.usuario?.correo || 'Email no disponible',
                             celular: appointment.usuario?.celular || 'Teléfono no disponible'
                         },
@@ -1228,23 +1270,6 @@ async function fetchAppointments() {
 }
 
 fetchAppointments();
-
-// Cambiar entre vista semanal y mensual
-toggleButton.addEventListener('click', () => {
-    if (weeklyView.classList.contains('hidden')) {
-        weeklyView.classList.remove('hidden');
-        monthlyView.classList.add('hidden');
-        toggleButton.textContent = 'Cambiar a Vista Mensual';
-        prevMonthButton.classList.add('hidden'); // Ocultar botones de navegación en vista semanal
-        nextMonthButton.classList.add('hidden');
-    } else {
-        weeklyView.classList.add('hidden');
-        monthlyView.classList.remove('hidden');
-        toggleButton.textContent = 'Cambiar a Vista Semanal';
-        prevMonthButton.classList.remove('hidden'); // Mostrar botones de navegación en vista mensual
-        nextMonthButton.classList.remove('hidden');
-    }
-});
 
 // Navegar entre meses
 prevMonthButton.addEventListener('click', () => {

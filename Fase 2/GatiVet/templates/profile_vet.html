@@ -992,80 +992,18 @@
         <section class="p-4 w-full max-w-5xl bg-white shadow-md rounded-lg">
             <h2 id="monthTitle" class="text-xl font-semibold text-center mb-4">Mi Agenda - Octubre 2024</h2>
             <!-- Mes actual -->
-
+    
             <!-- Contenedor para los enlaces de navegación -->
             <div class="flex justify-end mb-2">
                 <span id="prevMonth" class="cursor-pointer text-blue-500 underline text-sm mr-2 hidden">◀</span>
                 <!-- Solo el ícono -->
-                <span id="toggleView" class="cursor-pointer text-blue-500 underline text-xs mx-2">Cambiar a Vista
-                    Mensual</span> <!-- Tamaño de fuente más pequeño -->
                 <span id="nextMonth" class="cursor-pointer text-blue-500 underline text-sm hidden">▶</span>
                 <!-- Solo el ícono -->
             </div>
-
+    
             <!-- Contenido de la agenda -->
-            <div id="weeklyView" class="agenda-view">
-                <!-- Días de la semana -->
-                <div class="grid grid-cols-6 gap-2 text-center mb-4 mt-2">
-                    <div></div> <!-- Espacio vacío para las horas -->
-                    <div>Lunes 7</div>
-                    <div>Martes 8</div>
-                    <div>Miércoles 9</div>
-                    <div>Jueves 10</div>
-                    <div>Viernes 11</div>
-                </div>
-
-                <!-- Horas y Citas -->
-                <div class="grid grid-cols-6 gap-2">
-                    <!-- Horas en la columna izquierda -->
-                    <div class="text-right pr-2">
-                        <div class="py-1 border-t">08:30</div>
-                        <div class="py-1 border-t">09:30</div>
-                        <div class="py-1 border-t">10:30</div>
-                        <div class="py-1 border-t">11:30</div>
-                        <div class="py-1 border-t">12:30</div>
-                        <div class="py-1 border-t">13:30</div>
-                        <div class="py-1 border-t">14:30</div>
-                        <div class="py-1 border-t">15:30</div>
-                        <div class="py-1 border-t">16:30</div>
-                        <div class="py-1 border-t">17:30</div>
-                    </div>
-
-                    <!-- Citas para cada día -->
-                    <div class="border-l">
-                        <div class="appointment-card border-t bg-yellow-100 text-yellow-700 rounded-md shadow-lg p-1 cursor-pointer"
-                            style="grid-row: 4 / span 2;"
-                            onclick="openModalWeek('Presencial', 'Fernanda Sanz', 'fernanda@example.com', '+56912345678', 'fas fa-dog', 'COOKIE', 'Yorkshire Terrier', 'Hembra', '11:00 AM', '12:00 PM', 'Consulta General', 'Revisión anual', '25 de Octubre 2024')">
-                            <p class="text-[10px] font-bold">11:00 - 12:00</p> <!-- Tamaño reducido -->
-                            <p class="text-xs font-semibold">COOKIE</p>
-                            <p class="text-[10px]">Yorkshire Terrier</p> <!-- Tamaño reducido -->
-                            <div class="flex items-center text-[10px]"> <!-- Tamaño reducido -->
-                                <span class="mr-1 text-gray-500"><i class="fas fa-user"></i></span>
-                                <p>Fernanda Sanz</p>
-                            </div>
-                        </div>
-                        <div class="py-1 border-t"></div>
-                    </div>
-
-                    <div class="border-l">
-                        <div class="appointment-card border-t bg-green-100 text-green-700 rounded-md shadow-lg p-1 cursor-pointer"
-                            style="grid-row: 3 / span 2;"
-                            onclick="openModalWeek('Presencial', 'Mario Pérez', 'mario@example.com', '+56987654321', 'fas fa-cat', 'MANDARINA', 'Gato', 'Macho', '10:30 AM', '11:30 AM', 'Consulta General', 'Revisión anual', '25 de Octubre 2024')">
-                            <p class="text-[10px] font-bold">10:30 - 11:30</p> <!-- Tamaño reducido -->
-                            <p class="text-xs font-semibold">MANDARINA</p>
-                            <p class="text-[10px]">Gato</p> <!-- Tamaño reducido -->
-                            <div class="flex items-center text-[10px]"> <!-- Tamaño reducido -->
-                                <span class="mr-1 text-gray-500"><i class="fas fa-user"></i></span>
-                                <p>Mario Pérez</p>
-                            </div>
-                        </div>
-                        <div class="py-1 border-t"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Vista mensual (inicialmente oculta) -->
-            <div id="monthlyView" class="agenda-view hidden">
+            <!-- Vista mensual (inicialmente visible) -->
+            <div id="monthlyView" class="agenda-view">
                 <div class="grid grid-cols-7 gap-2 text-center mb-4 mt-2">
                     <div>Dom</div>
                     <div>Lun</div>
@@ -1132,7 +1070,6 @@
                         <i class="fas fa-info-circle mr-1"></i> Servicio: 
                         <span id="modalweek-service">Consulta General</span>
                     </p>
-                    <p><i class="fas fa-info-circle mr-1"></i> Tipo: <span id="modalweek-type-info">Consulta General</span></p>
                     <p><i class="fas fa-file-alt mr-1"></i> Motivo: <span id="modalweek-reason">Revisión anual</span></p>
                 </div>
 
