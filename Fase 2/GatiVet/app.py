@@ -1,20 +1,24 @@
+# Importaciones estándar de Python
+from datetime import datetime, timezone
+import os
+import uuid
+import smtplib
+from email.mime.text import MIMEText
+
+# Importaciones de terceros
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from functools import wraps
 import requests
 from requests.auth import HTTPBasicAuth
-from supabase import create_client
-from datetime import datetime
 import cloudinary
-import cloudinary.uploader  # Asegúrate de importar esto
-import uuid
+import cloudinary.uploader
 from flask_mail import Mail, Message
-from flask_cors import cross_origin
 import pytz
 import jwt
-import smtplib
-from email.mime.text import MIMEText
-import os
+
+# Importaciones específicas del proyecto
+from supabase import create_client
 
 app = Flask(__name__)
 CORS(app)
@@ -2183,6 +2187,58 @@ def get_agenda():
     
     return jsonify(combined_data), 200
 
+
+##Filtrar agenda
+@app.route('/api/agenda-completa', methods=['GET'])
+@cross_origin()
+def get_full_agenda():
+    print("API de agenda completa solicitada")
+    
+    # Obtener datos de la tabla Agenda, incluyendo 'area' y 'motivo'
+    agenda_response = supabase.table('Agenda').select('*').execute()
+    agenda_data = agenda_response.data
+    
+    # Obtener datos de la tabla Usuario
+    usuario_response = supabase.table('Usuario').select('*').execute()
+    usuario_data = {user['id_usuario']: user for user in usuario_response.data}
+    
+    # Obtener datos de la tabla Mascota
+    mascota_response = supabase.table('Mascota').select('*').execute()
+    mascota_data = {pet['id_mascota']: pet for pet in mascota_response.data}
+    
+    # Clasificar las citas en pasadas y futuras
+    atenciones_pasadas = []
+    atenciones_futuras = []
+    
+    for cita in agenda_data:
+        usuario_info = usuario_data.get(cita['id_usuario'])
+        mascota_info = mascota_data.get(cita['id_mascota'])
+        
+        # Combinación de datos de cada cita
+        combined_record = {
+            'fecha': cita['fecha'],           # Fecha de la cita
+            'hora': cita['hora'],             # Hora de la cita
+            'id_mascota': cita['id_mascota'], # ID de la mascota
+            'servicio': cita['servicio'],     # Servicio asignado
+            'motivo': cita['motivo'],         # Nuevo campo 'motivo'
+            'usuario': usuario_info,          # Información del usuario
+            'mascota': mascota_info           # Información de la mascota
+        }
+        
+        # Convertir la fecha con fromisoformat
+        fecha_cita = datetime.fromisoformat(cita['fecha'])
+        
+        # Clasificar en pasadas o futuras con timezone
+        if fecha_cita < datetime.now(timezone.utc):
+            atenciones_pasadas.append(combined_record)
+        else:
+            atenciones_futuras.append(combined_record)
+    
+    # Devolver ambas listas en formato JSON
+    return jsonify({
+        "atenciones_pasadas": atenciones_pasadas,
+        "atenciones_futuras": atenciones_futuras
+    }), 200
 
 #Obtener servicios desde Supabase
 @app.route('/obtener_servicios', methods=['GET'])

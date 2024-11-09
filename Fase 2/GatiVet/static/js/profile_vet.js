@@ -186,6 +186,75 @@ document.getElementById('upload-photo').addEventListener('change', function() {
     document.getElementById('upload-form').submit();
 });
 
+// Cargar recordatorios
+document.addEventListener('DOMContentLoaded', function() {
+    fetchHistoricalAndUpcomingAppointments();
+});
+
+function fetchHistoricalAndUpcomingAppointments() {
+    fetch('/api/agenda-completa')
+        .then(response => response.json())
+        .then(data => {
+            const pastAppointments = data.atenciones_pasadas;
+            const futureAppointments = data.atenciones_futuras;
+
+            const pastAppointmentsBody = document.getElementById('pastAppointmentsBody');
+            const futureAppointmentsBody = document.getElementById('futureAppointmentsBody');
+
+            // Vaciar el contenido actual de las tablas (en caso de que ya haya datos)
+            pastAppointmentsBody.innerHTML = '';
+            futureAppointmentsBody.innerHTML = '';
+
+            // Función para formatear la fecha
+            function formatDate(fecha, hora) {
+                // Crear un objeto Date usando la fecha y la hora proporcionadas
+                const formattedFecha = new Date(fecha.split('T')[0] + 'T' + hora + 'Z'); // Concatenamos la fecha y la hora en formato ISO
+
+                // Verificar si la fecha se ha creado correctamente
+                if (isNaN(formattedFecha)) {
+                    console.error('Error en la fecha:', fecha, hora);
+                    return 'Fecha inválida';
+                }
+
+                // Obtener los componentes de la fecha
+                const day = String(formattedFecha.getUTCDate()).padStart(2, '0');
+                const month = String(formattedFecha.getUTCMonth() + 1).padStart(2, '0'); // Meses empiezan desde 0
+                const year = formattedFecha.getUTCFullYear();
+                const hours = String(formattedFecha.getUTCHours()).padStart(2, '0');
+                const minutes = String(formattedFecha.getUTCMinutes()).padStart(2, '0');
+
+                // Formatear la fecha como "DD-MM-AAAA HH:MM"
+                return `${day}-${month}-${year} ${hours}:${minutes}`;
+            }
+
+            // Rellenar la tabla de Atenciones Pasadas
+            pastAppointments.forEach(cita => {
+                const formattedDate = formatDate(cita.fecha, cita.hora);
+                const row = `<tr>
+                    <td class="border border-gray-300 p-1 text-sm">${formattedDate}</td>
+                    <td class="border border-gray-300 p-1 text-sm">${cita.motivo}</td>
+                    <td class="border border-gray-300 p-1 text-sm">${cita.mascota ? cita.mascota.nombre : 'N/A'}</td>
+                    <td class="border border-gray-300 p-1 text-sm">${cita.usuario ? cita.usuario.nombre : 'N/A'}</td>
+                </tr>`;
+                pastAppointmentsBody.innerHTML += row;
+            });
+
+            // Rellenar la tabla de Atenciones Futuras
+            futureAppointments.forEach(cita => {
+                const formattedDate = formatDate(cita.fecha, cita.hora);
+                const row = `<tr>
+                    <td class="border border-gray-300 p-1 text-sm">${formattedDate}</td>
+                    <td class="border border-gray-300 p-1 text-sm">${cita.motivo}</td>
+                    <td class="border border-gray-300 p-1 text-sm">${cita.mascota ? cita.mascota.nombre : 'N/A'}</td>
+                    <td class="border border-gray-300 p-1 text-sm">${cita.usuario ? cita.usuario.nombre : 'N/A'}</td>
+                </tr>`;
+                futureAppointmentsBody.innerHTML += row;
+            });
+        })
+        .catch(error => console.error('Error fetching appointments:', error));
+}
+
+
 //////////// Ficha Clinica://////////////
 // Script para el comportamiento de las pestañas
 
