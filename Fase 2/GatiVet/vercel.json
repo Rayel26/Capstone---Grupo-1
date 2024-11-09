@@ -6,15 +6,15 @@
         "use": "@vercel/static"
       },
       {
-        "src": "styles/",
+        "src": "static/styles/*",
         "use": "@vercel/static"
       },
       {
-        "src": "js/",
+        "src": "static/js/*",
         "use": "@vercel/static"
       },
       {
-        "src": "static/*",
+        "src": "static/img/*",
         "use": "@vercel/static"
       }
     ],
@@ -24,16 +24,17 @@
         "dest": "templates/home.html"
       },
       {
-        "src": "/styles/(.)",
-        "dest": "/styles/$1"
+        "src": "/styles/(.*)",
+        "dest": "/static/styles/$1"
       },
       {
-        "src": "/js/(.)",
-        "dest": "/js/$1"
+        "src": "/js/(.*)",
+        "dest": "/static/js/$1"
       },
       {
-        "src": "/static/(.)",
-        "dest": "/static/$1"
+        "src": "/img/(.*)",
+        "dest": "/static/img/$1"
       }
     ]
   }
+  
