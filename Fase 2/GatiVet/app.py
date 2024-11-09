@@ -26,8 +26,9 @@ CORS(app)
 app.secret_key = 'supersecretkey'  # Clave para las sesiones
 
 # Configuración de cliente HTTP con tiempo de espera
-timeout = httpx.Timeout(10.0, read=30.0)  # 10 segundos para la conexión, 30 para leer la respuesta
+timeout = httpx.Timeout(30.0, read=100.0)
 client_httpx = httpx.Client(timeout=timeout)
+
 
 # Reemplaza con tus credenciales de Cloudinary
 CLOUD_NAME = 'dqeideoyd'
@@ -653,48 +654,51 @@ def get_pets_by_id():
     id_usuario = request.args.get('id_usuario')
 
     try:
-        if id_usuario is None or id_usuario == "":
+        if not id_usuario:
             return jsonify({'error': 'ID de usuario no proporcionado.'}), 400
 
         # Obtener las mascotas asociadas al id_usuario
-        pets_response = supabase.table('Mascota').select('id_mascota, nombre, edad, especie, raza, fecha_nacimiento, foto_url, Fallecimiento, causa_fallecimiento, sexo, num_microchip, tamaño, color_pelaje').eq('id_usuario', id_usuario).execute()
+        pets_response = supabase.table('Mascota').select(
+            'id_mascota, nombre, edad, especie, raza, fecha_nacimiento, foto_url, Fallecimiento, causa_fallecimiento, sexo, num_microchip, tamaño, color_pelaje'
+        ).eq('id_usuario', id_usuario).execute()
 
         # Realizar la consulta para obtener datos del usuario
-        user_response = supabase.table('Usuario').select('nombre, appaterno, apmaterno, id_usuario, id_domicilio, celular, correo').eq('id_usuario', id_usuario).execute()
-
-        if user_response.data:
-            user_data = user_response.data[0]
-            user_data['nombre_completo'] = f"{user_data['nombre']} {user_data['appaterno']}"  # Concatenar nombre y apellido
-        else:
-            user_data = {'rut': id_usuario, 'direccion': "N/A", 'nombre_completo': "N/A", 'celular': "N/A", 'correo': "N/A", 'id_usuario': "N/A"}
+        user_response = supabase.table('Usuario').select(
+            'nombre, appaterno, apmaterno, id_usuario, id_domicilio, celular, correo'
+        ).eq('id_usuario', id_usuario).execute()
 
         # Verificar si hay datos del usuario
         if user_response.data:
             user_data = user_response.data[0]
-            id_domicilio = user_data['id_domicilio']
+            id_domicilio = user_data.get('id_domicilio')  # Usamos get() para evitar un error si no existe el campo
             
             # Asignar el rut
             user_data['rut'] = id_usuario  # Asignamos id_usuario como rut
             
-            # Realizar la consulta para obtener la dirección del domicilio
-            domicilio_response = supabase.table('Domicilio').select('direccion').eq('id_domicilio', id_domicilio).execute()
-
-            # Asignar la dirección al usuario
-            user_data['direccion'] = domicilio_response.data[0]['direccion'] if domicilio_response.data else "N/A"
+            # Realizar la consulta para obtener la dirección del domicilio si existe un id_domicilio válido
+            if id_domicilio:
+                domicilio_response = supabase.table('Domicilio').select('direccion').eq('id_domicilio', id_domicilio).execute()
+                user_data['direccion'] = domicilio_response.data[0]['direccion'] if domicilio_response.data else "N/A"
+            else:
+                user_data['direccion'] = "N/A"
         else:
-            user_data = {'rut': id_usuario, 'direccion': "N/A", 'nombre': "N/A", 'celular': "N/A", 'correo': "N/A", 'id_usuario': "N/A"}  # Datos por defecto si no se encuentra el usuario
+            user_data = {
+                'rut': id_usuario, 'direccion': "N/A", 'nombre': "N/A", 
+                'celular': "N/A", 'correo': "N/A", 'id_usuario': "N/A"
+            }  # Datos por defecto si no se encuentra el usuario
 
+        # Verificar si hay mascotas asociadas
         if pets_response.data is None:
             return jsonify({'error': 'Error al obtener mascotas.'}), 500
 
-        if not pets_response.data and not user_response.data:
-            return jsonify({'pets': [], 'user': user_data}), 200
-
+        # Retornar los datos de usuario y mascotas
         return jsonify({'pets': pets_response.data, 'user': user_data}), 200
 
     except Exception as e:
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
+
+
 
 #Ruta para obtener Razas mascota
 @app.route('/razas/<especie>', methods=['GET'])

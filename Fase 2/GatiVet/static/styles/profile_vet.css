@@ -118,6 +118,7 @@ input {
     margin-left: 2px;
     color: #4CAF50; /* Color verde para la hora */
     display: block;
+    font-size: 0.8em;
     margin-bottom: 6px;
 }
 
@@ -125,7 +126,7 @@ input {
 .appointment-card .owner-name {
     margin-left: 2px;
     font-weight: bold; /* Nombre del dueño en negrita */
-    font-size: 1em;
+    font-size: 0.8em;
     color: #555; /* Gris oscuro para la legibilidad */
 }
 
@@ -133,14 +134,14 @@ input {
 .appointment-card .pet-name {
     margin-left: 2px;
     font-style: italic; /* Nombre de la mascota en cursiva */
-    font-size: 0.95em;
+    font-size: 0.7em;
     color: #777; /* Gris suave */
 }
 
 /* Tipo de consulta */
 .appointment-card .service-type {
     margin-left: 2px;
-    font-size: 0.9em; /* Tipo de servicio más pequeño */
+    font-size: 0.7em; /* Tipo de servicio más pequeño */
     color: #FF9800; /* Color naranjo para el tipo de consulta */
     margin-top: 4px;
 }

@@ -295,95 +295,57 @@ let selectedPetId; // Esto ahora es accesible en todo el archivo
 // Fichas clinicas
 // Función para buscar por ID de usuario
 function searchPetByUserId() {
-    const userId = document.getElementById("rut-paciente-nuevo").value; // Obtener el ID de usuario
-
-    // Limpiar el select de mascotas
+    const userId = document.getElementById("rut-paciente-nuevo").value.trim();
     const petSelect = document.getElementById("pet-select");
     petSelect.innerHTML = ""; // Limpiar opciones previas
 
     console.log(`Buscando mascotas para el ID de usuario: ${userId}`);
 
-    // Realizar la petición a la ruta de Flask para obtener las mascotas
-    fetch(`/get_pets_by_id?id_usuario=${userId}`)
-    .then(response => response.json())
+    fetch(`/get_pets_by_id?id_usuario=${encodeURIComponent(userId)}`)
+    .then(response => {
+        if (!response.ok) throw new Error(`Error ${response.status}`);
+        return response.json();
+    })
     .then(data => {
-        const ownerName = data.user.nombre; // Nombre del dueño
-        const petName = data.pets[0].nombre; // Nombre de la primera mascota (si hay más, puedes adaptar esto)
+        if (data.error) {
+            alert(data.error);
+            document.getElementById("pet-data").classList.add("hidden");
+            return;
+        }
 
-        // Guardamos los datos del dueño y la mascota en el formulario para usarlos luego
-        document.getElementById("owner-name").textContent = ownerName;
-        document.getElementById("pet-name").textContent = petName;
+        // Mostrar la información del dueño
+        const ownerData = data.user || {};
+        document.getElementById("owner-name").textContent = 
+            `${ownerData.nombre || ""} ${ownerData.appaterno || ""} ${ownerData.apmaterno || ""}`.trim() || "Nombre no disponible";
+        document.getElementById("owner-rut").textContent = ownerData.rut || "Rut no disponible";
+        document.getElementById("owner-address").textContent = ownerData.direccion || "Dirección no disponible";
+        document.getElementById("owner-phone").textContent = ownerData.celular || "Teléfono no disponible";
+        document.getElementById("owner-email").textContent = ownerData.correo || "Correo no disponible";
 
-        // Llenamos el select de mascotas
-        const petSelect = document.getElementById("pet-select");
-        data.pets.forEach(pet => {
-            const option = document.createElement("option");
-            option.value = pet.id_mascota;
-            option.textContent = pet.nombre; // Mostrar el nombre de la mascota
-            petSelect.appendChild(option);
-        });
+        // Mostrar la sección con datos del dueño
+        document.getElementById("pet-data").classList.remove("hidden");
 
-        // Seleccionar la primera mascota por defecto
         if (data.pets && data.pets.length > 0) {
-            const selectedPetId = data.pets[0].id_mascota;
-            // Puedes actualizar alguna lógica aquí si deseas preseleccionar la mascota
+            data.pets.forEach(pet => {
+                const option = document.createElement("option");
+                option.value = pet.id_mascota;
+                option.textContent = pet.nombre;
+                petSelect.appendChild(option);
+            });
+
+            // Selecciona la primera mascota por defecto y muestra sus datos
+            showPetData(data.pets[0]);
+        } else {
+            alert("No se encontraron mascotas para este ID de usuario.");
+            document.getElementById("pet-data").classList.add("hidden");
         }
     })
     .catch(error => {
         console.error("Error al obtener mascotas:", error);
         alert("Ocurrió un error al buscar las mascotas.");
-    })
-        .then(response => {
-            console.log(`Estado de la respuesta: ${response.status}`);
-            if (!response.ok) {
-                console.error('Error en la respuesta de la API:', response);
-                throw new Error('Error al obtener mascotas');
-            }
-            return response.json();
-        })
-        .then(data => { // Cambié 'pets' a 'data' para mayor claridad
-            console.log('Datos obtenidos:', data);
-            if (data.error) {
-                alert(data.error);
-                document.getElementById("pet-data").classList.add("hidden");
-                return;
-            }
-
-            // Mostrar la información del dueño
-            const ownerData = data.user; // Asignar los datos del dueño
-
-            document.getElementById("owner-name").textContent = 
-    (ownerData.nombre + " " + ownerData.appaterno + " " + ownerData.apmaterno).trim() || "Nombre no disponible";
-
-            document.getElementById("owner-rut").textContent = ownerData.rut || "Rut no disponible";
-            document.getElementById("owner-address").textContent = ownerData.direccion || "Dirección no disponible";
-            document.getElementById("owner-phone").textContent = ownerData.celular || "Teléfono no disponible";
-            document.getElementById("owner-email").textContent = ownerData.correo || "Correo no disponible";
-
-            // Mostrar la sección con datos del dueño
-            document.getElementById("pet-data").classList.remove("hidden");
-
-            if (data.pets && data.pets.length > 0) {
-                data.pets.forEach(pet => {
-                    const option = document.createElement("option");
-                    option.value = pet.id_mascota;
-                    option.textContent = pet.nombre; // Mostrar el nombre de la mascota
-                    petSelect.appendChild(option);
-                });
-        
-                // Selecciona la primera mascota por defecto
-                selectedPetId = data.pets[0].id_mascota; // Asigna la ID de la primera mascota
-                showPetData(data.pets[0]);
-            } else {
-                alert("No se encontraron mascotas para este ID de usuario.");
-                document.getElementById("pet-data").classList.add("hidden");
-            }
-        })
-        .catch(error => {
-            console.error("Error al obtener mascotas:", error);
-            alert("Ocurrió un error al buscar las mascotas.");
-        });
+    });
 }
+
 
 // Función para mostrar los datos de la mascota seleccionada
 function showPetData(pet) {
