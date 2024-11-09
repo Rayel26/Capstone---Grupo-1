@@ -1,13 +1,14 @@
 document.addEventListener("DOMContentLoaded", function () {
     // Elementos del DOM
     const confirmModal = document.getElementById('confirmModal');
+    const loadingText = document.getElementById('loadingText');
     const accountCreatedModal = document.getElementById('accountCreatedModal');
     
     const confirmButton = document.getElementById('confirmButton');
     const cancelButton = document.getElementById('cancelButton');
     const closeModalButton = document.getElementById('closeModalButton');
     const createAccountButton = document.getElementById('createAccountButton');
-    
+
     const registrationForm = document.getElementById('registrationForm');
 
     // Datos del formulario
@@ -161,20 +162,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Confirmar y enviar datos a Supabase
     confirmButton.addEventListener('click', function () {
+    // Mostrar texto "Registrando..." y deshabilitar botones
+    loadingText.classList.remove('hidden');
+    confirmButton.disabled = true;
+    cancelButton.disabled = true;
+
+        console.log('Confirmar clickeado');  // Agregar esta línea
         const userData = {
             nombre: firstNameInput.value,
             appaterno: lastNameInput.value,
             apmaterno: secondLastNameInput.value,
-            id_usuario: rutInput.value.replace(/[^0-9kK]/g, ''), // Eliminar caracteres no válidos
+            id_usuario: rutInput.value,
             correo: emailInput.value,
             contraseña: passwordInput.value,
             celular: getFullPhone(),
             tipousuarioid: 1,
-            fecha_creacion: new Date().toISOString() // Agregar la fecha actual
+            fecha_creacion: new Date().toISOString() 
         };
 
         // Verificar longitud del RUT
-        if (userData.id_usuario.length > 9) {
+        if (userData.id_usuario.length > 12) {
             alert('El RUT no puede exceder los 9 caracteres.');
             return; // Salir si el RUT es demasiado largo
         }
@@ -203,7 +210,13 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(error => {
             console.error('Error en el fetch:', error);
             alert('Error: ' + error.message);
-        });        
+        })
+        .finally(() => {
+            // Rehabilitar botones y ocultar texto "Registrando..."
+            loadingText.classList.add('hidden');
+            confirmButton.disabled = false;
+            cancelButton.disabled = false;
+        });     
     });
 
     // Cerrar el modal de "Cuenta creada"

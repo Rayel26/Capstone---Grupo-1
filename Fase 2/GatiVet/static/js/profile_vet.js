@@ -56,14 +56,16 @@ closeModalBtn.addEventListener('click', function() {
     editModal.classList.add('hidden');
 });
 
-// Función para formatear el RUT
 function formatRUT(value) {
+    // Asegurarse de que el valor es un string
+    value = String(value);
+
     // Eliminar cualquier carácter que no sea un número o la letra K
     let rut = value.replace(/[^0-9kK]/g, '');
 
-    // Si ya tiene más de 9 caracteres, no permitir agregar más
-    if (rut.length > 9) {
-        rut = rut.substring(0, 9);
+    // Si ya tiene más de 12 caracteres, no permitir agregar más
+    if (rut.length > 12) {
+        rut = rut.substring(0, 12);
     }
 
     // Formatear agregando puntos y guion
@@ -80,8 +82,10 @@ function formatRUT(value) {
     return rut;
 }
 
+
 // Validar y formatear RUT en tiempo real
 rutInput.addEventListener('input', function() {
+    console.log(typeof rutInput.value, rutInput.value);
     rutInput.value = formatRUT(rutInput.value);
     
     const rut = rutInput.value;
@@ -755,7 +759,6 @@ function savePetChanges() {
     });
 }
 
-
 // Función para calcular la edad
 function calculateAge() {
     const birthDateInput = document.getElementById("modal-birth-date");
@@ -1084,15 +1087,6 @@ function exportToPDF() {
     // Guardar el documento PDF
     doc.save("historial_clinico.pdf");
 }
-
-
-
-
-
-
-
-
-
 
 ///////////////////////////////////////////////////////
 // Script para editar información de modals de citas

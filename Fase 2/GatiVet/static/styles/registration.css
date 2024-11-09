@@ -1,0 +1,18 @@
+.spinner-border {
+    border-color: transparent;
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    display: none; /* Oculto por defecto */
+}
+
+.spinner-border.show {
+    display: inline-block; /* Mostrar cuando tenga la clase "show" */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

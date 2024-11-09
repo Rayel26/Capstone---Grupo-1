@@ -16,6 +16,7 @@ import cloudinary.uploader
 from flask_mail import Mail, Message
 import pytz
 import jwt
+import httpx
 
 # Importaciones específicas del proyecto
 from supabase import create_client
@@ -23,6 +24,10 @@ from supabase import create_client
 app = Flask(__name__)
 CORS(app)
 app.secret_key = 'supersecretkey'  # Clave para las sesiones
+
+# Configuración de cliente HTTP con tiempo de espera
+timeout = httpx.Timeout(10.0, read=30.0)  # 10 segundos para la conexión, 30 para leer la respuesta
+client_httpx = httpx.Client(timeout=timeout)
 
 # Reemplaza con tus credenciales de Cloudinary
 CLOUD_NAME = 'dqeideoyd'
@@ -642,8 +647,6 @@ def get_pet_checkups(id_mascota):
     except Exception as e:
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
-
-
 # Ruta para obtener mascotas por ID de usuario
 @app.route('/get_pets_by_id', methods=['GET'])
 def get_pets_by_id():
@@ -665,7 +668,6 @@ def get_pets_by_id():
         else:
             user_data = {'rut': id_usuario, 'direccion': "N/A", 'nombre_completo': "N/A", 'celular': "N/A", 'correo': "N/A", 'id_usuario': "N/A"}
 
-        
         # Verificar si hay datos del usuario
         if user_response.data:
             user_data = user_response.data[0]
@@ -1142,27 +1144,28 @@ def registration():
     return render_template('registration.html')
 
 #Ruta Registro
-@app.route('/register', methods=['POST']) 
+@app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
-    rut = data['id_usuario']
-    nombre = data['nombre']
-    appaterno = data['appaterno']
-    apmaterno = data['apmaterno']
-    correo = data['correo']
-    contraseña = data['contraseña']
-    celular = data['celular']
+    rut = data.get('id_usuario')
+    nombre = data.get('nombre')
+    appaterno = data.get('appaterno')
+    apmaterno = data.get('apmaterno')
+    correo = data.get('correo')
+    contraseña = data.get('contraseña')
+    celular = data.get('celular')
     fecha_creacion = datetime.now().strftime("%Y-%m-%d")
 
-    # Imprimir datos recibidos para diagnóstico
+    # Verificación de datos recibidos
     print(f"Datos recibidos: {data}")
 
-    # Verificar si el correo es válido
-    if not correo:
-        print("Error: El correo no es válido o está vacío.")
-        return jsonify({"error": "El correo es inválido o está vacío"}), 400
+    # Verificar si el RUT o el correo ya existen
+    existing_user = supabase.table('Usuario').select('id_usuario', 'correo').eq('id_usuario', rut).eq('correo', correo).execute()
 
-    # Crear usuario en la base de datos
+    if existing_user.data:
+        return jsonify({"error": "Ya existe un usuario con este RUT o correo."}), 400
+
+    # Insertar el usuario en la base de datos
     response = supabase.table('Usuario').insert({
         'id_usuario': rut,
         'nombre': nombre,
@@ -1176,18 +1179,11 @@ def register():
         'confirmacion': False
     }).execute()
 
-    # Imprimir el estado de la respuesta para verificar
-    print(f"Estado de respuesta de la creación de usuario: {response}")
-
-    # Cambiar la verificación del estado de respuesta
-    if response.data:  # Comprueba si hay datos en la respuesta
-        # Enviar un correo de prueba al usuario registrado
+    # Verificar si la inserción fue exitosa
+    if response.data:
+        # Enviar correo de prueba
         try:
-            # Imprimir el correo al que se enviará
-            print(f"Enviando correo de prueba al usuario: {correo}")
-            
-            # Crear y enviar el mensaje de prueba
-            confirmation_link = f"http://localhost:5000/confirm/{rut}"  # Cambia esto a tu dominio en producción
+            confirmation_link = f"http://localhost:5000/confirm/{rut}"
             msg = Message("Confirma tu correo",
                         sender=app.config['MAIL_USERNAME'],
                         recipients=[correo])
@@ -1198,21 +1194,16 @@ def register():
                 <a href="{confirmation_link}">Confirma tu correo aquí</a>
                 </p>
             """
-            
-            # Enviar el correo
             mail.send(msg)
-            print("Correo de prueba enviado exitosamente al usuario registrado.")
+            print("Correo de prueba enviado exitosamente.")
             
-            return jsonify({"message": "Usuario creado exitosamente y correo de prueba enviado", "data": response.data}), 201
+            return jsonify({"message": "Usuario creado exitosamente y correo de prueba enviado"}), 201
         except Exception as e:
-            # Imprimir error detallado si el envío falla
-            print(f"Error al enviar el correo de prueba al usuario registrado: {e}")
+            print(f"Error al enviar el correo de prueba: {e}")
             return jsonify({"error": "Usuario creado, pero no se pudo enviar el correo de prueba", "details": str(e)}), 500
-
     else:
-        # Imprimir detalles del error al crear el usuario
-        print(f"Error al crear el usuario: {response.error}")  # Verifica si hay un error en la respuesta
         return jsonify({"error": "Error al crear el usuario", "details": response.error}), 400
+
 
 
 @app.route('/confirm/<string:rut>', methods=['GET'])
@@ -2188,7 +2179,6 @@ def get_agenda():
     return jsonify(combined_data), 200
 
 
-##Filtrar agenda
 @app.route('/api/agenda-completa', methods=['GET'])
 @cross_origin()
 def get_full_agenda():
