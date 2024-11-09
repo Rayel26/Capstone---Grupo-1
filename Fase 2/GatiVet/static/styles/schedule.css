@@ -139,3 +139,8 @@
         display: none; /* También oculta nombre en pantallas menores a 360px */
     }
 }
+
+.time-button.disabled {
+    background-color: #ccc; /* Fondo gris para horas deshabilitadas */
+    cursor: not-allowed; /* Cursor en forma de cruz */
+}

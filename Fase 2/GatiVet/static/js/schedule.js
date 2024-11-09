@@ -261,6 +261,7 @@ document.querySelectorAll('#time-select button').forEach(button => {
     });
 });
 
+
 // Obtener los días festivos de Chile para un año específico
 function getHolidays(year) {
     return [
@@ -436,39 +437,82 @@ function generateTimeButtons() {
         // Agregar clases para estilo de los botones
         button.classList.add(
             'time-button',
-            'px-3', // Reducir padding horizontal
-            'py-1', // Reducir padding vertical
-            'bg-[#18beaa]',
-            'hover:bg-[#16a89a]',
-            'text-white',
-            'font-semibold',
-            'rounded-lg',
-            'shadow-md',
-            'focus:outline-none',
-            'focus:ring-2',
-            'focus:ring-green-400',
-            'focus:ring-opacity-75',
-            'transition',
-            'duration-300',
-            'ease-in-out',
-            'transition-transform',
-            'transform-gpu',
-            'hover:-translate-y-1',
-            'hover:shadow-lg',
-            'cursor-pointer'
+            'px-3', 'py-1', 'bg-[#18beaa]', 'hover:bg-[#16a89a]',
+            'text-white', 'font-semibold', 'rounded-lg', 'shadow-md',
+            'focus:outline-none', 'focus:ring-2', 'focus:ring-green-400',
+            'focus:ring-opacity-75', 'transition', 'duration-300',
+            'ease-in-out', 'transition-transform', 'transform-gpu',
+            'hover:-translate-y-1', 'hover:shadow-lg', 'cursor-pointer'
         );
         button.dataset.time = formattedTime; // Almacenar el tiempo en el atributo data
 
         // Manejar el evento de clic
         button.onclick = () => {
             document.getElementById('selected-time').value = formattedTime;
-            // Aquí puedes agregar una lógica para marcar el botón seleccionado, si es necesario
-            console.log(`Hora seleccionada: ${formattedTime}`); // Ver en la consola
+            // Aquí puedes agregar una lógica para marcar el botón seleccionado
+            console.log(`Hora seleccionada: ${formattedTime}`);
         };
 
         timeSelect.appendChild(button); // Agregar el botón al contenedor
     }
 }
+
+// Normalizar las horas al formato 'HH:MM' antes de comparar
+const normalizeTime = (time) => time.substring(0, 5); // Eliminar los segundos
+
+document.querySelectorAll('.day').forEach(dayElement => {
+    dayElement.addEventListener('click', function() {
+        const selectedDate = dayElement.textContent;
+        const selectedDateString = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`;
+
+        console.log("Día seleccionado:", selectedDateString);  // Depuración: mostrar el día seleccionado
+
+        fetch('/api/check_availability', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ date: selectedDateString })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Horas ocupadas para el día seleccionado:", data.occupied_hours); // Depuración: mostrar las horas ocupadas
+
+            const occupiedHours = data.occupied_hours.map(normalizeTime); // Normalizar horas ocupadas
+
+            document.querySelectorAll('.time-button').forEach(button => {
+                const buttonTime = normalizeTime(button.dataset.time); // Normalizar la hora del botón
+
+                console.log("Hora del botón:", buttonTime);  // Depuración
+
+                if (occupiedHours.includes(buttonTime)) {
+                    button.disabled = true;
+                    button.classList.add('disabled');
+                    console.log(`Hora ocupada: ${buttonTime}`);  // Depuración
+                } else {
+                    button.disabled = false;
+                    button.classList.remove('disabled');
+                }
+            });
+
+            const allHoursOccupied = occupiedHours.length === document.querySelectorAll('.time-button').length;
+            if (allHoursOccupied) {
+                dayElement.classList.add('fully-booked');
+                dayElement.style.backgroundColor = 'red';
+                console.log("El día está completamente ocupado");  // Depuración
+            } else {
+                dayElement.classList.remove('fully-booked');
+                dayElement.style.backgroundColor = '';
+            }
+
+            dayElement.classList.add('selected');
+            document.getElementById('date-select').value = selectedDateString;
+        })
+        .catch(err => {
+            console.error('Error fetching availability:', err); // Mostrar errores si hay algún problema
+        });
+    });
+});
+
+
 
 // Llamar a la función para generar los botones cuando se cargue el documento
 document.addEventListener('DOMContentLoaded', generateTimeButtons);

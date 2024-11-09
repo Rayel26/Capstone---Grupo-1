@@ -2253,5 +2253,23 @@ def obtener_servicios():
     else:
         return jsonify({"error": "Error al obtener los servicios"}), 500
     
+# Verificar disponibilidad agenda
+@app.route('/api/check_availability', methods=['POST'])
+def check_availability():
+    data = request.json
+    selected_date = data['date']  # Se espera que la fecha esté en formato 'YYYY-MM-DD'
+
+    # Consultar las horas ocupadas para la fecha seleccionada utilizando el cliente de Supabase inicializado
+    query = supabase.table('Agenda') \
+        .select('hora') \
+        .eq('fecha', selected_date)  # Suponiendo que 'fecha' es un campo de tipo date
+    
+    occupied_hours = query.execute()
+
+    # Devolver las horas ocupadas
+    occupied_hours_list = [entry['hora'] for entry in occupied_hours.data]
+    return jsonify({'occupied_hours': occupied_hours_list})
+
+
 if __name__ == '__main__':
     app.run(debug=True)  # Ejecuta la aplicación en modo depuración
