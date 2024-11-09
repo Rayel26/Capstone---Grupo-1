@@ -1,18 +1,19 @@
 {
     "builds": [
-        {
-        "src": "Fase 2/GatiVet/home.html",
+      {
+        "src": "Fase 2/GatiVet/templates/home.html",
         "use": "@vercel/static-build"
-        }
+      }
     ],
     "routes": [
-        {
+      {
         "src": "/",
-        "dest": "Fase 2/GatiVet/home.html"
-        },
-        {
+        "dest": "Fase 2/GatiVet/templates/home.html"
+      },
+      {
         "src": "/static/(.*)",
         "dest": "Fase 2/GatiVet/static/$1"
-        }
+      }
     ]
-}
+  }
+  

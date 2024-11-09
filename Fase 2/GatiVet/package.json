@@ -4,7 +4,9 @@
   "main": "tailwind.config.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:css": "tailwindcss -i ./static/styles/input.css -o ./static/styles/output.css --watch"
+    "build:css": "tailwindcss -i ./static/styles/input.css -o ./static/styles/output.css --watch",
+    "build": "npm run build:css", 
+    "vercel-build": "npm run build:css"
   },
   "keywords": [],
   "author": "",
