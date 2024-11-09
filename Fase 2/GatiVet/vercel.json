@@ -4,12 +4,28 @@
       {
         "src": "templates/home.html",
         "use": "@vercel/static"
+      },
+      {
+        "src": "styles/",
+        "use": "@vercel/static"
+      },
+      {
+        "src": "js/",
+        "use": "@vercel/static"
       }
     ],
     "routes": [
       {
         "src": "/",
         "dest": "templates/home.html"
+      },
+      {
+        "src": "/styles/(.)",
+        "dest": "/styles/$1"
+      },
+      {
+        "src": "/js/(.)",
+        "dest": "/js/$1"
       }
     ]
   }
