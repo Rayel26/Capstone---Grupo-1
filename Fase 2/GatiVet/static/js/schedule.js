@@ -460,6 +460,46 @@ function generateTimeButtons() {
 // Normalizar las horas al formato 'HH:MM' antes de comparar
 const normalizeTime = (time) => time.substring(0, 5); // Eliminar los segundos
 
+// Función para marcar los días como completamente ocupados si todas sus horas están tomadas
+const checkAllDaysOccupied = () => {
+    document.querySelectorAll('.day').forEach(dayElement => {
+        const selectedDate = dayElement.textContent;
+        const selectedDateString = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`;
+
+        fetch('/api/check_availability', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ date: selectedDateString })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Horas ocupadas para el día ", selectedDateString, ":", data.occupied_hours);
+
+            const occupiedHours = data.occupied_hours.map(normalizeTime); // Normalizar horas ocupadas
+
+            // Comprobar si todas las horas están ocupadas
+            const allHoursOccupied = occupiedHours.length === document.querySelectorAll('.time-button').length;
+            if (allHoursOccupied) {
+                dayElement.classList.add('fully-booked');
+                dayElement.style.backgroundColor = 'red';
+                dayElement.style.pointerEvents = 'none'; // Deshabilitar la selección de este día
+                console.log("El día " + selectedDateString + " está completamente ocupado");
+            } else {
+                dayElement.classList.remove('fully-booked');
+                dayElement.style.backgroundColor = '';
+                dayElement.style.pointerEvents = ''; // Habilitar la selección de este día si no está completamente ocupado
+            }
+        })
+        .catch(err => {
+            console.error('Error al verificar disponibilidad para el día:', err);
+        });
+    });
+};
+
+// Llamar a la función para revisar todos los días al cargar la página
+checkAllDaysOccupied();
+
+// Event listener para el clic de los días seleccionados
 document.querySelectorAll('.day').forEach(dayElement => {
     dayElement.addEventListener('click', function() {
         const selectedDate = dayElement.textContent;
