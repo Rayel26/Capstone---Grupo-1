@@ -1,40 +1,40 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "templates/home.html",
-        "use": "@vercel/static"
-      },
-      {
-        "src": "static/styles/*",
-        "use": "@vercel/static"
-      },
-      {
-        "src": "static/js/*",
-        "use": "@vercel/static"
-      },
-      {
-        "src": "static/img/*",
-        "use": "@vercel/static"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/",
-        "dest": "templates/home.html"
-      },
-      {
-        "src": "/styles/(.*)",
-        "dest": "/static/styles/$1"
-      },
-      {
-        "src": "/js/(.*)",
-        "dest": "/static/js/$1"
-      },
-      {
-        "src": "/img/(.*)",
-        "dest": "/static/img/$1"
-      }
-    ]
-  }
-  
+  "version": 2,
+  "builds": [
+    {
+      "src": "app.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "static/styles/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "static/js/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "static/img/*",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    { "src": "/", "dest": "app.py" },
+    {
+      "src": "/templates/home.html",
+      "dest": "templates/home.html"
+    },
+    {
+      "src": "/styles/(.*)",
+      "dest": "/static/styles/$1"
+    },
+    {
+      "src": "/js/(.*)",
+      "dest": "/static/js/$1"
+    },
+    {
+      "src": "/img/(.*)",
+      "dest": "/static/img/$1"
+    }
+  ]
+}
