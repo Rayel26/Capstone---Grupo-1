@@ -2,8 +2,8 @@
   "version": 2,
   "builds": [
     {
-      "src": "app.py",
-      "use": "@vercel/python"
+      "src": "templates/home.html",
+      "use": "@vercel/static"
     },
     {
       "src": "static/styles/*",
@@ -21,7 +21,7 @@
   "routes": [
     {
       "src": "/",
-      "dest": "app.py"
+      "dest": "templates/home.html"
     },
     {
       "src": "/styles/(.*)",
@@ -34,10 +34,6 @@
     {
       "src": "/img/(.*)",
       "dest": "/static/img/$1"
-    },
-    {
-      "src": "/templates/(.*)",
-      "dest": "/templates/$1"
     }
   ]
 }
