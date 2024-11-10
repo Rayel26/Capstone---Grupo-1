@@ -198,42 +198,47 @@ def login():
         email = request.form['email']
         password = request.form['password']
         
-        # Consultar la base de datos de Supabase, incluyendo el campo 'email_verified'
-        user_data = supabase.table('Usuario').select('id_usuario, correo, contraseña, tipousuarioid, confirmacion').eq('correo', email).execute()
-
-        if user_data.data:
-            user = user_data.data[0]  # Obtener el primer usuario encontrado
-
-            # Verificar si el correo ha sido confirmado
-            if not user.get('confirmacion'):
-                flash('Debe confirmar su correo electrónico para iniciar sesión', 'error')
-                return redirect(url_for('login'))
+        # Consultar la base de datos de Supabase, incluyendo el campo 'confirmacion'
+        try:
+            user_data = supabase.table('Usuario').select('id_usuario, correo, contraseña, tipousuarioid, confirmacion').eq('correo', email).execute()
             
-            # Verificar la contraseña (ajusta esto si usas un método de hash)
-            if user['contraseña'] == password:  # Cambia esto por la verificación de hash si es necesario
-                session['email'] = user['correo']
-                session['id_usuario'] = user['id_usuario']  # Almacena el id_usuario en la sesión
-                session['is_logged_in'] = True  # Marca que el usuario ha iniciado sesión
-                
-                # Determinar el rol basado en tipousuarioid
-                if user['tipousuarioid'] == 1:
-                    session['role'] = 'user'
-                elif user['tipousuarioid'] == 2:
-                    session['role'] = 'vet'
-                elif user['tipousuarioid'] == 3:
-                    session['role'] = 'admin'
-                else:
-                    flash('Rol de usuario desconocido', 'error')
-                    return redirect(url_for('login'))
+            if user_data.data:
+                user = user_data.data[0]  # Obtener el primer usuario encontrado
 
-                # Redirigir a la página de perfil
-                return redirect(url_for('home'))
+                # Verificar si el correo ha sido confirmado
+                if not user.get('confirmacion'):
+                    flash('Debe confirmar su correo electrónico para iniciar sesión', 'error')
+                    return redirect(url_for('login'))
+                
+                # Verificar la contraseña (ajusta esto si usas un método de hash)
+                if user['contraseña'] == password:  # Cambia esto por la verificación de hash si es necesario
+                    session['email'] = user['correo']
+                    session['id_usuario'] = user['id_usuario']  # Almacena el id_usuario en la sesión
+                    session['is_logged_in'] = True  # Marca que el usuario ha iniciado sesión
+                    
+                    # Determinar el rol basado en tipousuarioid
+                    if user['tipousuarioid'] == 1:
+                        session['role'] = 'user'
+                    elif user['tipousuarioid'] == 2:
+                        session['role'] = 'vet'
+                    elif user['tipousuarioid'] == 3:
+                        session['role'] = 'admin'
+                    else:
+                        flash('Rol de usuario desconocido', 'error')
+                        return redirect(url_for('login'))
+
+                    # Redirigir a la página de perfil
+                    return redirect(url_for('home'))
+                else:
+                    flash('Usuario o contraseña incorrectos', 'error')
             else:
                 flash('Usuario o contraseña incorrectos', 'error')
-        else:
-            flash('Usuario o contraseña incorrectos', 'error')
+        
+        except Exception as e:
+            flash(f'Error al intentar iniciar sesión: {str(e)}', 'error')
 
     return render_template('login.html')
+
 
 # Ruta para la registrar veterinario
 @app.route('/register_vet', methods=['POST'])
