@@ -1292,7 +1292,7 @@ def donation():
     return render_template('donation.html')
 
 #/// PRODUCTOS //
-#Crear productos
+# Crear productos
 @app.route('/create_product', methods=['POST'])
 @login_required
 @role_required('admin')
@@ -1309,6 +1309,9 @@ def create_product():
     for key in required_keys:
         if key not in data:
             return jsonify({'error': f'Falta el campo: {key}'}), 400
+
+    # Imprimir los datos recibidos para depuración
+    print('Datos recibidos:', data)
 
     # Determinar el tipo de producto
     tipo_producto_id = {
@@ -1333,12 +1336,16 @@ def create_product():
         'is_active': True
     }).execute()
 
+    # Imprimir la respuesta de Supabase para depuración
+    print('Respuesta de Supabase:', response)
+
     # Verificar si la inserción fue exitosa
     if response.data:
         return jsonify({'message': 'Producto creado exitosamente.', 'data': response.data}), 201
     else:
         print('Error de Supabase:', response.error)
         return jsonify({'error': 'Error al crear el producto.', 'details': response.error}), 400
+
 
 # Ruta para obtener los productos
 @app.route('/get_products', methods=['GET'])
