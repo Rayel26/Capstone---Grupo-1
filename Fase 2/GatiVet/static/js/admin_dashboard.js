@@ -147,7 +147,6 @@ document.getElementById('productForm').addEventListener('submit', async function
         isValid = false;
     }
 
-    // Si todo es válido, proceder a cargar la imagen si es necesario
     if (isValid) {
         let imageUrl;
 
@@ -160,42 +159,49 @@ document.getElementById('productForm').addEventListener('submit', async function
                 alert(`Error al subir la imagen: ${error.message}`);
                 return;
             }
-        } else {
+        } else if (selectedImageUrl) {
             // Usar la URL seleccionada de Cloudinary
             imageUrl = selectedImageUrl;
+        } else {
+            // Si no se selecciona ni archivo ni URL, mostrar error
+            document.getElementById('imageError').classList.remove('hidden');
+            isValid = false;
         }
 
-        // Preparar los datos del producto
-        const productData = {
-            name: name,
-            type: type,
-            brand: brand,
-            price: price,
-            quantity: quantity,
-            description: description,
-            image_url: imageUrl, // Incluir la URL de la imagen
-            fecha_ingreso: getCurrentDate() // Agregar la fecha de ingreso
-        };
+        // Si isValid sigue siendo true, preparar los datos y enviarlos
+        if (isValid) {
+            // Preparar los datos del producto
+            const productData = {
+                name: name,
+                type: type,
+                brand: brand,
+                price: price,
+                quantity: quantity,
+                description: description,
+                image_url: imageUrl, // Incluir la URL de la imagen
+                fecha_ingreso: getCurrentDate() // Agregar la fecha de ingreso
+            };
 
-        // Enviar los datos del producto al servidor
-        try {
-            const response = await fetch('/create_product', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(productData)
-            });
+            // Enviar los datos del producto al servidor
+            try {
+                const response = await fetch('/create_product', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(productData)
+                });
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`Error al crear el producto: ${errorData.error || response.statusText}`);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`Error al crear el producto: ${errorData.error || response.statusText}`);
+                }
+
+                // Restablecer el formulario y recargar productos
+                document.getElementById('productForm').reset();
+                loadProducts(); // Recargar productos después de añadir
+            } catch (error) {
+                console.error('Error en el proceso:', error);
+                alert(`Error al crear el producto: ${error.message}`);
             }
-
-            // Restablecer el formulario y recargar productos
-            document.getElementById('productForm').reset();
-            loadProducts(); // Recargar productos después de añadir
-        } catch (error) {
-            console.error('Error en el proceso:', error);
-            alert(`Error al crear el producto: ${error.message}`);
         }
     }
 });
