@@ -21,7 +21,8 @@ import httpx
 # Importaciones específicas del proyecto
 from supabase import create_client
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates', static_folder='static')
+
 CORS(app)
 app.secret_key = 'supersecretkey'  # Clave para las sesiones
 

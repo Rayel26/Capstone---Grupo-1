@@ -2,8 +2,8 @@
   "version": 2,
   "builds": [
     {
-      "src": "templates/home.html",
-      "use": "@vercel/static"
+      "src": "app.py",
+      "use": "@vercel/python"
     },
     {
       "src": "static/styles/*",
@@ -16,12 +16,16 @@
     {
       "src": "static/img/*",
       "use": "@vercel/static"
+    },
+    {
+      "src": "templates/*",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/",
-      "dest": "templates/home.html"
+      "dest": "app.py"
     },
     {
       "src": "/styles/(.*)",
@@ -34,6 +38,10 @@
     {
       "src": "/img/(.*)",
       "dest": "/static/img/$1"
+    },
+    {
+      "src": "/templates/(.*)",
+      "dest": "/templates/$1"
     }
   ]
 }
