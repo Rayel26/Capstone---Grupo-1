@@ -36,9 +36,9 @@
       "dest": "/static/js/$1"
     },
     {
-      "src": "/img/(.*)",
-      "dest": "/static/img/$1"
-    },
+      "src": "static/img/*",
+      "use": "@vercel/static"
+    },    
     {
       "src": "/templates/(.*)",
       "dest": "/templates/$1"
