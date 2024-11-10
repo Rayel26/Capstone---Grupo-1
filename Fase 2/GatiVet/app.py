@@ -198,9 +198,9 @@ def login():
         email = request.form['email']
         password = request.form['password']
         
-        # Consultar la base de datos de Supabase, incluyendo el campo 'confirmacion'
         try:
-            user_data = supabase.table('Usuario').select('id_usuario, correo, contraseña, tipousuarioid, confirmacion').eq('correo', email).execute()
+            # Corregimos la consulta para asegurarnos de que está bien estructurada
+            user_data = supabase.table('Usuario').select('id_usuario, correo, contraseña, tipousuarioid, confirmacion').filter('correo', 'eq', email).execute()
             
             if user_data.data:
                 user = user_data.data[0]  # Obtener el primer usuario encontrado
