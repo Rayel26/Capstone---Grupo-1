@@ -6,19 +6,7 @@
       "use": "@vercel/python"
     },
     {
-      "src": "static/styles/*",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "static/js/*",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "static/img/*",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "templates/*",
+      "src": "static/*",
       "use": "@vercel/static"
     }
   ],
@@ -26,22 +14,6 @@
     {
       "src": "/",
       "dest": "app.py"
-    },
-    {
-      "src": "/styles/(.*)",
-      "dest": "/static/styles/$1"
-    },
-    {
-      "src": "/js/(.*)",
-      "dest": "/static/js/$1"
-    },
-    {
-      "src": "/img/(.*)",
-      "dest": "/static/img/$1"
-    },
-    {
-      "src": "/templates/(.*)",
-      "dest": "/templates/$1"
     },
     {
       "src": "/(.*)",
