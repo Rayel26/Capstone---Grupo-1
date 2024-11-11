@@ -1100,7 +1100,7 @@ def save_sale():
     <html>
     <body style="font-family: Arial, sans-serif; color: #333;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <img src="https://res.cloudinary.com/dqeideoyd/image/upload/v1728506204/shrotm1w6az7voy7fgfg.png" alt="Gativer Logo" style="width: 150px; height: auto;">
+            <img src="https://res.cloudinary.com/dqeideoyd/image/upload/v1728506204/shrotm1w6az7voy7fgfg.png" alt="Gativet Logo" style="width: 150px; height: auto;">
             <div style="text-align: left;">
                 <h2 style="margin: 0; color: #4CAF50;">Gracias por comprar en Gativet!</h2>
                 <p style="margin: 0;">Aquí tienes tu resumen de compra:</p>

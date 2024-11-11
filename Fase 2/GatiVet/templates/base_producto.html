@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Home{% endblock %}</title>
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/Logo Gativet.png') }}">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/Logo.png') }}">
   <!-- CSS Interno -->
   <link href="{{ url_for('static', filename='styles/output.css') }}" rel="stylesheet">
   <link href="{{ url_for('static', filename='styles/base.css') }}" rel="stylesheet">
@@ -38,7 +38,7 @@
   <header class="text-gray-600 body-font w-full">
     <div class="flex flex-wrap p-5 flex-col md:flex-row items-center w-full relative">
         <a href="{{ url_for('home') }}" class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0 hover:text-gray-800 transition-colors duration-300 cursor-pointer">
-            <img src="{{ url_for('static', filename='img/Logo Gativet.png') }}" alt="Logo Gativet" class="w-12 h-12">
+            <img src="{{ url_for('static', filename='img/Logo.png') }}" alt="Logo Gativet" class="w-12 h-12">
         </a>
         <nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center">
             <a href="{{ url_for('home') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Inicio</a>
