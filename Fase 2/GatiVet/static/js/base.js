@@ -106,11 +106,14 @@ document.getElementById('submitComment').addEventListener('click', async () => {
     });
 
     if (response.ok) {
+        alert("Comentario guardado exitosamente.");
+    } else if (response.status === 401) {
+        // Si el backend responde con un error 401, mostramos el mensaje de autenticación
+        alert("Debe estar registrado en el sistema para realizar un comentario.");
     } else {
+        alert("Ocurrió un error al guardar el comentario.");
     }
 });
-
-
 
 ///////////////////////
 //Carrito
