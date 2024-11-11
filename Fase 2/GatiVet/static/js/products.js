@@ -155,9 +155,9 @@ function updateProductCards(isLoggedIn) {
                             </div>
                         ` : `
                             <div class="mt-3 flex justify-center text-center mb-2">
-                                <button class="login-btn block rounded-md mb-6 bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4">
-                                    Agregar al carrito
-                                </button>
+                                <button class="login-btn addToCartBtn block rounded-md mb-6 bg-[#18beaa] hover:bg-[#16a89a] text-white font-bold py-2 px-4">
+                                Agregar al carrito
+                            </button>
                             </div>
                         `}
                     </div>

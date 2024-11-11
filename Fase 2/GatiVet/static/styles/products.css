@@ -17,13 +17,13 @@
 
 
 @media (max-width: 1024px) {
-    .product {
+    .productList {
         width: calc(100% / 3 - 20px); /* Dos columnas en pantallas medianas */
     }
 }
 
 @media (max-width: 768px) {
-    .product {
+    .productList {
         width: calc(100% / 2 - 20px); /* Dos columnas en pantallas más pequeñas */
     }
 }
@@ -36,20 +36,21 @@
         gap: 10px; /* Espacio entre las tarjetas */
     }
 
-    .product {
+    .productList {
         width: calc(50% - 10px); /* Dos columnas, ajustando el ancho para el margen */
         padding: 10px; /* Ajustar el espacio alrededor del producto */
         box-sizing: border-box; /* Asegura que el padding no afecte el width */
     }
 
-    .product img {
+    .productList img {
         height: 150px; /* Ajustar la altura de la imagen */
         object-fit: cover; /* Asegurarse de que la imagen se recorte correctamente */
     }
 
     .tipoProducto,
     .nombreProducto,
-    .marcaProducto {
+    .marcaProducto,
+    .stockProducto {
         font-size: 0.8rem; /* Reducir el tamaño de la fuente */
     }
 
@@ -72,20 +73,21 @@
         gap: 5px; /* Espacio entre las tarjetas */
     }
 
-    .product {
+    .productList {
         width: calc(50% - 5px); /* Dos columnas, ajustando el ancho para el margen */
         padding: 8px; /* Ajustar el espacio alrededor del producto */
         box-sizing: border-box; /* Asegura que el padding no afecte el width */
     }
 
-    .product img {
+    .productList img {
         height: 140px; /* Ajustar la altura de la imagen */
         object-fit: cover; /* Asegurarse de que la imagen se recorte correctamente */
     }
 
     .tipoProducto,
     .nombreProducto,
-    .marcaProducto {
+    .marcaProducto,
+    .stockProducto {
         font-size: 0.6rem; /* Reducir el tamaño de la fuente aún más */
     }
 

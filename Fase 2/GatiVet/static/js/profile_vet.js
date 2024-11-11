@@ -287,8 +287,6 @@ tabButtons.forEach(tab => {
 });
 // Fin Script para el comportamiento de las pestañas -->
 
-
-
 ////////////
 // Declarar selectedPetId como una variable global
 let selectedPetId; // Esto ahora es accesible en todo el archivo
