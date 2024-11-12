@@ -977,13 +977,15 @@
                     <div>Vie</div>
                     <div>Sáb</div>
                 </div>
-                <div class="grid grid-cols-7 gap-2" id="calendarDays"></div>
+                <div class="grid grid-cols-7 gap-2" id="calendarDays">
+                    <!-- Se insertan dinamicamente las tarjetas de cita-->
+                </div>
             </div>
         </section>
 
         <!-- Modal semanal -->
         <!-- Modal (inicialmente oculto) -->
-        <div id="modalweek" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+        <div id="modalweek" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 flex hidden">
             <div class="bg-white rounded-lg p-6 w-96 shadow-xl relative">
                 <!-- Botón de cerrar -->
                 <button class="absolute top-2 right-2 text-gray-500 hover:text-gray-700" onclick="closeModalWeek()">
@@ -992,23 +994,23 @@
 
                 <!-- Header del modal -->
                 <div class="flex justify-between items-center mb-4 border-b pb-2">
-                    <h2 class="text-xl font-bold" id="modalweek-type">Cita: Presencial</h2>
+                    <h2 class="text-xl font-bold" id="modalweek-type"></h2>
                     <span class="text-gray-500 text-sm" id="modalweek-date-icon">
                         <i class="fas fa-calendar"></i> 
-                        <span id="modalweek-date">25 de Octubre 2024</span>
+                        <span id="modalweek-date"></span>
                     </span>
                 </div>
 
                 <!-- Información del dueño -->
                 <div class="mb-4 border-b border-gray-300 pb-2">
-                    <p class="text-lg font-semibold" id="modalweek-owner">Fernanda Sanz</p>
+                    <p class="text-lg font-semibold" id="modalweek-owner"></p>
                     <p class="text-sm text-gray-600">
                         <i class="fas fa-envelope mr-1"></i>
-                        <span id="modalweek-email">fernanda@example.com</span>
+                        <span id="modalweek-email"></span>
                     </p>
                     <p class="text-sm text-gray-600">
                         <i class="fas fa-phone mr-1"></i>
-                        <span id="modalweek-phone">+56912345678</span>
+                        <span id="modalweek-phone"></span>
                     </p>
                 </div>
 
@@ -1018,11 +1020,10 @@
                         <img id="modalweek-pet-icon" class="w-full h-full object-cover" alt="Foto de mascota">
                     </div>
                     <div>
-                        <p class="text-lg font-semibold" id="modalweek-pet">COOKIE</p>
-                        <p class="text-sm text-gray-600" id="modalweek-breed">Yorkshire Terrier, Hembra</p>
+                        <p class="text-lg font-semibold" id="modalweek-pet"></p>
+                        <p class="text-sm text-gray-600" id="modalweek-breed"></p>
                     </div>
                 </div>
-
 
                 <!-- Detalles de la cita -->
                 <div class="mb-4 text-sm text-gray-600 space-y-2 border-gray-300 pb-2">
@@ -1032,7 +1033,7 @@
                     </p>
                     <p>
                         <i class="fas fa-info-circle mr-1"></i> Servicio: 
-                        <span id="modalweek-service">Consulta General</span>
+                        <span id="modalweek-service"></span>
                     </p>
                     <p><i class="fas fa-file-alt mr-1"></i> Motivo: <span id="modalweek-reason">Revisión anual</span></p>
                 </div>
@@ -1047,9 +1048,6 @@
 
     </div>
     <!-- Fin Agenda -->
-
-
-
 <script src="{{ url_for('static', filename='js/profile_vet.js') }}"></script>
 
 </body>

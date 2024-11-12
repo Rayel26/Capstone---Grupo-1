@@ -231,27 +231,188 @@ input[type="time"]::-webkit-calendar-picker-indicator {
         padding: 0.5rem 0;
     }
     
-    /* Modal */
-    #modalweek {
-        width: 100%; /* Ajustar el ancho para pantallas pequeñas */
-        padding: 10px;
-    }
-    
-    #modalweek h2 {
-        font-size: 1rem; /* Título más pequeño */
-    }
-    
-    #modalweek p {
-        font-size: 0.7rem; /* Reducir el tamaño del texto */
-    }
-
-    /* Botones del modal */
-    #modalweek button {
-        padding: 6px 10px; /* Reducir tamaño de botones */
-        font-size: 0.7rem;
-    }
 }
 
 .hidden {
     display: none;
 }
+/*Agenda/
+
+/* Mantener el fondo gris para todas las resoluciones */
+body.bg-gray-100 {
+    background-color: #f7fafc;
+}
+
+/* Responsive styles for Agenda */
+
+/* For small screens (up to 360px) */
+@media (max-width: 360px) {
+    .container {
+        padding: 0.5rem;
+    }
+    #monthTitle {
+        font-size: 1rem; /* Achicar título */
+    }
+    #modalweek {
+        padding: 1rem;
+    }
+    #modalweek .p-6 {
+        padding: 1rem;
+    }
+    #modalweek .w-96 {
+        width: 90%;
+    }
+    #modalweek-owner, #modalweek-pet {
+        font-size: 1rem;
+    }
+    /* Ajustar los detalles de la cita */
+    #modalweek .border-b {
+        padding-bottom: 0.5rem;
+    }
+    #modalweek input[type="time"], #modalweek span, #modalweek p {
+        line-height: 1.1; /* Reducir el espacio entre líneas */
+        margin-bottom: 0.25rem; /* Reducir el margen inferior entre elementos */
+    }
+}
+
+/* For screens up to 480px */
+@media (max-width: 480px) {
+    .container {
+        padding: 1rem;
+    }
+    #monthTitle {
+        font-size: 1.25rem; /* Ajustar tamaño del título */
+    }
+    #modalweek .w-96 {
+        width: 85%;
+    }
+    #calendarDays {
+        grid-template-columns: repeat(7, 1fr);
+    }
+    #modalweek-owner, #modalweek-pet {
+        font-size: 1.125rem;
+    }
+    #modalweek input[type="time"], #modalweek span, #modalweek p {
+        line-height: 1.1;
+        margin-bottom: 0.3rem;
+    }
+    #modalweek .border-b {
+        padding-bottom: 0.5rem;
+    }
+}
+
+/* For screens up to 640px */
+@media (max-width: 640px) {
+    .container {
+        padding: 1.5rem;
+    }
+    #monthTitle {
+        font-size: 1.5rem; /* Ajustar tamaño del título */
+    }
+    #modalweek .w-96 {
+        width: 80%;
+    }
+    #calendarDays {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    #modalweek input[type="time"], #modalweek span, #modalweek p {
+        line-height: 1.2;
+        margin-bottom: 0.4rem;
+    }
+    #modalweek .border-b {
+        padding-bottom: 0.5rem;
+    }
+}
+
+/* For screens up to 768px */
+@media (max-width: 768px) {
+    .container {
+        padding: 2rem;
+    }
+    #monthTitle {
+        font-size: 1.75rem; /* Ajustar tamaño del título */
+    }
+    #calendarDays {
+        grid-template-columns: repeat(7, 1fr);
+    }
+    #modalweek .w-96 {
+        width: 75%;
+    }
+    #modalweek-pet {
+        font-size: 1.25rem;
+    }
+    #modalweek input[type="time"], #modalweek span, #modalweek p {
+        line-height: 1.25;
+        margin-bottom: 0.5rem;
+    }
+    #modalweek .border-b {
+        padding-bottom: 0.75rem;
+    }
+}
+/* Eliminar espacio entre los elementos de la cita */
+.appointment-time,
+.appointment-div .owner-name,
+.appointment-div .pet-name,
+.appointment-div .service-type {
+    margin: 0;
+    padding: 0;
+    line-height: 1; /* Para evitar que los elementos tengan demasiado espacio entre líneas */
+}
+
+
+/* Aplicar estilos responsivos a los elementos de la cita */
+@media (max-width: 360px) {
+    .appointment-div {
+        padding: 0.5rem; /* Agregar un poco de padding si es necesario */
+    }
+    .appointment-time {
+        font-size: 1rem;
+    }
+    .owner-name,
+    .pet-name,
+    .service-type {
+        font-size: 0.9rem; /* Ajustar el tamaño de la fuente en pantallas pequeñas */
+    }
+}
+
+@media (max-width: 480px) {
+    .appointment-time {
+        font-size: 1.1rem;
+    }
+    .owner-name,
+    .pet-name,
+    .service-type {
+        font-size: 1rem; /* Ajustar el tamaño de la fuente */
+    }
+}
+
+@media (max-width: 640px) {
+    .appointment-time {
+        font-size: 1.2rem;
+    }
+    .owner-name,
+    .pet-name,
+    .service-type {
+        font-size: 1.1rem; /* Ajustar el tamaño de la fuente */
+    }
+}
+
+@media (max-width: 768px) {
+    .appointment-time {
+        font-size: 1.3rem;
+    }
+    .owner-name,
+    .pet-name,
+    .service-type {
+        font-size: 1.2rem; /* Ajustar el tamaño de la fuente */
+    }
+}
+/* Ocultar los elementos no deseados en pantallas pequeñas */
+@media (max-width: 640px) {
+    .owner-name,  /* Ocultar el nombre del dueño */
+
+    .service-type { /* Ocultar el tipo de servicio */
+        display: none;
+    }
+}
+

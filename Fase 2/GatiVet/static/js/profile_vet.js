@@ -1183,12 +1183,13 @@ function generateCalendar(year, month, appointments = {}) {
                     const tipoConsulta = appointment.type || 'Servicio no disponible';
 
                     appointmentDiv.innerHTML = `
-                        <strong>${hora}</strong>
+                        <strong class="appointment-time">${hora}</strong>
                         <div class="owner-name">${nombreDueño}</div>
                         <div class="pet-name">${nombreMascota}</div>
                         <div class="service-type">${tipoConsulta}</div>
                     `;
 
+                    
                     // Agregar el evento de clic para abrir el modal
                     appointmentDiv.addEventListener('click', () => {
                         const appointmentObject = {
