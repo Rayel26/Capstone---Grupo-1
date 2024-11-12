@@ -938,7 +938,7 @@ function exportToPDF() {
     const date = new Date().toLocaleDateString();
 
     // Define la ruta de la imagen
-    const imageUrl = "/static/img/Logo%20Gativet.png";
+    const imageUrl = "/static/img/Logo.png";
 
     // Agregar la imagen a la parte superior derecha
     doc.addImage(imageUrl, "PNG", pageWidth - 40, 10, 30, 30); // Ajusta la posición y el tamaño
