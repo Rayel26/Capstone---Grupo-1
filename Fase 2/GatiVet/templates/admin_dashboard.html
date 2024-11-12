@@ -941,13 +941,6 @@
                             </optgroup>
                         </select>
                         <div id="brandError" class="error">Este campo es obligatorio.</div>
-                    </div>
-                    <!-- Precio -->
-                    <div>
-                        <label for="price" class="block text-gray-700">Precio:</label>
-                        <input type="text" id="price" class="border rounded w-full py-1 px-2 text-gray-700"
-                            placeholder="Precio del medicamento" oninput="formatCurrency(this)" required>
-                        <div id="priceError" class="error hidden">Este campo es obligatorio.</div>
                     </div>           
                     <!-- Cantidad -->
                     <div>
@@ -964,24 +957,23 @@
                     </div>
                     <!-- Imagen del Producto -->
                     <div>
-                        <label for="medicationtImage" class="block text-gray-700">Seleccionar Imagen del Producto:</label>
-                        <select id="medicationImage" class="border rounded w-full py-1 px-2 text-gray-700"
-                                onchange="updateImagePreview()">
+                        <label for="medicationImage" class="block text-gray-700">Seleccionar Imagen del Producto:</label>
+                        <select id="medicationImage" class="border rounded w-full py-1 px-2 text-gray-700" onchange="updateImagePreview()">
                             <option value="">Seleccione una imagen</option>
+                            <!-- Las imágenes se llenarán dinámicamente con JavaScript -->
                         </select>
-                        <div id="imageError" class="error hidden">Este campo es obligatorio.</div>
+                        <div id="imageError" class="error hidden text-red-500 mt-1">Este campo es obligatorio.</div>
                         <div class="mt-2">
-                            <img id="imagePreview" src="" alt="Vista previa de la imagen"
-                                class="hidden w-32 h-32 border rounded mt-2" />
+                            <!-- Vista previa de la imagen -->
+                            <img id="imagePreview" src="" alt="Vista previa de la imagen" class="hidden w-32 h-32 border rounded mt-2" />
                         </div>
                     </div>
-                    <div class="mt-2">
-                        <input type="file" id="medicationImage" accept="image/*"
-                            class="border rounded w-full py-1 px-2 text-gray-700" onchange="uploadToCloudinary()">
-                    </div>                   
-                    <img id="medicationImagePreview" src="" alt="Vista previa de la imagen"
-                        class="hidden w-32 h-32 border rounded mt-2" />
                     
+                    <!-- Subir imagen a Cloudinary -->
+                    <div class="mt-2">
+                        <input type="file" id="fileInput" accept="image/*" class="border rounded w-full py-1 px-2 text-gray-700" onchange="uploadToCloudinary()">
+                    </div> 
+
                 </div>
                 <button type="submit"
                         class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"

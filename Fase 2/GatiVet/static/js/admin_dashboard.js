@@ -1896,82 +1896,127 @@ async function deleteFoundation(foundationId) {
 
 
 // MEDICAMENTOS
-let imageUrl = '';  // Variable global para almacenar la URL de la imagen
+// Función para cargar las imágenes de medicamentos al cargar la página
+async function loadMedicationImages() {
+    try {
+        const response = await fetch('/api/cloudinary/images');
+        const images = await response.json();
 
-function uploadToCloudinary() {
-    var fileInput = document.getElementById('medicationFile');  // Cambia el ID aquí
-    var file = fileInput.files[0];
+        if (Array.isArray(images)) {
+            const select = document.getElementById('medicationImage');
 
+            // Limpiar el select antes de llenarlo con nuevas opciones
+            select.innerHTML = '<option value="">Seleccione una imagen</option>';
+
+            // Llenar el select con las URLs de las imágenes
+            images.forEach(imageUrl => {
+                const option = document.createElement('option');
+                option.value = imageUrl; // Guardar la URL de la imagen como valor del option
+                option.textContent = imageUrl.split('/').pop(); // Mostrar el nombre del archivo (el último segmento de la URL)
+                select.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('Error loading images:', error);
+    }
+}
+
+// Función para actualizar la vista previa de la imagen seleccionada
+function updateImagePreview() {
+    const selectElement = document.getElementById('medicationImage');
+    const previewImage = document.getElementById('imagePreview');
+    const errorElement = document.getElementById('imageError');
+    
+    const selectedImageUrl = selectElement.value;
+    
+    // Verificar si se seleccionó una imagen
+    if (selectedImageUrl) {
+        previewImage.src = selectedImageUrl; // Establecer la URL de la imagen
+        previewImage.classList.remove('hidden'); // Mostrar la vista previa
+        errorElement.classList.add('hidden'); // Ocultar el mensaje de error
+    } else {
+        previewImage.classList.add('hidden'); // Ocultar la vista previa si no hay selección
+        errorElement.classList.remove('hidden'); // Mostrar el mensaje de error
+    }
+}
+
+// Cargar las imágenes de medicamentos al cargar la página
+document.addEventListener('DOMContentLoaded', loadMedicationImages);
+
+// Función para cargar la imagen a Cloudinary
+async function uploadToCloudinary() {
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0]; // Obtener el archivo seleccionado
+    
     if (!file) {
-        alert("Por favor selecciona una imagen.");
+        alert('Por favor, selecciona un archivo.');
         return;
     }
 
-    var formData = new FormData();
-    formData.append('medication', file);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'tu_upload_preset'); // Reemplaza con tu preset
+    formData.append('folder', 'Medicamentos');
 
-    fetch('/upload-medication-image', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.url) {
-            imageUrl = data.url;  // Guarda la URL en la variable global
-            console.log("Imagen subida correctamente:", data.url);
+    try {
+        const response = await fetch('https://api.cloudinary.com/v1_1/tu_cloud_name/image/upload', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            const imageUrl = data.secure_url;
+            document.getElementById('imagePreview').src = imageUrl;  // Mostrar vista previa
+            return imageUrl;  // Retornar la URL de la imagen
         } else {
-            alert('Error al subir la imagen');
+            console.error('Error al subir la imagen:', data.error.message);
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Ocurrió un error al subir la imagen');
-    });
+    } catch (error) {
+        console.error('Error al subir la imagen:', error);
+    }
 }
 
-function submitMedicine(event) {
-    event.preventDefault();  // Previene el envío del formulario por defecto
+async function submitMedicine(event) {
+    event.preventDefault();
 
-    // Obtén los valores del formulario
     const nombre = document.getElementById('medicineName').value;
-    const tipo = document.getElementById('medicineType').value;
-    const marca = document.getElementById('brand').value;
-    const precio = document.getElementById('price').value;
-    const cantidad = document.getElementById('quantity').value;
     const descripcion = document.getElementById('description').value;
+    const marca = document.getElementById('brand').value;
+    const tipoMedicamento = document.getElementById('medicineType').value;
+    const stock = document.getElementById('quantity').value;
+    const imagenUrl = await uploadToCloudinary(); // Subir la imagen y obtener la URL
+    const fechaIngreso = new Date().toISOString(); // Obtener la fecha actual en formato ISO 8601
 
-    // Crea el objeto de datos a enviar
-    const data = {
+    const medicineData = {
         nombre,
-        tipo,
-        marca,
-        precio,
-        stock: cantidad,
         descripcion,
-        imagen_url: imageUrl  // Usa la URL de la imagen aquí
+        marca,
+        tipo_medicamento: tipoMedicamento,
+        stock: parseInt(stock),
+        imagen_url: imagenUrl,
+        fecha_ingreso: fechaIngreso
     };
 
-    // Envía los datos a la API
-    fetch('/api/add-medicine', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Medicamento guardado exitosamente');
-            // Limpia el formulario si es necesario
-            document.getElementById('medicineForm').reset();
-            imageUrl = '';  // Resetea la URL de la imagen
+    try {
+        const response = await fetch('/api/medicamentos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(medicineData)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            alert(result.message);  // Mostrar mensaje de éxito
         } else {
-            alert('Error al guardar el medicamento: ' + data.message);
+            alert(result.error);  // Mostrar mensaje de error
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Ocurrió un error al guardar el medicamento');
-    });
+    } catch (error) {
+        console.error('Error al enviar los datos:', error);
+    }
 }
+

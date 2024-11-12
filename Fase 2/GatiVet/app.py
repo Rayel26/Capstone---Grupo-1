@@ -1605,8 +1605,6 @@ def activate_product(id_producto):
         print(f'Error al activar el producto: {str(e)}')
         return jsonify({'error': 'Error interno del servidor.'}), 500
 
-
-
 #Ruta para obtener la cantidad de productos en el carrito
 @app.route('/cart_count', methods=['GET'])
 def cart_count():
@@ -2354,75 +2352,54 @@ def check_availability():
     occupied_hours_list = [entry['hora'] for entry in occupied_hours.data]
     return jsonify({'occupied_hours': occupied_hours_list})
 
+from cloudinary.api import resources
 
 ### MEDICAMENTOS ADMIN
-#Sube imagenes a cloudinary de medicamentos
-@app.route('/upload-medication-image', methods=['POST'])
-def upload_medication_image():
-    if 'medication' not in request.files:
-        return jsonify({"error": "No file part"}), 400
 
-    file = request.files['medication']
-    if file.filename == '':
-        return jsonify({"error": "No selected file"}), 400
-
-    try:
-        # Subir la imagen a Cloudinary en la carpeta 'Medicamentos/'
-        upload_result = cloudinary.uploader.upload(file, folder="Medicamentos/")
-        return jsonify({"url": upload_result['secure_url']})
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-#obtiene imagenes a cloudinary
-@app.route('/get-medication-images', methods=['GET'])
+# Ruta para obtener las imágenes de medicamentos desde Cloudinary
+@app.route('/api/cloudinary/medications', methods=['GET'])
 def get_medication_images():
-    try:
-        # Obtener la lista de imágenes en la carpeta 'Medicamentos/'
-        resources = cloudinary.api.resources(folder='Medicamentos/')
-        images = []
+    url = f'https://api.cloudinary.com/v1_1/{CLOUD_NAME}/resources/image/upload'
+    response = requests.get(url, auth=HTTPBasicAuth(API_KEY, API_SECRET))
 
-        for resource in resources['resources']:
-            images.append({
-                'name': resource['public_id'],  # ID público de la imagen
-                'url': resource['secure_url']   # URL segura de la imagen
-            })
-
+    if response.status_code == 200:
+        # Obtenemos solo las URLs seguras de las imágenes
+        images = [resource['secure_url'] for resource in response.json().get('resources', [])]
         return jsonify(images)
+    else:
+        return jsonify({'error': 'Error fetching images from Cloudinary'}), response.status_code
 
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-    
-#Guarda datos en Supabase Medicina
-@app.route('/api/add-medicine', methods=['POST'])
+
+# Ruta para agregar medicamento
+@app.route('/api/medicamentos', methods=['POST'])
 def add_medicine():
-    data = request.get_json()
-    try:
-        # Extrae los datos enviados
-        nombre = data.get('nombre')
-        descripcion = data.get('descripcion')
-        marca = data.get('marca')
-        stock = data.get('stock')
-        fecha_ingreso = datetime.now()
-        imagen_url = data.get('imagen_url')
+    data = request.json
+    
+    # Recibe los datos desde el formulario
+    nombre = data['nombre']
+    descripcion = data['descripcion']
+    marca = data['marca']
+    tipo_medicamento = data['tipo_medicamento']
+    stock = data['stock']
+    imagen_url = data['imagen_url']
+    fecha_ingreso = data['fecha_ingreso']
+    
+    # Inserta los datos en la tabla Medicamentos
+    response = supabase.table('Medicamentos').insert({
+        'nombre': nombre,
+        'descripcion': descripcion,
+        'marca': marca,
+        'tipo_medicamento': tipo_medicamento,
+        'stock': stock,
+        'imagen_url': imagen_url,
+        'fecha_ingreso': fecha_ingreso
+    }).execute()
 
-        # Inserta el medicamento en Supabase
-        result = supabase.table('Medicamentos').insert({
-            "nombre": nombre,
-            "descripcion": descripcion,
-            "marca": marca,
-            "stock": stock,
-            "fecha_ingreso": fecha_ingreso,
-            "imagen_url": imagen_url
-        }).execute()
-
-        # Verifica si hubo un error en la inserción
-        if result.error:
-            return jsonify({"success": False, "message": result.error.message}), 400
-
-        return jsonify({"success": True}), 200
-    except Exception as e:
-        return jsonify({"success": False, "message": str(e)}), 500
+    if response.status_code == 201:
+        return jsonify({'message': 'Medicamento agregado exitosamente'}), 201
+    else:
+        return jsonify({'error': 'Error al agregar medicamento'}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)  # Ejecuta la aplicación en modo depuración
+
