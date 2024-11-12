@@ -866,13 +866,12 @@ def profile_vet():
     user_id = str(session.get('id_usuario'))
     print(f"user_id: {user_id}")  # Asegúrate de que el valor sea lo que esperas
 
-
     # Comprobar si user_id es None
     if user_id is None:
         return "No se encontró el ID de usuario en la sesión."
 
-    # Obtener los datos del veterinario de la tabla Usuario usando id_usuario
-    vet_data = supabase.table('Usuario').select('*').eq('id_usuario', user_id).execute()
+    # Escapar manualmente el valor de user_id agregando comillas simples directamente en la consulta
+    vet_data = supabase.table('Usuario').select('*').eq('id_usuario', f"'{user_id}'").execute()
 
     # Verificar si se encontraron datos del veterinario
     if not vet_data.data:
