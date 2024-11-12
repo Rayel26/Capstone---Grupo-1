@@ -1318,8 +1318,8 @@ def donation():
     # Pasar los datos a la plantilla
     return render_template('donation.html', casos=casos_data, fundaciones=fundaciones_data, user_data=user_data)
 
-from flask import jsonify
 
+# Ruta para la guardar donaciones
 @app.route('/save_donation', methods=['POST'])
 def save_donation():
     # Obtener los datos del formulario
@@ -1369,6 +1369,49 @@ def save_donation():
     # Verificación si la inserción fue exitosa
     if response.data is None:
         return f"Error al guardar la donación: {response.error}", 500
+
+    # Recuperar el correo del usuario
+    usuario_response = supabase.table("Usuario").select("correo").eq("id_usuario", id_usuario).single().execute()
+    if not usuario_response.data:
+        return jsonify({"success": False, "message": "No se pudo recuperar el correo del usuario."}), 500
+
+    correo_usuario = usuario_response.data['correo']
+
+    # Función para formato de precio en CLP
+    def formato_clp(valor):
+        return f"${valor:,.0f}".replace(",", ".")
+
+    # Crear el contenido del correo
+    mensaje_correo_html = f"""
+    <html>
+    <body style="font-family: Arial, sans-serif; color: #333;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <img src="https://res.cloudinary.com/dqeideoyd/image/upload/v1728506204/shrotm1w6az7voy7fgfg.png" alt="Logo" style="width: 150px; height: auto;">
+            <div style="text-align: left;">
+                <h2 style="margin: 0; color: #4CAF50;">¡Gracias por tu donación!</h2>
+                <p style="margin: 0;">Agradecemos tu apoyo a {nombre_donacion}.</p>
+            </div>
+        </div>
+
+        <p><strong>Donación realizada:</strong> {formato_clp(total)}</p>
+        <p><strong>Fecha:</strong> {fecha_actual.strftime('%d/%m/%Y')}</p>
+
+        <p>¡Gracias por hacer la diferencia!</p>
+    </body>
+    </html>
+    """
+
+    # Enviar el correo
+    try:
+        msg = Message("Gracias por tu donación",
+                    sender=app.config['MAIL_USERNAME'],
+                    recipients=[correo_usuario])
+        msg.html = mensaje_correo_html  # Configurar el contenido HTML
+        mail.send(msg)
+        print("Correo de agradecimiento enviado exitosamente.")
+    except Exception as e:
+        print(f"Error al enviar el correo: {e}")
+        return jsonify({"success": True, "message": "Donación registrada, pero no se pudo enviar el correo."}), 500
 
     # Devolver un JSON de éxito
     return jsonify({"status": "success", "message": "Donación registrada correctamente"})
