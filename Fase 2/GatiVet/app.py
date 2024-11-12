@@ -2382,7 +2382,9 @@ def add_medicine():
     tipo_medicamento = data['tipo_medicamento']
     stock = data['stock']
     imagen_url = data['imagen_url']
-    fecha_ingreso = data['fecha_ingreso']
+    fecha_ingreso = datetime.now().isoformat()  # Convertir a cadena
+
+    print(f"nombre: {nombre}, descripcion: {descripcion}, marca: {marca}, stock: {stock}, imagen_url: {imagen_url}")
     
     # Inserta los datos en la tabla Medicamentos
     response = supabase.table('Medicamentos').insert({

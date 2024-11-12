@@ -873,8 +873,8 @@
                     </div>            
                     <!-- Marca -->
                     <div>
-                        <label for="brand" class="block text-gray-700">Marca:</label>
-                        <select id="brand" class="border rounded w-full py-1 px-2 text-gray-700" required>
+                        <label for="brandMedi" class="block text-gray-700">Marca:</label>
+                        <select id="brandMedi" class="border rounded w-full py-1 px-2 text-gray-700" required>
                             <option value="">Seleccione una marca</option>
                             <optgroup label="Antiparasitarios">
                                 <option value="Frontline">Frontline</option>
@@ -944,15 +944,15 @@
                     </div>           
                     <!-- Cantidad -->
                     <div>
-                        <label for="quantity" class="block text-gray-700">Cantidad:</label>
-                        <input type="number" id="quantity" class="border rounded w-full py-1 px-2 text-gray-700"
+                        <label for="quantityMedi" class="block text-gray-700">Cantidad:</label>
+                        <input type="number" id="quantityMedi" class="border rounded w-full py-1 px-2 text-gray-700"
                             placeholder="Cantidad disponible" required>
                         <div id="quantityError" class="error hidden">Este campo es obligatorio.</div>
                     </div>
                     <!-- Descripción -->
                     <div>
-                        <label for="description" class="block text-gray-700">Descripción:</label>
-                        <textarea id="description" class="border rounded w-full py-1 px-2 text-gray-700"
+                        <label for="descriptionMedi" class="block text-gray-700">Descripción:</label>
+                        <textarea id="descriptionMedi" class="border rounded w-full py-1 px-2 text-gray-700"
                                 placeholder="Descripción del medicamento"></textarea>
                     </div>
                     <!-- Imagen del Producto -->
@@ -965,13 +965,13 @@
                         <div id="imageError" class="error hidden text-red-500 mt-1">Este campo es obligatorio.</div>
                         <div class="mt-2">
                             <!-- Vista previa de la imagen -->
-                            <img id="imagePreview" src="" alt="Vista previa de la imagen" class="hidden w-32 h-32 border rounded mt-2" />
+                            <img id="medicationImagePreview" src="" alt="Vista previa de la imagen" class="hidden w-32 h-32 border rounded mt-2" />
                         </div>
                     </div>
                     
                     <!-- Subir imagen a Cloudinary -->
                     <div class="mt-2">
-                        <input type="file" id="fileInput" accept="image/*" class="border rounded w-full py-1 px-2 text-gray-700" onchange="uploadToCloudinary()">
+                        <input type="file" id="medicationFile" accept="image/*" class="border rounded w-full py-1 px-2 text-gray-700" onchange="uploadToCloudinary()">
                     </div> 
 
                 </div>
