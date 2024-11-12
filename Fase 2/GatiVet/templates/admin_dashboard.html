@@ -44,6 +44,9 @@
                     <li><a href="#" onclick="showSection('fundaciones')" class="hover:underline"
                             style="color: #18beaa; border-bottom: 2px solid transparent; transition: border-bottom 0.3s;">
                             Fundaciones</a></li>
+                    <li><a href="#" onclick="showSection('medicamentos')" class="hover:underline"
+                                style="color: #18beaa; border-bottom: 2px solid transparent; transition: border-bottom 0.3s;">
+                                Medicamentos</a></li>
                 </ul>
             </nav>
 
@@ -61,7 +64,6 @@
             <!-- Filtros -->
             <div class="flex justify-between mb-4">
                 <div class="flex items-center">
-                    <!-- Filtro por Tipo de Producto -->
                     <!-- Filtro por Tipo de Producto -->
                     <div class="mr-4">
                         <label for="productFilter" class="mr-1 text-gray-700 text-xs">Filtrar por tipo:</label>
@@ -760,6 +762,235 @@
         </section>
     </div>
     <!-- Fin Contenido Fundaciones -->
+
+
+    <!-- Contenido Medicamentos -->
+    <div class="container mx-auto flex items-start justify-center pt-10 section hidden" id="medicamentos">
+        <section class="p-4 w-full max-w-3xl bg-white shadow-md rounded-lg">
+            <!-- Encabezado centrado -->
+            <div class="flex justify-center mb-4">
+                <h2 class="text-xl font-bold">Gestión de Medicamentos</h2>
+            </div>
+
+            <!-- Filtros -->
+            <div class="flex justify-between mb-4">
+                <div class="flex items-center">
+                    <!-- Filtro por Tipo de Medicamento -->
+                    <div class="mr-4">
+                        <label for="medicineFilter" class="mr-1 text-gray-700 text-xs">Filtrar por tipo:</label>
+                        <select id="medicineFilter" class="border rounded py-0.5 px-1 text-gray-700 text-xs"
+                                onchange="filterMedicines()">
+                            <option value="">Todos los tipos</option>
+                            <option value="antiparasitario">Antiparasitario</option>
+                            <option value="antibiotico">Antibiótico</option>
+                            <option value="antiinflamatorio">Analgésico y Antiinflamatorio</option>
+                            <option value="vacunas">Vacunas</option>
+                            <option value="antifúngicos">Antifúngicos</option>
+                            <option value="reproductivos">Medicamentos hormonales y reproductivos</option>
+                            <option value="suplementosVitaminas">Suplementos y vitaminas</option>
+                            <option value="sedantesAnestésicos">Sedantes y anestésicos</option>
+                            <option value="oftálmicosOtológicos">Medicamentos oftálmicos y otológicos</option>
+                            <option value="digestivo">Medicamentos para el sistema digestivo</option>
+                            <option value="antihistamínicos">Antihistamínicos y medicamentos antialérgicos</option>
+                        </select>
+                    </div>
+
+                    <!-- Filtro por Mes de Ingreso -->
+                    <div>
+                        <label for="monthFilter" class="mr-1 text-gray-700 text-xs">Filtrar por mes:</label>
+                        <input type="month" id="monthFilter" class="border rounded py-1 px-1 text-gray-700 text-xs"
+                            onchange="filterByMonth()">
+                    </div>
+                </div>
+
+                <!-- Botón para exportar a Excel -->
+                <button class="text-white py-1 px-3 rounded hover:bg-teal-500 transition duration-200 text-sm"
+                        style="background-color: #18beaa;" onclick="exportToExcel()">
+                    Exportar a Excel
+                </button>
+            </div>
+
+            <!-- Tabla de stock de medicamentos -->
+            <table id="medicineTable" class="min-w-full bg-white border border-gray-300 shadow rounded-lg overflow-hidden text-xs mt-3">
+                <thead>
+                    <tr class="text-white" style="background-color: #18beaa;">
+                        <th class="py-1 px-2 border-b">Nombre del Medicamento</th>
+                        <th class="py-1 px-2 border-b">Tipo</th>
+                        <th class="py-1 px-2 border-b">Marca</th>
+                        <th class="py-1 px-2 border-b">Stock</th>
+                        <th class="py-1 px-2 border-b">Fecha ingreso</th>
+                        <th class="py-1 px-2 border-b">Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="medicineTableExt">
+                    <!-- Aquí se mostrarán los medicamentos filtrados -->
+                </tbody>
+            </table>
+
+            <!-- Controles de Paginación -->
+            <div id="paginationControls" class="mt-4 flex justify-center items-center">
+                <button id="prevPageBtn" class="text-white py-1 px-3 rounded mr-2 text-sm"
+                        style="background-color: #18beaa;" onclick="prevPage()">
+                    &lt;&lt;
+                </button>
+                <span id="currentPage" class="text-gray-700 text-sm"></span>
+                <button id="nextPageBtn" class="text-white py-1 px-3 rounded ml-2 text-sm"
+                        style="background-color: #18beaa;" onclick="nextPage()">
+                    &gt;&gt;
+                </button>
+            </div>
+
+            <!-- Formulario para subir medicamentos -->
+            <form id="medicineForm" class="mt-6 bg-white p-6 shadow rounded-lg text-sm" onsubmit="submitMedicine(event)">
+                <h4 class="text-base font-semibold">Agregar Nuevo Medicamento</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                    <!-- Nombre del Medicamento -->
+                    <div>
+                        <label for="medicineName" class="block text-gray-700">Nombre del Medicamento:</label>
+                        <input type="text" id="medicineName" class="border rounded w-full py-1 px-2 text-gray-700"
+                            placeholder="Nombre del medicamento" required>
+                        <div id="nameError" class="error hidden">Este campo es obligatorio.</div>
+                    </div>
+            
+                    <!-- Tipo de Medicamento -->
+                    <div>
+                        <label for="medicineType" class="block text-gray-700">Tipo de Medicamento:</label>
+                        <select id="medicineType" class="border rounded w-full py-1 px-2 text-gray-700" required>
+                            <option value="">Todos los tipos</option>
+                            <option value="antiparasitario">Antiparasitario</option>
+                            <option value="antibiotico">Antibiótico</option>
+                            <option value="antiinflamatorio">Analgésico y Antiinflamatorio</option>
+                            <option value="vacunas">Vacunas</option>
+                            <option value="antifúngicos">Antifúngicos</option>
+                            <option value="reproductivos">Medicamentos hormonales y reproductivos</option>
+                            <option value="suplementosVitaminas">Suplementos y vitaminas</option>
+                            <option value="sedantesAnestésicos">Sedantes y anestésicos</option>
+                            <option value="oftálmicosOtológicos">Medicamentos oftálmicos y otológicos</option>
+                            <option value="digestivo">Medicamentos para el sistema digestivo</option>
+                            <option value="antihistamínicos">Antihistamínicos y medicamentos antialérgicos</option>
+                        </select>
+                        <div id="typeError" class="error">Este campo es obligatorio.</div>
+                    </div>            
+                    <!-- Marca -->
+                    <div>
+                        <label for="brand" class="block text-gray-700">Marca:</label>
+                        <select id="brand" class="border rounded w-full py-1 px-2 text-gray-700" required>
+                            <option value="">Seleccione una marca</option>
+                            <optgroup label="Antiparasitarios">
+                                <option value="Frontline">Frontline</option>
+                                <option value="NexGard">NexGard</option>
+                                <option value="Drontal">Drontal</option>
+                                <option value="Advantage">Advantage</option>
+                                <option value="Heartgard">Heartgard</option>
+                            </optgroup>
+                            <optgroup label="Antibióticos">
+                                <option value="AmoxiVet">AmoxiVet</option>
+                                <option value="Baytril">Baytril</option>
+                                <option value="Clindacyn">Clindacyn</option>
+                                <option value="Synulox">Synulox</option>
+                            </optgroup>
+                            <optgroup label="Analgésicos y Anti-inflamatorios">
+                                <option value="Metacam">Metacam</option>
+                                <option value="Previcox">Previcox</option>
+                                <option value="Carprovet">Carprovet</option>
+                            </optgroup>
+                            <optgroup label="Vacunas">
+                                <option value="Nobivac">Nobivac</option>
+                                <option value="Cavium">Cavium</option>
+                                <option value="Rabvac">Rabvac</option>
+                            </optgroup>
+                            <optgroup label="Antifúngicos">
+                                <option value="Oral Fungiconazole">Oral Fungiconazole</option>
+                                <option value="Ketoconazol">Ketoconazol</option>
+                                <option value="Lamisil">Lamisil</option>
+                            </optgroup>
+                            <optgroup label="Medicamentos Hormonales y Reproductivos">
+                                <option value="Ovarelin">Ovarelin</option>
+                                <option value="Estrumate">Estrumate</option>
+                                <option value="Cystorelin">Cystorelin</option>
+                            </optgroup>
+                            <optgroup label="Suplementos y Vitaminas">
+                                <option value="VetriScience">VetriScience</option>
+                                <option value="Nutri-Vet">Nutri-Vet</option>
+                                <option value="Cosequin">Cosequin</option>
+                            </optgroup>
+                            <optgroup label="Sedantes y Anestésicos">
+                                <option value="Acepromazine">Acepromazine</option>
+                                <option value="Propofol">Propofol</option>
+                                <option value="Isoflurano">Isoflurano</option>
+                            </optgroup>
+                            <optgroup label="Medicamentos Cardiovasculares">
+                                <option value="Vetmedin">Vetmedin</option>
+                                <option value="Fortekor">Fortekor</option>
+                                <option value="Lasix">Lasix</option>
+                            </optgroup>
+                            <optgroup label="Medicamentos Oftálmicos y Otológicos">
+                                <option value="Tobramycin">Tobramycin</option>
+                                <option value="Otomax">Otomax</option>
+                                <option value="Cyclosporine A">Cyclosporine A</option>
+                            </optgroup>
+                            <optgroup label="Medicamentos Digestivos">
+                                <option value="Metoclopramide">Metoclopramide</option>
+                                <option value="Omeprazol">Omeprazol</option>
+                                <option value="Sucralfate">Sucralfate</option>
+                            </optgroup>
+                            <optgroup label="Antihistamínicos y Medicamentos Antialérgicos">
+                                <option value="Benadryl">Benadryl</option>
+                                <option value="Zyrtec">Zyrtec</option>
+                                <option value="Atarax">Atarax</option>
+                            </optgroup>
+                        </select>
+                        <div id="brandError" class="error">Este campo es obligatorio.</div>
+                    </div>
+                    <!-- Precio -->
+                    <div>
+                        <label for="price" class="block text-gray-700">Precio:</label>
+                        <input type="text" id="price" class="border rounded w-full py-1 px-2 text-gray-700"
+                            placeholder="Precio del medicamento" oninput="formatCurrency(this)" required>
+                        <div id="priceError" class="error hidden">Este campo es obligatorio.</div>
+                    </div>           
+                    <!-- Cantidad -->
+                    <div>
+                        <label for="quantity" class="block text-gray-700">Cantidad:</label>
+                        <input type="number" id="quantity" class="border rounded w-full py-1 px-2 text-gray-700"
+                            placeholder="Cantidad disponible" required>
+                        <div id="quantityError" class="error hidden">Este campo es obligatorio.</div>
+                    </div>
+                    <!-- Descripción -->
+                    <div>
+                        <label for="description" class="block text-gray-700">Descripción:</label>
+                        <textarea id="description" class="border rounded w-full py-1 px-2 text-gray-700"
+                                placeholder="Descripción del medicamento"></textarea>
+                    </div>
+                    <!-- Imagen del Producto -->
+                    <div>
+                        <label for="medicationtImage" class="block text-gray-700">Seleccionar Imagen del Producto:</label>
+                        <select id="medicationImage" class="border rounded w-full py-1 px-2 text-gray-700"
+                                onchange="updateImagePreview()">
+                            <option value="">Seleccione una imagen</option>
+                        </select>
+                        <div id="imageError" class="error hidden">Este campo es obligatorio.</div>
+                        <div class="mt-2">
+                            <img id="imagePreview" src="" alt="Vista previa de la imagen"
+                                class="hidden w-32 h-32 border rounded mt-2" />
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <input type="file" id="medicationImage" accept="image/*"
+                            class="border rounded w-full py-1 px-2 text-gray-700" onchange="uploadToCloudinary()">
+                    </div>                   
+                    <img id="medicationImagePreview" src="" alt="Vista previa de la imagen"
+                        class="hidden w-32 h-32 border rounded mt-2" />
+                    
+                </div>
+                <button type="submit"
+                        class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
+                        style="background-color: #18beaa;">Subir Medicamento</button>
+            </form>
+        </section>
+    </div>
+    <!-- Fin Contenido Medicamentos -->
+
 
 
     <!-- Scripts -->

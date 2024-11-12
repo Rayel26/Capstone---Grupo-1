@@ -1895,11 +1895,83 @@ async function deleteFoundation(foundationId) {
 }
 
 
+// MEDICAMENTOS
+let imageUrl = '';  // Variable global para almacenar la URL de la imagen
 
+function uploadToCloudinary() {
+    var fileInput = document.getElementById('medicationFile');  // Cambia el ID aquí
+    var file = fileInput.files[0];
 
+    if (!file) {
+        alert("Por favor selecciona una imagen.");
+        return;
+    }
 
+    var formData = new FormData();
+    formData.append('medication', file);
 
+    fetch('/upload-medication-image', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.url) {
+            imageUrl = data.url;  // Guarda la URL en la variable global
+            console.log("Imagen subida correctamente:", data.url);
+        } else {
+            alert('Error al subir la imagen');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Ocurrió un error al subir la imagen');
+    });
+}
 
+function submitMedicine(event) {
+    event.preventDefault();  // Previene el envío del formulario por defecto
 
+    // Obtén los valores del formulario
+    const nombre = document.getElementById('medicineName').value;
+    const tipo = document.getElementById('medicineType').value;
+    const marca = document.getElementById('brand').value;
+    const precio = document.getElementById('price').value;
+    const cantidad = document.getElementById('quantity').value;
+    const descripcion = document.getElementById('description').value;
 
+    // Crea el objeto de datos a enviar
+    const data = {
+        nombre,
+        tipo,
+        marca,
+        precio,
+        stock: cantidad,
+        descripcion,
+        imagen_url: imageUrl  // Usa la URL de la imagen aquí
+    };
 
+    // Envía los datos a la API
+    fetch('/api/add-medicine', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Medicamento guardado exitosamente');
+            // Limpia el formulario si es necesario
+            document.getElementById('medicineForm').reset();
+            imageUrl = '';  // Resetea la URL de la imagen
+        } else {
+            alert('Error al guardar el medicamento: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Ocurrió un error al guardar el medicamento');
+    });
+}

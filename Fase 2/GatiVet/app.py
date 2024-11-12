@@ -2322,58 +2322,6 @@ def get_agenda():
     
     return jsonify(combined_data), 200
 
-
-@app.route('/api/agenda-completa', methods=['GET'])
-@cross_origin()
-def get_full_agenda():
-    print("API de agenda completa solicitada")
-    
-    # Obtener datos de la tabla Agenda, incluyendo 'area' y 'motivo'
-    agenda_response = supabase.table('Agenda').select('*').execute()
-    agenda_data = agenda_response.data
-    
-    # Obtener datos de la tabla Usuario
-    usuario_response = supabase.table('Usuario').select('*').execute()
-    usuario_data = {user['id_usuario']: user for user in usuario_response.data}
-    
-    # Obtener datos de la tabla Mascota
-    mascota_response = supabase.table('Mascota').select('*').execute()
-    mascota_data = {pet['id_mascota']: pet for pet in mascota_response.data}
-    
-    # Clasificar las citas en pasadas y futuras
-    atenciones_pasadas = []
-    atenciones_futuras = []
-    
-    for cita in agenda_data:
-        usuario_info = usuario_data.get(cita['id_usuario'])
-        mascota_info = mascota_data.get(cita['id_mascota'])
-        
-        # Combinación de datos de cada cita
-        combined_record = {
-            'fecha': cita['fecha'],           # Fecha de la cita
-            'hora': cita['hora'],             # Hora de la cita
-            'id_mascota': cita['id_mascota'], # ID de la mascota
-            'servicio': cita['servicio'],     # Servicio asignado
-            'motivo': cita['motivo'],         # Nuevo campo 'motivo'
-            'usuario': usuario_info,          # Información del usuario
-            'mascota': mascota_info           # Información de la mascota
-        }
-        
-        # Convertir la fecha con fromisoformat
-        fecha_cita = datetime.fromisoformat(cita['fecha'])
-        
-        # Clasificar en pasadas o futuras con timezone
-        if fecha_cita < datetime.now(timezone.utc):
-            atenciones_pasadas.append(combined_record)
-        else:
-            atenciones_futuras.append(combined_record)
-    
-    # Devolver ambas listas en formato JSON
-    return jsonify({
-        "atenciones_pasadas": atenciones_pasadas,
-        "atenciones_futuras": atenciones_futuras
-    }), 200
-
 #Obtener servicios desde Supabase
 @app.route('/obtener_servicios', methods=['GET'])
 def obtener_servicios():
@@ -2404,6 +2352,75 @@ def check_availability():
     occupied_hours_list = [entry['hora'] for entry in occupied_hours.data]
     return jsonify({'occupied_hours': occupied_hours_list})
 
+
+### MEDICAMENTOS ADMIN
+#Sube imagenes a cloudinary de medicamentos
+@app.route('/upload-medication-image', methods=['POST'])
+def upload_medication_image():
+    if 'medication' not in request.files:
+        return jsonify({"error": "No file part"}), 400
+
+    file = request.files['medication']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+
+    try:
+        # Subir la imagen a Cloudinary en la carpeta 'Medicamentos/'
+        upload_result = cloudinary.uploader.upload(file, folder="Medicamentos/")
+        return jsonify({"url": upload_result['secure_url']})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+#obtiene imagenes a cloudinary
+@app.route('/get-medication-images', methods=['GET'])
+def get_medication_images():
+    try:
+        # Obtener la lista de imágenes en la carpeta 'Medicamentos/'
+        resources = cloudinary.api.resources(folder='Medicamentos/')
+        images = []
+
+        for resource in resources['resources']:
+            images.append({
+                'name': resource['public_id'],  # ID público de la imagen
+                'url': resource['secure_url']   # URL segura de la imagen
+            })
+
+        return jsonify(images)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+#Guarda datos en Supabase Medicina
+@app.route('/api/add-medicine', methods=['POST'])
+def add_medicine():
+    data = request.get_json()
+    try:
+        # Extrae los datos enviados
+        nombre = data.get('nombre')
+        descripcion = data.get('descripcion')
+        marca = data.get('marca')
+        stock = data.get('stock')
+        fecha_ingreso = datetime.now()
+        imagen_url = data.get('imagen_url')
+
+        # Inserta el medicamento en Supabase
+        result = supabase.table('Medicamentos').insert({
+            "nombre": nombre,
+            "descripcion": descripcion,
+            "marca": marca,
+            "stock": stock,
+            "fecha_ingreso": fecha_ingreso,
+            "imagen_url": imagen_url
+        }).execute()
+
+        # Verifica si hubo un error en la inserción
+        if result.error:
+            return jsonify({"success": False, "message": result.error.message}), 400
+
+        return jsonify({"success": True}), 200
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)  # Ejecuta la aplicación en modo depuración
