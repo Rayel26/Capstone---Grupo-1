@@ -863,7 +863,9 @@ def guardar_comentario():
 @role_required('vet')  # Asegurarse de que este decorador existe para verificar el rol del usuario
 def profile_vet():
     # Asumiendo que el veterinario ha iniciado sesión y su id_usuario está almacenado en la sesión
-    user_id = session.get('id_usuario') 
+    user_id = str(session.get('id_usuario'))
+    print(f"user_id: {user_id}")  # Asegúrate de que el valor sea lo que esperas
+
 
     # Comprobar si user_id es None
     if user_id is None:
