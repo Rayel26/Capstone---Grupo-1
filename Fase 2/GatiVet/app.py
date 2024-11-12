@@ -870,8 +870,8 @@ def profile_vet():
     if user_id is None:
         return "No se encontró el ID de usuario en la sesión."
 
-    # Escapar manualmente el valor de user_id agregando comillas simples directamente en la consulta
-    vet_data = supabase.table('Usuario').select('*').eq('id_usuario', f"'{user_id}'").execute()
+    # Realizar la consulta sin comillas adicionales alrededor de user_id
+    vet_data = supabase.table('Usuario').select('*').eq('id_usuario', user_id).execute()
 
     # Verificar si se encontraron datos del veterinario
     if not vet_data.data:
