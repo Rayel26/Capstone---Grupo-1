@@ -48,12 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="w-full h-40 mb-4 overflow-hidden rounded-lg shadow-md transition-transform transform hover:scale-105">
                         <img src="${caseItem.foto_url}" class="object-cover w-full h-full rounded-lg">
                     </div>
-                    <div class="text-center mt-3">
-                        <a href="{{ url_for('donation') }}"
-                            class="inline-block px-4 py-2 text-white bg-[#18beaa] border border-[#139b89] rounded-md hover:bg-[#139b89] focus:outline-none focus:ring-2 focus:ring-[#18beaa] focus:ring-opacity-50 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-xl">
-                            Apoya a ${caseItem.nombre_caso}
-                        </a>
-                    </div>
                 </div>
             `;
             casesContainer.appendChild(caseCard);
@@ -89,12 +83,6 @@ async function fetchFundaciones() {
                       </p>
                       <div class="w-full h-40 mb-4 overflow-hidden rounded-lg shadow-md transition-transform transform hover:scale-105">
                           <img src="${fundacion.foto_url}" class="object-cover w-full h-full rounded-lg">
-                      </div>
-                      <div class="text-center mt-3">
-                          <a href="{{ url_for('donation') }}"
-                              class="inline-block px-4 py-2 text-white bg-[#18beaa] border border-[#139b89] rounded-md hover:bg-[#139b89] focus:outline-none focus:ring-2 focus:ring-[#18beaa] focus:ring-opacity-50 transition-transform transform-gpu hover:-translate-y-1 hover:shadow-xl">
-                              Apoya a ${fundacion.nombre_fundacion}
-                          </a>
                       </div>
                   </div>
               </div>

@@ -83,15 +83,14 @@ if (payNowBtn && cartModal) {
 
 // Función para manejar la entrada de los últimos 8 dígitos y mantener el prefijo fijo
 const phoneInput = document.getElementById('phone-input');
-const prefix = "+56 9 "; // Prefijo fijo
+const prefix = ""; // Si tienes un prefijo específico, cámbialo aquí.
 
 if (phoneInput) {
-    // Establecemos el prefijo al cargar la página
-    phoneInput.value = prefix;
+    // Asegúrate de que el valor del celular se establece al cargar
+    phoneInput.value = prefix + phoneInput.value.slice(prefix.length); // Se mantiene el valor original y el prefijo
 
     // Evento para restringir la entrada a solo los últimos 8 dígitos
     phoneInput.addEventListener('input', function() {
-        // Capturamos solo los números después del prefijo
         let userInput = phoneInput.value.slice(prefix.length).replace(/\D/g, '');
 
         // Limitamos a 8 dígitos
@@ -117,3 +116,43 @@ if (phoneInput) {
         }
     });
 }
+
+//Guarda datos en Supabase
+document.getElementById("payNowBtn").addEventListener("click", async function(event) {
+    event.preventDefault(); // Evitar el envío tradicional del formulario
+
+    // Capturar los valores del formulario
+    const nameOption = document.getElementById("nameOption").value;
+    const donationOption = document.getElementById("donationOption").value;
+
+    // Asegurarse de que se hayan seleccionado los valores
+    if (nameOption === "" || donationOption === "0") {
+        alert("Por favor, selecciona un caso o fundación y un monto de donación.");
+        return;
+    }
+
+    // Enviar datos a Flask a través de una petición AJAX
+    try {
+        const response = await fetch('/save_donation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded', // Formulario tradicional
+            },
+            body: new URLSearchParams({
+                nameOption: nameOption,
+                donationOption: donationOption
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al guardar la donación');
+        }
+
+        // Mostrar el modal de éxito
+        document.getElementById("cartModal").classList.remove("hidden");
+    } catch (error) {
+        console.error("Error al registrar la donación:", error);
+        alert("Hubo un error al procesar tu donación.");
+    }
+});
+

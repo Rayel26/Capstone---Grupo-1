@@ -17,6 +17,8 @@ from flask_mail import Mail, Message
 import pytz
 import jwt
 import httpx
+import string
+import random
 
 # Importaciones específicas del proyecto
 from supabase import create_client
@@ -1286,10 +1288,92 @@ def delete_user(user_id):
         print(f"Ocurrió un error al eliminar el usuario: {e}")
         return jsonify({"error": "Error al eliminar el usuario", "details": str(e)}), 500
 
-#Ruta para donaciones
+#/// DONACIONES //
+# Ruta para la página de donaciones
 @app.route('/donation')
 def donation():
-    return render_template('donation.html')
+    # Consultar los casos y fundaciones desde la base de datos Supabase
+    casos = supabase.table('CasoDonacion').select('id_caso, nombre_caso').execute()
+    fundaciones = supabase.table('FundacionDonacion').select('id_fundacion, nombre_fundacion').execute()
+
+    # Asegurarse de que accedes a los datos correctamente
+    casos_data = casos.data  # Accede a los datos con el atributo .data
+    fundaciones_data = fundaciones.data  # Accede a los datos con el atributo .data
+
+    # Suponiendo que tienes el ID del usuario en la sesión (por ejemplo, usando flask-login o similar)
+    user_id = session.get('id_usuario')  # O reemplaza esto con el método adecuado para obtener el ID del usuario
+
+    if user_id:
+        # Consultar los datos del usuario desde la base de datos Supabase
+        user = supabase.table('Usuario').select('nombre', 'appaterno', 'correo', 'celular').eq('id_usuario', user_id).execute()
+
+        # Asegúrate de que el usuario existe en la base de datos
+        if user.data:
+            user_data = user.data[0]  # Obtén el primer resultado de la consulta
+        else:
+            user_data = None
+    else:
+        user_data = None
+
+    # Pasar los datos a la plantilla
+    return render_template('donation.html', casos=casos_data, fundaciones=fundaciones_data, user_data=user_data)
+
+from flask import jsonify
+
+@app.route('/save_donation', methods=['POST'])
+def save_donation():
+    # Obtener los datos del formulario
+    nombre_donacion_id = request.form.get('nameOption')  # Aquí se obtiene el ID seleccionado
+    total = request.form.get('donationOption')
+
+    # Obtener el id_usuario desde la sesión
+    id_usuario = session.get('id_usuario')  # Obtener el id_usuario desde la sesión
+
+    # Verifica si los datos del formulario y el id_usuario están vacíos
+    if not nombre_donacion_id or not total or not id_usuario:
+        return "Faltan datos necesarios", 400
+
+    # Asegúrate de que 'total' sea un número
+    try:
+        total = int(total)
+    except ValueError:
+        return "El total debe ser un número válido", 400
+
+    # Calcular la fecha actual en la zona horaria de Santiago
+    local_tz = pytz.timezone('America/Santiago')
+    fecha_actual = datetime.now(local_tz)
+    
+    # Convertir la fecha a formato ISO para timestamptz
+    fecha_iso = fecha_actual.isoformat()  # Esta es la representación ISO 8601
+
+    # Verificar si el ID corresponde a un caso o a una fundación
+    caso = supabase.table('CasoDonacion').select('nombre_caso').eq('id_caso', nombre_donacion_id).execute()
+    if caso.data:
+        nombre_donacion = caso.data[0]['nombre_caso']
+    else:
+        # Si no es un caso, entonces debe ser una fundación
+        fundacion = supabase.table('FundacionDonacion').select('nombre_fundacion').eq('id_fundacion', nombre_donacion_id).execute()
+        if fundacion.data:
+            nombre_donacion = fundacion.data[0]['nombre_fundacion']
+        else:
+            return "Caso o fundación no encontrados", 400
+
+    # Insertar los datos en Supabase
+    response = supabase.table('Donacion').insert({
+        'fecha': fecha_iso,
+        'total': total,
+        'id_usuario': id_usuario,
+        'nombre_donacion': nombre_donacion
+    }).execute()
+
+    # Verificación si la inserción fue exitosa
+    if response.data is None:
+        return f"Error al guardar la donación: {response.error}", 500
+
+    # Devolver un JSON de éxito
+    return jsonify({"status": "success", "message": "Donación registrada correctamente"})
+
+#/// FIN DONACIONES //
 
 #/// PRODUCTOS //
 # Crear productos

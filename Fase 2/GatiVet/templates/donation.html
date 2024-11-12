@@ -11,38 +11,70 @@
                 <!-- Column 1: Personal Details and Order Summary (Center) -->
                 <div class="lg:w-1/2 p-6 rounded-md bg-gray-50">
                     <h2 class="text-2xl font-bold text-gray-800">Completa tu donación</h2>
-                    <form class="mt-8 space-y-6">
+                    <form class="mt-8 space-y-6" action="/save_donation" method="POST">
                         <!-- Personal Details -->
                         <div>
                             <h3 class="text-lg font-semibold text-gray-800 mb-4">Información personal</h3>
+                            <!-- Mostrar los datos del usuario si están disponibles -->
+                            {% if user_data %}
                             <div class="grid md:grid-cols-2 gap-4">
                                 <div>
-                                    <input type="text" placeholder="Nombre"
+                                    <input type="text" placeholder="Nombre" value="{{ user_data.nombre }}"
                                         class="px-4 py-3 bg-white text-gray-800 w-full rounded-md border focus:outline-blue-600" />
                                 </div>
                                 <div>
-                                    <input type="text" placeholder="Apellido"
+                                    <input type="text" placeholder="Apellido" value="{{ user_data.appaterno }}"
                                         class="px-4 py-3 bg-white text-gray-800 w-full rounded-md border focus:outline-blue-600" />
                                 </div>
                                 <div>
-                                    <input type="email" placeholder="Correo"
+                                    <input type="email" placeholder="Correo" value="{{ user_data.correo }}"
                                         class="px-4 py-3 bg-white text-gray-800 w-full rounded-md border focus:outline-blue-600" />
                                 </div>
                                 <div>
                                     <input type="text" id="phone-input" placeholder="Ingrese su número de teléfono"
-                                    class="px-4 py-3 bg-white text-gray-800 w-full rounded-md border focus:outline-blue-600">
+                                        value="{{ user_data.celular }}"
+                                        class="px-4 py-3 bg-white text-gray-800 w-full rounded-md border focus:outline-blue-600">
+
                                 </div>
                             </div>
+                            {% else %}
+                            <p>No se pudo cargar la información del usuario.</p>
+                            {% endif %}
+
+                        </div>
+                        <!-- Name Option -->
+                        <div class="mt-8">
+                            <h3 class="text-lg font-semibold text-gray-800">Selecciona Caso o Fundación a donar</h3>
+                            <select id="nameOption"
+                                class="w-full mt-4 px-4 py-3 bg-white text-gray-800 rounded-md border focus:outline-blue-600">
+                                <option value="" disabled selected>Selecciona un Caso o Fundación</option>
+
+                                <!-- Grupo de Casos -->
+                                <optgroup label="Casos">
+                                    {% for caso in casos %}
+                                    <option value="{{ caso.id_caso }}">{{ caso.nombre_caso }}</option>
+                                    {% endfor %}
+                                </optgroup>
+
+                                <!-- Grupo de Fundaciones -->
+                                <optgroup label="Fundaciones">
+                                    {% for fundacion in fundaciones %}
+                                    <option value="{{ fundacion.id_fundacion }}">{{ fundacion.nombre_fundacion }}
+                                    </option>
+                                    {% endfor %}
+                                </optgroup>
+                            </select>
                         </div>
 
                         <!-- Donation Option -->
                         <div class="mt-8">
                             <h3 class="text-lg font-semibold text-gray-800">¿Monto de la donación?</h3>
-                            <select class="w-full mt-4 px-4 py-3 bg-white text-gray-800 rounded-md border focus:outline-blue-600">
+                            <select id="donationOption"
+                                class="w-full mt-4 px-4 py-3 bg-white text-gray-800 rounded-md border focus:outline-blue-600">
                                 <option value="0">Selecciona un monto</option>
-                                <option value="5">$5</option>
-                                <option value="10">$10</option>
-                                <option value="20">$20</option>
+                                <option value="5000">$5.000</option>
+                                <option value="10000">$10.000</option>
+                                <option value="20000">$20.000</option>
                             </select>
                         </div>
                     </form>
@@ -53,9 +85,7 @@
                     <h2 class="text-2xl font-bold text-white">Método de Pago</h2>
                     <div class="mt-8">
                         <label class="block text-white mb-2">Número de Tarjeta</label>
-                        <input type="text" placeholder="Número de Tarjeta"
-                            maxlength="16"
-                            pattern="\d{16}"
+                        <input type="text" placeholder="Número de Tarjeta" maxlength="16" pattern="\d{16}"
                             inputmode="numeric"
                             class="px-4 py-3 w-full rounded-md bg-white text-gray-800 border border-gray-300 focus:outline-blue-600" />
                     </div>
@@ -63,22 +93,25 @@
                         <label for="card-expiration-input" class="block text-white mb-2">Fecha de Expiración*</label>
                         <div class="relative">
                             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
-                                <svg class="h-4 w-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                                    <path fill-rule="evenodd" d="M5 5a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a2 2 0 0 1 2-2ZM3 19v-7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Zm6.01-6a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm-10 4a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z" clip-rule="evenodd"/>
+                                <svg class="h-4 w-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd"
+                                        d="M5 5a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 1 1 0 1 1 2 0 1 1 0 0 0 1 1h1a1 1 0 0 0 1-1 2 2 0 0 1 2 2v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a2 2 0 0 1 2-2ZM3 19v-7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Zm6.01-6a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm-10 4a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm6 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0Zm2 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z"
+                                        clip-rule="evenodd" />
                                 </svg>
                             </div>
-                            <input id="card-expiration-input" type="text" class="block w-full rounded-lg border border-gray-300 bg-gray-50 pl-10 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500" placeholder="MM/YY" required />
+                            <input id="card-expiration-input" type="text"
+                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 pl-10 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                                placeholder="MM/YY" required />
                         </div>
                     </div>
                     <div class="mt-4">
                         <label class="block text-white mb-2">CVV</label>
-                        <input type="text" placeholder="CVV"
-                            maxlength="3"
-                            pattern="\d{3}"
-                            inputmode="numeric"
+                        <input type="text" placeholder="CVV" maxlength="3" pattern="\d{3}" inputmode="numeric"
                             class="px-4 py-3 w-full rounded-md bg-white text-gray-800 border border-gray-300 focus:outline-blue-600" />
                     </div>
-                    <button id="payNowBtn" class="w-full mt-6 py-3 bg-[#18beaa] text-white rounded-md">Pagar Ahora</button>
+                    <button id="payNowBtn" class="w-full mt-6 py-3 bg-[#18beaa] text-white rounded-md">Pagar
+                        Ahora</button>
 
                 </div>
 
@@ -86,24 +119,26 @@
         </div>
     </div>
 </div>
-
-
 <!-- Modal -->
 <div id="cartModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 hidden">
     <div class="relative p-4 w-full max-w-sm bg-white rounded-lg shadow-md text-center">
         <!-- Botón para cerrar el modal -->
-        <button type="button" id="closeModalBtn" class="absolute top-3 right-3 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center">
+        <button type="button" id="closeModalBtn"
+            class="absolute top-3 right-3 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center">
             <span class="sr-only">Cerrar modal</span>
         </button>
 
         <!-- Contenido del modal -->
         <div class="p-4 md:p-5 text-center">
-            <svg class="mx-auto mb-4 text-teal-600 w-10 h-10" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            <svg class="mx-auto mb-4 text-teal-600 w-10 h-10" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M5 13l4 4L19 7" />
             </svg>
             <h2 class="text-lg font-semibold mb-4 text-teal-600">Donación completada con éxito</h2>
             <p class="text-gray-700 mb-6">¡Gracias por donar, el resumen de tu pedido se ha enviado a tu correo!</p>
-            <button id="acceptModalBtn" class="text-white bg-teal-600 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm inline-flex items-center px-4 py-2 text-center">
+            <button id="acceptModalBtn"
+                class="text-white bg-teal-600 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm inline-flex items-center px-4 py-2 text-center">
                 Aceptar
             </button>
         </div>
@@ -112,7 +147,7 @@
 
 
 <!-- Include flatpickr JS -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> 
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <!-- Include flatpickr Spanish locale -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 
