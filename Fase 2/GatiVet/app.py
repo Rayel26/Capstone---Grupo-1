@@ -870,8 +870,8 @@ def profile_vet():
     if user_id is None:
         return "No se encontró el ID de usuario en la sesión."
 
-    # Realizar la consulta sin comillas adicionales alrededor de user_id
-    vet_data = supabase.table('Usuario').select('*').eq('id_usuario', user_id).execute()
+    # Usar .filter en lugar de .eq para realizar la consulta
+    vet_data = supabase.table('Usuario').select('*').filter('id_usuario', 'eq', user_id).execute()
 
     # Verificar si se encontraron datos del veterinario
     if not vet_data.data:
@@ -885,7 +885,7 @@ def profile_vet():
     # Verificar si existe id_domicilio
     if id_domicilio:
         # Obtener los datos de domicilio usando id_domicilio desde la tabla Domicilio
-        domicilio_data = supabase.table('Domicilio').select('*').eq('id_domicilio', id_domicilio).execute()
+        domicilio_data = supabase.table('Domicilio').select('*').filter('id_domicilio', 'eq', id_domicilio).execute()
 
         # Verificar si se encontraron datos de domicilio
         if domicilio_data.data:
@@ -901,6 +901,7 @@ def profile_vet():
 
     # Renderizar la plantilla con los datos del veterinario y su domicilio
     return render_template('profile_vet.html', vet=vet)
+
 
 #Ruta guardar datos veterinarios
 @app.route('/save_vet_data', methods=['POST']) 
