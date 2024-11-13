@@ -830,18 +830,11 @@
                             <option value="antihistamínicos">Antihistamínicos y medicamentos antialérgicos</option>
                         </select>
                     </div>
-
-                    <!-- Filtro por Mes de Ingreso -->
-                    <div>
-                        <label for="monthFilter" class="mr-1 text-gray-700 text-xs">Filtrar por mes:</label>
-                        <input type="month" id="monthFilter" class="border rounded py-1 px-1 text-gray-700 text-xs"
-                            onchange="filterByMonth()">
-                    </div>
                 </div>
 
                 <!-- Botón para exportar a Excel -->
                 <button class="text-white py-1 px-3 rounded hover:bg-teal-500 transition duration-200 text-sm"
-                    style="background-color: #18beaa;" onclick="exportToExcel()">
+                    style="background-color: #18beaa;" onclick="exportMedicinesToExcel()">
                     Exportar a Excel
                 </button>
             </div>
@@ -863,6 +856,7 @@
                     <!-- Aquí se mostrarán los medicamentos filtrados -->
                 </tbody>
             </table>
+
 
             <!-- Controles de Paginación -->
             <div id="paginationControls" class="mt-4 flex justify-center items-center">
@@ -994,6 +988,8 @@
                             placeholder="Descripción del medicamento"></textarea>
                     </div>
                     <!-- Imagen del Producto -->
+                    <input type="hidden" id="imagen_url" name="imagen_url">
+
                     <div>
                         <label for="medicationImage" class="block text-gray-700">Seleccionar Imagen del
                             Producto:</label>

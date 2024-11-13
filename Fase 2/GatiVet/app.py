@@ -2457,22 +2457,29 @@ def add_medicine():
         print('Error de Supabase:', response.error)
         return jsonify({'success': False, 'error': 'Error al agregar medicamento.', 'details': response.error}), 400
 
-# Nueva ruta para obtener todos los medicamentos
+# Ruta para obtener medicamentos
 @app.route('/api/obtener_medicamentos', methods=['GET'])
 def obtener_lista_medicamentos():
     try:
-        # Ejecuta la consulta en Supabase
-        response = supabase.table('Medicamentos').select('*').execute()
+        # Obtiene los filtros de la URL
+        tipo_medicamento = request.args.get('tipo_medicamento')
 
-        # Imprimir la respuesta completa para depuración
+        # Construye la consulta dinámica basada en los filtros
+        query = supabase.table('Medicamentos').select('*')
+
+        # Aplica el filtro por tipo de medicamento si existe
+        if tipo_medicamento:
+            query = query.eq('tipo_medicamento', tipo_medicamento)
+
+        # Ejecuta la consulta
+        response = query.execute()
+
+        # Imprime la respuesta completa para depuración
         print("Contenido completo de la respuesta:", response)
 
         # Comprobamos si la respuesta tiene datos
         if not response.data:
             print("No se encontraron medicamentos en la respuesta.")
-            print("Tipo de respuesta:", type(response))
-            print("Código de estado de la respuesta:", response.status_code)
-
             return jsonify({'error': 'No se encontraron medicamentos'}), 404
         
         # Retornar los datos obtenidos

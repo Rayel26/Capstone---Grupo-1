@@ -1897,6 +1897,8 @@ async function deleteFoundation(foundationId) {
 
 // MEDICAMENTOS
 
+let medicines = [];  // Definir la variable global de medicamentos
+
 // Función para cargar las imágenes de medicamentos desde Cloudinary
 async function loadMedicationImages() {
     try {
@@ -1917,6 +1919,30 @@ async function loadMedicationImages() {
     } catch (error) {
         console.error('Error loading images:', error);
     }
+}
+
+// Función para exportar la tabla de medicamentos a Excel
+function exportMedicinesToExcel() {
+    const table = document.getElementById('medicineTableExt');  // Tabla de medicamentos
+    const rows = table.querySelectorAll('tr');
+    const ws_data = [];  // No incluir encabezado
+
+    rows.forEach(row => {
+        const rowData = [
+            row.cells[0].innerText,
+            row.cells[1].innerText,
+            row.cells[2].innerText,
+            row.cells[3].innerText,
+            row.cells[4].innerText
+        ];
+        ws_data.push(rowData);
+    });
+
+    const ws = XLSX.utils.aoa_to_sheet(ws_data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Stock de Medicamentos');
+    XLSX.writeFile(wb, 'stock_medicamentos.xlsx');
+    alert('Exportación de medicamentos completada.');
 }
 
 // Función para actualizar la vista previa de la imagen seleccionada de Cloudinary
@@ -1989,8 +2015,8 @@ async function uploadToCloudinary() {
     }
 }
 
-// Vista previa de la imagen seleccionada desde PC
-document.getElementById('medicationFile').addEventListener('change', function(event) {
+// Vista previa de la imagen seleccionada desde PC y subir a Cloudinary
+document.getElementById('medicationFile').addEventListener('change', async function(event) {
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
@@ -2000,8 +2026,12 @@ document.getElementById('medicationFile').addEventListener('change', function(ev
             previewImage.classList.remove('hidden');
         };
         reader.readAsDataURL(file);
+        
+        // Subir la imagen a Cloudinary
+        await uploadToCloudinary();
     }
 });
+
 
 // Función para enviar el medicamento
 function submitMedicine(event) {
@@ -2073,8 +2103,21 @@ function sendMedicineData(imagenUrl) {
 
 // Función para obtener los medicamentos y llenar la tabla
 async function fetchMedicines() {
+    // Obtiene los valores de los filtros
+    const medicineFilter = document.getElementById('medicineFilter').value;
+
     try {
-        const response = await fetch('/api/obtener_medicamentos');  // Nueva ruta de API
+        // Construye la URL con el filtro de tipo de medicamento
+        let url = '/api/obtener_medicamentos?';
+        if (medicineFilter) {
+            url += `tipo_medicamento=${medicineFilter}&`;
+        }
+
+        // Elimina el último '&' si está presente
+        url = url.endsWith('&') ? url.slice(0, -1) : url;
+
+        // Hace la solicitud fetch con los parámetros de filtro
+        const response = await fetch(url);  
 
         if (!response.ok) {
             console.error('Error al obtener medicamentos:', response.status, response.statusText);
@@ -2082,7 +2125,7 @@ async function fetchMedicines() {
         }
 
         const medicines = await response.json();  // Convierte la respuesta a JSON
-        
+
         // Selecciona el tbody de la tabla
         const tableBody = document.getElementById('medicineTableBody');
         tableBody.innerHTML = ''; // Limpia la tabla antes de llenarla
@@ -2092,12 +2135,12 @@ async function fetchMedicines() {
             const row = document.createElement('tr');
 
             // Crea celdas para cada campo y añade a la fila
-            row.innerHTML = `
-                <td class="py-1 px-2 border-b">${medicine.nombre}</td>
+            row.innerHTML = ` 
+                <td class="py-1 px-2 border-b">${medicine.nombre || 'No disponible'}</td>
                 <td class="py-1 px-2 border-b">${medicine.tipo_medicamento || 'No disponible'}</td>
                 <td class="py-1 px-2 border-b">${medicine.marca || 'No disponible'}</td>
-                <td class="py-1 px-2 border-b">${medicine.stock}</td>
-                <td class="py-1 px-2 border-b">${new Date(medicine.fecha_ingreso).toLocaleDateString()}</td>
+                <td class="py-1 px-2 border-b">${medicine.stock || 0}</td>
+                <td class="py-1 px-2 border-b">${new Date(medicine.fecha_ingreso).toLocaleDateString() || 'Fecha no disponible'}</td>
                 <td class="py-1 px-2 border-b">
                     <!-- Celda de Acción -->
                 </td>
@@ -2107,21 +2150,15 @@ async function fetchMedicines() {
             const editButton = document.createElement('button');
             editButton.textContent = 'Editar';
             editButton.className = 'text-blue-500 hover:underline mr-2';  // Agregar espacio entre los botones
-
-            // Llama a la función de mostrar el modal
-            console.log(medicine); // Verifica si 'medicine' tiene un 'id'
-            // Asegúrate de pasar el campo correcto 'id_medicamento' en lugar de 'id'.
             editButton.onclick = () => showEditModal(medicine.id_medicamento);
 
-
-             // Boton eliminar
+            // Boton eliminar
             const actionButton = document.createElement('button');
             actionButton.textContent = 'Eliminar';
             actionButton.className = 'text-red-500 hover:underline';
             actionButton.onclick = () => {
-                console.log("ID del medicamento:", medicine.id_medicamento);  // Verifica el ID antes de hacer la solicitud
                 if (medicine.id_medicamento) {
-                    deleteMedicine(medicine.id_medicamento);  // Llama a la función de eliminación con el id_medicamento
+                    deleteMedicine(medicine.id_medicamento);
                 } else {
                     console.error('ID del medicamento no disponible');
                 }
@@ -2139,6 +2176,12 @@ async function fetchMedicines() {
         console.error('Error al obtener medicamentos:', error);
     }
 }
+
+// Llama la función cuando cambian los filtros
+function filterMedicines() {
+    fetchMedicines();  // Vuelve a llamar la función de obtener medicamentos
+}
+
 
 function showEditModal(medicineId) {
     const modal = document.getElementById('editMedicineModal');
@@ -2266,11 +2309,6 @@ async function deleteMedicine(medicineId) {
         alert('Error al eliminar el medicamento. Intenta nuevamente.');
     }
 }
-
-
-
-
-
 
 // Llama a la función cuando la página se carga
 document.addEventListener('DOMContentLoaded', fetchMedicines);
