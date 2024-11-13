@@ -96,7 +96,7 @@ function isValidRut(rut) {
     return rutPattern.test(rut);
 }
 
-// Formatear RUT
+// Formatear RUT (solo para la interfaz de usuario)
 function formatRut() {
     const input = document.getElementById('rut-input');
     let value = input.value.replace(/[^0-9kK]/g, ''); // Eliminar caracteres no válidos
@@ -117,8 +117,8 @@ async function updateUserCard(id_usuario) {
 
     try {
         // Realizar una solicitud GET al endpoint de Flask con el id_usuario proporcionado
-        const response = await fetch(`/api/get_user_by_id?id_usuario=${id_usuario}`);
-        
+        const response = await fetch(`/api/get_user_by_id?id_usuario=${encodeURIComponent(id_usuario)}`);
+
         if (response.ok) {
             const user = await response.json();
             
@@ -140,12 +140,6 @@ async function updateUserCard(id_usuario) {
     }
 }
 
-// Función para normalizar el RUT quitando puntos y guión
-function normalizeRut(rut) {
-    return rut.replace(/\./g, '').replace(/-/g, '');
-}
-
-
 // Evento del botón para continuar
 const button = document.querySelector('button');
 
@@ -158,11 +152,11 @@ button.onclick = async function() {
         return;
     }
 
-    // Normalizar el RUT para usarlo en la consulta
-    const id_usuario = normalizeRut(rut);
+    // Usar el RUT tal cual está (sin normalizar)
+    const id_usuario = rut; // El RUT con los puntos y guion
 
     // Actualizar la tarjeta del usuario llamando al backend para obtener los datos
-    await updateUserCard(id_usuario);  // Llama a la función con el RUT normalizado
+    await updateUserCard(id_usuario);
     
     // Cargar las mascotas del usuario
     await loadPets(id_usuario); // Llama a la función de cargar mascotas con el ID normalizado
@@ -170,6 +164,8 @@ button.onclick = async function() {
     // Lógica para continuar al siguiente paso
     nextStep('step-id', 'step-search', 'id-icon');
 };
+
+
 
 //Funcion para llamar a los doctores en agenda
 function loadDoctors() {

@@ -2020,18 +2020,32 @@ def get_medical_record():
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
-##Obtener usuarios por rut
 @app.route('/api/get_user_by_id', methods=['GET'])
 def get_user_by_id():
     # Obtener el RUT del parámetro de la solicitud
     id_usuario = request.args.get('id_usuario')
-    
-    # Normalizar el RUT quitando puntos y guiones
-    id_usuario = id_usuario.replace('.', '').replace('-', '')
+
+    # Imprimir el valor recibido de id_usuario para depuración
+    print(f"Recibiendo id_usuario: {id_usuario}")
+
+    # Validar que el id_usuario no sea None o vacío
+    if not id_usuario:
+        return jsonify({"error": "El parámetro 'id_usuario' es obligatorio."}), 400  # Si el valor es None o vacío
 
     try:
-        # Consulta con el RUT normalizado utilizando .filter()
-        response = supabase.table('Usuario').select('nombre, appaterno, apmaterno, celular, id_domicilio').filter('id_usuario', 'eq', id_usuario).execute()
+        # Asegurarse de que id_usuario se trata como texto al hacer la consulta
+        id_usuario_str = str(id_usuario)  # Forzar que id_usuario sea un string
+
+        # Imprimir la consulta que se va a ejecutar para depuración
+        print(f"Ejecutando consulta con id_usuario: {id_usuario_str}")
+        
+        # Realizar la consulta en Supabase asegurándose de que se pase como texto
+        response = supabase.table('Usuario').select('nombre, appaterno, apmaterno, celular, id_domicilio') \
+                                           .filter('id_usuario', 'eq', id_usuario_str) \
+                                           .execute()
+
+        # Depuración adicional para ver la respuesta de la consulta
+        print(f"Respuesta de la consulta de Usuario: {response.data}")
 
         if response.data:
             user_data = response.data[0]
@@ -2042,6 +2056,10 @@ def get_user_by_id():
 
             # Obtener la dirección desde la tabla Domicilio usando id_domicilio como clave externa
             domicilio_response = supabase.table('Domicilio').select('direccion').filter('id_domicilio', 'eq', user_data['id_domicilio']).execute()
+
+            # Depuración adicional para la consulta de domicilio
+            print(f"Respuesta de la consulta de Domicilio: {domicilio_response.data}")
+
             direccion = domicilio_response.data[0]['direccion'] if domicilio_response.data else 'Dirección no encontrada'
 
             # Responder con los datos del usuario
@@ -2054,8 +2072,10 @@ def get_user_by_id():
             return jsonify({'error': 'Usuario no encontrado'}), 404
 
     except Exception as e:
+        # Imprimir detalles completos del error
         print(f"Ocurrió un error al obtener el usuario: {e}")
         return jsonify({"error": "Error al obtener usuario", "details": str(e)}), 500
+
 
 ##Obtener doctores
 @app.route('/api/get_doctors', methods=['GET'])
