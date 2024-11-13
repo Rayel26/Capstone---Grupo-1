@@ -848,47 +848,90 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-
-document.getElementById('modalPassword').addEventListener('input', function() {
-    const password = this.value;
+document.addEventListener('DOMContentLoaded', function() {
+    // Obtener los elementos
+    const modalPassword = document.getElementById('modalPassword');
     const errorMessage = document.getElementById('password-error-message');
-    const requirementsMessage = document.getElementById('password-requirements');
     const requirementsInfo = document.getElementById('pswd_info');
 
-    // Mostrar cuadro de requisitos
-    requirementsInfo.classList.remove('hidden');
+    // Depuración: Verificar que los elementos existen
+    console.log('modalPassword:', modalPassword);
+    console.log('errorMessage:', errorMessage);
+    console.log('requirementsInfo:', requirementsInfo);
 
-    // Comprobar requisitos
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasLowerCase = /[a-z]/.test(password);
-    const hasNumber = /[0-9]/.test(password);
-
-    // Actualizar requisitos visualmente
-    
-    document.getElementById('capital').classList.toggle('valid', hasUpperCase);
-    document.getElementById('capital').classList.toggle('invalid', !hasUpperCase);
-    
-    document.getElementById('letter').classList.toggle('valid', hasLowerCase);
-    document.getElementById('letter').classList.toggle('invalid', !hasLowerCase);
-    
-    document.getElementById('number').classList.toggle('valid', hasNumber);
-    document.getElementById('number').classList.toggle('invalid', !hasNumber);
-    
-
-    // Mensaje de error
-    if (!hasUpperCase || !hasNumber) {
-        errorMessage.classList.remove('hidden');
-    } else {
-        errorMessage.classList.add('hidden');
+    // Asegúrate de que los elementos existen antes de agregar el evento
+    if (!modalPassword) {
+        console.error('No se encontró el elemento modalPassword en el DOM.');
+    }
+    if (!errorMessage) {
+        console.error('No se encontró el elemento password-error-message en el DOM.');
+    }
+    if (!requirementsInfo) {
+        console.error('No se encontró el elemento pswd_info en el DOM.');
     }
 
-    requirementsMessage.innerHTML = requirementsText;
-    requirementsMessage.classList.remove('hidden');
+    // Si algún elemento falta, no continuar con el script
+    if (!modalPassword || !requirementsInfo || !errorMessage) {
+        console.error('Algún elemento no se encontró en el DOM. Deteniendo la ejecución.');
+        return;
+    }
+
+    // Event listener para la contraseña
+    modalPassword.addEventListener('input', function() {
+        const password = this.value;
+
+        console.log('Contraseña ingresada:', password); // Depuración: Mostrar la contraseña ingresada
+
+        // Mostrar cuadro de requisitos
+        requirementsInfo.classList.remove('hidden'); // Esto debería hacer que el cuadro de requisitos sea visible
+        console.log('Se mostró el cuadro de requisitos.');
+
+        // Comprobar requisitos
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasLowerCase = /[a-z]/.test(password);
+        const hasNumber = /[0-9]/.test(password);
+
+        console.log('Mayúsculas:', hasUpperCase);
+        console.log('Minúsculas:', hasLowerCase);
+        console.log('Número:', hasNumber);
+
+        // Actualizar requisitos visualmente
+        const capitalElement = document.getElementById('capital');
+        const letterElement = document.getElementById('letter');
+        const numberElement = document.getElementById('number');
+
+        console.log('Actualizando requisitos visualmente...');
+        capitalElement.classList.toggle('valid', hasUpperCase);
+        capitalElement.classList.toggle('invalid', !hasUpperCase);
+
+        letterElement.classList.toggle('valid', hasLowerCase);
+        letterElement.classList.toggle('invalid', !hasLowerCase);
+
+        numberElement.classList.toggle('valid', hasNumber);
+        numberElement.classList.toggle('invalid', !hasNumber);
+
+        // Mensaje de error
+        if (!hasUpperCase || !hasNumber) {
+            errorMessage.classList.remove('hidden');
+            console.log('Mostrando mensaje de error: La contraseña no es válida.');
+        } else {
+            errorMessage.classList.add('hidden');
+            console.log('Contraseña válida. Ocultando mensaje de error.');
+        }        
+    });
 });
+
+
 
 // Función para mostrar/ocultar la contraseña
 function togglePasswordVisibility(inputId, toggleIcon) {
     const input = document.getElementById(inputId);
+    
+    if (!input) {
+        console.error(`El campo con ID ${inputId} no se encuentra en el DOM.`);
+        return; // Si no se encuentra el input, salimos de la función
+    }
+
     if (input.type === "password") {
         input.type = "text";
         toggleIcon.textContent = '🙈'; // Cambia el ícono a uno que indica que la contraseña es visible
@@ -897,6 +940,18 @@ function togglePasswordVisibility(inputId, toggleIcon) {
         toggleIcon.textContent = '👁️'; // Cambia el ícono a uno que indica que la contraseña está oculta
     }
 }
+
+// Mostrar el mensaje de error
+function showError() {
+    document.getElementById('password-error-message').classList.remove('hidden');
+}
+
+// Ocultar el mensaje de error
+function hideError() {
+    document.getElementById('password-error-message').classList.add('hidden');
+}
+
+
 
 // Funciones para abrir y cerrar modales de editar usuario
 // Función para abrir el modal de edición
