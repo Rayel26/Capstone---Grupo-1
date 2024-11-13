@@ -2483,6 +2483,25 @@ def obtener_lista_medicamentos():
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
+@app.route('/api/medicamentos/<int:medicine_id>', methods=['DELETE'])
+@login_required
+@role_required('admin')
+def delete_medicine(medicine_id):
+    # Verificar si el medicamento existe
+    response = supabase.table('Medicamentos').select('*').eq('id_medicamento', medicine_id).execute()
+
+    if not response.data:
+        return jsonify({'error': 'Medicamento no encontrado.'}), 404
+
+    # Eliminar el medicamento de la base de datos
+    delete_response = supabase.table('Medicamentos').delete().eq('id_medicamento', medicine_id).execute()
+
+    if delete_response.data:
+        return jsonify({'success': True, 'message': 'Medicamento eliminado exitosamente.'}), 200
+    else:
+        return jsonify({'error': 'Error al eliminar el medicamento.'}), 400
+
+
 if __name__ == '__main__':
     app.run(debug=True)  # Ejecuta la aplicación en modo depuración
 

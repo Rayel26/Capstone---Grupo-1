@@ -2111,7 +2111,15 @@ async function fetchMedicines() {
             const actionButton = document.createElement('button');
             actionButton.textContent = 'Eliminar';
             actionButton.className = 'text-red-500 hover:underline';
-            actionButton.onclick = () => deleteMedicine(medicine.id);  // Llama a la función de eliminación
+            actionButton.onclick = () => {
+                console.log("ID del medicamento:", medicine.id_medicamento);  // Verifica el ID antes de hacer la solicitud
+                if (medicine.id_medicamento) {
+                    deleteMedicine(medicine.id_medicamento);  // Llama a la función de eliminación con el id_medicamento
+                } else {
+                    console.error('ID del medicamento no disponible');
+                }
+            };
+
 
             // Selecciona la celda de acción y agrega los botones
             const actionCell = row.querySelector('td:last-child');  // Seleccionar la última celda (Acción)
@@ -2134,11 +2142,35 @@ function editMedicine(id) {
 }
 
 // Función para manejar la eliminación de un medicamento
-function deleteMedicine(id) {
-    console.log('Eliminar medicamento con ID:', id);
-    // Aquí deberías implementar la lógica para eliminar el medicamento.
-    // Podrías hacer una llamada a la API para eliminarlo del servidor.
+async function deleteMedicine(medicineId) {
+    if (!confirm('¿Estás seguro de que quieres eliminar este medicamento?')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/medicamentos/${medicineId}`, {
+            method: 'DELETE',  // Método DELETE para eliminar el recurso
+        });
+
+        if (response.ok) {
+            const jsonResponse = await response.json();
+            alert(jsonResponse.message);
+
+            // Recarga la lista de medicamentos para reflejar los cambios
+            loadMedicines();
+        } else {
+            const errorResponse = await response.json();
+            alert(`Error: ${errorResponse.error}`);
+        }
+    } catch (error) {
+        console.error('Error al eliminar el medicamento:', error);
+        alert('Error al eliminar el medicamento. Intenta nuevamente.');
+    }
 }
+
+
+
+
 
 // Llama a la función cuando la página se carga
 document.addEventListener('DOMContentLoaded', fetchMedicines);
