@@ -252,23 +252,22 @@ def register_vet():
 
     try:
         # Extraer los datos del JSON
-        rut = data['id_usuario']
-        nombre = data['nombre']
-        appaterno = data['appaterno']
-        apmaterno = data['apmaterno']
-        correo = data['correo']
-        contraseña = data['contraseña']
-        celular = data['celular']
-        especialidad = data['especialidad']  # Nuevo campo
-        tipo_usuario = data['tipousuarioid']  # Permitir diferentes tipos de usuario
+        rut = data.get('id_usuario')
+        nombre = data.get('nombre')
+        appaterno = data.get('appaterno')
+        apmaterno = data.get('apmaterno')
+        correo = data.get('correo')
+        contraseña = data.get('contraseña')
+        celular = data.get('celular')
+        especialidad = data.get('especialidad')
+        tipo_usuario = data.get('tipousuarioid')
 
         # Validaciones adicionales (si es necesario)
         if not (rut and nombre and correo and contraseña and celular and especialidad):
             return jsonify({"error": "Faltan campos requeridos."}), 400
 
         # Obtener la fecha actual en el formato "YYYY-MM-DD"
-        fecha_creacion = datetime.now().strftime("%Y-%m-%d")  # Formatear la fecha
-
+        fecha_creacion = datetime.now().strftime("%Y-%m-%d")
 
         # Inserta los datos en Supabase
         response = supabase.table('Usuario').insert({
@@ -279,18 +278,19 @@ def register_vet():
             'correo': correo,
             'contraseña': contraseña,
             'celular': celular,
-            'especialidad': especialidad,  # Agregar especialidad
-            'tipousuarioid': tipo_usuario,  # Usar el tipo de usuario proporcionado
-            'fecha_creacion': fecha_creacion  # Agregar la fecha de creación
+            'especialidad': especialidad,
+            'tipousuarioid': tipo_usuario,
+            'fecha_creacion': fecha_creacion
         }).execute()
 
-        # Log para ver la respuesta de Supabase
-        print("Respuesta de Supabase:", response)
+        # Log para ver la respuesta completa de Supabase
+        print("Respuesta completa de Supabase:", response)
 
-        # Verificar la respuesta de Supabase
-        if response.data:  # Verificar si hay datos en la respuesta
+        # Verificar si la respuesta de Supabase contiene datos
+        if response.data:
             return jsonify({"message": "Veterinario creado exitosamente", "data": response.data}), 201
         else:
+            print(f"Error al obtener respuesta válida de Supabase: {response}")
             return jsonify({"error": "Error al crear el veterinario", "details": response.error}), 400
 
     except KeyError as e:
