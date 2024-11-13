@@ -2401,6 +2401,32 @@ def add_medicine():
         return jsonify({'message': 'Medicamento agregado exitosamente'}), 201
     else:
         return jsonify({'error': 'Error al agregar medicamento'}), 500
+    
+
+# Nueva ruta para obtener todos los medicamentos
+@app.route('/api/obtener_medicamentos', methods=['GET'])
+def obtener_lista_medicamentos():
+    try:
+        # Ejecuta la consulta en Supabase
+        response = supabase.table('Medicamentos').select('*').execute()
+
+        # Imprimir la respuesta completa para depuración
+        print("Contenido completo de la respuesta:", response)
+
+        # Comprobamos si la respuesta tiene datos
+        if not response.data:
+            print("No se encontraron medicamentos en la respuesta.")
+            print("Tipo de respuesta:", type(response))
+            print("Código de estado de la respuesta:", response.status_code)
+
+            return jsonify({'error': 'No se encontraron medicamentos'}), 404
+        
+        # Retornar los datos obtenidos
+        return jsonify(response.data), 200
+
+    except Exception as e:
+        print("Error al procesar la solicitud:", str(e))
+        return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)  # Ejecuta la aplicación en modo depuración
