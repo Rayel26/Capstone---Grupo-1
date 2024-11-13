@@ -1896,6 +1896,7 @@ async function deleteFoundation(foundationId) {
 
 
 // MEDICAMENTOS
+
 // Función para cargar las imágenes de medicamentos desde Cloudinary
 async function loadMedicationImages() {
     try {
@@ -2101,14 +2102,17 @@ async function fetchMedicines() {
                     <!-- Celda de Acción -->
                 </td>
             `;
-            
+
             // Boton editar
             const editButton = document.createElement('button');
             editButton.textContent = 'Editar';
             editButton.className = 'text-blue-500 hover:underline mr-2';  // Agregar espacio entre los botones
 
             // Llama a la función de mostrar el modal
-            editButton.onclick = () => showEditModal(medicine.id);
+            console.log(medicine); // Verifica si 'medicine' tiene un 'id'
+            // Asegúrate de pasar el campo correcto 'id_medicamento' en lugar de 'id'.
+            editButton.onclick = () => showEditModal(medicine.id_medicamento);
+
 
              // Boton eliminar
             const actionButton = document.createElement('button');
@@ -2123,7 +2127,6 @@ async function fetchMedicines() {
                 }
             };
 
-
             // Selecciona la celda de acción y agrega los botones
             const actionCell = row.querySelector('td:last-child');  // Seleccionar la última celda (Acción)
             actionCell.appendChild(editButton);
@@ -2137,17 +2140,45 @@ async function fetchMedicines() {
     }
 }
 
-// Función para abrir el modal de edición
 function showEditModal(medicineId) {
     const modal = document.getElementById('editMedicineModal');
     const editMedicineId = document.getElementById('editMedicineId');
-    
+    const editMedicineName = document.getElementById('editMedicineName');
+    const editMedicineDescription = document.getElementById('editMedicineDescription');
+    const editMedicineType = document.getElementById('editMedicineType');
+    const editMedicineBrand = document.getElementById('editMedicineBrand');
+    const editMedicineStock = document.getElementById('editMedicineStock');
+
+    console.log("ID del medicamento:", medicineId);
+
     // Establece el ID del medicamento en el campo oculto
     editMedicineId.value = medicineId;
-    
-    // Muestra el modal
+
+    // Verifica que medicineId esté definido correctamente
+    if (!medicineId) {
+        console.error("ID del medicamento no definido");
+        return;
+    }
+
+    // Solicitar los datos del medicamento por su ID
+    fetch(`/api/medicamentos/${medicineId}`)
+        .then(response => response.json())
+        .then(data => {
+            // Cargar los datos en los campos del modal
+            if (data) {
+                editMedicineName.value = data.nombre;
+                editMedicineDescription.value = data.descripcion;
+                editMedicineType.value = data.tipo_medicamento;
+                editMedicineBrand.value = data.marca;
+                editMedicineStock.value = data.stock;
+            }
+        })
+        .catch(error => console.error('Error fetching medicine data:', error));
+
+    // Mostrar el modal
     modal.classList.remove('hidden');
 }
+
 
 // Función para cerrar el modal
 function closeModalMedicine() {
@@ -2155,13 +2186,59 @@ function closeModalMedicine() {
     modal.classList.add('hidden');
 }
 
+function updateMedicine(event) {
+    event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
 
-// Función para manejar la edición de un medicamento
-function editMedicine(id) {
-    console.log('Editar medicamento con ID:', id);
-    // Aquí deberías implementar la lógica para editar el medicamento,
-    // como abrir un formulario de edición o redirigir a otra página.
+    const medicineId = document.getElementById('editMedicineId').value;
+
+    if (!medicineId) {
+        console.error("El ID del medicamento es inválido.");
+        return;
+    }
+
+    const medicineName = document.getElementById('editMedicineName').value;
+    const medicineDescription = document.getElementById('editMedicineDescription').value;
+    const medicineType = document.getElementById('editMedicineType').value;
+    const medicineBrand = document.getElementById('editMedicineBrand').value;
+    const medicineStock = document.getElementById('editMedicineStock').value;
+
+    // Prepara los datos para la solicitud PUT
+    const data = {
+        nombre: medicineName,
+        descripcion: medicineDescription,
+        tipo_medicamento: medicineType,
+        marca: medicineBrand,
+        stock: medicineStock
+    };
+
+    // Realiza la solicitud PUT
+    fetch(`http://127.0.0.1:5000/api/medicamentos/${medicineId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (response.ok) {
+            // Mostrar mensaje de éxito
+            const successMessage = document.getElementById('successMessageMedicine');
+            successMessage.textContent = 'Medicamento actualizado exitosamente.';
+            successMessage.classList.remove('hidden');
+
+            // Cerrar el modal y recargar la lista de medicamentos después de 2 segundos
+            setTimeout(() => {
+                successMessage.classList.add('hidden');
+                closeModalMedicine(); // Cierra el modal de edición de medicamentos
+                fetchMedicines(); // Recarga la lista de medicamentos
+            }, 2000); // Espera de 2 segundos antes de cerrar el modal
+        } else {
+            console.error('Error al actualizar el medicamento');
+        }
+    })
+    .catch(error => console.error('Error en la solicitud:', error));
 }
+
 
 // Función para manejar la eliminación de un medicamento
 async function deleteMedicine(medicineId) {

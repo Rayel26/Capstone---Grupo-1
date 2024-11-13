@@ -2412,7 +2412,6 @@ def get_medication_images():
     else:
         return jsonify({'error': 'Error fetching images from Cloudinary'}), response.status_code
 
-
 # Ruta para agregar medicamento
 @app.route('/api/medicamentos', methods=['POST'])
 @login_required
@@ -2483,6 +2482,44 @@ def obtener_lista_medicamentos():
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
+# Ruta para actualizar un medicamento
+@app.route('/api/medicamentos/<int:medicine_id>', methods=['PUT'])
+@login_required
+@role_required('admin')
+def update_medicine(medicine_id):
+    # Obtener datos del formulario
+    data = request.get_json()
+
+    # Verificar si se recibieron datos
+    if not data:
+        return jsonify({'error': 'No se recibió ningún dato.'}), 400
+
+    # Aquí procesas la actualización del medicamento en la base de datos
+    response = supabase.table('Medicamentos').update({
+        'nombre': data['nombre'],
+        'descripcion': data['descripcion'],
+        'tipo_medicamento': data['tipo_medicamento'],
+        'marca': data['marca'],
+        'stock': data['stock']
+    }).eq('id_medicamento', medicine_id).execute()
+
+    if response.data:
+        return jsonify({'success': True, 'message': 'Medicamento actualizado exitosamente.'}), 200
+    else:
+        return jsonify({'error': 'Error al actualizar medicamento.'}), 400
+
+@app.route('/api/medicamentos/<int:medicine_id>', methods=['GET'])
+@login_required
+@role_required('admin')
+def get_medicine(medicine_id):
+    response = supabase.table('Medicamentos').select('*').eq('id_medicamento', medicine_id).execute()
+
+    if response.data:
+        return jsonify(response.data[0]), 200  # Retorna los datos del medicamento
+    else:
+        return jsonify({'error': 'Medicamento no encontrado'}), 404
+
+#Eliminar medicamento
 @app.route('/api/medicamentos/<int:medicine_id>', methods=['DELETE'])
 @login_required
 @role_required('admin')
