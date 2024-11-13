@@ -1023,13 +1023,26 @@ def contact():
 def schedule():
     return render_template('schedule.html')
 
+# Ruta para la página de carrito
 @app.route('/cart')
 @login_required
 def cart():
-    # Verificar si el usuario está logueado
-    if not session.get('is_logged_in'):
-        session['cart'] = []  # Vaciar el carrito si no está logueado
-    return render_template('cart.html')
+    # Obtener el ID del usuario de la sesión
+    user_id = session.get('id_usuario')
+
+    # Consultar los datos del usuario desde la base de datos Supabase
+    usuario = supabase.table('Usuario').select('nombre', 'appaterno', 'correo', 'celular').filter('id_usuario', 'eq', user_id).execute()
+
+    # Asegúrate de que el usuario existe en la base de datos
+    if usuario.data:
+        usuario_data = usuario.data[0]  # Obtén el primer resultado de la consulta
+    else:
+        usuario_data = None
+
+    # Pasar los datos a la plantilla
+    return render_template('cart.html', usuario_data=usuario_data)
+
+
 
 @app.route('/save_sale', methods=['POST'])
 def save_sale():
