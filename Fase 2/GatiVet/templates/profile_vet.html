@@ -509,86 +509,75 @@
             <!-- Fin Contenido Datos del Paciente -->
 
             <!-- Modal de edición de mascota -->
-            <div id="modal-edit-pet" class="hidden fixed z-10 inset-0 overflow-y-auto">
-                <div class="flex items-center justify-center min-h-screen">
+            <div id="modal-edit-pet" class="hidden fixed z-10 inset-0 overflow-y-auto" style="background-color: rgba(0, 0, 0, 0.5);">
+                <div class="flex items-center justify-center min-h-screen" style="overflow: hidden; position: fixed; top: 0; left: 0; right: 0; bottom: 0;">
                     <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-                        <h2 class="text-2xl font-bold mb-4">Editar Información de Mascota</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <h2 class="text-2xl font-bold text-center text-gray-900 mb-6">Editar Información de Mascota</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Nombre -->
                             <div class="relative mb-4">
-                                <label for="modal-pet-name"
-                                    class="text-xs font-medium text-gray-900 block mb-2">Nombre:</label>
-                                <input type="text" name="modal-pet-name" id="modal-pet-name"
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
-                                    required>
+                                <label for="modal-pet-name" class="text-sm font-medium text-gray-900 block mb-2">Nombre:</label>
+                                <input type="text" name="modal-pet-name" id="modal-pet-name" class="shadow-md border border-gray-300 text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-3" disabled required>
                             </div>
+                            
+                            <!-- Edad -->
                             <div class="relative mb-4">
-                                <label for="modal-age"
-                                    class="text-xs font-medium text-gray-900 block mb-2">Edad:</label>
-                                <input type="text" name="modal-age" id="modal-age"
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
-                                    required>
+                                <label for="modal-age" class="text-sm font-medium text-gray-900 block mb-2">Edad:</label>
+                                <input type="text" name="modal-age" id="modal-age" class="shadow-md border border-gray-300 text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-3" disabled required>
                             </div>
+                            
+                            <!-- Fecha de nacimiento -->
                             <div class="relative mb-4">
-                                <label for="modal-birth-date" class="text-xs font-medium text-gray-900 block mb-2">Fecha
-                                    de nacimiento:</label>
-                                <input type="date" id="modal-birth-date" name="modal-birth-date"
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
-                                    required onchange="calculateAge()">
+                                <label for="modal-birth-date" class="text-sm font-medium text-gray-900 block mb-2">Fecha de nacimiento:</label>
+                                <input type="date" id="modal-birth-date" name="modal-birth-date" class="shadow-md border border-gray-300 text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-3" disabled required onchange="calculateAge()">
                             </div>
+                            
+                            <!-- Especie -->
                             <div class="relative mb-4">
-                                <label for="modal-species"
-                                    class="text-xs font-medium text-gray-900 block mb-2">Especie:</label>
-                                <input type="text" name="modal-species" id="modal-species"
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
-                                    required>
+                                <label for="modal-species" class="text-sm font-medium text-gray-900 block mb-2">Especie:</label>
+                                <input type="text" name="modal-species" id="modal-species" class="shadow-md border border-gray-300 text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-3" disabled required>
                             </div>
+                            
+                            <!-- Raza -->
                             <div class="relative mb-4">
-                                <label for="modal-breed"
-                                    class="text-xs font-medium text-gray-900 block mb-2">Raza:</label>
-                                <input type="text" name="modal-breed" id="modal-breed"
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
-                                    required>
+                                <label for="modal-breed" class="text-sm font-medium text-gray-900 block mb-2">Raza:</label>
+                                <input type="text" name="modal-breed" id="modal-breed" class="shadow-md border border-gray-300 text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-3" disabled required>
                             </div>
+                            
+                            <!-- Género -->
                             <div class="relative mb-4">
-                                <label for="modal-gender"
-                                    class="text-xs font-medium text-gray-900 block mb-2">Género:</label>
-                                <input type="text" name="modal-gender" id="modal-gender"
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
-                                    required>
+                                <label for="modal-gender" class="text-sm font-medium text-gray-900 block mb-2">Género:</label>
+                                <input type="text" name="modal-gender" id="modal-gender" class="shadow-md border border-gray-300 text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-3" required>
                             </div>
+                            
+                            <!-- Número de Microchip -->
                             <div class="relative mb-4">
-                                <label for="modal-microchip-number"
-                                    class="text-xs font-medium text-gray-900 block mb-2">Número de Microchip:</label>
-                                <input type="text" name="modal-microchip-number" id="modal-microchip-number"
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
-                                    required>
+                                <label for="modal-microchip-number" class="text-sm font-medium text-gray-900 block mb-2">Número de Microchip:</label>
+                                <input type="text" name="modal-microchip-number" id="modal-microchip-number" class="shadow-md border border-gray-300 text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-3" required>
                             </div>
+                            
+                            <!-- Tamaño -->
                             <div class="relative mb-4">
-                                <label for="modal-size"
-                                    class="text-xs font-medium text-gray-900 block mb-2">Tamaño:</label>
-                                <input type="text" name="modal-size" id="modal-size"
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
-                                    required>
+                                <label for="modal-size" class="text-sm font-medium text-gray-900 block mb-2">Tamaño:</label>
+                                <input type="text" name="modal-size" id="modal-size" class="shadow-md border border-gray-300 text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-3" required>
                             </div>
+                            
+                            <!-- Color de Pelaje -->
                             <div class="relative mb-4">
-                                <label for="modal-coat-color" class="text-xs font-medium text-gray-900 block mb-2">Color
-                                    de Pelaje:</label>
-                                <input type="text" name="modal-coat-color" id="modal-coat-color"
-                                    class="shadow-sm border border-gray-300 text-gray-900 sm:text-xs rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-2 input-short input-background"
-                                    required>
+                                <label for="modal-coat-color" class="text-sm font-medium text-gray-900 block mb-2">Color de Pelaje:</label>
+                                <input type="text" name="modal-coat-color" id="modal-coat-color" class="shadow-md border border-gray-300 text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-3" required>
                             </div>
-
                         </div>
-                        <!-- Asegúrate de tener un botón de guardar en el modal -->
-                        <button id="save-pet-button" onclick="savePetChanges()">Guardar cambios</button>
 
-                        <div class="mt-6 flex justify-end">
-                            <button onclick="cerrarModal()"
-                                class="bg-red-500 text-white px-4 py-2 rounded-md">Cerrar</button>
+                        <!-- Botón de guardar cambios -->
+                        <div class="flex justify-between mt-6">
+                            <button id="save-pet-button" onclick="savePetChanges()" class="bg-[#18beaa] text-white font-semibold py-2 px-6 rounded-lg hover:bg-[#18beaa] focus:outline-none focus:ring-2 focus:ring-[#18beaa]" style="background-color: #18beaa !important;">Guardar cambios</button>
+                            <button onclick="cerrarModal()" class="bg-red-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">Cerrar</button>
                         </div>
                     </div>
                 </div>
             </div>
+
 
             <!-- Contenido Historia Clínica -->
             <div id="tab2" class="hidden p-6">
@@ -936,7 +925,6 @@
             </div>
         </section>
 
-        <!-- Modal semanal -->
         <!-- Modal (inicialmente oculto) -->
         <div id="modalweek" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 flex hidden">
             <div class="bg-white rounded-lg p-6 w-96 shadow-xl relative">
