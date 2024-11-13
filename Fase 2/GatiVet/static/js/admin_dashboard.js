@@ -2157,7 +2157,7 @@ async function deleteMedicine(medicineId) {
             alert(jsonResponse.message);
 
             // Recarga la lista de medicamentos para reflejar los cambios
-            loadMedicines();
+            fetchMedicines();  // Llama a fetchMedicines para recargar los medicamentos
         } else {
             const errorResponse = await response.json();
             alert(`Error: ${errorResponse.error}`);
@@ -2167,6 +2167,7 @@ async function deleteMedicine(medicineId) {
         alert('Error al eliminar el medicamento. Intenta nuevamente.');
     }
 }
+
 
 
 
