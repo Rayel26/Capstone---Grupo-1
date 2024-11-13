@@ -1,25 +1,57 @@
 // Productos
-// Función para subir la imagen a Cloudinary
-async function uploadImageToCloudinary(file) {
-    const cloudName = 'dqeideoyd'; // Reemplaza con tu Cloud Name
-    const uploadPreset = 'prueba'; // Reemplaza con tu Upload Preset
 
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', uploadPreset);
-
-    const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, {
-        method: 'POST',
-        body: formData
-    });
-
-    const data = await response.json();
-    if (data.secure_url) {
-        return data.secure_url; // Retornar la URL de la imagen
+// Función que maneja el evento onchange y pasa el archivo a la función de carga
+function handleFileUpload(event) {
+    const file = event.target.files[0]; // Obtener el archivo seleccionado
+    if (file) {
+        uploadImageToCloudinary(file); // Pasar el archivo a la función uploadImageToCloudinary
     } else {
-        throw new Error('Error al cargar la imagen a Cloudinary');
+        console.error('No se seleccionó ningún archivo.');
     }
 }
+
+// Función para subir la imagen a Cloudinary
+async function uploadImageToCloudinary(file) {
+    try {
+        // Verificar si el archivo está definido y es válido
+        if (!file) {
+            throw new Error('No se proporcionó ningún archivo.');
+        }
+
+        const cloudName = 'dqeideoyd'; // Reemplaza con tu Cloud Name
+        const uploadPreset = 'prueba'; // Reemplaza con tu Upload Preset
+
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', uploadPreset);
+
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, {
+            method: 'POST',
+            body: formData
+        });
+
+        // Si la respuesta no es exitosa, lanzar error
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Cloudinary error: ${errorData.error.message}`);
+        }
+
+        // Procesar la respuesta
+        const data = await response.json();
+        console.log('Respuesta de Cloudinary:', data); // Log para depurar
+
+        // Verificar que la URL de la imagen esté presente en la respuesta
+        if (data.secure_url) {
+            return data.secure_url; // Retornar la URL de la imagen
+        } else {
+            throw new Error('Error al cargar la imagen a Cloudinary');
+        }
+    } catch (error) {
+        console.error('Error en la carga de imagen:', error);
+        throw error; // Rethrow para que el error pueda ser manejado externamente si es necesario
+    }
+}
+
 
 // Función para mostrar la sección correspondiente
 function showSection(sectionId) {
@@ -1465,7 +1497,7 @@ async function deleteCase(caseId) {
 document.addEventListener('DOMContentLoaded', loadCases);
 
 // Función para subir la imagen a Cloudinary
-async function uploadImageToCloudinary() {
+async function uploadImageToCloudinaryCase() {
     const uploadedImageFile = document.getElementById('uploadImageCase').files[0]; // Obtiene el archivo de imagen
 
     // Verifica que se haya seleccionado un archivo
@@ -1518,7 +1550,7 @@ async function submitCase(event) {
 
     // Verificar si se ha subido una imagen
     if (uploadedImageFile) {
-        imageUrl = await uploadImageToCloudinary(); // Espera la carga de la imagen
+        imageUrl = await uploadImageToCloudinaryCase(); // Espera la carga de la imagen
         if (!imageUrl) {
             alert('Error al subir la imagen. Intenta nuevamente.');
             return; // Si no hay URL, no envíes el formulario
