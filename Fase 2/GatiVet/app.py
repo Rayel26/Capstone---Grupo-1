@@ -1985,34 +1985,13 @@ def insert_medical_history():
 
     return jsonify({'message': 'Historial médico insertado con éxito!', 'id_historial': id_historial}), 201
 
-# Ruta historial médico
+##Ruta historial medico
 @app.route('/get_medical_history', methods=['GET'])
 def get_medical_history():
     pet_id = request.args.get('id_mascota')  # Obtiene el id_mascota de la consulta
-    
-    try:
-        # Validar que se ha proporcionado el ID de la mascota
-        if not pet_id:
-            return jsonify({'error': 'ID de mascota no proporcionado.'}), 400
+    data = supabase.table('HistorialMedico').select('*').filter('id_mascota', 'eq', pet_id).execute()
 
-        # Obtener el historial médico asociado al id_mascota
-        medical_history_response = supabase.table('HistorialMedico').select('*').filter('id_mascota', 'eq', pet_id).execute()  # Usando .filter()
-
-        # Verificar si hay un error en la respuesta
-        if hasattr(medical_history_response, 'error') and medical_history_response.error:
-            return jsonify({'error': 'Error al obtener el historial médico.', 'details': medical_history_response.error.message}), 500
-
-        # Verificar si se obtuvieron datos
-        if not medical_history_response.data:
-            return jsonify({'medical_history': []}), 200
-
-        # Retornar el historial médico obtenido
-        return jsonify({'medical_history': medical_history_response.data}), 200
-
-    except Exception as e:
-        print("Error al procesar la solicitud:", str(e))
-        return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
-
+    return jsonify(data.data), 200  # Devuelve los datos obtenidos
 
 @app.route('/get_medical_record', methods=['GET'])
 def get_medical_record():
