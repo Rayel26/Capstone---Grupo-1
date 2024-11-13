@@ -2102,12 +2102,15 @@ async function fetchMedicines() {
                 </td>
             `;
             
-            // Crear botones de acción
+            // Boton editar
             const editButton = document.createElement('button');
             editButton.textContent = 'Editar';
             editButton.className = 'text-blue-500 hover:underline mr-2';  // Agregar espacio entre los botones
-            editButton.onclick = () => editMedicine(medicine.id);  // Llama a la función de edición
 
+            // Llama a la función de mostrar el modal
+            editButton.onclick = () => showEditModal(medicine.id);
+
+             // Boton eliminar
             const actionButton = document.createElement('button');
             actionButton.textContent = 'Eliminar';
             actionButton.className = 'text-red-500 hover:underline';
@@ -2133,6 +2136,25 @@ async function fetchMedicines() {
         console.error('Error al obtener medicamentos:', error);
     }
 }
+
+// Función para abrir el modal de edición
+function showEditModal(medicineId) {
+    const modal = document.getElementById('editMedicineModal');
+    const editMedicineId = document.getElementById('editMedicineId');
+    
+    // Establece el ID del medicamento en el campo oculto
+    editMedicineId.value = medicineId;
+    
+    // Muestra el modal
+    modal.classList.remove('hidden');
+}
+
+// Función para cerrar el modal
+function closeModalMedicine() {
+    const modal = document.getElementById('editMedicineModal');
+    modal.classList.add('hidden');
+}
+
 
 // Función para manejar la edición de un medicamento
 function editMedicine(id) {

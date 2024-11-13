@@ -45,8 +45,8 @@
                             style="color: #18beaa; border-bottom: 2px solid transparent; transition: border-bottom 0.3s;">
                             Fundaciones</a></li>
                     <li><a href="#" onclick="showSection('medicamentos')" class="hover:underline"
-                                style="color: #18beaa; border-bottom: 2px solid transparent; transition: border-bottom 0.3s;">
-                                Medicamentos</a></li>
+                            style="color: #18beaa; border-bottom: 2px solid transparent; transition: border-bottom 0.3s;">
+                            Medicamentos</a></li>
                 </ul>
             </nav>
 
@@ -207,40 +207,52 @@
             </form>
     </div>
     <!-- Fin Contenido Productos -->
-<!-- Modal para Editar Producto -->
-<div id="editProductModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg shadow-lg w-96 p-6">
-        <h4 class="text-lg font-semibold text-center mb-4">Editar Producto</h4>
-        <form id="editProductForm" onsubmit="saveEditProduct(event)">
-            <input type="hidden" id="editProductId"> <!-- ID del producto -->
-            <div class="mt-2">
-                <label for="editProductName" class="block text-gray-700">Nombre del Producto:</label>
-                <input type="text" id="editProductName" class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400" required>
-            </div>
-            <div class="mt-2">
-                <label for="editProductPrice" class="block text-gray-700">Precio:</label>
-                <input type="text" id="editProductPrice" class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400" required>
-            </div>
-            <div class="mt-2">
-                <label for="editProductQuantity" class="block text-gray-700">Cantidad:</label>
-                <input type="number" id="editProductQuantity" class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400" required>
-            </div>
-            <div class="mt-2">
-                <label for="editProductDescription" class="block text-gray-700">Descripción:</label>
-                <input type="text" id="editProductDescription" class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400" required>
-            </div>
-            <div class="flex justify-between mt-4">
-                <button type="submit" style="background-color: #18beaa; color: white; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.875rem;">
-                    Actualizar Producto
-                </button>
-                <button type="button" style="background-color: #e3342f; color: white; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.875rem;" onclick="closeEditModal()">
-                    Cancelar
-                </button>
-            </div>
-        </form>
-        <div id="successMessageProduct" class="mt-4 text-green-500 text-center hidden"></div>
+    <!-- Modal para Editar Producto -->
+    <div id="editProductModal"
+        class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-lg w-96 p-6">
+            <h4 class="text-lg font-semibold text-center mb-4">Editar Producto</h4>
+            <form id="editProductForm" onsubmit="saveEditProduct(event)">
+                <input type="hidden" id="editProductId"> <!-- ID del producto -->
+                <div class="mt-2">
+                    <label for="editProductName" class="block text-gray-700">Nombre del Producto:</label>
+                    <input type="text" id="editProductName"
+                        class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
+                        required>
+                </div>
+                <div class="mt-2">
+                    <label for="editProductPrice" class="block text-gray-700">Precio:</label>
+                    <input type="text" id="editProductPrice"
+                        class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
+                        required>
+                </div>
+                <div class="mt-2">
+                    <label for="editProductQuantity" class="block text-gray-700">Cantidad:</label>
+                    <input type="number" id="editProductQuantity"
+                        class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
+                        required>
+                </div>
+                <div class="mt-2">
+                    <label for="editProductDescription" class="block text-gray-700">Descripción:</label>
+                    <input type="text" id="editProductDescription"
+                        class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
+                        required>
+                </div>
+                <div class="flex justify-between mt-4">
+                    <button type="submit"
+                        style="background-color: #18beaa; color: white; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.875rem;">
+                        Actualizar Producto
+                    </button>
+                    <button type="button"
+                        style="background-color: #e3342f; color: white; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.875rem;"
+                        onclick="closeEditModal()">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+            <div id="successMessageProduct" class="mt-4 text-green-500 text-center hidden"></div>
+        </div>
     </div>
-</div>
 
     <!-- Contenido Gestión de usuarios -->
     <div class="container mx-auto flex items-start justify-center pt-10 section hidden" id="usuarios">
@@ -642,27 +654,35 @@
                     style="background-color: #18beaa;">Subir Caso</button>
             </form>
             <!-- Modal para editar Casos de Animales -->
-            <div id="editCaseModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden flex items-center justify-center z-50">
+            <div id="editCaseModal"
+                class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden flex items-center justify-center z-50">
                 <div class="bg-white rounded-lg shadow-lg w-96 p-6">
                     <h4 class="text-lg font-semibold text-center mb-4">Editar Caso</h4>
                     <form id="editCaseForm" onsubmit="updateCase(event)">
                         <input type="hidden" id="editCaseId">
                         <div class="mt-2">
                             <label for="editCaseName" class="block text-gray-700">Nombre del Caso:</label>
-                            <input type="text" id="editCaseName" class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400" required>
+                            <input type="text" id="editCaseName"
+                                class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
+                                required>
                         </div>
                         <div class="mt-2">
                             <label for="editCaseDescription" class="block text-gray-700">Descripción:</label>
-                            <textarea id="editCaseDescription" class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400" rows="3"></textarea>
+                            <textarea id="editCaseDescription"
+                                class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
+                                rows="3"></textarea>
                         </div>
                         <div id="editImagePreviewContainer" class="hidden mt-2">
                             <img id="editImagePreview" class="w-full h-auto rounded" alt="Vista previa de la imagen">
                         </div>
                         <div class="flex justify-between mt-4">
-                            <button type="submit" style="background-color: #18beaa; color: white; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.875rem;">
+                            <button type="submit"
+                                style="background-color: #18beaa; color: white; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.875rem;">
                                 Actualizar Caso
                             </button>
-                            <button type="button" style="background-color: #e3342f; color: white; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.875rem;" onclick="closeModal()">Cancelar</button>
+                            <button type="button"
+                                style="background-color: #e3342f; color: white; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.875rem;"
+                                onclick="closeModal()">Cancelar</button>
                         </div>
                     </form>
                     <div id="successMessage" class="mt-4 text-green-500 text-center hidden"></div>
@@ -697,7 +717,8 @@
             </table>
 
             <!-- Formulario para añadir Fundaciones -->
-            <form id="foundationForm" class="mt-6 bg-white p-6 shadow rounded-lg text-sm" onsubmit="submitFoundation(event)">
+            <form id="foundationForm" class="mt-6 bg-white p-6 shadow rounded-lg text-sm"
+                onsubmit="submitFoundation(event)">
                 <h4 class="text-base font-semibold">Agregar Nueva Fundación</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                     <div>
@@ -711,49 +732,64 @@
                             placeholder="Descripción de la fundación" required></textarea>
                     </div>
                     <div>
-                        <label for="FundationImage" class="block text-gray-700">Seleccionar Imagen de la Fundación:</label>
-                        <select id="FundationImage" class="border rounded w-full py-1 px-2 text-gray-700" onchange="showFoundationImagePreview()">
+                        <label for="FundationImage" class="block text-gray-700">Seleccionar Imagen de la
+                            Fundación:</label>
+                        <select id="FundationImage" class="border rounded w-full py-1 px-2 text-gray-700"
+                            onchange="showFoundationImagePreview()">
                             <option value="">Seleccione una imagen</option>
                             <!-- Las opciones se llenarán dinámicamente desde Cloudinary -->
                         </select>
                         <div id="fundationImageError" class="error hidden">Este campo es obligatorio.</div>
                         <div class="mt-2">
-                            <img id="imagePreviewFoundation" src="" alt="Vista previa de la imagen" class="hidden w-32 h-32 border rounded mt-2" />
+                            <img id="imagePreviewFoundation" src="" alt="Vista previa de la imagen"
+                                class="hidden w-32 h-32 border rounded mt-2" />
                         </div>
-                    </div>                    
+                    </div>
                     <div class="mt-2">
-                        <label for="uploadImageFund" class="block text-gray-700">Subir nueva Imagen de la Fundación:</label>
-                        <input type="file" id="uploadImageFund" accept="image/*" class="border rounded w-full py-1 px-2 text-gray-700" onchange="uploadFoundationImageToCloudinary()">
+                        <label for="uploadImageFund" class="block text-gray-700">Subir nueva Imagen de la
+                            Fundación:</label>
+                        <input type="file" id="uploadImageFund" accept="image/*"
+                            class="border rounded w-full py-1 px-2 text-gray-700"
+                            onchange="uploadFoundationImageToCloudinary()">
                     </div>
                     <div id="imagePreviewContainerFoundation" class="mt-2 hidden">
-                        <img id="imagePreviewContainerFoundationImage" src="" alt="Vista previa de la imagen" class="w-32 h-32 border rounded mt-2" />
+                        <img id="imagePreviewContainerFoundationImage" src="" alt="Vista previa de la imagen"
+                            class="w-32 h-32 border rounded mt-2" />
                     </div>
-                    
-                    
+
+
                 </div>
                 <button type="submit"
                     class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
                     style="background-color: #18beaa;">Subir Fundación</button>
             </form>
             <!-- Modal para editar Fundaciones -->
-            <div id="editFoundationModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden flex items-center justify-center z-50">
+            <div id="editFoundationModal"
+                class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden flex items-center justify-center z-50">
                 <div class="bg-white rounded-lg shadow-lg w-96 p-6">
                     <h4 class="text-lg font-semibold text-center mb-4">Editar Fundación</h4>
                     <form id="editFoundationForm" onsubmit="updateFoundation(event)">
                         <input type="hidden" id="editFoundationId"> <!-- ID de la fundación -->
                         <div class="mt-2">
                             <label for="editFoundationName" class="block text-gray-700">Nombre de la Fundación:</label>
-                            <input type="text" id="editFoundationName" class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400" required>
+                            <input type="text" id="editFoundationName"
+                                class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
+                                required>
                         </div>
                         <div class="mt-2">
                             <label for="editFoundationDescription" class="block text-gray-700">Descripción:</label>
-                            <textarea id="editFoundationDescription" class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400" rows="3" required></textarea>
+                            <textarea id="editFoundationDescription"
+                                class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
+                                rows="3" required></textarea>
                         </div>
                         <div class="flex justify-between mt-4">
-                            <button type="submit" style="background-color: #18beaa; color: white; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.875rem;">
+                            <button type="submit"
+                                style="background-color: #18beaa; color: white; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.875rem;">
                                 Actualizar Fundación
                             </button>
-                            <button type="button" style="background-color: #e3342f; color: white; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.875rem;" onclick="closeModalFoundation()">Cancelar</button>
+                            <button type="button"
+                                style="background-color: #e3342f; color: white; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.875rem;"
+                                onclick="closeModalFoundation()">Cancelar</button>
                         </div>
                     </form>
                     <div id="successMessageFoundation" class="mt-4 text-green-500 text-center hidden"></div>
@@ -779,7 +815,7 @@
                     <div class="mr-4">
                         <label for="medicineFilter" class="mr-1 text-gray-700 text-xs">Filtrar por tipo:</label>
                         <select id="medicineFilter" class="border rounded py-0.5 px-1 text-gray-700 text-xs"
-                                onchange="filterMedicines()">
+                            onchange="filterMedicines()">
                             <option value="">Todos los tipos</option>
                             <option value="antiparasitario">Antiparasitario</option>
                             <option value="antibiotico">Antibiótico</option>
@@ -805,13 +841,14 @@
 
                 <!-- Botón para exportar a Excel -->
                 <button class="text-white py-1 px-3 rounded hover:bg-teal-500 transition duration-200 text-sm"
-                        style="background-color: #18beaa;" onclick="exportToExcel()">
+                    style="background-color: #18beaa;" onclick="exportToExcel()">
                     Exportar a Excel
                 </button>
             </div>
 
             <!-- Tabla de stock de medicamentos -->
-            <table id="medicineTableExt" class="min-w-full bg-white border border-gray-300 shadow rounded-lg overflow-hidden text-xs mt-3">
+            <table id="medicineTableExt"
+                class="min-w-full bg-white border border-gray-300 shadow rounded-lg overflow-hidden text-xs mt-3">
                 <thead>
                     <tr class="text-white" style="background-color: #18beaa;">
                         <th class="py-1 px-2 border-b">Nombre del Medicamento</th>
@@ -830,18 +867,19 @@
             <!-- Controles de Paginación -->
             <div id="paginationControls" class="mt-4 flex justify-center items-center">
                 <button id="prevPageBtn" class="text-white py-1 px-3 rounded mr-2 text-sm"
-                        style="background-color: #18beaa;" onclick="prevPage()">
+                    style="background-color: #18beaa;" onclick="prevPage()">
                     &lt;&lt;
                 </button>
                 <span id="currentPage" class="text-gray-700 text-sm"></span>
                 <button id="nextPageBtn" class="text-white py-1 px-3 rounded ml-2 text-sm"
-                        style="background-color: #18beaa;" onclick="nextPage()">
+                    style="background-color: #18beaa;" onclick="nextPage()">
                     &gt;&gt;
                 </button>
             </div>
 
             <!-- Formulario para subir medicamentos -->
-            <form id="medicineForm" class="mt-6 bg-white p-6 shadow rounded-lg text-sm" onsubmit="submitMedicine(event)">
+            <form id="medicineForm" class="mt-6 bg-white p-6 shadow rounded-lg text-sm"
+                onsubmit="submitMedicine(event)">
                 <h4 class="text-base font-semibold">Agregar Nuevo Medicamento</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                     <!-- Nombre del Medicamento -->
@@ -851,7 +889,7 @@
                             placeholder="Nombre del medicamento" required>
                         <div id="nameError" class="error hidden">Este campo es obligatorio.</div>
                     </div>
-            
+
                     <!-- Tipo de Medicamento -->
                     <div>
                         <label for="medicineType" class="block text-gray-700">Tipo de Medicamento:</label>
@@ -870,7 +908,7 @@
                             <option value="antihistamínicos">Antihistamínicos y medicamentos antialérgicos</option>
                         </select>
                         <div id="typeError" class="error">Este campo es obligatorio.</div>
-                    </div>            
+                    </div>
                     <!-- Marca -->
                     <div>
                         <label for="brandMedi" class="block text-gray-700">Marca:</label>
@@ -941,7 +979,7 @@
                             </optgroup>
                         </select>
                         <div id="brandError" class="error">Este campo es obligatorio.</div>
-                    </div>           
+                    </div>
                     <!-- Cantidad -->
                     <div>
                         <label for="quantityMedi" class="block text-gray-700">Cantidad:</label>
@@ -953,32 +991,126 @@
                     <div>
                         <label for="descriptionMedi" class="block text-gray-700">Descripción:</label>
                         <textarea id="descriptionMedi" class="border rounded w-full py-1 px-2 text-gray-700"
-                                placeholder="Descripción del medicamento"></textarea>
+                            placeholder="Descripción del medicamento"></textarea>
                     </div>
                     <!-- Imagen del Producto -->
                     <div>
-                        <label for="medicationImage" class="block text-gray-700">Seleccionar Imagen del Producto:</label>
-                        <select id="medicationImage" class="border rounded w-full py-1 px-2 text-gray-700" onchange="updateImagePreview()">
+                        <label for="medicationImage" class="block text-gray-700">Seleccionar Imagen del
+                            Producto:</label>
+                        <select id="medicationImage" class="border rounded w-full py-1 px-2 text-gray-700"
+                            onchange="updateImagePreview()">
                             <option value="">Seleccione una imagen</option>
                             <!-- Las imágenes se llenarán dinámicamente con JavaScript -->
                         </select>
                         <div id="imageError" class="error hidden text-red-500 mt-1">Este campo es obligatorio.</div>
                         <div class="mt-2">
                             <!-- Vista previa de la imagen -->
-                            <img id="medicationImagePreview" src="" alt="Vista previa de la imagen" class="hidden w-32 h-32 border rounded mt-2" />
+                            <img id="medicationImagePreview" src="" alt="Vista previa de la imagen"
+                                class="hidden w-32 h-32 border rounded mt-2" />
                         </div>
                     </div>
-                    
+
                     <!-- Subir imagen a Cloudinary -->
                     <div class="mt-2">
-                        <input type="file" id="medicationFile" accept="image/*" class="border rounded w-full py-1 px-2 text-gray-700">
-                    </div> 
+                        <input type="file" id="medicationFile" accept="image/*"
+                            class="border rounded w-full py-1 px-2 text-gray-700">
+                    </div>
 
                 </div>
                 <button type="submit"
-                        class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
-                        style="background-color: #18beaa;">Subir Medicamento</button>
+                    class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
+                    style="background-color: #18beaa;">Subir Medicamento</button>
             </form>
+
+            <!-- Modal para editar Medicamentos -->
+            <div id="editMedicineModal"
+                class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden flex items-center justify-center z-50">
+                <div class="bg-white rounded-lg shadow-lg w-96 p-6">
+                    <h4 class="text-lg font-semibold text-center mb-4">Editar Medicamento</h4>
+                    <form id="editMedicineForm" onsubmit="updateMedicine(event)">
+                        <input type="hidden" id="editMedicineId"> <!-- ID del medicamento -->
+
+                        <div class="mt-2">
+                            <label for="editMedicineName" class="block text-gray-700">Nombre del Medicamento:</label>
+                            <input type="text" id="editMedicineName"
+                                class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
+                                required>
+                        </div>
+
+                        <div class="mt-2">
+                            <label for="editMedicineDescription" class="block text-gray-700">Descripción:</label>
+                            <textarea id="editMedicineDescription"
+                                class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
+                                rows="3" required></textarea>
+                        </div>
+
+                        <div class="mt-2">
+                            <label for="editMedicineType" class="block text-gray-700">Tipo de Medicamento:</label>
+                            <select id="editMedicineType"
+                                class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700" required>
+                                <option value="">Seleccionar Tipo</option>
+                                <option value="antiparasitario">Antiparasitario</option>
+                                <option value="antibiotico">Antibiótico</option>
+                                <option value="antiinflamatorio">Analgésico y Antiinflamatorio</option>
+                                <option value="vacunas">Vacunas</option>
+                                <option value="antifúngicos">Antifúngicos</option>
+                                <option value="reproductivos">Medicamentos hormonales y reproductivos</option>
+                                <option value="suplementosVitaminas">Suplementos y vitaminas</option>
+                                <option value="sedantesAnestésicos">Sedantes y anestésicos</option>
+                                <option value="oftálmicosOtológicos">Medicamentos oftálmicos y otológicos</option>
+                                <option value="digestivo">Medicamentos para el sistema digestivo</option>
+                                <option value="antihistamínicos">Antihistamínicos y medicamentos antialérgicos</option>
+                            </select>
+                        </div>
+
+                        <div class="mt-2">
+                            <label for="editMedicineBrand" class="block text-gray-700">Marca:</label>
+                            <select id="editMedicineBrand"
+                                class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700" required>
+                                <option value="">Seleccionar Marca</option>
+                                <optgroup label="Antiparasitarios">
+                                    <option value="Frontline">Frontline</option>
+                                    <option value="NexGard">NexGard</option>
+                                    <option value="Drontal">Drontal</option>
+                                    <option value="Advantage">Advantage</option>
+                                    <option value="Heartgard">Heartgard</option>
+                                </optgroup>
+                                <optgroup label="Antibióticos">
+                                    <option value="AmoxiVet">AmoxiVet</option>
+                                    <option value="Baytril">Baytril</option>
+                                    <option value="Clindacyn">Clindacyn</option>
+                                    <option value="Synulox">Synulox</option>
+                                </optgroup>
+                                <optgroup label="Analgésicos y Anti-inflamatorios">
+                                    <option value="Metacam">Metacam</option>
+                                    <option value="Previcox">Previcox</option>
+                                    <option value="Carprovet">Carprovet</option>
+                                </optgroup>
+                                <!-- Agrega más categorías según sea necesario -->
+                            </select>
+                        </div>
+
+                        <div class="mt-2">
+                            <label for="editMedicineStock" class="block text-gray-700">Stock:</label>
+                            <input type="number" id="editMedicineStock"
+                                class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400"
+                                required>
+                        </div>
+
+                        <div class="flex justify-between mt-4">
+                            <button type="submit"
+                                style="background-color: #18beaa; color: white; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.875rem;">
+                                Actualizar Medicamento
+                            </button>
+                            <button type="button"
+                                style="background-color: #e3342f; color: white; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.875rem;"
+                                onclick="closeModalMedicine()">Cancelar</button>
+                        </div>
+                    </form>
+                    <div id="successMessageMedicine" class="mt-4 text-green-500 text-center hidden"></div>
+                </div>
+            </div>
+
         </section>
     </div>
     <!-- Fin Contenido Medicamentos -->
