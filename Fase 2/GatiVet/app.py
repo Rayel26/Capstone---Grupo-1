@@ -2546,6 +2546,47 @@ def delete_medicine(medicine_id):
         return jsonify({'error': 'Error al eliminar el medicamento.'}), 400
 
 
+#Ruta para recuperación de contraseña
+@app.route('/recover_password', methods=['POST'])
+def recover_password():
+    # Obtener el correo electrónico enviado en formato JSON
+    data = request.get_json()
+    correo = data.get('email')
+
+    if not correo:
+        return jsonify({"success": False, "message": "El correo electrónico es requerido."}), 400
+
+    # Verificar si el correo existe y está confirmado en la tabla "usuarios"
+    response = supabase.table('Usuario').select('*').eq('correo', correo).eq('confirmacion', True).execute()
+
+    # Verificar si la respuesta contiene datos
+    if not response.data or len(response.data) == 0:
+        return jsonify({"success": False, "message": "Correo no registrado o no confirmado."}), 400
+
+    # El usuario se encuentra en response.data, que es una lista
+    usuario = response.data[0]  # Tomamos el primer (y único) usuario de la lista
+
+    try:
+        msg = Message("Recuperación de Contraseña",
+                    sender=app.config['MAIL_USERNAME'],
+                    recipients=[correo])
+        msg.html = f"""
+        <html>
+            <body>
+                <h2>Recuperación de Contraseña</h2>
+                <p>Hola {usuario['nombre']} {usuario['appaterno']},</p>
+                <p>Tu contraseña es: {usuario['contraseña']}</p>
+                <p>Si no solicitaste esta recuperación, por favor ignora este mensaje.</p>
+            </body>
+        </html>
+        """
+        mail.send(msg)
+
+        return jsonify({"success": True, "message": "Correo de recuperación enviado exitosamente."}), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "message": f"Error al enviar el correo: {str(e)}"}), 500
+
 if __name__ == '__main__':
     app.run(debug=True)  # Ejecuta la aplicación en modo depuración
 
