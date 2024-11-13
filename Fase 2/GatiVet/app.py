@@ -825,8 +825,9 @@ def obtener_comentarios():
 @app.route('/api/guardarComentario', methods=['POST'])
 def guardar_comentario():
     try:
-        # Verifica si el usuario está conectado (usa la sesión para almacenar el ID del usuario)
+        # Verifica si el usuario está conectado
         if 'id_usuario' not in session:
+            print(f"Usuario no autenticado. Sesión: {session}")
             return jsonify({'error': 'Usuario no autenticado'}), 401
         
         # Obtener los datos del comentario desde la solicitud
@@ -834,13 +835,17 @@ def guardar_comentario():
         titulo = data.get('titulo')
         calificacion = data.get('calificacion')
         texto = data.get('texto')
-        
+
+        # Comprobar los datos antes de hacer la inserción
+        if not titulo or not calificacion or not texto:
+            return jsonify({'error': 'Datos incompletos'}), 400
+
         # Obtener el id_usuario desde la sesión
         usuario_id = session['id_usuario']
         
-        # Generar la fecha actual (formato YYYY-MM-DD)
+        # Generar la fecha actual
         fecha_actual = datetime.now().strftime('%Y-%m-%d')
-        
+
         # Insertar los datos en la tabla 'Comentario'
         response = supabase.table('Comentario').insert({
             'titulo': titulo,
@@ -850,12 +855,24 @@ def guardar_comentario():
             'fecha': fecha_actual       # Fecha actual
         }).execute()
 
-        if response.status_code == 201:
+        # Depuración: Imprimir toda la respuesta para ver su estructura
+        print(f"Respuesta de Supabase: {response}")
+
+        # Comprobar si existe algún error
+        if hasattr(response, 'error') and response.error:
+            # Si tiene error, devolverlo
+            print(f"Error en la respuesta: {response.error}")
+            return jsonify({'error': response.error}), 400
+        
+        # Verificar si la respuesta contiene datos
+        if hasattr(response, 'data') and response.data:
             return jsonify({'message': 'Comentario guardado exitosamente'}), 201
         else:
-            return jsonify({'error': 'Error al guardar el comentario'}), 400
+            return jsonify({'error': 'No se recibió una respuesta válida de la base de datos'}), 400
 
     except Exception as e:
+        # Mostrar el error real en los logs para depuración
+        print(f"Error al guardar el comentario: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 # Ruta para el perfil de veterinario

@@ -889,7 +889,7 @@
                     <!-- Tipo de Medicamento -->
                     <div>
                         <label for="medicineType" class="block text-gray-700">Tipo de Medicamento:</label>
-                        <select id="medicineType" class="border rounded w-full py-1 px-2 text-gray-700" required>
+                        <select id="medicineType" class="border rounded w-full py-1 px-2 text-gray-700" required onchange="filterBrands()">
                             <option value="">Todos los tipos</option>
                             <option value="antiparasitario">Antiparasitario</option>
                             <option value="antibiotico">Antibiótico</option>
@@ -905,70 +905,66 @@
                         </select>
                         <div id="typeError" class="error">Este campo es obligatorio.</div>
                     </div>
+
                     <!-- Marca -->
                     <div>
                         <label for="brandMedi" class="block text-gray-700">Marca:</label>
                         <select id="brandMedi" class="border rounded w-full py-1 px-2 text-gray-700" required>
                             <option value="">Seleccione una marca</option>
-                            <optgroup label="Antiparasitarios">
+                            <optgroup id="antiparasitario" label="Antiparasitarios">
                                 <option value="Frontline">Frontline</option>
                                 <option value="NexGard">NexGard</option>
                                 <option value="Drontal">Drontal</option>
                                 <option value="Advantage">Advantage</option>
                                 <option value="Heartgard">Heartgard</option>
                             </optgroup>
-                            <optgroup label="Antibióticos">
+                            <optgroup id="antibiotico" label="Antibióticos">
                                 <option value="AmoxiVet">AmoxiVet</option>
                                 <option value="Baytril">Baytril</option>
                                 <option value="Clindacyn">Clindacyn</option>
                                 <option value="Synulox">Synulox</option>
                             </optgroup>
-                            <optgroup label="Analgésicos y Anti-inflamatorios">
+                            <optgroup id="antiinflamatorios" label="Analgésicos y Anti-inflamatorios">
                                 <option value="Metacam">Metacam</option>
                                 <option value="Previcox">Previcox</option>
                                 <option value="Carprovet">Carprovet</option>
                             </optgroup>
-                            <optgroup label="Vacunas">
+                            <optgroup id="vacunas" label="Vacunas">
                                 <option value="Nobivac">Nobivac</option>
                                 <option value="Cavium">Cavium</option>
                                 <option value="Rabvac">Rabvac</option>
                             </optgroup>
-                            <optgroup label="Antifúngicos">
+                            <optgroup id="antifúngicos" label="Antifúngicos">
                                 <option value="Oral Fungiconazole">Oral Fungiconazole</option>
                                 <option value="Ketoconazol">Ketoconazol</option>
                                 <option value="Lamisil">Lamisil</option>
                             </optgroup>
-                            <optgroup label="Medicamentos Hormonales y Reproductivos">
+                            <optgroup id="reproductivos" label="Medicamentos Hormonales y Reproductivos">
                                 <option value="Ovarelin">Ovarelin</option>
                                 <option value="Estrumate">Estrumate</option>
                                 <option value="Cystorelin">Cystorelin</option>
                             </optgroup>
-                            <optgroup label="Suplementos y Vitaminas">
+                            <optgroup id="suplementosVitaminas" label="Suplementos y Vitaminas">
                                 <option value="VetriScience">VetriScience</option>
                                 <option value="Nutri-Vet">Nutri-Vet</option>
                                 <option value="Cosequin">Cosequin</option>
                             </optgroup>
-                            <optgroup label="Sedantes y Anestésicos">
+                            <optgroup id="sedantesAnestésicos" label="Sedantes y Anestésicos">
                                 <option value="Acepromazine">Acepromazine</option>
                                 <option value="Propofol">Propofol</option>
                                 <option value="Isoflurano">Isoflurano</option>
                             </optgroup>
-                            <optgroup label="Medicamentos Cardiovasculares">
-                                <option value="Vetmedin">Vetmedin</option>
-                                <option value="Fortekor">Fortekor</option>
-                                <option value="Lasix">Lasix</option>
-                            </optgroup>
-                            <optgroup label="Medicamentos Oftálmicos y Otológicos">
+                            <optgroup id="oftálmicosOtológicos" label="Medicamentos Oftálmicos y Otológicos">
                                 <option value="Tobramycin">Tobramycin</option>
                                 <option value="Otomax">Otomax</option>
                                 <option value="Cyclosporine A">Cyclosporine A</option>
                             </optgroup>
-                            <optgroup label="Medicamentos Digestivos">
+                            <optgroup id="digestivo" label="Medicamentos Digestivos">
                                 <option value="Metoclopramide">Metoclopramide</option>
                                 <option value="Omeprazol">Omeprazol</option>
                                 <option value="Sucralfate">Sucralfate</option>
                             </optgroup>
-                            <optgroup label="Antihistamínicos y Medicamentos Antialérgicos">
+                            <optgroup id="antihistamínicos" label="Antihistamínicos y Medicamentos Antialérgicos">
                                 <option value="Benadryl">Benadryl</option>
                                 <option value="Zyrtec">Zyrtec</option>
                                 <option value="Atarax">Atarax</option>
@@ -976,6 +972,7 @@
                         </select>
                         <div id="brandError" class="error">Este campo es obligatorio.</div>
                     </div>
+
                     <!-- Cantidad -->
                     <div>
                         <label for="quantityMedi" class="block text-gray-700">Cantidad:</label>

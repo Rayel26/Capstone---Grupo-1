@@ -96,6 +96,8 @@ document.getElementById('submitComment').addEventListener('click', async () => {
         texto: comentario
     };
 
+    console.log(data);  // Agrega esta línea para verificar los datos antes de enviarlos
+
     // Enviar los datos al backend
     const response = await fetch('/api/guardarComentario', {
         method: 'POST',
@@ -111,7 +113,9 @@ document.getElementById('submitComment').addEventListener('click', async () => {
         // Si el backend responde con un error 401, mostramos el mensaje de autenticación
         alert("Debe estar registrado en el sistema para realizar un comentario.");
     } else {
-        alert("Ocurrió un error al guardar el comentario.");
+        const errorData = await response.json();  // Captura el mensaje de error
+        console.error('Error:', errorData);        // Imprime el error en la consola
+        alert(`Ocurrió un error al guardar el comentario: ${errorData.error}`);
     }
 });
 

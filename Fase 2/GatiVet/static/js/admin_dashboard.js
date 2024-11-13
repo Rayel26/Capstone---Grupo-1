@@ -1986,6 +1986,30 @@ async function deleteFoundation(foundationId) {
 
 let medicines = [];  // Definir la variable global de medicamentos
 
+function filterBrands() {
+    // Primero, obtenemos el valor seleccionado del tipo de medicamento
+    const selectedType = document.getElementById('medicineType').value;
+    
+    // Ocultamos todas las opciones de marcas
+    const allOptgroups = document.querySelectorAll('optgroup');
+    allOptgroups.forEach(optgroup => {
+        optgroup.style.display = 'none';
+    });
+
+    // Si se selecciona un tipo de medicamento, solo mostramos las marcas correspondientes
+    if (selectedType) {
+        const selectedGroup = document.getElementById(selectedType);
+        if (selectedGroup) {
+            selectedGroup.style.display = 'block';
+        }
+    } else {
+        // Si no se selecciona un tipo, mostramos todas las marcas
+        allOptgroups.forEach(optgroup => {
+            optgroup.style.display = 'block';
+        });
+    }
+}
+
 // Función para cargar las imágenes de medicamentos desde Cloudinary
 async function loadMedicationImages() {
     try {
