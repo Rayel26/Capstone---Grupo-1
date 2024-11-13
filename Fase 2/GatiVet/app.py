@@ -19,6 +19,7 @@ import jwt
 import httpx
 import string
 import random
+from cloudinary.api import resources
 
 # Importaciones específicas del proyecto
 from supabase import create_client
@@ -322,7 +323,7 @@ def profile():
         return "No se encontró el ID de usuario en la sesión."
 
     # Obtener los datos del usuario de Supabase, incluyendo la dirección y numeración
-    user_data = supabase.table('Usuario').select('*, Domicilio(direccion, numeracion)').eq('id_usuario', user_id).execute()
+    user_data = supabase.table('Usuario').select('*, Domicilio(direccion, numeracion)').filter('id_usuario', 'eq', user_id).execute()
     
     # Registro de la respuesta de Supabase
     print(f"User data from Supabase: {user_data.data}")  # Verifica lo que devuelve Supabase
@@ -345,6 +346,7 @@ def profile():
     user['numeracion'] = domicilio_info.get('numeracion', '')  # Obtener numeración
 
     return render_template('profile.html', user=user)
+
 
 # Ruta para guardar perfil de usuario
 @app.route('/guardar-perfil', methods=['POST'])
@@ -380,7 +382,7 @@ def update_profile():
         'apmaterno': apmaterno,
         'celular': celular,
         'correo': correo
-    }).eq('id_usuario', user_id).execute()
+    }).filter('id_usuario', 'eq', user_id).execute()
 
     print("Respuesta de Supabase para usuario:", response_usuario)
 
@@ -391,7 +393,7 @@ def update_profile():
         return jsonify({'success': False, 'message': error_message}), 500
 
     # Obtener el id_domicilio del usuario
-    response_domicilio_id = supabase.table('Usuario').select('id_domicilio').eq('id_usuario', user_id).execute()
+    response_domicilio_id = supabase.table('Usuario').select('id_domicilio').filter('id_usuario', 'eq', user_id).execute()
 
     # Si no existe un domicilio asociado, crear uno nuevo
     if not response_domicilio_id.data or response_domicilio_id.data[0].get('id_domicilio') is None:
@@ -408,7 +410,7 @@ def update_profile():
             # Actualizar el campo id_domicilio en la tabla Usuario
             response_update_usuario = supabase.table('Usuario').update({
                 'id_domicilio': new_domicilio_id
-            }).eq('id_usuario', user_id).execute()
+            }).filter('id_usuario', 'eq', user_id).execute()
 
             if not response_update_usuario.data:
                 error_message = response_update_usuario.error or 'Error al actualizar el id_domicilio en Usuario'
@@ -428,7 +430,7 @@ def update_profile():
     response_update_domicilio = supabase.table('Domicilio').update({
         'direccion': direccion,
         'numeracion': numeracion
-    }).eq('id_domicilio', domicilio_id).execute()
+    }).filter('id_domicilio', 'eq', domicilio_id).execute()
 
     print("Respuesta de Supabase para actualizar domicilio:", response_update_domicilio)
 
@@ -451,7 +453,7 @@ def delete_account():
 
     try:
         # Eliminar el usuario de Supabase
-        response = supabase.table('Usuario').delete().eq('id_usuario', user_id).execute()
+        response = supabase.table('Usuario').delete().filter('id_usuario', 'eq', user_id).execute()
 
         # Imprimir respuesta para depuración
         print('Response:', response)
@@ -508,7 +510,7 @@ def add_pet():
         print(f"Nombre del archivo: {foto.filename}, Tipo de archivo: {foto.content_type}")
 
         # Verificar que el usuario existe en la tabla Usuario
-        usuario_existente = supabase.table('Usuario').select('id_usuario').eq('id_usuario', id_usuario).execute()
+        usuario_existente = supabase.table('Usuario').select('id_usuario').filter('id_usuario', 'eq', id_usuario).execute()
         if not usuario_existente.data or len(usuario_existente.data) == 0:
             return jsonify({'error': 'Usuario no encontrado'}), 404
 
@@ -542,7 +544,7 @@ def add_pet():
             return jsonify({'error': 'Error al subir la imagen a Cloudinary', 'details': str(e)}), 500
 
         # Actualizar la URL de la foto en Supabase
-        update_response = supabase.table('Mascota').update({'foto_url': foto_url}).eq('id_mascota', id_mascota).execute()
+        update_response = supabase.table('Mascota').update({'foto_url': foto_url}).filter('id_mascota', 'eq', id_mascota).execute()
 
         # Verificar si hubo un error en la respuesta de actualización
         if not update_response.data:  # Si no hay datos, hubo un error
@@ -570,7 +572,7 @@ def get_pets():
         # Obtener las mascotas de la tabla Mascota para el usuario específico
         response = supabase.table('Mascota') \
             .select('id_mascota, nombre, edad, especie, raza, fecha_nacimiento, foto_url, Fallecimiento, causa_fallecimiento') \
-            .eq('id_usuario', user_id) \
+            .filter('id_usuario', 'eq', user_id) \
             .execute()
         
         # Verificar si la respuesta contiene un error
@@ -598,7 +600,7 @@ def get_pet_vaccines(id_mascota):
         # Selecciona solo los campos específicos de la base de datos
         response = supabase.table('Vacuna') \
             .select('fecha, nombre_vacuna, prox_fecha, nombre_veterinario') \
-            .eq('id_mascota', id_mascota) \
+            .filter('id_mascota', 'eq', id_mascota) \
             .execute()
         
         print("Respuesta de Supabase:", response)
@@ -612,15 +614,14 @@ def get_pet_vaccines(id_mascota):
     except Exception as e:
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
-
-##Obtener desparacitaciones
+## Obtener desparacitaciones
 @app.route('/get_pet_deworming/<int:id_mascota>', methods=['GET'])
 @login_required
 def get_pet_deworming(id_mascota):
     try:
         response = supabase.table('Desparacitacion') \
             .select('fecha, nombre_desparacitador, dosis, nombre_veterinario, prox_fecha') \
-            .eq('id_mascota', id_mascota) \
+            .filter('id_mascota', 'eq', id_mascota) \
             .execute()
         
         print("Respuesta de Supabase:", response)
@@ -633,7 +634,6 @@ def get_pet_deworming(id_mascota):
     except Exception as e:
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
-
 # Obtener citas
 @app.route('/get_pet_checkups/<int:id_mascota>', methods=['GET'])
 @login_required
@@ -641,11 +641,10 @@ def get_pet_checkups(id_mascota):
     try:
         # Consulta con join para traer la columna descripcion de TipoCita
         response = supabase.table('Cita') \
-        .select('id_cita, descripcion, prox_fecha, fecha, id_medico(nombre), TipoCita(descripcion)') \
-        .eq('id_mascota', id_mascota) \
-        .execute()
+            .select('id_cita, descripcion, prox_fecha, fecha, id_medico(nombre), TipoCita(descripcion)') \
+            .filter('id_mascota', 'eq', id_mascota) \
+            .execute()
 
-        
         print("Respuesta de Supabase:", response)
         
         if response.data is None:
@@ -668,12 +667,12 @@ def get_pets_by_id():
         # Obtener las mascotas asociadas al id_usuario
         pets_response = supabase.table('Mascota').select(
             'id_mascota, nombre, edad, especie, raza, fecha_nacimiento, foto_url, Fallecimiento, causa_fallecimiento, sexo, num_microchip, tamaño, color_pelaje'
-        ).eq('id_usuario', id_usuario).execute()
+        ).filter('id_usuario', 'eq', id_usuario).execute()
 
         # Realizar la consulta para obtener datos del usuario
         user_response = supabase.table('Usuario').select(
             'nombre, appaterno, apmaterno, id_usuario, id_domicilio, celular, correo'
-        ).eq('id_usuario', id_usuario).execute()
+        ).filter('id_usuario', 'eq', id_usuario).execute()
 
         # Verificar si hay datos del usuario
         if user_response.data:
@@ -685,7 +684,7 @@ def get_pets_by_id():
             
             # Realizar la consulta para obtener la dirección del domicilio si existe un id_domicilio válido
             if id_domicilio:
-                domicilio_response = supabase.table('Domicilio').select('direccion').eq('id_domicilio', id_domicilio).execute()
+                domicilio_response = supabase.table('Domicilio').select('direccion').filter('id_domicilio', 'eq', id_domicilio).execute()
                 user_data['direccion'] = domicilio_response.data[0]['direccion'] if domicilio_response.data else "N/A"
             else:
                 user_data['direccion'] = "N/A"
@@ -706,8 +705,6 @@ def get_pets_by_id():
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
-
-
 #Ruta para obtener Razas mascota
 @app.route('/razas/<especie>', methods=['GET'])
 def obtener_razas(especie):
@@ -718,7 +715,7 @@ def obtener_razas(especie):
     else:
         return jsonify({"mensaje": "Especie no válida"}), 400
 
-#Editar imagen mascota
+# Editar imagen mascota
 @app.route('/upload-image', methods=['POST'])
 def upload_image():
     # Verifica si se envió un archivo
@@ -747,7 +744,7 @@ def upload_image():
             return jsonify({'success': False, 'message': 'Error al subir la imagen a Cloudinary'}), 500
 
         # Actualizar la URL de la imagen en Supabase para la mascota correspondiente
-        response = supabase.table('Mascota').update({'foto_url': image_url}).eq('id_mascota', int(id_mascota)).execute()
+        response = supabase.table('Mascota').update({'foto_url': image_url}).filter('id_mascota', 'eq', int(id_mascota)).execute()
 
         # Verificar si la actualización fue exitosa
         if response.status_code == 200:  # Este método puede variar
@@ -759,7 +756,7 @@ def upload_image():
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
 
-#Solicitud para editar mascota
+# Solicitud para editar mascota
 @app.route('/edit_pet/<pet_id>', methods=['PUT'])
 def edit_pet(pet_id):
     try:
@@ -781,7 +778,7 @@ def edit_pet(pet_id):
             'raza': raza,
             'fecha_nacimiento': fecha_nacimiento,
             'edad': edad
-        }).eq('id_mascota', pet_id).execute()
+        }).filter('id_mascota', 'eq', pet_id).execute()
 
         print('Respuesta de Supabase:', response)  # Imprimir la respuesta completa
 
@@ -795,17 +792,21 @@ def edit_pet(pet_id):
         print(f'Error en edit_pet: {str(e)}')  # Imprimir el error en la consola del servidor
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
-#Eliminar mascota
+# Eliminar mascota
 @app.route('/pets/<int:pet_id>', methods=['DELETE'])
 def delete_pet(pet_id):
-    # Elimina la mascota usando el ID
-    response = supabase.table('Mascota').delete().eq('id_mascota', pet_id).execute()
+    try:
+        # Elimina la mascota usando el ID
+        response = supabase.table('Mascota').delete().filter('id_mascota', 'eq', pet_id).execute()
 
-    if response.data:
-        return jsonify({"message": "Mascota eliminada con éxito."}), 200
-    else:
-        # Manejo de errores
-        return jsonify({"message": "Error al eliminar la mascota.", "details": response}), 400
+        if response.data:
+            return jsonify({"message": "Mascota eliminada con éxito."}), 200
+        else:
+            # Manejo de errores
+            return jsonify({"message": "Error al eliminar la mascota.", "details": response}), 400
+    except Exception as e:
+        return jsonify({"message": "Error al procesar la solicitud", "details": str(e)}), 500
+
 
 #Ruta para comentarios
 @app.route('/comentarios', methods=['GET'])
@@ -870,7 +871,6 @@ def profile_vet():
     if user_id is None:
         return "No se encontró el ID de usuario en la sesión."
 
-    # Usar .filter en lugar de .eq para realizar la consulta
     vet_data = supabase.table('Usuario').select('*').filter('id_usuario', 'eq', user_id).execute()
 
     # Verificar si se encontraron datos del veterinario
@@ -903,7 +903,7 @@ def profile_vet():
     return render_template('profile_vet.html', vet=vet)
 
 
-#Ruta guardar datos veterinarios
+# Ruta guardar datos veterinarios
 @app.route('/save_vet_data', methods=['POST']) 
 @login_required
 @role_required('vet')  # Verifica el rol del usuario
@@ -922,7 +922,7 @@ def save_vet_data():
         numeracion = data.get('numeracion')  # Captura de la numeración
 
         # Verificar si el usuario ya existe
-        usuario_response = supabase.table('Usuario').select('id_domicilio').eq('id_usuario', user_id).execute()
+        usuario_response = supabase.table('Usuario').select('id_domicilio').filter('id_usuario', 'eq', user_id).execute()
 
         if not usuario_response.data:
             return jsonify({'success': False, 'message': 'El usuario no existe'}), 404
@@ -945,7 +945,7 @@ def save_vet_data():
                 # Actualizar el campo id_domicilio en la tabla Usuario
                 response_update_usuario = supabase.table('Usuario').update({
                     'id_domicilio': new_domicilio_id
-                }).eq('id_usuario', user_id).execute()
+                }).filter('id_usuario', 'eq', user_id).execute()
 
                 if not response_update_usuario.data:
                     error_message = response_update_usuario.error or 'Error al actualizar el id_domicilio en Usuario'
@@ -965,7 +965,7 @@ def save_vet_data():
         response_update_domicilio = supabase.table('Domicilio').update({
             'direccion': direccion,
             'numeracion': numeracion
-        }).eq('id_domicilio', domicilio_id).execute()
+        }).filter('id_domicilio', 'eq', domicilio_id).execute()
 
         if not response_update_domicilio.data:
             error_message = response_update_domicilio.error or 'Error desconocido al actualizar la dirección'
@@ -1042,8 +1042,7 @@ def cart():
     # Pasar los datos a la plantilla
     return render_template('cart.html', usuario_data=usuario_data)
 
-
-
+# Ruta de compra
 @app.route('/save_sale', methods=['POST'])
 def save_sale():
     if not session.get('is_logged_in'):
@@ -1090,7 +1089,7 @@ def save_sale():
             return jsonify({"success": False, "message": "Error al guardar el detalle de la venta."}), 500
 
     # Recuperar el correo del usuario desde la base de datos
-    usuario_response = supabase.table("Usuario").select("correo").eq("id_usuario", user_id).single().execute()
+    usuario_response = supabase.table("Usuario").select("correo").filter("id_usuario", "eq", user_id).single().execute()
     if not usuario_response.data:
         return jsonify({"success": False, "message": "No se pudo recuperar el correo del usuario."}), 500
     
@@ -1101,7 +1100,7 @@ def save_sale():
         return f"${valor:,.0f}".replace(",", ".")
 
     # Crear el contenido HTML del correo con el resumen de la compra
-    productos_detalle_html = "".join([
+    productos_detalle_html = "".join([ 
         f"""
         <tr>
             <td style="padding: 8px; border: 1px solid #ddd;">{item['nombre_producto']}</td>
@@ -1170,7 +1169,7 @@ def save_sale():
 def registration():
     return render_template('registration.html')
 
-#Ruta Registro
+# Ruta Registro
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -1187,7 +1186,7 @@ def register():
     print(f"Datos recibidos: {data}")
 
     # Verificar si el RUT o el correo ya existen
-    existing_user = supabase.table('Usuario').select('id_usuario', 'correo').eq('id_usuario', rut).eq('correo', correo).execute()
+    existing_user = supabase.table('Usuario').select('id_usuario', 'correo').filter('id_usuario', 'eq', rut).filter('correo', 'eq', correo).execute()
 
     if existing_user.data:
         return jsonify({"error": "Ya existe un usuario con este RUT o correo."}), 400
@@ -1232,11 +1231,10 @@ def register():
         return jsonify({"error": "Error al crear el usuario", "details": response.error}), 400
 
 
-
 @app.route('/confirm/<string:rut>', methods=['GET'])
 def confirm_user(rut):
     # Actualizar el estado de confirmación en la base de datos
-    response = supabase.table('Usuario').update({'confirmacion': True}).eq('id_usuario', rut).execute()
+    response = supabase.table('Usuario').update({'confirmacion': True}).filter('id_usuario', 'eq', rut).execute()
 
     if response.data:
         # Agregar mensaje flash para la confirmación exitosa
@@ -1268,7 +1266,7 @@ def update_user(rut):
             }
 
             # Realizar la actualización en la tabla "Usuario" en Supabase
-            response = supabase.table('Usuario').update(data_to_update).eq('id_usuario', rut).execute()
+            response = supabase.table('Usuario').update(data_to_update).filter('id_usuario', 'eq', rut).execute()
 
             # Imprimir la respuesta para verificar su estructura
             print("Respuesta de Supabase:", response)
@@ -1290,7 +1288,7 @@ def update_user(rut):
 def delete_user(user_id):
     try:
         # Realiza la eliminación en la tabla "Usuario" en Supabase
-        response = supabase.table('Usuario').delete().eq('id_usuario', user_id).execute()
+        response = supabase.table('Usuario').delete().filter('id_usuario', 'eq', user_id).execute()
 
         # Verifica si la respuesta contiene un error
         if hasattr(response, 'error') and response.error:
@@ -1361,12 +1359,12 @@ def save_donation():
     fecha_iso = fecha_actual.isoformat()  # Esta es la representación ISO 8601
 
     # Verificar si el ID corresponde a un caso o a una fundación
-    caso = supabase.table('CasoDonacion').select('nombre_caso').eq('id_caso', nombre_donacion_id).execute()
+    caso = supabase.table('CasoDonacion').select('nombre_caso').filter('id_caso', 'eq', nombre_donacion_id).execute()
     if caso.data:
         nombre_donacion = caso.data[0]['nombre_caso']
     else:
         # Si no es un caso, entonces debe ser una fundación
-        fundacion = supabase.table('FundacionDonacion').select('nombre_fundacion').eq('id_fundacion', nombre_donacion_id).execute()
+        fundacion = supabase.table('FundacionDonacion').select('nombre_fundacion').filter('id_fundacion', 'eq', nombre_donacion_id).execute()
         if fundacion.data:
             nombre_donacion = fundacion.data[0]['nombre_fundacion']
         else:
@@ -1385,7 +1383,7 @@ def save_donation():
         return f"Error al guardar la donación: {response.error}", 500
 
     # Recuperar el correo del usuario
-    usuario_response = supabase.table("Usuario").select("correo").eq("id_usuario", id_usuario).single().execute()
+    usuario_response = supabase.table("Usuario").select("correo").filter("id_usuario", "eq", id_usuario).single().execute()
     if not usuario_response.data:
         return jsonify({"success": False, "message": "No se pudo recuperar el correo del usuario."}), 500
 
@@ -1502,12 +1500,12 @@ def get_products():
         'is_logged_in': is_logged_in
     }), 200
 
-#selecciona producto
+# selecciona producto
 @app.route('/item/<int:id_producto>', methods=['GET'])
 @login_required
 def get_product(id_producto):
-    response = supabase.table('Producto').select('*').eq('id_producto', id_producto).execute()
-    
+    response = supabase.table('Producto').select('*').filter('id_producto', 'eq', id_producto).execute()
+
     if response.data:
         product = response.data[0]
         return render_template('item.html', product=product)
@@ -1550,8 +1548,7 @@ def update_product(product_id):
         'descripcion': data['description'],
         'valor': data['price'],
         'stock': data['quantity'],
-    }).eq('id_producto', product_id).execute()  # Cambiar 'id' a 'id_producto'
-
+    }).filter('id_producto', 'eq', product_id).execute()
 
     # Verificar si la actualización fue exitosa
     if response.data:
@@ -1567,7 +1564,7 @@ def update_product(product_id):
 def delete_product(id_producto):
     try:
         # Actualizar el estado del producto a inactivo
-        response = supabase.table('Producto').update({'is_active': False}).eq('id_producto', id_producto).execute()
+        response = supabase.table('Producto').update({'is_active': False}).filter('id_producto', 'eq', id_producto).execute()
 
         if response.data:
             return jsonify({'message': 'Producto marcado como inactivo exitosamente.'}), 200
@@ -1578,14 +1575,14 @@ def delete_product(id_producto):
         print(f'Excepción al marcar el producto como inactivo: {str(e)}')  # Log de la excepción
         return jsonify({'error': 'Error interno del servidor.'}), 500
 
-#Ruta activar producto
+# Ruta para activar producto
 @app.route('/activate_product/<int:id_producto>', methods=['PUT'])
 @login_required
 @role_required('admin')
 def activate_product(id_producto):
     try:
         # Obtener el producto de la base de datos
-        response = supabase.table('Producto').select('*').eq('id_producto', id_producto).execute()
+        response = supabase.table('Producto').select('*').filter('id_producto', 'eq', id_producto).execute()  # Usando .filter()
 
         if not response.data:
             return jsonify({'error': 'Producto no encontrado.'}), 404
@@ -1599,7 +1596,7 @@ def activate_product(id_producto):
         update_response = supabase.table('Producto').update({
             'is_active': producto['is_active'],
             'stock': producto['stock']
-        }).eq('id_producto', id_producto).execute()
+        }).filter('id_producto', 'eq', id_producto).execute()  # Usando .filter()
 
         if not update_response.data:
             return jsonify({'error': 'Error al activar el producto.'}), 500
@@ -1645,7 +1642,7 @@ def update_stock(product_id):
         quantity = data['quantity']
 
         # Verificar si el producto existe en la base de datos
-        response = supabase.table('Producto').select('*').eq('id_producto', product_id).execute()
+        response = supabase.table('Producto').select('*').filter('id_producto', 'eq', product_id).execute()  # Usando .filter()
 
         if not response.data:
             return jsonify({"success": False, "message": "Producto no encontrado"}), 404
@@ -1658,7 +1655,7 @@ def update_stock(product_id):
             return jsonify({"success": False, "message": "Stock insuficiente"}), 400
 
         # Actualizar el stock en la base de datos
-        update_response = supabase.table('Producto').update({'stock': nuevo_stock}).eq('id_producto', product_id).execute()
+        update_response = supabase.table('Producto').update({'stock': nuevo_stock}).filter('id_producto', 'eq', product_id).execute()  # Usando .filter()
 
         if update_response.data:
             return jsonify({"success": True, "message": f"Stock actualizado correctamente para el producto {product_id}"}), 200
@@ -1689,7 +1686,7 @@ def get_users():
 def get_supabase_key():
     return jsonify({'supabase_key': SUPABASE_KEY})
 
-##Subir foto vet
+## Subir foto vet
 @app.route('/upload_photo_vet', methods=['POST'])
 @login_required  # Asegúrate de que solo usuarios autenticados puedan subir fotos
 @role_required('vet')  # Asegúrate de que solo los veterinarios puedan cambiar su foto
@@ -1713,7 +1710,7 @@ def upload_photo_vet():
         image_url = upload_result['secure_url']
 
         # Actualizar la URL de la imagen en la base de datos de Supabase
-        response = supabase.table('Usuario').update({'imagen': image_url}).eq('id_usuario', user_id).execute()
+        response = supabase.table('Usuario').update({'imagen': image_url}).filter('id_usuario', 'eq', user_id).execute()  # Usando .filter()
 
         if response.status_code == 200:
             flash("Imagen subida y actualizada con éxito.", "success")
@@ -1727,7 +1724,7 @@ def upload_photo_vet():
 
     return redirect(url_for('profile_vet'))  # Redirigir al perfil del veterinario
 
-##actualizar estado
+## actualizar estado
 @app.route('/update-pet-status', methods=['POST'])
 def update_pet_status():
     data = request.json
@@ -1749,7 +1746,7 @@ def update_pet_status():
 
     # Actualizar la base de datos en la tabla 'Mascota' en Supabase
     try:
-        response = supabase.table('Mascota').update(updates).eq('id_mascota', pet_id).execute()
+        response = supabase.table('Mascota').update(updates).filter('id_mascota', 'eq', pet_id).execute()  # Usando .filter()
 
         if response.data:  # Verificamos si hay datos en la respuesta
             return jsonify({"success": True}), 200
@@ -1760,7 +1757,7 @@ def update_pet_status():
         print(f"Error al actualizar la mascota: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
 
-##Obtener estado
+## Obtener estado
 @app.route('/get-pet-status', methods=['GET'])
 def get_pet_status():
     pet_id = request.args.get('pet_id') or request.args.get('id_mascota')  # Acepta ambos
@@ -1768,7 +1765,7 @@ def get_pet_status():
         return jsonify({"error": "ID de mascota no proporcionado."}), 400
     try:
         # Consultar la tabla "Mascota" en Supabase
-        response = supabase.table('Mascota').select('reproductor, esterilizado, tratamiento, Fallecimiento, causa_fallecimiento').eq('id_mascota', pet_id).execute()
+        response = supabase.table('Mascota').select('reproductor, esterilizado, tratamiento, Fallecimiento, causa_fallecimiento').filter('id_mascota', 'eq', pet_id).execute()  # Usando .filter()
 
         # Verificar si hay errores en la respuesta
         if not response.data:
@@ -1789,7 +1786,7 @@ def get_pet_status():
         print(f"Error al obtener el estado de la mascota: {str(e)}")  # Imprimir el error
         return jsonify({"error": "Error al procesar la solicitud: " + str(e)}), 500
 
-##Editar mascota
+## Editar mascota
 @app.route('/update_pet/<pet_id>', methods=['POST'])
 def update_pet(pet_id):
     data = request.json
@@ -1814,7 +1811,7 @@ def update_pet(pet_id):
         'num_microchip': num_microchip,
         'tamaño': tamaño,
         'color_pelaje': color_pelaje
-    }).eq('id_mascota', pet_id).execute()  # Asegúrate de que 'id_mascota' sea el nombre correcto de tu columna de identificador
+    }).filter('id_mascota', 'eq', pet_id).execute()  # Usando .filter()
 
     return jsonify({"message": "Mascota actualizada exitosamente."}), 200
 
@@ -1829,7 +1826,7 @@ def get_vaccines_by_pet_id():
             return jsonify({'error': 'ID de mascota no proporcionado.'}), 400
 
         # Obtener las vacunas asociadas al id_mascota
-        vaccines_response = supabase.table('Vacuna').select('*').eq('id_mascota', id_mascota).execute()
+        vaccines_response = supabase.table('Vacuna').select('*').filter('id_mascota', 'eq', id_mascota).execute()  # Usando .filter()
 
         # Verificar si hay un error en la respuesta
         if hasattr(vaccines_response, 'error') and vaccines_response.error:
@@ -1879,7 +1876,7 @@ def add_vaccine():
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
-# Ruta para obtener despracitaciones por ID de mascota
+# Ruta para obtener desparasitaciones por ID de mascota
 @app.route('/get_dewormer_by_pet_id', methods=['GET'])
 def get_dewormer_by_pet_id():
     id_mascota = request.args.get('id_mascota')
@@ -1889,8 +1886,8 @@ def get_dewormer_by_pet_id():
         if not id_mascota:
             return jsonify({'error': 'ID de mascota no proporcionado.'}), 400
 
-        # Obtener las vacunas asociadas al id_mascota
-        dewormer_response = supabase.table('Desparacitacion').select('*').eq('id_mascota', id_mascota).execute()
+        # Obtener las desparacitaciones asociadas al id_mascota
+        dewormer_response = supabase.table('Desparacitacion').select('*').filter('id_mascota', 'eq', id_mascota).execute()  # Usando .filter()
 
         # Verificar si hay un error en la respuesta
         if hasattr(dewormer_response, 'error') and dewormer_response.error:
@@ -1900,7 +1897,7 @@ def get_dewormer_by_pet_id():
         if not dewormer_response.data:
             return jsonify({'dewormer': []}), 200
 
-        # Retornar las vacunas obtenidas
+        # Retornar las desparacitaciones obtenidas
         return jsonify({'dewormer': dewormer_response.data}), 200
 
     except Exception as e:
@@ -1988,21 +1985,61 @@ def insert_medical_history():
 
     return jsonify({'message': 'Historial médico insertado con éxito!', 'id_historial': id_historial}), 201
 
-##Ruta historial medico
+# Ruta historial médico
 @app.route('/get_medical_history', methods=['GET'])
 def get_medical_history():
     pet_id = request.args.get('id_mascota')  # Obtiene el id_mascota de la consulta
-    data = supabase.table('HistorialMedico').select('*').eq('id_mascota', pet_id).execute()
+    
+    try:
+        # Validar que se ha proporcionado el ID de la mascota
+        if not pet_id:
+            return jsonify({'error': 'ID de mascota no proporcionado.'}), 400
 
+        # Obtener el historial médico asociado al id_mascota
+        medical_history_response = supabase.table('HistorialMedico').select('*').filter('id_mascota', 'eq', pet_id).execute()  # Usando .filter()
 
-    return jsonify(data.data), 200  # Devuelve los datos obtenidos
+        # Verificar si hay un error en la respuesta
+        if hasattr(medical_history_response, 'error') and medical_history_response.error:
+            return jsonify({'error': 'Error al obtener el historial médico.', 'details': medical_history_response.error.message}), 500
+
+        # Verificar si se obtuvieron datos
+        if not medical_history_response.data:
+            return jsonify({'medical_history': []}), 200
+
+        # Retornar el historial médico obtenido
+        return jsonify({'medical_history': medical_history_response.data}), 200
+
+    except Exception as e:
+        print("Error al procesar la solicitud:", str(e))
+        return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
+
 
 @app.route('/get_medical_record', methods=['GET'])
 def get_medical_record():
     record_id = request.args.get('id_historial')
-    data = supabase.table('HistorialMedico').select('*').eq('id_historial', record_id).execute()
+    
+    try:
+        # Validar que se ha proporcionado el ID del historial
+        if not record_id:
+            return jsonify({'error': 'ID de historial no proporcionado.'}), 400
 
-    return jsonify(data.data[0]), 200  # Devuelve el primer resultado
+        # Obtener el registro médico asociado al id_historial
+        medical_record_response = supabase.table('HistorialMedico').select('*').filter('id_historial', 'eq', record_id).execute()  # Usando .filter()
+
+        # Verificar si hay un error en la respuesta
+        if hasattr(medical_record_response, 'error') and medical_record_response.error:
+            return jsonify({'error': 'Error al obtener el historial médico.', 'details': medical_record_response.error.message}), 500
+
+        # Verificar si se obtuvieron datos
+        if not medical_record_response.data:
+            return jsonify({'error': 'Historial médico no encontrado.'}), 404
+
+        # Retornar el primer registro médico obtenido
+        return jsonify(medical_record_response.data[0]), 200  # Devuelve el primer resultado
+
+    except Exception as e:
+        print("Error al procesar la solicitud:", str(e))
+        return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
 
 ##Obtener usuarios por rut
 @app.route('/api/get_user_by_id', methods=['GET'])
@@ -2014,9 +2051,9 @@ def get_user_by_id():
     id_usuario = id_usuario.replace('.', '').replace('-', '')
 
     try:
-        # Consulta con el RUT normalizado
-        response = supabase.table('Usuario').select('nombre, appaterno, apmaterno, celular, id_domicilio').eq('id_usuario', id_usuario).execute()
-        
+        # Consulta con el RUT normalizado utilizando .filter()
+        response = supabase.table('Usuario').select('nombre, appaterno, apmaterno, celular, id_domicilio').filter('id_usuario', 'eq', id_usuario).execute()
+
         if response.data:
             user_data = response.data[0]
 
@@ -2025,7 +2062,7 @@ def get_user_by_id():
             celular = user_data['celular']
 
             # Obtener la dirección desde la tabla Domicilio usando id_domicilio como clave externa
-            domicilio_response = supabase.table('Domicilio').select('direccion').eq('id_domicilio', user_data['id_domicilio']).execute()
+            domicilio_response = supabase.table('Domicilio').select('direccion').filter('id_domicilio', 'eq', user_data['id_domicilio']).execute()
             direccion = domicilio_response.data[0]['direccion'] if domicilio_response.data else 'Dirección no encontrada'
 
             # Responder con los datos del usuario
@@ -2045,8 +2082,8 @@ def get_user_by_id():
 @app.route('/api/get_doctors', methods=['GET'])
 def get_doctors():
     try:
-        # Obtener los usuarios que son doctores
-        response = supabase.table('Usuario').select('nombre, appaterno, apmaterno, id_usuario, imagen').eq('tipousuarioid', 2).execute()
+        # Obtener los usuarios que son doctores usando .filter()
+        response = supabase.table('Usuario').select('nombre, appaterno, apmaterno, id_usuario, imagen').filter('tipousuarioid', 'eq', 2).execute()
         
         # Verifica si hay datos
         if not response.data:
@@ -2067,14 +2104,14 @@ def get_doctors():
         print(f"Ocurrió un error al obtener los doctores: {e}")
         return jsonify({"error": "Error al obtener doctores", "details": str(e)}), 500
 
-
 ##Obtener mascotas de agenda
 @app.route('/api/get_pets_by_user_id', methods=['GET'])
 def get_pets_by_user_id():
     id_usuario = request.args.get('id_usuario')
 
     try:
-        response = supabase.table('Mascota').select('id_mascota, nombre, edad, raza, foto_url').eq('id_usuario', id_usuario).execute()
+        # Obtener las mascotas asociadas al id_usuario usando .filter()
+        response = supabase.table('Mascota').select('id_mascota, nombre, edad, raza, foto_url').filter('id_usuario', 'eq', id_usuario).execute()
 
         if response.data:
             return jsonify(response.data), 200
@@ -2110,8 +2147,8 @@ def confirm_appointment():
         'motivo': details
     }).execute()
 
-    # Obtener la información del doctor desde la tabla Usuario (tipousuarioid = 2)
-    doctor_response = supabase.table('Usuario').select('nombre, appaterno').eq('id_usuario', doctor_id).eq('tipousuarioid', 2).execute()
+    # Obtener la información del doctor desde la tabla Usuario (tipousuarioid = 2) usando .filter()
+    doctor_response = supabase.table('Usuario').select('nombre, appaterno').filter('id_usuario', 'eq', doctor_id).filter('tipousuarioid', 'eq', 2).execute()
 
     if doctor_response.data:
         # Concatenar los nombres
@@ -2120,18 +2157,18 @@ def confirm_appointment():
         doctor_name = 'Desconocido'
 
 
-    # Obtener la información de la mascota
-    pet_response = supabase.table('Mascota').select('nombre').eq('id_mascota', pet_id).execute()
+    # Obtener la información de la mascota usando .filter()
+    pet_response = supabase.table('Mascota').select('nombre').filter('id_mascota', 'eq', pet_id).execute()
     pet_name = pet_response.data[0]['nombre'] if pet_response.data else 'Desconocida'
 
-    # Obtener el id_domicilio del usuario
-    user_response = supabase.table('Usuario').select('id_domicilio').eq('id_usuario', rut).execute()
+    # Obtener el id_domicilio del usuario usando .filter()
+    user_response = supabase.table('Usuario').select('id_domicilio').filter('id_usuario', 'eq', rut).execute()
     user_address_id = user_response.data[0]['id_domicilio'] if user_response.data else None
 
     # Si el id_domicilio existe, obtener la dirección y la numeración desde la tabla Domicilio
     user_address = 'Dirección no disponible'
     if user_address_id:
-        address_response = supabase.table('Domicilio').select('direccion', 'numeracion').eq('id_domicilio', user_address_id).execute()
+        address_response = supabase.table('Domicilio').select('direccion', 'numeracion').filter('id_domicilio', 'eq', user_address_id).execute()
         if address_response.data:
             # Concatenar la dirección y la numeración
             user_address = f"{address_response.data[0]['direccion']} {address_response.data[0]['numeracion']}"
@@ -2145,7 +2182,6 @@ def confirm_appointment():
         'petName': pet_name,
         'userAddress': user_address
     }), 201
-
 
 #///CASOS ADMINISTRADOR ///
 #ruta guardar casos administrador
@@ -2195,29 +2231,27 @@ def update_case(case_id):
     nombre_caso = data.get('nombre_caso')
     descripcion = data.get('descripcion')
 
-    # Actualizar el caso en la base de datos
+    # Actualizar el caso en la base de datos usando .filter()
     response = supabase.table('CasoDonacion').update({
         'nombre_caso': nombre_caso,
         'descripcion': descripcion,
-        
-    }).eq('id_caso', case_id).execute()
+    }).filter('id_caso', 'eq', case_id).execute()
 
     return jsonify({"message": "Caso actualizado exitosamente!"}), 200
 
 # Ruta para obtener un caso por ID
 @app.route('/api/casos/<int:case_id>', methods=['GET'])
 def get_case(case_id):
-    case = supabase.table('CasoDonacion').select('*').eq('id_caso', case_id).execute()
+    case = supabase.table('CasoDonacion').select('*').filter('id_caso', 'eq', case_id).execute()
     if case.data:
         return jsonify(case.data[0]), 200  # Devuelve solo el primer caso encontrado
     return jsonify({"message": "Caso no encontrado"}), 404
-
 
 #Ruta para eliminar casos administrador
 @app.route('/api/casos/<int:case_id>', methods=['DELETE'])
 def delete_case(case_id):
     # Eliminar el caso de la tabla CasoDonacion
-    response = supabase.table('CasoDonacion').delete().eq('id_caso', case_id).execute()
+    response = supabase.table('CasoDonacion').delete().filter('id_caso', 'eq', case_id).execute()
     return jsonify({"message": "Caso eliminado exitosamente!"}), 200
 
 #/// FIN CASOS ADMINISTRADOR ///   
@@ -2275,14 +2309,14 @@ def update_foundation(foundation_id):
     response = supabase.table('FundacionDonacion').update({
         'nombre_fundacion': nombre_fundacion,
         'descripcion': descripcion,
-    }).eq('id_fundacion', foundation_id).execute()
+    }).filter('id_fundacion', 'eq', foundation_id).execute()
 
     return jsonify({"message": "Fundación actualizada exitosamente!"}), 200
 
 # Ruta para obtener una fundación por ID (editar)
 @app.route('/api/fundaciones/<int:foundation_id>', methods=['GET'])
 def get_foundation(foundation_id):
-    foundation = supabase.table('FundacionDonacion').select('*').eq('id_fundacion', foundation_id).execute()
+    foundation = supabase.table('FundacionDonacion').select('*').filter('id_fundacion', 'eq', foundation_id).execute()
     if foundation.data:
         return jsonify(foundation.data[0]), 200  # Devuelve solo la primera fundación encontrada
     return jsonify({"message": "Fundación no encontrada"}), 404
@@ -2290,8 +2324,8 @@ def get_foundation(foundation_id):
 # Ruta para eliminar fundaciones
 @app.route('/api/fundaciones/<int:foundation_id>', methods=['DELETE'])
 def delete_foundation(foundation_id):
-    # Eliminar la fundación de la tabla Fundacion
-    response = supabase.table('FundacionDonacion').delete().eq('id_fundacion', foundation_id).execute()
+    # Eliminar la fundación de la tabla FundacionDonacion
+    response = supabase.table('FundacionDonacion').delete().filter('id_fundacion', 'eq', foundation_id).execute()
     return jsonify({"message": "Fundación eliminada exitosamente!"}), 200
 
 #/// FIN CASOS FUNDACIONES ///
@@ -2356,15 +2390,13 @@ def check_availability():
     # Consultar las horas ocupadas para la fecha seleccionada utilizando el cliente de Supabase inicializado
     query = supabase.table('Agenda') \
         .select('hora') \
-        .eq('fecha', selected_date)  # Suponiendo que 'fecha' es un campo de tipo date
+        .filter('fecha', 'eq', selected_date)  # Suponiendo que 'fecha' es un campo de tipo date
     
     occupied_hours = query.execute()
 
     # Devolver las horas ocupadas
     occupied_hours_list = [entry['hora'] for entry in occupied_hours.data]
     return jsonify({'occupied_hours': occupied_hours_list})
-
-from cloudinary.api import resources
 
 ### MEDICAMENTOS ADMIN
 
