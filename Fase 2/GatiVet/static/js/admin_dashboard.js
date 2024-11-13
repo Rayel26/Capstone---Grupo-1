@@ -2058,6 +2058,7 @@ function sendMedicineData(imagenUrl) {
     })
     .then(response => response.json())
     .then(data => {
+        console.log("Respuesta de la API:", data);
         if (data.success) {
             alert('Medicamento guardado exitosamente');
             document.getElementById('medicineForm').reset();
@@ -2067,12 +2068,7 @@ function sendMedicineData(imagenUrl) {
             alert('Error al guardar el medicamento: ' + data.message);
         }
     })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Ocurrió un error al guardar el medicamento');
-    });
 }
-
 
 // Función para obtener los medicamentos y llenar la tabla
 async function fetchMedicines() {

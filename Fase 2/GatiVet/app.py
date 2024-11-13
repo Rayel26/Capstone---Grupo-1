@@ -2415,36 +2415,48 @@ def get_medication_images():
 
 # Ruta para agregar medicamento
 @app.route('/api/medicamentos', methods=['POST'])
+@login_required
+@role_required('admin')
 def add_medicine():
-    data = request.json
-    
-    # Recibe los datos desde el formulario
-    nombre = data['nombre']
-    descripcion = data['descripcion']
-    marca = data['marca']
-    tipo_medicamento = data['tipo_medicamento']
-    stock = data['stock']
-    imagen_url = data['imagen_url']
-    fecha_ingreso = datetime.now().isoformat()  # Convertir a cadena
+    # Obtener datos del formulario
+    data = request.get_json()
 
-    print(f"nombre: {nombre}, descripcion: {descripcion}, marca: {marca}, stock: {stock}, imagen_url: {imagen_url}")
-    
-    # Inserta los datos en la tabla Medicamentos
+    # Comprobar si se recibieron datos
+    if not data:
+        return jsonify({'error': 'No se recibió ningún dato.'}), 400
+
+    # Verificar claves necesarias
+    required_keys = ['nombre', 'descripcion', 'marca', 'tipo_medicamento', 'stock', 'imagen_url']
+    for key in required_keys:
+        if key not in data:
+            return jsonify({'error': f'Falta el campo: {key}'}), 400
+
+    # Imprimir los datos recibidos para depuración
+    print('Datos recibidos:', data)
+
+    # Obtener la fecha de ingreso
+    fecha_ingreso = datetime.now().isoformat()
+
+    # Crear el medicamento en Supabase
     response = supabase.table('Medicamentos').insert({
-        'nombre': nombre,
-        'descripcion': descripcion,
-        'marca': marca,
-        'tipo_medicamento': tipo_medicamento,
-        'stock': stock,
-        'imagen_url': imagen_url,
+        'nombre': data['nombre'],
+        'descripcion': data['descripcion'],
+        'marca': data['marca'],
+        'tipo_medicamento': data['tipo_medicamento'],
+        'stock': data['stock'],
+        'imagen_url': data['imagen_url'],
         'fecha_ingreso': fecha_ingreso
     }).execute()
 
-    if response.status_code == 201:
-        return jsonify({'message': 'Medicamento agregado exitosamente'}), 201
+    # Imprimir la respuesta de Supabase para depuración
+    print('Respuesta de Supabase:', response)
+
+    # Verificar si la inserción fue exitosa
+    if response.data:
+        return jsonify({'success': True, 'message': 'Medicamento agregado exitosamente.', 'data': response.data}), 201
     else:
-        return jsonify({'error': 'Error al agregar medicamento'}), 500
-    
+        print('Error de Supabase:', response.error)
+        return jsonify({'success': False, 'error': 'Error al agregar medicamento.', 'details': response.error}), 400
 
 # Nueva ruta para obtener todos los medicamentos
 @app.route('/api/obtener_medicamentos', methods=['GET'])
