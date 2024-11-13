@@ -1303,7 +1303,6 @@ def delete_user(user_id):
         print(f"Ocurrió un error al eliminar el usuario: {e}")
         return jsonify({"error": "Error al eliminar el usuario", "details": str(e)}), 500
 
-#/// DONACIONES //
 # Ruta para la página de donaciones
 @app.route('/donation')
 def donation():
@@ -1315,12 +1314,12 @@ def donation():
     casos_data = casos.data  # Accede a los datos con el atributo .data
     fundaciones_data = fundaciones.data  # Accede a los datos con el atributo .data
 
-    # Suponiendo que tienes el ID del usuario en la sesión (por ejemplo, usando flask-login o similar)
+    # Suponiendo que tienes el ID del usuario en la sesión
     user_id = session.get('id_usuario')  # O reemplaza esto con el método adecuado para obtener el ID del usuario
 
     if user_id:
-        # Consultar los datos del usuario desde la base de datos Supabase
-        user = supabase.table('Usuario').select('nombre', 'appaterno', 'correo', 'celular').eq('id_usuario', user_id).execute()
+        # Consultar los datos del usuario desde la base de datos Supabase con .filter
+        user = supabase.table('Usuario').select('nombre', 'appaterno', 'correo', 'celular').filter('id_usuario', 'eq', user_id).execute()
 
         # Asegúrate de que el usuario existe en la base de datos
         if user.data:
