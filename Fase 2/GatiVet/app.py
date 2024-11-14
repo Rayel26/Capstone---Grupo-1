@@ -1190,7 +1190,7 @@ def register():
     correo = data.get('correo')
     contraseña = data.get('contraseña')
     celular = data.get('celular')
-    direccion = data.get('domicilio')  # Captura de la dirección
+    direccion = data.get('direccion')  # Captura de la dirección
     numeracion = data.get('numeracion')  # Captura de la numeración
     fecha_creacion = datetime.now().strftime("%Y-%m-%d")
 
@@ -1238,7 +1238,6 @@ def register():
                             recipients=[correo])
                 msg.html = f"""
                     <p>Hola {nombre} {appaterno} {apmaterno}, de RUT {rut}:</p>
-                    <p>Este es un correo para verificar la configuración de Flask-Mail al registrarse.</p>
                     <p>Por favor, confirma tu correo haciendo clic en el siguiente enlace: 
                     <a href="{confirmation_link}">Confirma tu correo aquí</a>
                     </p>
