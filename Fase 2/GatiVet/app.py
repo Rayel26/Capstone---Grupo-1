@@ -1,5 +1,5 @@
 # Importaciones estándar de Python
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import os
 import uuid
 from email.mime.text import MIMEText
@@ -14,8 +14,17 @@ import cloudinary
 import cloudinary.uploader
 from flask_mail import Mail, Message
 import pytz
+from apscheduler.schedulers.background import BackgroundScheduler
+import logging
 
 from cloudinary.api import resources
+
+# Configuración de logging para depuración
+logging.basicConfig(level=logging.DEBUG)
+
+# Configuración de APScheduler
+scheduler = BackgroundScheduler()
+scheduler.start()
 
 # Importaciones específicas del proyecto
 from supabase import create_client
@@ -103,6 +112,8 @@ razas_gatos = [
     {"id": 42, "nombre": "Mau Egipcio"},
     {"id": 43, "nombre": "Tonkinés"},
     {"id": 44, "nombre": "Javanés"},
+    {"id": 45, "nombre": "DLP"},
+    {"id": 46, "nombre": "DPL"},
 ]
 # Lista de razas de perros (solo nombres)
 razas_perros = [
@@ -156,6 +167,7 @@ razas_perros = [
     {"id": 48, "nombre": "Flat-Coated Retriever"},
     {"id": 49, "nombre": "English Springer Spaniel"},
     {"id": 50, "nombre": "Vizsla"},
+    {"id": 51, "nombre": "Criollo"},
 ]
 ##FIN RAZAS
 
@@ -1971,6 +1983,86 @@ def add_dewormer():
     except Exception as e:
         print("Error al procesar la solicitud:", str(e))
         return jsonify({'error': 'Error procesando la solicitud', 'details': str(e)}), 500
+
+
+# Función para revisar y enviar recordatorios
+def enviar_recordatorios():
+    try:
+        # Obtener la fecha actual
+        hoy = datetime.now().strftime('%Y-%m-%d')
+        logging.debug(f"Fecha de hoy: {hoy}")
+
+        # Consultar las vacunas que tienen una prox_fecha programada
+        response_vacunas = supabase.table('Vacuna') \
+            .select('id_mascota, prox_fecha, nombre_vacuna') \
+            .execute()
+
+        if response_vacunas.data:
+            for vacuna in response_vacunas.data:
+                id_mascota = vacuna['id_mascota']
+                nombre_vacuna = vacuna['nombre_vacuna']
+                prox_fecha = datetime.strptime(vacuna['prox_fecha'], '%Y-%m-%d')
+
+                # Calcular la fecha de envío del recordatorio (3 días antes de prox_fecha)
+                fecha_recordatorio = prox_fecha - timedelta(days=3)
+
+                logging.debug(f"Fecha de recordatorio calculada: {fecha_recordatorio.strftime('%Y-%m-%d')}")
+
+                # Enviar recordatorio solo si hoy es 3 días antes de prox_fecha
+                if hoy == fecha_recordatorio.strftime('%Y-%m-%d'):
+                    logging.debug(f"Enviando recordatorio para la vacuna {nombre_vacuna} para la mascota con ID: {id_mascota}")
+
+                    # Obtener el dueño de la mascota (usuario asociado)
+                    response_mascota = supabase.table('Mascota') \
+                        .select('id_usuario, nombre') \
+                        .filter('id_mascota', 'eq', id_mascota) \
+                        .execute()
+
+                    if response_mascota.data:
+                        id_usuario = response_mascota.data[0]['id_usuario']
+                        nombre_mascota = response_mascota.data[0]['nombre']
+
+                        logging.debug(f"Dueño encontrado para la mascota {nombre_mascota}: Usuario ID {id_usuario}")
+
+                        # Obtener el correo electrónico del usuario
+                        response_usuario = supabase.table('Usuario') \
+                            .select('correo') \
+                            .filter('id_usuario', 'eq', id_usuario) \
+                            .execute()
+
+                        if response_usuario.data:
+                            email_usuario = response_usuario.data[0]['correo']
+                            logging.debug(f"Correo electrónico del usuario {id_usuario}: {email_usuario}")
+
+                            # Enviar correo electrónico de recordatorio
+                            with app.app_context():
+                                msg = Message(
+                                    subject=f"Recordatorio de vacunación para {nombre_mascota}",
+                                    recipients=[email_usuario],
+                                    body=f"Hola,\n\n"
+                                        f"Te recordamos que la vacuna '{nombre_vacuna}' de tu mascota {nombre_mascota} "
+                                        f"está programada para el {prox_fecha.strftime('%Y-%m-%d')}. "
+                                        "Por favor, asegúrate de estar listo para administrarla o llevar a tu mascota al veterinario.\n\n"
+                                        "Saludos,\n"
+                                        "Equipo Veterinario de GatiVet"
+                                )
+                                mail.send(msg)
+                                logging.info(f"Recordatorio enviado a {email_usuario} para la vacuna {nombre_vacuna} de la mascota {nombre_mascota}.")
+                                logging.debug(f"Recordatorio enviado al correo: {email_usuario}")
+                        else:
+                            logging.warning(f"No se encontró correo electrónico para el usuario {id_usuario}.")
+                    else:
+                        logging.warning(f"No se encontró la mascota con ID {id_mascota}.")
+        else:
+            logging.info(f"No se encontraron vacunas programadas para enviar recordatorios.")
+
+    except Exception as e:
+        logging.error(f"Error al enviar recordatorios: {e}")
+
+# Programar la tarea para que se ejecute todos los días a las 12:00 PM
+scheduler = BackgroundScheduler()
+scheduler.add_job(enviar_recordatorios, 'cron', hour=12, minute=0)  # Ejecutar a las 12:00 PM cada día
+scheduler.start()
 
 # Ruta guardar ficha
 @app.route('/api/insertar_historial', methods=['POST'])

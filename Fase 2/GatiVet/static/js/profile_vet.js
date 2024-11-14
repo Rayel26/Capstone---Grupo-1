@@ -1766,3 +1766,5 @@ document.getElementById("pet-select").addEventListener("change", function() {
     // Mostrar datos de desparasitaciones de la mascota seleccionada
     fetchDewormersByPetId(selectedPetId); // Llama a la función para obtener las desparasitaciones
 });
+
+
