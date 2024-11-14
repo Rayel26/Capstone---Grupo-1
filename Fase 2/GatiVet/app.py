@@ -2404,6 +2404,13 @@ def check_availability():
     data = request.json
     selected_date = data['date']  # Se espera que la fecha esté en formato 'YYYY-MM-DD'
 
+    # Obtener la fecha actual
+    today = datetime.today().strftime('%Y-%m-%d')  # Formato 'YYYY-MM-DD'
+
+    # Comprobar si la fecha seleccionada es anterior a la fecha actual
+    if selected_date < today:
+        return jsonify({'occupied_hours': []})  # No consultar, devolver lista vacía para días pasados
+
     # Consultar las horas ocupadas para la fecha seleccionada utilizando el cliente de Supabase inicializado
     query = supabase.table('Agenda') \
         .select('hora') \

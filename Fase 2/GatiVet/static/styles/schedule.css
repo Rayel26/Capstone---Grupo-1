@@ -144,3 +144,8 @@
     background-color: #ccc; /* Fondo gris para horas deshabilitadas */
     cursor: not-allowed; /* Cursor en forma de cruz */
 }
+
+.day.occupied {
+    background-color: red;
+    color: white;
+}

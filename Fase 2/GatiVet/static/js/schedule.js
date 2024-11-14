@@ -257,7 +257,6 @@ document.querySelectorAll('#time-select button').forEach(button => {
     });
 });
 
-
 // Obtener los días festivos de Chile para un año específico
 function getHolidays(year) {
     return [
@@ -284,10 +283,9 @@ today.setHours(0, 0, 0, 0); // Asegurarse de que se comparen solo las fechas
 
 let currentMonth = today.getMonth();
 let currentYear = today.getFullYear();
-let previousMonth = null; // Para almacenar el mes anterior
 let monthStack = []; // Para almacenar la pila de meses visitados
 
-// Función para crear el calendario
+// Crear el calendario
 function createCalendar() {
     const calendarContainer = document.getElementById('calendar');
     const monthNameElement = document.getElementById('month-name');
@@ -346,23 +344,65 @@ function createCalendar() {
                 dayElement.classList.add('weekend'); // Agregar clase de fin de semana
             }
         } else {
-            // Verificar si la fecha es anterior a hoy
-            if (dayDate >= today) { // Solo permitir selección si la fecha es hoy o en el futuro
+            // Deshabilitar días anteriores a la fecha actual
+            if (dayDate < today) {
+                dayElement.classList.add('disabled'); // Agregar clase de deshabilitado
+                dayElement.style.color = 'grey'; // Cambiar color a gris para fechas deshabilitadas
+                dayElement.style.pointerEvents = 'none'; // Evitar la interacción con el mouse
+            } else {
+                // Permitir seleccionar días futuros
                 dayElement.addEventListener('click', function() {
                     document.querySelectorAll('.day.selected').forEach(el => el.classList.remove('selected'));
                     dayElement.classList.add('selected');
                     document.getElementById('date-select').value = dateString; // Guardar la fecha seleccionada
                 });
-            } else {
-                dayElement.classList.add('disabled'); // Agregar clase de deshabilitado
-                dayElement.style.color = 'grey'; // Cambiar color a gris para fechas deshabilitadas
-                dayElement.style.pointerEvents = 'none'; // Evitar la interacción con el mouse
             }
         }
 
         calendarContainer.appendChild(dayElement);
     }
+
+    // Llamar a la función para verificar si los días están ocupados y marcar los días ocupados
+    checkAllDaysOccupied();
 }
+
+// Función para marcar los días como completamente ocupados si todas sus horas están tomadas
+function checkAllDaysOccupied() {
+    document.querySelectorAll('.day').forEach(dayElement => {
+        const selectedDate = dayElement.textContent;
+        const selectedDateString = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`;
+
+        fetch('/api/check_availability', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ date: selectedDateString })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const occupiedHours = data.occupied_hours.map(normalizeTime); // Normalizar horas ocupadas
+
+            // Comprobar si todas las horas están ocupadas
+            const allHoursOccupied = occupiedHours.length === document.querySelectorAll('.time-button').length;
+            if (allHoursOccupied) {
+                dayElement.classList.add('fully-booked');
+                dayElement.style.backgroundColor = 'red'; // Cambiar color a rojo
+                dayElement.style.pointerEvents = 'none'; // Deshabilitar la selección de este día
+            } else {
+                dayElement.classList.remove('fully-booked');
+                dayElement.style.backgroundColor = ''; // Restaurar color si no está ocupado
+                dayElement.style.pointerEvents = ''; // Habilitar la selección si no está ocupado
+            }
+        })
+        .catch(err => {
+            console.error('Error al verificar disponibilidad para el día:', err);
+        });
+    });
+}
+
+// Llamar a la función para crear el calendario inicial
+createCalendar();
+
+
 
 // Botón de mes siguiente
 document.getElementById('next-month').addEventListener('click', function() {
@@ -395,7 +435,6 @@ document.getElementById('prev-month').addEventListener('click', function() {
     }
 });
 
-createCalendar(); // Llamar a la función para crear el calendario inicial
 
 // Función para validar selección de fecha y hora
 function validateDateTime() {
@@ -408,7 +447,6 @@ function validateDateTime() {
     }
     return true;
 }
-
 
 /// Función para generar los botones de hora
 function generateTimeButtons() {
@@ -456,44 +494,7 @@ function generateTimeButtons() {
 // Normalizar las horas al formato 'HH:MM' antes de comparar
 const normalizeTime = (time) => time.substring(0, 5); // Eliminar los segundos
 
-// Función para marcar los días como completamente ocupados si todas sus horas están tomadas
-const checkAllDaysOccupied = () => {
-    document.querySelectorAll('.day').forEach(dayElement => {
-        const selectedDate = dayElement.textContent;
-        const selectedDateString = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(selectedDate).padStart(2, '0')}`;
 
-        fetch('/api/check_availability', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ date: selectedDateString })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Horas ocupadas para el día ", selectedDateString, ":", data.occupied_hours);
-
-            const occupiedHours = data.occupied_hours.map(normalizeTime); // Normalizar horas ocupadas
-
-            // Comprobar si todas las horas están ocupadas
-            const allHoursOccupied = occupiedHours.length === document.querySelectorAll('.time-button').length;
-            if (allHoursOccupied) {
-                dayElement.classList.add('fully-booked');
-                dayElement.style.backgroundColor = 'red';
-                dayElement.style.pointerEvents = 'none'; // Deshabilitar la selección de este día
-                console.log("El día " + selectedDateString + " está completamente ocupado");
-            } else {
-                dayElement.classList.remove('fully-booked');
-                dayElement.style.backgroundColor = '';
-                dayElement.style.pointerEvents = ''; // Habilitar la selección de este día si no está completamente ocupado
-            }
-        })
-        .catch(err => {
-            console.error('Error al verificar disponibilidad para el día:', err);
-        });
-    });
-};
-
-// Llamar a la función para revisar todos los días al cargar la página
-checkAllDaysOccupied();
 
 // Event listener para el clic de los días seleccionados
 document.querySelectorAll('.day').forEach(dayElement => {
@@ -503,6 +504,17 @@ document.querySelectorAll('.day').forEach(dayElement => {
 
         console.log("Día seleccionado:", selectedDateString);  // Depuración: mostrar el día seleccionado
 
+        // Obtener la fecha actual
+        const today = new Date();
+        const todayString = today.toISOString().split('T')[0]; // Formato 'YYYY-MM-DD'
+
+        // Comprobar si la fecha seleccionada es anterior a la fecha actual
+        if (selectedDateString < todayString) {
+            console.log("No se puede seleccionar una fecha anterior a hoy.");
+            return; // Salir de la función si la fecha es anterior
+        }
+
+        // Si la fecha no es anterior a hoy, hacer la consulta
         fetch('/api/check_availability', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
