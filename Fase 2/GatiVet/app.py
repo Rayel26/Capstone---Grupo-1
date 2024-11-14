@@ -2511,7 +2511,7 @@ def obtener_lista_medicamentos():
 
         # Aplica el filtro por tipo de medicamento si existe
         if tipo_medicamento:
-            query = query.eq('tipo_medicamento', tipo_medicamento)
+            query = query.filter('tipo_medicamento', 'eq', tipo_medicamento)
 
         # Ejecuta la consulta
         response = query.execute()
@@ -2550,45 +2550,45 @@ def update_medicine(medicine_id):
         'tipo_medicamento': data['tipo_medicamento'],
         'marca': data['marca'],
         'stock': data['stock']
-    }).eq('id_medicamento', medicine_id).execute()
+    }).filter('id_medicamento', 'eq', medicine_id).execute()
 
     if response.data:
         return jsonify({'success': True, 'message': 'Medicamento actualizado exitosamente.'}), 200
     else:
         return jsonify({'error': 'Error al actualizar medicamento.'}), 400
 
+#Obtener medicamentos 
 @app.route('/api/medicamentos/<int:medicine_id>', methods=['GET'])
 @login_required
 @role_required('admin')
 def get_medicine(medicine_id):
-    response = supabase.table('Medicamentos').select('*').eq('id_medicamento', medicine_id).execute()
+    response = supabase.table('Medicamentos').select('*').filter('id_medicamento', 'eq', medicine_id).execute()
 
     if response.data:
         return jsonify(response.data[0]), 200  # Retorna los datos del medicamento
     else:
         return jsonify({'error': 'Medicamento no encontrado'}), 404
 
-#Eliminar medicamento
+# Eliminar medicamento
 @app.route('/api/medicamentos/<int:medicine_id>', methods=['DELETE'])
 @login_required
 @role_required('admin')
 def delete_medicine(medicine_id):
     # Verificar si el medicamento existe
-    response = supabase.table('Medicamentos').select('*').eq('id_medicamento', medicine_id).execute()
+    response = supabase.table('Medicamentos').select('*').filter('id_medicamento', 'eq', medicine_id).execute()
 
     if not response.data:
         return jsonify({'error': 'Medicamento no encontrado.'}), 404
 
     # Eliminar el medicamento de la base de datos
-    delete_response = supabase.table('Medicamentos').delete().eq('id_medicamento', medicine_id).execute()
+    delete_response = supabase.table('Medicamentos').delete().filter('id_medicamento', 'eq', medicine_id).execute()
 
     if delete_response.data:
         return jsonify({'success': True, 'message': 'Medicamento eliminado exitosamente.'}), 200
     else:
         return jsonify({'error': 'Error al eliminar el medicamento.'}), 400
 
-
-#Ruta para recuperación de contraseña
+# Ruta para recuperación de contraseña
 @app.route('/recover_password', methods=['POST'])
 def recover_password():
     # Obtener el correo electrónico enviado en formato JSON
@@ -2599,7 +2599,7 @@ def recover_password():
         return jsonify({"success": False, "message": "El correo electrónico es requerido."}), 400
 
     # Verificar si el correo existe y está confirmado en la tabla "usuarios"
-    response = supabase.table('Usuario').select('*').eq('correo', correo).eq('confirmacion', True).execute()
+    response = supabase.table('Usuario').select('*').filter('correo', 'eq', correo).filter('confirmacion', 'eq', True).execute()
 
     # Verificar si la respuesta contiene datos
     if not response.data or len(response.data) == 0:
@@ -2642,7 +2642,6 @@ def update_hour():
         return jsonify({'error': 'Faltan datos necesarios'}), 400
 
     try:
-        # Actualizar la hora en la tabla Agenda usando .filter en lugar de .eq
         response = supabase.table('Agenda').update({
             'hora': new_time  # Actualizamos la columna 'hora' con el nuevo valor
         }).filter('id_agenda', 'eq', appointment_id).execute()
