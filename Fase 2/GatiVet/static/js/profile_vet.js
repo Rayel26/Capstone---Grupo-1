@@ -699,10 +699,10 @@ function cerrarModal() {
 document.getElementById('saveButton').addEventListener('click', async function() {
     const consultationDate = document.getElementById('consultationDate').value;
     const consultationStartTime = document.getElementById('consultationStartTime').value;
-    const animalTemperature = parseFloat(document.getElementById('animalTemperature').value);
+    const animalTemperature = parseFloat(document.getElementById('animalTemperature').value).toFixed(2);
     const heartRate = parseInt(document.getElementById('heartRate').value);
     const respiratoryRate = parseInt(document.getElementById('respiratoryRate').value);
-    const patientWeight = parseFloat(document.getElementById('patientWeight').value);
+    const patientWeight = parseFloat(document.getElementById('patientWeight').value).toFixed(2);
     const consultationReason = document.getElementById('consultationReason').value;
     const physicalExam = document.getElementById('physicalExam').value;
     const diagnosis = document.getElementById('diagnosis').value;
@@ -714,17 +714,21 @@ document.getElementById('saveButton').addEventListener('click', async function()
         return;
     }
 
-    console.log("Mascota seleccionada para guardar (selectedPetId):", selectedPetId); // Verificación
+    // Validación de límites de campos numéricos
+    if (animalTemperature > 999.99 || patientWeight > 999.99 || heartRate > 999 || respiratoryRate > 999) {
+        alert("Por favor, ingresa valores válidos para los campos de temperatura, peso, frecuencia cardíaca y frecuencia respiratoria.");
+        return;
+    }
 
     const id_usuario = document.getElementById("rut-paciente-nuevo").value;
 
     const medicalHistory = {
         fecha: consultationDate,
         hora_inicio: consultationStartTime,
-        temperatura: animalTemperature,
+        temperatura: parseFloat(animalTemperature),
         frecuencia_cardiaca: heartRate,
         frecuencia_respiratoria: respiratoryRate,
-        peso: patientWeight,
+        peso: parseFloat(patientWeight),
         motivo_consulta: consultationReason,
         examen_fisico: physicalExam,
         diagnostico: diagnosis,
@@ -732,9 +736,6 @@ document.getElementById('saveButton').addEventListener('click', async function()
         id_mascota: selectedPetId,
         id_usuario: id_usuario
     };
-
-    console.log("ID de mascota que se va a guardar:", selectedPetId);
-
 
     try {
         const response = await fetch('http://127.0.0.1:5000/api/insertar_historial', {
@@ -758,6 +759,8 @@ document.getElementById('saveButton').addEventListener('click', async function()
         alert("Hubo un problema al enviar la solicitud. Intenta nuevamente más tarde.");
     }
 });
+
+
 
 // Script ver historial medico
 function loadMedicalHistory() {
@@ -883,7 +886,7 @@ function exportToPDF() {
     doc.text(title, titleX, 20);
 
     // Ajustar la posición de los datos del dueño, mascota y fecha
-    const dataStartY = 40; // Aumentar la separación del título a 40
+    const dataStartY = 40 + 20; // Aumentar la separación del título a 20 mm (antes era 40 mm)
 
     doc.setFontSize(12);
     doc.setFont("normal");
@@ -891,7 +894,7 @@ function exportToPDF() {
 
     // Ajustar la posición del nombre de la mascota para que quede debajo del dueño
     const petNameY = dataStartY + 10; // Asegura que el nombre de la mascota quede debajo del dueño
-    doc.text("Mascota: " + petName, leftMargin, petNameY); 
+    doc.text("Mascota: " + petName, leftMargin, petNameY);
 
     doc.text("Fecha: " + date, leftMargin + 160, dataStartY); // Ajusta la posición
 
@@ -916,8 +919,8 @@ function exportToPDF() {
         const filteredRows = rows.slice(1).map(row => row.filter((_, index) => index !== excludedColumnIndex));
 
         // Definir la altura de las filas y las columnas
-        const rowHeight = 8; // Reduce la altura de las filas para que no haya mucho espacio
-        const cellPadding = 2;
+        const baseRowHeight = 8; // Alto básico de cada fila sin contar saltos de línea
+        const cellPadding = 5;
         const cellWidth = contentWidth / filteredHeaders.length; // Ajustar automáticamente el ancho de las celdas según la cantidad de columnas
 
         // Añadir encabezados de la tabla con líneas
@@ -925,60 +928,100 @@ function exportToPDF() {
         filteredHeaders.forEach((header, index) => {
             const x = leftMargin + (index * cellWidth);
             doc.setFont("bold");
-            doc.text(header, x + cellPadding, tableStartY + rowHeight / 2); // Texto dentro de la celda
-            doc.rect(x, tableStartY, cellWidth, rowHeight); // Línea alrededor de la celda
+            doc.text(header, x + cellPadding, tableStartY + baseRowHeight / 2); // Texto dentro de la celda
+            doc.rect(x, tableStartY, cellWidth, baseRowHeight); // Línea alrededor de la celda
         });
+
+        // Variable para realizar el ajuste de la posición Y dependiendo de las filas
+        let currentY = tableStartY + baseRowHeight;
+        let pageCount = 1; // Contador de páginas
 
         // Añadir datos de cada fila con líneas
         doc.setFont("normal");
         filteredRows.forEach((row, rowIndex) => {
+            let rowHeight = baseRowHeight; // Empezamos con una altura básica para la fila
+            let maxCellHeight = 0;
+
+            // Determinar la altura de cada celda y encontrar la más alta
+            const cellHeights = row.map(cell => {
+                const splitText = doc.splitTextToSize(cell, cellWidth - 2 * cellPadding);
+                const height = splitText.length * baseRowHeight;
+                maxCellHeight = Math.max(maxCellHeight, height);
+                return height;
+            });
+
+            // Actualizar la altura de la fila a la altura máxima de las celdas
+            rowHeight = maxCellHeight;
+
+            // Verificar si la fila cabe en la página actual, si no, añadir una nueva página
+            if (currentY + rowHeight > pageHeight - 40) { // Deja un margen de 40mm para la firma
+                doc.addPage(); // Agregar una nueva página
+                pageCount++; // Incrementar el contador de páginas
+                currentY = 20; // Reiniciar la posición Y en la nueva página
+            }
+
+            // Posición Y inicial para la fila actual
+            let rowStartY = currentY;
+
+            // Dibujar celdas y agregar texto
             row.forEach((cell, cellIndex) => {
                 const x = leftMargin + (cellIndex * cellWidth);
-                const y = tableStartY + (rowIndex + 1) * rowHeight;
+                const y = rowStartY;
 
-                // Añadir el texto de la celda
-                doc.text(cell, x + cellPadding, y + rowHeight / 2);
-                
-                // Dibuja las líneas alrededor de cada celda
+                // Redibujar la celda con la altura ajustada
                 doc.rect(x, y, cellWidth, rowHeight);
+
+                // Añadir el texto de la celda con saltos de línea automáticos y alineación izquierda
+                const splitText = doc.splitTextToSize(cell, cellWidth - 2 * cellPadding);
+                doc.text(splitText, x + cellPadding, y + cellPadding); // Alineado a la izquierda dentro de la celda
+
+                // Ajustar la posición para la siguiente celda en la misma fila
+                currentY = y + rowHeight;
             });
+
+            // Aumentar la posición Y para la siguiente fila
+            currentY += 0; // Sin aumentar espacio adicional entre las filas
         });
 
         // Línea de separación después de la tabla
-        doc.line(leftMargin, tableStartY + filteredRows.length * rowHeight, pageWidth - rightMargin, tableStartY + filteredRows.length * rowHeight);
-    } else {
-        console.error("La tabla de historial clínico no se encuentra en el DOM.");
+        doc.line(leftMargin, currentY, pageWidth - rightMargin, currentY);
+
+        // Verificar si hay suficiente espacio para agregar la firma en la misma página
+        const remainingSpace = pageHeight - currentY - 20; // 20mm de margen inferior
+
+        if (remainingSpace >= 20) { // Si hay suficiente espacio, agregar la firma en la misma página
+            const signatureLineY = currentY + 10; // 10 mm de espacio después de la tabla
+            const signatureLineXStart = pageWidth - rightMargin - 60; // Ajusta la posición para que la línea no quede pegada al margen
+            const signatureLineXEnd = pageWidth - rightMargin - 9; // Ajusta la longitud de la línea
+
+            // Dibuja la línea de firma
+            doc.setLineWidth(0.5); // Grosor de la línea
+            doc.line(signatureLineXStart, signatureLineY, signatureLineXEnd, signatureLineY); // Dibuja la línea
+
+            // Añadir texto para indicar que es para la firma (debajo de la línea)
+            const signatureText = "Firma y Timbre del Veterinario";
+
+            // Establecer la posición del texto para que se ajuste al mismo largo que la línea
+            const textWidth = doc.getTextWidth(signatureText);
+            const textX = (signatureLineXStart + signatureLineXEnd) / 2 - (textWidth / 2); // Centra el texto entre los márgenes de la línea
+
+            // Añadir texto debajo de la línea
+            doc.setFontSize(12);
+            doc.setFont("normal");
+            doc.text(signatureText, textX, signatureLineY + 5); // Ajusta la posición para que el texto quede debajo de la línea
+        } else {
+            // Si no hay suficiente espacio, agregar una nueva página con la firma
+            doc.addPage();
+            doc.setFontSize(12);
+            doc.setFont("normal");
+            doc.text("Firma y Timbre del Veterinario", pageWidth / 2 - 70, 20);
+        }
+
+        // Guardar el archivo PDF
+        doc.save("historial_clinico.pdf");
     }
-
-    // Línea para la firma y el timbre del veterinario
-    const signatureLineY = pageHeight - 30; // Y position para la línea de firma, ajusta según sea necesario
-    const signatureLineXStart = pageWidth - rightMargin - 60; // Ajusta la posición para que la línea no quede pegada al margen
-    const signatureLineXEnd = pageWidth - rightMargin - 9; // Ajusta la longitud de la línea
-
-    // Dibuja la línea de firma
-    doc.setLineWidth(0.5); // Grosor de la línea
-    doc.line(signatureLineXStart, signatureLineY, signatureLineXEnd, signatureLineY); // Dibuja la línea
-
-    // Añadir texto para indicar que es para la firma (debajo de la línea)
-    // Asegúrate de que el texto esté alineado y tenga el mismo largo que la línea
-    const signatureText = "Firma y Timbre del Veterinario";
-
-    // Establecer la posición del texto para que se ajuste al mismo largo que la línea
-    const textXStart = signatureLineXStart; // Inicia el texto al principio de la línea
-    const textXEnd = signatureLineXEnd; // Finaliza el texto al final de la línea
-
-    // Centrar el texto en el área de la línea
-    const textWidth = doc.getTextWidth(signatureText);
-    const textX = (textXStart + textXEnd) / 2 - (textWidth / 2); // Centra el texto entre los márgenes de la línea
-
-    // Añadir texto debajo de la línea
-    doc.setFontSize(12);
-    doc.setFont("normal");
-    doc.text(signatureText, textX, signatureLineY + 5); // Ajusta la posición para que el texto quede debajo de la línea
-
-    // Guardar el documento PDF
-    doc.save("historial_clinico.pdf");
 }
+
 
 ///////////////////////////////////////////////////////
 // Script para editar información de modals de citas
