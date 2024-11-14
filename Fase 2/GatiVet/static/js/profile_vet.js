@@ -1184,7 +1184,11 @@ function generateCalendar(year, month, appointments = {}) {
                             },
                             hora: hora || 'Hora no disponible',
                             servicio: tipoConsulta || 'Servicio no disponible',
-                            motivo: appointment.motivo || 'Motivo no disponible'
+                            motivo: appointment.motivo || 'Motivo no disponible',
+                            domicilio: {
+                                direccion: appointment.domicilio?.direccion || 'Dirección no disponible',
+                                numeracion: appointment.domicilio?.numeracion || 'Numeración no disponible'
+                            }
                         };
 
                         console.log('Datos de la cita antes de abrir el modal:', appointmentObject);
@@ -1211,35 +1215,31 @@ async function fetchAppointments() {
 
         const appointments = {};
         data.forEach(appointment => {
-            // Verificar si la fecha existe y es válida
             if (appointment.fecha) {
-                // Crear el objeto Date directamente desde el formato ISO recibido
                 const appointmentDate = new Date(appointment.fecha);
-                
-                // Verificar si la fecha es válida
+
                 if (isNaN(appointmentDate)) {
                     console.error(`Fecha inválida: ${appointment.fecha}`);
-                    return; // Saltar esta cita si la fecha es inválida
+                    return;
                 }
 
-                const day = appointmentDate.getUTCDate(); // Cambiar a getUTCDate() para obtener el día correcto
-                const month = appointmentDate.getUTCMonth(); // Cambiar a getUTCMonth() para obtener el mes correcto
-                const year = appointmentDate.getUTCFullYear(); // Cambiar a getUTCFullYear() para obtener el año correcto
+                const day = appointmentDate.getUTCDate();
+                const month = appointmentDate.getUTCMonth();
+                const year = appointmentDate.getUTCFullYear();
 
-                // Usamos el año, el mes (ajustado) y el día como clave
                 const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
                 if (!appointments[key]) {
-                    appointments[key] = []; // Inicializar como array si no existe
+                    appointments[key] = [];
                 }
 
                 if (appointment.servicio) {
                     appointments[key].push({
-                        id_agenda: appointment.id_agenda, // Incluir el id_agenda aquí
+                        id_agenda: appointment.id_agenda,
                         time: appointment.hora || 'Hora no disponible',
                         pet: `Mascota ID: ${appointment.id_mascota}`,
                         type: appointment.servicio || 'Tipo no disponible',
-                        color: 'someColor', // Asegúrate de que se define un color
+                        color: 'someColor',
                         usuario: {
                             nombre: `${appointment.usuario.nombre} ${appointment.usuario.appaterno}`.trim() || 'Nombre no disponible',
                             correo: appointment.usuario?.correo || 'Email no disponible',
@@ -1252,8 +1252,12 @@ async function fetchAppointments() {
                             foto_url: appointment.mascota?.foto_url || 'Icono no disponible'
                         },
                         motivo: appointment.motivo || 'Motivo no disponible',
-                        fecha: appointment.fecha || 'Fecha no disponible' // Usar el formato original
-                    });                    
+                        fecha: appointment.fecha || 'Fecha no disponible',
+                        domicilio: {
+                            direccion: appointment.domicilio?.direccion || 'Dirección no disponible',
+                            numeracion: appointment.domicilio?.numeracion || 'Numeración no disponible'
+                        }
+                    });
                 } else {
                     console.warn(`Cita sin servicio válida: ${JSON.stringify(appointment)}`);
                 }
@@ -1262,16 +1266,84 @@ async function fetchAppointments() {
             }
         });
 
-        // Llama a la función para generar el calendario
         generateCalendar(currentYear, currentMonth, appointments);
-
     } catch (error) {
         console.error('Error fetching appointments:', error);
     }
 }
 
-
 fetchAppointments();
+
+function openModalWeek(appointment) {
+    console.log('Datos de la cita:', appointment); // Para depurar
+    console.log('ID de la cita:', appointment.id_agenda, 'Nombre de la cita:', appointment.type);
+    console.log('Direccion:', appointment.domicilio?.direccion);
+
+    if (!appointment || typeof appointment !== 'object') {
+        console.error('El objeto de la cita no es válido:', appointment);
+        return;
+    }
+
+    const appointmentId = appointment.id_agenda;
+    if (!appointmentId) {
+        console.error('El ID de la cita no está disponible');
+        alert('El ID de la cita no está disponible');
+        return;
+    }
+
+    const modal = document.getElementById('modalweek');
+    modal.setAttribute('data-appointment-id', appointmentId);
+
+    // Completa los campos del modal con los datos de la cita
+    document.getElementById('modalweek-type').innerText = `Cita: ${appointment.type || 'Tipo no disponible'}`;
+    document.getElementById('modalweek-service').innerText = `${appointment.type || 'Servicio no disponible'}`;
+    document.getElementById('modalweek-date').innerText = `${new Date(appointment.fecha).toLocaleDateString()}`;
+
+    // Información del dueño
+    document.getElementById('modalweek-owner').innerText = appointment.usuario?.nombre || 'Nombre no disponible';
+    document.getElementById('modalweek-email').innerText = appointment.usuario?.correo || 'Email no disponible';
+    document.getElementById('modalweek-phone').innerText = appointment.usuario?.celular || 'Teléfono no disponible';
+
+    // Información de la mascota
+    document.getElementById('modalweek-pet-icon').src = appointment.mascota?.foto_url || 'url-de-imagen-de-prueba.jpg';
+    document.getElementById('modalweek-pet').innerText = appointment.mascota?.nombre || 'Nombre no disponible';
+    document.getElementById('modalweek-breed').innerText = `${appointment.mascota?.raza || 'Raza no disponible'}, ${appointment.mascota?.sexo || 'Sexo no disponible'}`;
+
+    // Información del domicilio
+    if (appointment.domicilio) {
+        const domicilio = appointment.domicilio;
+        const address = `${domicilio.direccion || 'Dirección no disponible'}, ${domicilio.numeracion || 'Numeración no disponible'}`;
+        document.getElementById('modalweek-address').innerText = address;
+    } else {
+        document.getElementById('modalweek-address').innerText = 'Dirección no disponible';
+    }
+
+    // Detalles de la cita
+    const startTimeInput = document.getElementById('modalweek-start-time');
+    
+    const hora = appointment.hora || '00:00';
+    const formattedHora = hora.match(/^([0-9]{2}):([0-9]{2})$/) ? hora : '00:00';
+
+    const [hours, minutes] = formattedHora.split(':');
+    let ampm = 'AM';
+    let formattedTime = `${hours}:${minutes} ${ampm}`;
+    if (parseInt(hours) >= 12) {
+        ampm = 'PM';
+        const newHours = parseInt(hours) - 12;
+        formattedTime = `${newHours}:${minutes} ${ampm}`;
+    }
+
+    const options = startTimeInput.querySelectorAll('option');
+    options.forEach(option => {
+        if (option.value === formattedTime) {
+            option.selected = true;
+        }
+    });
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
 
 // Navegar entre meses
 prevMonthButton.addEventListener('click', () => {
@@ -1292,49 +1364,6 @@ nextMonthButton.addEventListener('click', () => {
     fetchAppointments(); // Actualizar citas al cambiar de mes
 });
 
-// Modal de la agenda
-function openModalWeek(appointment) {
-    console.log('Datos de la cita:', appointment); // Para depurar
-    console.log('ID de la cita:', appointment.id_agenda, 'Nombre de la cita:', appointment.name);
-
-    if (!appointment || typeof appointment !== 'object') {
-        console.error('El objeto de la cita no es válido:', appointment);
-        return;
-    }
-
-    const appointmentId = appointment.id_agenda;  // Usamos id_agenda en lugar de id
-    if (!appointmentId) {
-        console.error('El ID de la cita no está disponible');
-        alert('El ID de la cita no está disponible');
-        return;
-    }
-
-    // Establecer el ID de la cita en el modal
-    const modal = document.getElementById('modalweek');
-    modal.setAttribute('data-appointment-id', appointmentId);  // Asignamos el id_agenda al modal
-
-    // Completa los campos del modal con los datos de la cita
-    document.getElementById('modalweek-type').innerText = `Cita: ${appointment.type || 'Tipo no disponible'}`;
-    document.getElementById('modalweek-date').innerText = `${new Date(appointment.fecha).toLocaleDateString()}`;
-
-    // Información del dueño
-    document.getElementById('modalweek-owner').innerText = appointment.usuario?.nombre || 'Nombre no disponible';
-    document.getElementById('modalweek-email').innerText = appointment.usuario?.correo || 'Email no disponible';
-    document.getElementById('modalweek-phone').innerText = appointment.usuario?.celular || 'Teléfono no disponible';
-
-    // Información de la mascota
-    document.getElementById('modalweek-pet-icon').src = appointment.mascota?.foto_url || 'url-de-imagen-de-prueba.jpg';
-    document.getElementById('modalweek-pet').innerText = appointment.mascota?.nombre || 'Nombre no disponible';
-    document.getElementById('modalweek-breed').innerText = `${appointment.mascota?.raza || 'Raza no disponible'}, ${appointment.mascota?.sexo || 'Sexo no disponible'}`;
-
-    // Detalles de la cita
-    const startTimeInput = document.getElementById('modalweek-start-time');
-    startTimeInput.value = appointment.hora || '00:00'; // Asignamos la hora correctamente al input
-
-    // Mostrar el modal
-    modal.classList.remove('hidden');
-    modal.classList.add('flex'); // Usar flex para mostrar el modal
-}
 
 // Función para cerrar el modal
 function closeModalWeek() {
@@ -1343,9 +1372,39 @@ function closeModalWeek() {
 
 // Función para cancelar la cita
 function cancelAppointmentWeek() {
-    alert("Cita cancelada");
-    closeModalWeek();
+    const modal = document.getElementById('modalweek');
+    const appointmentId = modal.getAttribute('data-appointment-id');  // Obtener el ID de la cita
+
+    if (!appointmentId) {
+        console.error('El ID de la cita no está disponible');
+        alert('El ID de la cita no está disponible');
+        return;
+    }
+
+    // Confirmar la acción de cancelación
+    if (confirm('¿Estás seguro de que deseas cancelar esta cita?')) {
+        // Llamada a la API para cancelar la cita
+        fetch(`/api/cancelar-cita/${appointmentId}`, {
+            method: 'DELETE',  // Usamos DELETE para eliminar la cita
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Cita cancelada con éxito');
+                closeModalWeek();  // Cerrar el modal después de la cancelación
+            } else {
+                alert('Hubo un error al cancelar la cita');
+            }
+        })
+        .catch(error => {
+            console.error('Error al intentar cancelar la cita:', error);
+            alert('Error al intentar cancelar la cita');
+        });
+    }
 }
+
 
 // Variables para almacenar el estado de la cita
 let isEditing = false;

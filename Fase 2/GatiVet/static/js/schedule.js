@@ -627,7 +627,7 @@ async function confirmAppointment() {
         alert('Por favor, seleccione una mascota.');
         return;
     }
-    
+
     // Validar que se han completado los detalles de la cita
     const appointmentDetails = document.getElementById('appointment-details').value;
     if (!appointmentDetails) {
@@ -661,7 +661,9 @@ async function confirmAppointment() {
 
     const doctorId = document.getElementById('staff-select').value;
     const service = document.getElementById('service-select').value;
-    const rut = normalizeRut(document.getElementById('rut-input').value);
+
+    // Tomamos el RUT directamente formateado y validado
+    const rut = document.getElementById('rut-input').value;
 
     // Enviar la información a la ruta de Flask
     try {
@@ -671,7 +673,7 @@ async function confirmAppointment() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                rut: rut,
+                rut: rut, // Usamos el RUT tal cual como está
                 doctorId: doctorId,
                 service: service,
                 date: selectedDate,
@@ -717,3 +719,4 @@ async function confirmAppointment() {
         alert('Ocurrió un error al confirmar la cita.');
     }
 }
+

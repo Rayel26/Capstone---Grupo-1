@@ -14,7 +14,7 @@ import cloudinary
 import cloudinary.uploader
 from flask_mail import Mail, Message
 import pytz
-import httpx
+
 from cloudinary.api import resources
 
 # Importaciones específicas del proyecto
@@ -25,9 +25,6 @@ app = Flask(__name__, template_folder='templates', static_folder='static')
 CORS(app)
 app.secret_key = 'supersecretkey'  # Clave para las sesiones
 
-# Configuración de cliente HTTP con tiempo de espera
-timeout = httpx.Timeout(30.0, read=100.0)
-client_httpx = httpx.Client(timeout=timeout)
 
 
 # Reemplaza con tus credenciales de Cloudinary
@@ -2342,13 +2339,12 @@ def delete_foundation(foundation_id):
 
 #/// FIN CASOS FUNDACIONES ///
 
-# Ruta Agenda
 @app.route('/api/agenda', methods=['GET'])
 @cross_origin()
 def get_agenda():
     print("API de agenda solicitada")
     
-    # Obtener datos de la tabla Agenda, asegurándote de incluir 'area' y 'motivo'
+    # Obtener datos de la tabla Agenda
     agenda_response = supabase.table('Agenda').select('*').execute()
     agenda_data = agenda_response.data
     
@@ -2360,26 +2356,33 @@ def get_agenda():
     mascota_response = supabase.table('Mascota').select('*').execute()
     mascota_data = {pet['id_mascota']: pet for pet in mascota_response.data}
     
+    # Obtener datos de la tabla Domicilio
+    domicilio_response = supabase.table('Domicilio').select('id_domicilio', 'numeracion', 'direccion').execute()
+    domicilio_data = {dom['id_domicilio']: dom for dom in domicilio_response.data}
+    
     # Preparar la respuesta combinada
     combined_data = []
     for cita in agenda_data:
-        usuario_info = usuario_data.get(cita['id_usuario'])  # Asumiendo 'id_usuario' como FK en Agenda
-        mascota_info = mascota_data.get(cita['id_mascota'])  # Asumiendo 'id_mascota' como FK en Agenda
+        usuario_info = usuario_data.get(cita['id_usuario'])
+        mascota_info = mascota_data.get(cita['id_mascota'])
+        domicilio_info = domicilio_data.get(usuario_info['id_domicilio']) if usuario_info else None
         
-        # Combinar datos incluyendo el id_agenda
+        # Combinar los datos
         combined_record = {
-            'id_agenda': cita['id_agenda'],    # Incluir el id_agenda
-            'fecha': cita['fecha'],            # Fecha de la cita
-            'hora': cita['hora'],              # Hora de la cita
-            'id_mascota': cita['id_mascota'],  # ID de la mascota
-            'servicio': cita['servicio'],      # Servicio asignado
-            'motivo': cita['motivo'],          # Motivo de la cita
-            'usuario': usuario_info,           # Información del usuario
-            'mascota': mascota_info            # Información de la mascota
+            'id_agenda': cita['id_agenda'],
+            'fecha': cita['fecha'],
+            'hora': cita['hora'],
+            'id_mascota': cita['id_mascota'],
+            'servicio': cita['servicio'],
+            'motivo': cita['motivo'],
+            'usuario': usuario_info,
+            'mascota': mascota_info,
+            'domicilio': domicilio_info  # Incluye el domicilio en los datos combinados
         }
         combined_data.append(combined_record)
     
     return jsonify(combined_data), 200
+
 
 
 #Obtener servicios desde Supabase
@@ -2602,6 +2605,7 @@ def recover_password():
     except Exception as e:
         return jsonify({"success": False, "message": f"Error al enviar el correo: {str(e)}"}), 500
 
+#Ruta para actualizar cita
 @app.route('/update_hour', methods=['POST'])
 def update_hour():
     # Obtener los datos enviados desde el frontend
@@ -2628,6 +2632,36 @@ def update_hour():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+#Ruta eliminar cita
+@app.route('/api/cancelar-cita/<string:appointment_id>', methods=['DELETE'])
+def cancelar_cita(appointment_id):
+    try:
+        print(f'Intentando cancelar cita con ID: {appointment_id}')  # Depuración
+
+        # Accede a la tabla de citas en Supabase usando .filter
+        cita = supabase.table('Agenda').delete().filter('id_agenda', 'eq', appointment_id).execute()
+
+        print(f'Respuesta de Supabase: {cita}')  # Depuración para verificar todo el objeto respuesta
+
+        # Verificamos si la respuesta tiene data o count
+        if cita.data:
+            print(f'Datos encontrados para la cita: {cita.data}')  # Depuración
+            # Verifica que los datos de la respuesta están presentes
+            return jsonify({'message': 'Cita cancelada con éxito'}), 200
+        elif cita.count == 0:
+            print(f'No se encontró la cita con ID {appointment_id} en la base de datos')  # Depuración
+            return jsonify({'message': 'Cita no encontrada'}), 404
+        else:
+            print(f'Error al eliminar la cita. Respuesta de Supabase: {cita}')  # Depuración
+            return jsonify({'message': 'No se pudo eliminar la cita'}), 400
+
+    except Exception as e:
+        print(f'Error al intentar cancelar la cita: {str(e)}')  # Depuración
+        return jsonify({'message': f'Error al intentar cancelar la cita: {str(e)}'}), 500
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)  # Ejecuta la aplicación en modo depuración
