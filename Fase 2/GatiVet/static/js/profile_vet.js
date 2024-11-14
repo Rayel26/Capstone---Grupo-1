@@ -866,7 +866,7 @@ function exportToPDF() {
 
     // Obtener los datos del dueño y la mascota del DOM
     const ownerName = document.getElementById("owner-name").textContent;
-    const petName = document.getElementById("pet-name").textContent;
+    const petName = document.getElementById("pet-name").value;
 
     const title = "Historial Clínico";
     const author = "Veterinario: Dr. Juan Pérez";
@@ -990,7 +990,7 @@ function exportToPDF() {
         const remainingSpace = pageHeight - currentY - 20; // 20mm de margen inferior
 
         if (remainingSpace >= 20) { // Si hay suficiente espacio, agregar la firma en la misma página
-            const signatureLineY = currentY + 10; // 10 mm de espacio después de la tabla
+            const signatureLineY = currentY + 30; // 10 mm de espacio después de la tabla
             const signatureLineXStart = pageWidth - rightMargin - 60; // Ajusta la posición para que la línea no quede pegada al margen
             const signatureLineXEnd = pageWidth - rightMargin - 9; // Ajusta la longitud de la línea
 
@@ -1168,6 +1168,7 @@ function generateCalendar(year, month, appointments = {}) {
                     // Agregar el evento de clic para abrir el modal
                     appointmentDiv.addEventListener('click', () => {
                         const appointmentObject = {
+                            id_agenda: appointment.id_agenda, // Incluir el id_agenda aquí
                             type: appointment.type,
                             fecha: `${monthNames[month]} ${day}, ${year}`,
                             usuario: {
@@ -1234,6 +1235,7 @@ async function fetchAppointments() {
 
                 if (appointment.servicio) {
                     appointments[key].push({
+                        id_agenda: appointment.id_agenda, // Incluir el id_agenda aquí
                         time: appointment.hora || 'Hora no disponible',
                         pet: `Mascota ID: ${appointment.id_mascota}`,
                         type: appointment.servicio || 'Tipo no disponible',
@@ -1268,6 +1270,7 @@ async function fetchAppointments() {
     }
 }
 
+
 fetchAppointments();
 
 // Navegar entre meses
@@ -1290,14 +1293,25 @@ nextMonthButton.addEventListener('click', () => {
 });
 
 // Modal de la agenda
-
 function openModalWeek(appointment) {
     console.log('Datos de la cita:', appointment); // Para depurar
+    console.log('ID de la cita:', appointment.id_agenda, 'Nombre de la cita:', appointment.name);
 
     if (!appointment || typeof appointment !== 'object') {
         console.error('El objeto de la cita no es válido:', appointment);
         return;
     }
+
+    const appointmentId = appointment.id_agenda;  // Usamos id_agenda en lugar de id
+    if (!appointmentId) {
+        console.error('El ID de la cita no está disponible');
+        alert('El ID de la cita no está disponible');
+        return;
+    }
+
+    // Establecer el ID de la cita en el modal
+    const modal = document.getElementById('modalweek');
+    modal.setAttribute('data-appointment-id', appointmentId);  // Asignamos el id_agenda al modal
 
     // Completa los campos del modal con los datos de la cita
     document.getElementById('modalweek-type').innerText = `Cita: ${appointment.type || 'Tipo no disponible'}`;
@@ -1314,22 +1328,18 @@ function openModalWeek(appointment) {
     document.getElementById('modalweek-breed').innerText = `${appointment.mascota?.raza || 'Raza no disponible'}, ${appointment.mascota?.sexo || 'Sexo no disponible'}`;
 
     // Detalles de la cita
-    document.getElementById('modalweek-start-time').value = appointment.hora || 'Hora no disponible'; // Hora de inicio
-    document.getElementById('modalweek-service').innerText = appointment.servicio || 'Servicio no disponible';
-    document.getElementById('modalweek-reason').innerText = appointment.motivo || 'Motivo no disponible';
+    const startTimeInput = document.getElementById('modalweek-start-time');
+    startTimeInput.value = appointment.hora || '00:00'; // Asignamos la hora correctamente al input
 
     // Mostrar el modal
-    const modal = document.getElementById('modalweek');
     modal.classList.remove('hidden');
     modal.classList.add('flex'); // Usar flex para mostrar el modal
 }
-
 
 // Función para cerrar el modal
 function closeModalWeek() {
     document.getElementById('modalweek').classList.add('hidden');
 }
-
 
 // Función para cancelar la cita
 function cancelAppointmentWeek() {
@@ -1342,26 +1352,87 @@ let isEditing = false;
 
 function editAppointmentWeek() {
     const startTimeInput = document.getElementById("modalweek-start-time");
-    const endTimeInput = document.getElementById("modalweek-end-time");
     const editTime = document.getElementById("editTime");
 
     if (isEditing) {
-        // Guardar los cambios
-        const startTime = startTimeInput.value;
-        const endTime = endTimeInput.value;
+        // Obtener la hora y el ID de la cita
+        let startTime = startTimeInput.value.trim();  // Eliminar espacios extra alrededor de la hora
+        const appointmentId = document.getElementById('modalweek').getAttribute('data-appointment-id');  // Obtener el ID desde el modal
 
-        console.log("Guardando cambios:", startTime, endTime);
+        // Verificar que el ID de la cita no sea undefined
+        if (!appointmentId) {
+            console.error('ID de cita no encontrado');
+            alert('Hubo un problema al guardar los cambios. El ID de la cita no se ha encontrado.');
+            return;
+        }
+
+        // Depurar: Ver el valor de la hora antes de validarla
+        console.log('Valor de la hora antes de la validación:', startTime);
+
+        // Convertir la hora en formato 12 horas a 24 horas si es necesario
+        startTime = convertTo24HourFormat(startTime);
+
+        // Asegúrate de que la hora esté en el formato correcto (HH:MM)
+        const timeRegex = /^\d{2}:\d{2}$/;
+        if (!timeRegex.test(startTime)) {
+            console.log('Formato de hora no válido');
+            alert('Formato de hora no válido. Asegúrese de que la hora esté en formato HH:MM.');
+            return;
+        }
+
+        // Enviar los datos al servidor para actualizar la hora
+        fetch('/update_hour', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                appointment_id: appointmentId, // ID de la cita
+                new_time: startTime // Nueva hora en formato HH:MM
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                alert(data.message);  // Mostrar un mensaje de éxito
+                console.log("Cambio realizado:", data);
+            } else {
+                alert(data.error);  // Mostrar un mensaje de error
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Hubo un error al actualizar la hora.');
+        });
+
+        // Cambiar el estado del botón de edición
         alert("Los cambios se realizaron correctamente.");
         editTime.textContent = "Editar";
         startTimeInput.disabled = true;
-        endTimeInput.disabled = true;
     } else {
         editTime.textContent = "Guardar Cambios";
         startTimeInput.disabled = false;
-        endTimeInput.disabled = false;
     }
 
     isEditing = !isEditing;
+}
+
+// Función para convertir una hora en formato 12 horas (AM/PM) a formato 24 horas
+function convertTo24HourFormat(time) {
+    const [hour, minute] = time.split(":");
+    let hours = parseInt(hour, 10);
+    const minutes = minute.split(" ")[0]; // Elimina el "AM/PM"
+    let ampm = time.split(" ")[1] || '';  // Para capturar AM/PM
+
+    if (ampm.toUpperCase() === 'PM' && hours < 12) {
+        hours += 12;  // Convertir a formato de 24 horas si es PM
+    }
+    if (ampm.toUpperCase() === 'AM' && hours === 12) {
+        hours = 0;  // Convertir la medianoche (12:00 AM) a 00:00
+    }
+
+    // Formatear a 24 horas, asegurándose de que sea de dos dígitos
+    return `${hours.toString().padStart(2, '0')}:${minutes}`;
 }
 
 // Selecciona el input de tiempo
@@ -1371,7 +1442,6 @@ const timeInput = document.getElementById('consultationStartTime');
 timeInput.addEventListener('click', function () {
     this.showPicker();
 });
-
 
 
 ///////////vacunas////////////////////////////////// 

@@ -971,7 +971,14 @@
                 <div class="mb-4 text-sm text-gray-600 space-y-2 border-gray-300 pb-2">
                     <p>
                         <i class="fas fa-clock mr-1"></i> Hora Inicio:
-                        <input id="modalweek-start-time" type="time" value="11:00" disabled />
+                        <!-- Aquí se usa un select para la hora -->
+                        <select id="modalweek-start-time" disabled>
+                            <option value="08:30 AM">08:30 a. m.</option>
+                            <option value="10:30 AM">10:30 a. m.</option>
+                            <option value="12:30 PM">12:30 p. m.</option>
+                            <option value="02:30 PM">02:30 p. m.</option>
+                            <option value="04:30 PM">04:30 p. m.</option>
+                        </select>
                     </p>
                     <p>
                         <i class="fas fa-info-circle mr-1"></i> Servicio: 
@@ -987,7 +994,6 @@
                 </div>
             </div>
         </div>
-
     </div>
     <!-- Fin Agenda -->
 <script src="{{ url_for('static', filename='js/profile_vet.js') }}"></script>

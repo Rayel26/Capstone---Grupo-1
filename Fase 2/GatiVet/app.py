@@ -2,7 +2,6 @@
 from datetime import datetime, timezone
 import os
 import uuid
-import smtplib
 from email.mime.text import MIMEText
 
 # Importaciones de terceros
@@ -15,10 +14,7 @@ import cloudinary
 import cloudinary.uploader
 from flask_mail import Mail, Message
 import pytz
-import jwt
 import httpx
-import string
-import random
 from cloudinary.api import resources
 
 # Importaciones específicas del proyecto
@@ -2346,7 +2342,7 @@ def delete_foundation(foundation_id):
 
 #/// FIN CASOS FUNDACIONES ///
 
-#Ruta Agenda
+# Ruta Agenda
 @app.route('/api/agenda', methods=['GET'])
 @cross_origin()
 def get_agenda():
@@ -2367,22 +2363,24 @@ def get_agenda():
     # Preparar la respuesta combinada
     combined_data = []
     for cita in agenda_data:
-        usuario_info = usuario_data.get(cita['id_usuario'])  # Asumiendo 'usuario_id' como FK en Agenda
-        mascota_info = mascota_data.get(cita['id_mascota'])  # Asumiendo 'mascota_id' como FK en Agenda
+        usuario_info = usuario_data.get(cita['id_usuario'])  # Asumiendo 'id_usuario' como FK en Agenda
+        mascota_info = mascota_data.get(cita['id_mascota'])  # Asumiendo 'id_mascota' como FK en Agenda
         
-        # Combinar datos
+        # Combinar datos incluyendo el id_agenda
         combined_record = {
-            'fecha': cita['fecha'],           # Fecha de la cita
-            'hora': cita['hora'],             # Hora de la cita
-            'id_mascota': cita['id_mascota'], # ID de la mascota
-            'servicio': cita['servicio'],     # Servicio asignado
-            'motivo': cita['motivo'],         # Nuevo campo 'motivo'
-            'usuario': usuario_info,          # Información del usuario
-            'mascota': mascota_info           # Información de la mascota
+            'id_agenda': cita['id_agenda'],    # Incluir el id_agenda
+            'fecha': cita['fecha'],            # Fecha de la cita
+            'hora': cita['hora'],              # Hora de la cita
+            'id_mascota': cita['id_mascota'],  # ID de la mascota
+            'servicio': cita['servicio'],      # Servicio asignado
+            'motivo': cita['motivo'],          # Motivo de la cita
+            'usuario': usuario_info,           # Información del usuario
+            'mascota': mascota_info            # Información de la mascota
         }
         combined_data.append(combined_record)
     
     return jsonify(combined_data), 200
+
 
 #Obtener servicios desde Supabase
 @app.route('/obtener_servicios', methods=['GET'])
@@ -2603,6 +2601,33 @@ def recover_password():
 
     except Exception as e:
         return jsonify({"success": False, "message": f"Error al enviar el correo: {str(e)}"}), 500
+
+@app.route('/update_hour', methods=['POST'])
+def update_hour():
+    # Obtener los datos enviados desde el frontend
+    appointment_id = request.json.get('appointment_id')  # El ID de la cita
+    new_time = request.json.get('new_time')  # La nueva hora
+    
+    print(f'ID de cita: {appointment_id}, Nueva hora: {new_time}')
+
+    if not appointment_id or not new_time:
+        return jsonify({'error': 'Faltan datos necesarios'}), 400
+
+    try:
+        # Actualizar la hora en la tabla Agenda usando .filter en lugar de .eq
+        response = supabase.table('Agenda').update({
+            'hora': new_time  # Actualizamos la columna 'hora' con el nuevo valor
+        }).filter('id_agenda', 'eq', appointment_id).execute()
+
+        # Verificar si hay un error o no
+        if 'error' in response.data:  # Si la respuesta contiene un campo 'error'
+            return jsonify({'error': response.data['error']}), 500  # Devolvemos el error
+
+        # Si la respuesta es exitosa, podemos acceder a los datos modificados
+        return jsonify({'message': 'Hora actualizada correctamente', 'data': response.data}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)  # Ejecuta la aplicación en modo depuración
