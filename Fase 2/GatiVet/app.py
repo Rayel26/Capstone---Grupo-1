@@ -1190,6 +1190,8 @@ def register():
     correo = data.get('correo')
     contraseña = data.get('contraseña')
     celular = data.get('celular')
+    direccion = data.get('domicilio')  # Captura de la dirección
+    numeracion = data.get('numeracion')  # Captura de la numeración
     fecha_creacion = datetime.now().strftime("%Y-%m-%d")
 
     # Verificación de datos recibidos
@@ -1201,44 +1203,60 @@ def register():
     if existing_user.data:
         return jsonify({"error": "Ya existe un usuario con este RUT o correo."}), 400
 
-    # Insertar el usuario en la base de datos
-    response = supabase.table('Usuario').insert({
-        'id_usuario': rut,
-        'nombre': nombre,
-        'appaterno': appaterno,
-        'apmaterno': apmaterno,
-        'correo': correo,
-        'contraseña': contraseña,
-        'celular': celular,
-        'tipousuarioid': 1,
-        'fecha_creacion': fecha_creacion,
-        'confirmacion': False
+    # Crear un nuevo registro en la tabla Domicilio
+    response_new_domicilio = supabase.table('Domicilio').insert({
+        'direccion': direccion,
+        'numeracion': numeracion
     }).execute()
 
-    # Verificar si la inserción fue exitosa
-    if response.data:
-        # Enviar correo de prueba
-        try:
-            confirmation_link = f"http://localhost:5000/confirm/{rut}"
-            msg = Message("Confirma tu correo",
-                        sender=app.config['MAIL_USERNAME'],
-                        recipients=[correo])
-            msg.html = f"""
-                <p>Hola {nombre} {appaterno} {apmaterno}, de RUT {rut}:</p>
-                <p>Este es un correo para verificar la configuración de Flask-Mail al registrarse.</p>
-                <p>Por favor, confirma tu correo haciendo clic en el siguiente enlace: 
-                <a href="{confirmation_link}">Confirma tu correo aquí</a>
-                </p>
-            """
-            mail.send(msg)
-            print("Correo de prueba enviado exitosamente.")
-            
-            return jsonify({"message": "Usuario creado exitosamente y correo de prueba enviado"}), 201
-        except Exception as e:
-            print(f"Error al enviar el correo de prueba: {e}")
-            return jsonify({"error": "Usuario creado, pero no se pudo enviar el correo de prueba", "details": str(e)}), 500
+    # Verificar si el domicilio fue creado exitosamente
+    if response_new_domicilio.data:
+        new_domicilio_id = response_new_domicilio.data[0]['id_domicilio']
+
+        # Insertar el usuario en la base de datos con el id_domicilio
+        response = supabase.table('Usuario').insert({
+            'id_usuario': rut,
+            'nombre': nombre,
+            'appaterno': appaterno,
+            'apmaterno': apmaterno,
+            'correo': correo,
+            'contraseña': contraseña,
+            'celular': celular,
+            'tipousuarioid': 1,
+            'fecha_creacion': fecha_creacion,
+            'confirmacion': False,
+            'id_domicilio': new_domicilio_id  # Asociar el domicilio
+        }).execute()
+
+        # Verificar si la inserción del usuario fue exitosa
+        if response.data:
+            # Enviar correo de confirmación
+            try:
+                confirmation_link = f"http://localhost:5000/confirm/{rut}"
+                msg = Message("Confirma tu correo",
+                            sender=app.config['MAIL_USERNAME'],
+                            recipients=[correo])
+                msg.html = f"""
+                    <p>Hola {nombre} {appaterno} {apmaterno}, de RUT {rut}:</p>
+                    <p>Este es un correo para verificar la configuración de Flask-Mail al registrarse.</p>
+                    <p>Por favor, confirma tu correo haciendo clic en el siguiente enlace: 
+                    <a href="{confirmation_link}">Confirma tu correo aquí</a>
+                    </p>
+                """
+                mail.send(msg)
+                print("Correo de prueba enviado exitosamente.")
+                
+                return jsonify({"message": "Usuario creado exitosamente y correo de prueba enviado"}), 201
+            except Exception as e:
+                print(f"Error al enviar el correo de prueba: {e}")
+                return jsonify({"error": "Usuario creado, pero no se pudo enviar el correo de prueba", "details": str(e)}), 500
+        else:
+            return jsonify({"error": "Error al crear el usuario", "details": response.error}), 400
+
     else:
-        return jsonify({"error": "Error al crear el usuario", "details": response.error}), 400
+        error_message = response_new_domicilio.error or 'Error al crear el nuevo domicilio'
+        print("Error al crear domicilio:", error_message)
+        return jsonify({'error': error_message}), 500
 
 
 @app.route('/confirm/<string:rut>', methods=['GET'])

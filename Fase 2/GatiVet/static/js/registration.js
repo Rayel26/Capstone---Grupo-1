@@ -19,13 +19,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
     const phoneInput = document.getElementById('phone');
-    
+    const addressInput = document.getElementById('address'); // Nuevo campo de dirección
+    const numerationInput = document.getElementById('numeration'); // Nuevo campo de numeración
+
     const summaryFirstName = document.getElementById('summaryFirstName');
     const summaryLastName = document.getElementById('summaryLastName');
     const summarySecondLastName = document.getElementById('summarySecondLastName');
     const summaryRUT = document.getElementById('summaryRUT');
     const summaryEmail = document.getElementById('summaryEmail');
     const summaryPhone = document.getElementById('summaryPhone');
+    const summaryAddress = document.getElementById('summaryAddress'); // Resumen de dirección
+    const summaryNumeration = document.getElementById('summaryNumeration'); // Resumen de numeración
+
 
     // Configuración de Supabase
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndsbmFobWJpZ3NiY2t3YmR3ZXpvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjg1MDg5MzUsImV4cCI6MjA0NDA4NDkzNX0.CP-BaGcCf-fQD-lYrbH0_B-sKVOwUb9Xgy9-nzKjtLM';
@@ -145,19 +150,42 @@ document.addEventListener("DOMContentLoaded", function () {
             if (emailExists) {
                 alert('Este correo ya está registrado.');
             } else {
-                // Llenar el resumen
-                summaryFirstName.textContent = firstNameInput.value;
-                summaryLastName.textContent = lastNameInput.value;
-                summarySecondLastName.textContent = secondLastNameInput.value;
-                summaryRUT.textContent = rutInput.value;
-                summaryEmail.textContent = emailInput.value;
-                summaryPhone.textContent = getFullPhone();
+                // Depuración: Verificar si los elementos de resumen existen
+                console.log('Resumen de los elementos:', {
+                    summaryFirstName,
+                    summaryLastName,
+                    summarySecondLastName,
+                    summaryRUT,
+                    summaryEmail,
+                    summaryPhone,
+                    summaryAddress,
+                    summaryNumeration
+                });
 
-                showModal(confirmModal); // Mostrar modal de confirmación
+                // Verificar si los elementos de resumen no son null antes de asignarles valores
+                if (summaryFirstName && summaryLastName && summarySecondLastName && summaryRUT &&
+                    summaryEmail && summaryPhone && summaryAddress && summaryNumeration) {
+
+                    // Llenar el resumen solo si los elementos existen
+                    summaryFirstName.textContent = firstNameInput.value;
+                    summaryLastName.textContent = lastNameInput.value;
+                    summarySecondLastName.textContent = secondLastNameInput.value;
+                    summaryRUT.textContent = rutInput.value;
+                    summaryEmail.textContent = emailInput.value;
+                    summaryPhone.textContent = getFullPhone();
+                    summaryAddress.textContent = addressInput.value; // Agregar dirección al resumen
+                    summaryNumeration.textContent = numerationInput.value; // Agregar numeración al resumen
+
+                    showModal(confirmModal); // Mostrar modal de confirmación
+                } else {
+                    console.error('Algunos elementos de resumen no fueron encontrados en el DOM.');
+                    alert('Error: Algunos elementos de resumen no fueron encontrados en el DOM.');
+                }
             }
         }).catch(error => {
             alert('Error al verificar el correo: ' + error.message);
         });
+
     });
 
     // Confirmar y enviar datos a Supabase
@@ -176,8 +204,10 @@ document.addEventListener("DOMContentLoaded", function () {
             correo: emailInput.value,
             contraseña: passwordInput.value,
             celular: getFullPhone(),
+            direccion: addressInput.value, // Enviar dirección a Supabase
+            numeracion: numerationInput.value, // Enviar numeración a Supabase
             tipousuarioid: 1,
-            fecha_creacion: new Date().toISOString() 
+            fecha_creacion: new Date().toISOString()
         };
 
         // Verificar longitud del RUT
