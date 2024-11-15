@@ -75,3 +75,107 @@
 }
 
 
+/* Estilo base para el menú */
+nav ul {
+    display: flex; /* Mostrar menú horizontal */
+    gap: 1rem;
+    justify-content: space-around;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    transition: all 0.3s ease-in-out; /* Transición suave */
+}
+
+/* Estilo de los enlaces */
+nav a {
+    color: #18beaa;
+    border-bottom: 2px solid transparent;
+    transition: border-bottom 0.3s, color 0.3s; /* Transición suave para color */
+    text-decoration: none;
+}
+
+nav a:hover {
+    border-bottom: 2px solid #18beaa;
+    color: #18beaa; /* Cambiar color al hacer hover */
+}
+
+/* Botón del menú (oculto por defecto) */
+.menu-button {
+    display: none; /* Oculto en pantallas grandes */
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: #18beaa;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    transition: transform 0.3s ease; /* Transición para el botón */
+}
+
+.menu-button:hover {
+    transform: rotate(90deg); /* Rotea el botón cuando se pasa el ratón */
+}
+
+/* Menú desplegable en pantallas pequeñas */
+nav ul.hidden {
+    display: none; /* Ocultar menú por defecto */
+    opacity: 0; /* Comienza invisible */
+    visibility: hidden; /* No se puede interactuar */
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Transición para visibilidad */
+}
+
+/* Menú activo */
+nav ul.active {
+    display: flex;
+    flex-direction: column;
+    background-color: #f9f9f9;
+    position: absolute;
+    top: 50px;
+    right: 0;
+    width: 150px; /* Hacer el menú más estrecho */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px; /* Reducir padding */
+    opacity: 1; /* Hace visible el menú */
+    visibility: visible; /* Hace que el menú sea interactuable */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Agrega sombra para darle profundidad */
+}
+
+/* Estilo de los elementos dentro del menú */
+nav ul.active li {
+    margin: 8px 0; /* Reducir el margen entre los elementos */
+    text-align: right;
+    transition: transform 0.3s ease; /* Agregar transición a los elementos del menú */
+}
+
+nav ul.active li:hover {
+    transform: translateX(10px); /* Efecto de desplazamiento al hacer hover */
+}
+
+/* Media Query: Pantallas menores a 768px */
+@media (max-width: 768px) {
+    .menu-button {
+        display: block; /* Mostrar botón */
+    }
+
+    nav ul {
+        display: none; /* Ocultar menú por defecto */
+    }
+}
+
+/* Media Query: Pantallas mayores a 768px (modo normal) */
+@media (min-width: 769px) {
+    .menu-button {
+        display: none; /* Ocultar botón */
+    }
+
+    nav ul {
+        display: flex; /* Mostrar menú horizontal */
+        position: static;
+        flex-direction: row;
+        background: none;
+        border: none;
+        padding: 0;
+    }
+}

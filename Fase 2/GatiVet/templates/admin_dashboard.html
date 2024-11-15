@@ -31,24 +31,36 @@
             </div>
 
             <nav>
-                <ul class="flex space-x-4">
-                    <li><a href="#" onclick="showSection('productos')" class="hover:underline"
-                            style="color: #18beaa; border-bottom: 2px solid transparent; transition: border-bottom 0.3s;">
-                            Productos</a></li>
-                    <li><a href="#" onclick="showSection('usuarios')" class="hover:underline"
-                            style="color: #18beaa; border-bottom: 2px solid transparent; transition: border-bottom 0.3s;">
-                            Usuarios</a></li>
-                    <li><a href="#" onclick="showSection('casos')" class="hover:underline"
-                            style="color: #18beaa; border-bottom: 2px solid transparent; transition: border-bottom 0.3s;">
-                            Casos</a></li>
-                    <li><a href="#" onclick="showSection('fundaciones')" class="hover:underline"
-                            style="color: #18beaa; border-bottom: 2px solid transparent; transition: border-bottom 0.3s;">
-                            Fundaciones</a></li>
-                    <li><a href="#" onclick="showSection('medicamentos')" class="hover:underline"
-                            style="color: #18beaa; border-bottom: 2px solid transparent; transition: border-bottom 0.3s;">
-                            Medicamentos</a></li>
+                <!-- Botón de hamburguesa -->
+                <button class="menu-button" onclick="toggleMenu()">☰</button>
+                <!-- Menú -->
+                <ul>
+                    <li><a href="#" onclick="showSection('productos')">Productos</a></li>
+                    <li><a href="#" onclick="showSection('usuarios')">Usuarios</a></li>
+                    <li><a href="#" onclick="showSection('casos')">Casos</a></li>
+                    <li><a href="#" onclick="showSection('fundaciones')">Fundaciones</a></li>
+                    <li><a href="#" onclick="showSection('medicamentos')">Medicamentos</a></li>
                 </ul>
             </nav>
+            <script>
+                /* Función para alternar el menú */
+                function toggleMenu() {
+                    const menu = document.querySelector('nav ul');
+                    menu.classList.toggle('hidden');
+                    menu.classList.toggle('active');
+                }
+                 /* Detectar clics fuera del menú */
+                document.addEventListener('click', (event) => {
+                    const menu = document.querySelector('nav ul');
+                    const button = document.querySelector('.menu-button');
+    
+                    // Verificar si el clic ocurrió fuera del menú y del botón
+                    if (!menu.contains(event.target) && !button.contains(event.target)) {
+                        menu.classList.add('hidden');
+                        menu.classList.remove('active');
+                    }
+                });
+            </script>
 
         </div>
     </header>
