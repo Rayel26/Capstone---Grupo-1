@@ -179,3 +179,167 @@ nav ul.active li:hover {
         padding: 0;
     }
 }
+
+@media (min-width: 769px) {
+    /* Ajustes generales para pantallas grandes */
+    #productos {
+        padding: 20px;
+    }
+
+    #productForm .grid {
+        grid-template-columns: repeat(2, 1fr); /* Dos columnas para el formulario */
+    }
+
+    .table-container {
+        margin: 20px 0; /* Espaciado en la tabla */
+    }
+
+    .pagination-controls {
+        margin-top: 20px; /* Ajustar espaciado de paginación */
+    }
+
+    #editProductModal {
+        width: 60%; /* Modal más grande */
+    }
+}
+
+  /* Estilos generales */
+  table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+/* Media query para pantallas pequeñas (480px o menos) */
+@media (max-width: 480px) {
+    table {
+        font-size: 8px; /* Reducir tamaño de texto aún más */
+    }
+    th, td {
+        padding: 4px 3px; /* Ajustar padding */
+    }
+    th {
+        font-size: 10px;
+    }
+}
+
+/* Media query para pantallas aún más pequeñas (360px o menos) */
+@media (max-width: 360px) {
+    table {
+        font-size: 7px; /* Reducir tamaño de texto aún más */
+    }
+    th, td {
+        padding: 3px 2px; /* Ajustar padding */
+    }
+    th {
+        font-size: 9px;
+    }
+}
+
+/* Media query para pantallas medianas (768px o menos) */
+@media (max-width: 768px) {
+    table {
+        font-size: 10px; /* Reducir el tamaño de la fuente */
+    }
+    th, td {
+        padding: 7px 5px; /* Ajustar padding */
+    }
+}
+
+/* Media query para pantallas de 460px o menos */
+@media (max-width: 460px) {
+    table {
+        font-size: 8px; /* Reducir el tamaño de la fuente */
+    }
+    th, td {
+        padding: 5px 4px; /* Ajustar padding */
+    }
+}
+
+  /* Estilo base */
+  #filterContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+#filterInner {
+    display: flex;
+    align-items: center;
+}
+#productFilterContainer, #monthFilterContainer {
+    margin-right: 1rem;
+}
+#productFilterLabel, #monthFilterLabel {
+    font-size: 0.75rem; /* Tamaño de fuente pequeño */
+}
+#productFilter, #monthFilter {
+    font-size: 0.75rem;
+    padding: 0.125rem 0.25rem;
+}
+
+/* Media Query para pantallas pequeñas (menos de 360px) */
+@media (max-width: 360px) {
+    #filterContainer {
+        flex-direction: column;
+    }
+    #filterInner {
+        flex-direction: column;
+    }
+    #productFilterContainer, #monthFilterContainer {
+        margin-bottom: 0.5rem;
+    }
+    #productFilterLabel, #monthFilterLabel {
+        font-size: 0.375rem; /* Muy pequeño */
+    }
+    #productFilter, #monthFilter {
+        font-size: 0.375rem;
+        padding: 0.125rem 0.25rem;
+    }
+}
+
+/* Media Query para pantallas medianas (360px - 460px) */
+@media (max-width: 460px) {
+    #filterContainer {
+        flex-direction: column;
+    }
+    #filterInner {
+        flex-direction: column;
+    }
+    #productFilterContainer, #monthFilterContainer {
+        margin-bottom: 0.5rem;
+    }
+    #productFilterLabel, #monthFilterLabel {
+        font-size: 0.4375rem; /* Un poco más grande que el tamaño anterior */
+    }
+}
+
+/* Media Query para pantallas medianas a grandes (480px - 768px) */
+@media (max-width: 768px) {
+    #filterContainer {
+        flex-direction: column;
+    }
+    #filterInner {
+        flex-direction: column;
+    }
+    #productFilterContainer, #monthFilterContainer {
+        margin-bottom: 0.75rem;
+    }
+    #productFilterLabel, #monthFilterLabel {
+        font-size: 0.5rem;
+    }
+}
+
+/* Media Query para pantallas grandes (mayores de 768px) */
+@media (min-width: 768px) {
+    #filterContainer {
+        flex-direction: row;
+    }
+    #filterInner {
+        flex-direction: row;
+    }
+    #productFilterContainer, #monthFilterContainer {
+        margin-right: 1rem;
+    }
+    #productFilterLabel, #monthFilterLabel {
+        font-size: 0.75rem;
+    }
+}

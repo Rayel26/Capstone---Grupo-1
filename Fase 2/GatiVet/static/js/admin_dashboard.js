@@ -281,6 +281,39 @@ function loadProducts() {
 
 }
 
+// Función para obtener las clases de tamaño de fuente y padding según el tamaño de pantalla
+function getResponsiveClasses() {
+    const screenWidth = window.innerWidth;
+
+    // Definir clases de padding y tamaño de fuente según el tamaño de pantalla
+    if (screenWidth <= 360) {
+        return {
+            fontSize: '7px',
+            padding: '3px 2px',
+        };
+    } else if (screenWidth <= 460) {
+        return {
+            fontSize: '8px',
+            padding: '4px 3px',
+        };
+    } else if (screenWidth <= 480) {
+        return {
+            fontSize: '8px',
+            padding: '4px 3px',
+        };
+    } else if (screenWidth <= 768) {
+        return {
+            fontSize: '10px',
+            padding: '7px 5px',
+        };
+    } else {
+        return {
+            fontSize: '12px',
+            padding: '8px 6px',
+        };
+    }
+}
+
 // Función para actualizar la tabla con productos
 function updateTable() {
     const table = document.getElementById('productTableExt');
@@ -300,14 +333,17 @@ function updateTable() {
             product.stock = 0; // Establecer cantidad a 0
         }
 
+        // Obtener las clases de estilo según el tamaño de pantalla
+        const responsiveClasses = getResponsiveClasses();
+
         row.innerHTML = `
-            <td class="py-2 px-4 border-b">${product.nombre_producto}</td>
-            <td class="py-2 px-4 border-b">${tipoProductoNombre}</td>
-            <td class="py-2 px-4 border-b">${product.marca}</td>
-            <td class="py-2 px-4 border-b">${product.valor ? product.valor.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' }) : 'N/A'}</td>
-            <td class="py-2 px-4 border-b">${product.stock}</td>
-            <td class="py-2 px-4 border-b">${product.fecha_ingreso}</td>
-            <td class="py-2 px-4 border-b"></td> <!-- Celda vacía donde se agregarán los botones -->
+            <td class="border-b" style="font-size: ${responsiveClasses.fontSize}; padding: ${responsiveClasses.padding}">${product.nombre_producto}</td>
+            <td class="border-b" style="font-size: ${responsiveClasses.fontSize}; padding: ${responsiveClasses.padding}">${tipoProductoNombre}</td>
+            <td class="border-b" style="font-size: ${responsiveClasses.fontSize}; padding: ${responsiveClasses.padding}">${product.marca}</td>
+            <td class="border-b" style="font-size: ${responsiveClasses.fontSize}; padding: ${responsiveClasses.padding}">${product.valor ? product.valor.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' }) : 'N/A'}</td>
+            <td class="border-b" style="font-size: ${responsiveClasses.fontSize}; padding: ${responsiveClasses.padding}">${product.stock}</td>
+            <td class="border-b" style="font-size: ${responsiveClasses.fontSize}; padding: ${responsiveClasses.padding}">${product.fecha_ingreso}</td>
+            <td class="border-b" style="font-size: ${responsiveClasses.fontSize}; padding: ${responsiveClasses.padding}"></td> <!-- Celda vacía donde se agregarán los botones -->
         `;
 
         // Crear botones de acción
@@ -315,7 +351,7 @@ function updateTable() {
         editButton.textContent = 'Editar';
         editButton.className = 'text-blue-500 hover:underline';
         editButton.onclick = () => openEditModal(product);
-        
+
         const actionButton = document.createElement('button');
         actionButton.textContent = product.is_active ? 'Desactivar' : 'Activar';
         actionButton.className = product.is_active ? 'text-red-500 hover:underline' : 'text-green-500 hover:underline';
@@ -335,6 +371,7 @@ function updateTable() {
         // Agregar la fila a la tabla
         table.appendChild(row);
     });
+
     updatePaginationControls();
 }
 
