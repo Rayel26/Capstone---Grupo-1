@@ -15,12 +15,8 @@ import cloudinary.uploader
 from flask_mail import Mail, Message
 import pytz
 from apscheduler.schedulers.background import BackgroundScheduler
-import logging
 
 from cloudinary.api import resources
-
-# Configuración de logging para depuración
-logging.basicConfig(level=logging.DEBUG)
 
 # Configuración de APScheduler
 scheduler = BackgroundScheduler()
