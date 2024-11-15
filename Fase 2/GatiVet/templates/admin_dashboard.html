@@ -53,13 +53,22 @@
                 document.addEventListener('click', (event) => {
                     const menu = document.querySelector('nav ul');
                     const button = document.querySelector('.menu-button');
-    
-                    // Verificar si el clic ocurrió fuera del menú y del botón
-                    if (!menu.contains(event.target) && !button.contains(event.target)) {
-                        menu.classList.add('hidden');
-                        menu.classList.remove('active');
+                    const header = document.querySelector('header');
+                
+                    // Verificar si el menú está activo
+                    if (menu.classList.contains('active')) {
+                        // Detectar si el clic ocurrió fuera del menú, el botón y el header
+                        if (!menu.contains(event.target) && !button.contains(event.target) && !header.contains(event.target)) {
+                            // Verificar si no hay texto seleccionado
+                            const selection = window.getSelection();
+                            if (!selection.toString()) {
+                                menu.classList.add('hidden');
+                                menu.classList.remove('active');
+                            }
+                        }
                     }
                 });
+                
             </script>
 
         </div>

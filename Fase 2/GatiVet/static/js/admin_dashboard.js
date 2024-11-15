@@ -354,7 +354,7 @@ function updateTable() {
 
         const actionButton = document.createElement('button');
         actionButton.textContent = product.is_active ? 'Desactivar' : 'Activar';
-        actionButton.className = product.is_active ? 'text-red-500 hover:underline' : 'text-green-500 hover:underline';
+        actionButton.className = product.is_active ? 'ml-1 text-red-500 hover:underline' : 'text-green-500 hover:underline';
         actionButton.onclick = () => {
             if (product.is_active) {
                 deleteProduct(product.id_producto);
