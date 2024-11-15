@@ -67,43 +67,88 @@
     width: 100%; /* Ancho completo para los botones */
 }
 
+/* Contenedor de la imagen */
 .doctor-image-container {
-    width: 284px; /* Ajusta según sea necesario */
-    height: 284px; /* Altura igual a la anchura para mantenerlo cuadrado */
+    width: 100%; /* Hace que el contenedor ocupe el 100% del espacio disponible */
+    max-width: 284px; /* Máximo tamaño en pantallas grandes */
+    height: auto; /* Altura automática para mantener proporciones */
+    aspect-ratio: 1 / 1; /* Mantiene la proporción cuadrada sin importar el tamaño */
     overflow: hidden; /* Oculta cualquier parte de la imagen que sobresalga */
-    border-radius: 8px; /* Bordes redondeados para el contenedor (opcional) */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra para el contenedor (opcional) */
+    border-radius: 8px; /* Bordes redondeados para el contenedor */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra para el contenedor */
+    margin: 0 auto; /* Centra el contenedor */
 }
 
+/* Imagen dentro del contenedor */
 .doctor-image {
-    width: 100%; /* Asegura que la imagen use todo el ancho del contenedor */
-    height: 100%; /* Asegura que la imagen use toda la altura del contenedor */
-    object-fit: cover; /* Asegura que la imagen cubra el área sin deformarse */
+    width: 100%; /* La imagen ocupa el 100% del ancho del contenedor */
+    height: 100%; /* La imagen ocupa el 100% de la altura del contenedor */
+    object-fit: cover; /* La imagen cubre el área sin deformarse */
 }
 
-#next-month, #prev-month {
-    font-size: 1.5rem; /* Tamaño de la flecha */
-    background: none; /* Sin fondo */
-    border: none; /* Sin borde */
-    cursor: pointer; /* Cambia el cursor a puntero */
-    color: #18beaa; /* Color de las flechas */
+/* Media Queries para pantallas pequeñas (menos de 600px) */
+@media screen and (max-width: 600px) {
+    .doctor-image-container {
+        max-width: 200px; /* Reduce el tamaño máximo en pantallas más pequeñas */
+    }
 }
 
-/* Cambios para pantallas pequeñas */
-@media (max-width: 480px) {
-    .step-icon {
-        font-size: 1.5rem; /* Tamaño de icono para pantallas menores a 480px */
-    }
-    .calendar {
-        font-size: 0.7rem; /* Reducir el tamaño de la fuente */
-    }
-    .day {
-        padding: 2px; /* Ajustar el padding para días */
-    }
-    .month-name {
-        font-size: 1rem; /* Tamaño del nombre del mes */
+/* Media Queries para pantallas muy pequeñas (menos de 400px) */
+@media screen and (max-width: 400px) {
+    .doctor-image-container {
+        max-width: 150px; /* Ajusta aún más el tamaño en pantallas muy pequeñas */
     }
 }
+
+/* Estilo general para el contenedor principal */
+.w-full {
+    width: 100%; /* Asegura que el contenedor ocupe el 100% del espacio disponible */
+}
+
+/* Estilo para el contenedor del calendario */
+.calendar-container {
+    width: 100%; /* El contenedor del calendario ocupa todo el ancho disponible */
+    margin: 0 auto; /* Centra el contenedor */
+}
+
+/* Estilo de los botones de navegación */
+.nav-buttons button {
+    padding: 8px 12px; /* Un tamaño de botón cómodo */
+    font-size: 18px; /* Ajusta el tamaño de la fuente para facilitar su lectura */
+}
+
+/* Estilo para la selección de hora */
+#time-select {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center; /* Centra los botones de selección de hora */
+}
+
+/* Media Queries para pantallas pequeñas */
+@media screen and (max-width: 768px) {
+    .w-full {
+        width: 90%; /* Ajusta el ancho en pantallas pequeñas */
+    }
+
+    /* Para pantallas más pequeñas que 600px */
+    @media screen and (max-width: 600px) {
+        .calendar-container {
+            width: 100%; /* El calendario ocupa todo el ancho disponible */
+        }
+
+        /* Ajusta la imagen del calendario y los botones */
+        .nav-buttons button {
+            font-size: 14px; /* Reduce el tamaño de fuente de los botones */
+        }
+
+        /* Ajusta la selección de hora */
+        #time-select {
+            gap: 5px; /* Reduce el espacio entre los botones de selección de hora */
+        }
+    }
+}
+
 
 #user-card {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
