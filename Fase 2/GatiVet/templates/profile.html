@@ -109,7 +109,7 @@
                         <div class="relative flex items-center">
                             <input type="text" name="address" id="address" value="{{ user.direccion }}"
                                 class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
-                                required>
+                                required readonly>
                             <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
                         </div>
                         <ul id="suggestions"
@@ -196,7 +196,7 @@
                         <div class="relative flex items-center">
                             <input type="text" name="numeration" id="numeration" value="{{ user.numeracion}}"
                                 class="shadow-sm border border-gray-300 text-sm sm:text-xs text-gray-900 rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block p-1.5 pr-3 input-short input-background"
-                                required placeholder="Ingresa un número o letra">
+                                required readonly placeholder="Ingresa un número o letra">
                             <i class="edit-icon fa fa-pencil ml-2 cursor-pointer hidden"></i>
                         </div>
                     </div>

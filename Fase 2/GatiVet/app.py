@@ -244,7 +244,7 @@ def login():
     return render_template('login.html')
 
 
-# Ruta para la registrar veterinario
+# Ruta para registrar veterinario
 @app.route('/register_vet', methods=['POST'])
 def register_vet():
     data = request.get_json()
@@ -268,6 +268,12 @@ def register_vet():
         if not (rut and nombre and correo and contraseña and celular and especialidad):
             return jsonify({"error": "Faltan campos requeridos."}), 400
 
+        # Verificar si el correo ya está registrado
+        correo_existente = supabase.table('Usuario').select('correo').eq('correo', correo).execute()
+        
+        if correo_existente.data:
+            return jsonify({"error": "El correo ya está registrado. Intenta con otro."}), 409
+
         # Obtener la fecha actual en el formato "YYYY-MM-DD"
         fecha_creacion = datetime.now().strftime("%Y-%m-%d")
 
@@ -282,7 +288,8 @@ def register_vet():
             'celular': celular,
             'especialidad': especialidad,
             'tipousuarioid': tipo_usuario,
-            'fecha_creacion': fecha_creacion
+            'fecha_creacion': fecha_creacion,
+            'confirmacion': True  # Valor predeterminado para confirmación
         }).execute()
 
         # Log para ver la respuesta completa de Supabase
@@ -301,6 +308,7 @@ def register_vet():
     except Exception as e:
         print(f"Ocurrió un error inesperado: {e}")
         return jsonify({"error": "Error inesperado", "details": str(e)}), 500
+
 
 # Ruta para cerrar sesión
 @app.route('/logout')
