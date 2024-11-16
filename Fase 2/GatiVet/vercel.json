@@ -18,6 +18,11 @@
     {
       "src": "/(.*)",
       "dest": "app.py"
+    },
+    {
+      "src": "/google(.*).html",
+      "dest": "/google$1.html"
     }
   ]
+
 }
