@@ -2235,8 +2235,8 @@ def get_user_by_id():
         
         # Realizar la consulta en Supabase asegurándose de que se pase como texto
         response = supabase.table('Usuario').select('nombre, appaterno, apmaterno, celular, id_domicilio') \
-                                           .filter('id_usuario', 'eq', id_usuario_str) \
-                                           .execute()
+                                        .filter('id_usuario', 'eq', id_usuario_str) \
+                                        .execute()
 
         # Depuración adicional para ver la respuesta de la consulta
         print(f"Respuesta de la consulta de Usuario: {response.data}")
@@ -2329,7 +2329,7 @@ def confirm_appointment():
     pet_id = data.get('petId')
     details = data.get('details')
 
-    # Insertar los datos en Supabase sin id_agenda
+    # Insertar los datos en Supabase
     response = supabase.table('Agenda').insert({
         'id_usuario': rut,
         'medico_veterinario_id': doctor_id,
@@ -2340,37 +2340,63 @@ def confirm_appointment():
         'motivo': details
     }).execute()
 
-    # Obtener la información del doctor desde la tabla Usuario (tipousuarioid = 2) usando .filter()
+    # Obtener la información del doctor
     doctor_response = supabase.table('Usuario').select('nombre, appaterno').filter('id_usuario', 'eq', doctor_id).filter('tipousuarioid', 'eq', 2).execute()
+    doctor_name = f"{doctor_response.data[0]['nombre']} {doctor_response.data[0]['appaterno']}" if doctor_response.data else 'Desconocido'
 
-    if doctor_response.data:
-        # Concatenar los nombres
-        doctor_name = f"{doctor_response.data[0]['nombre']} {doctor_response.data[0]['appaterno']}"
-    else:
-        doctor_name = 'Desconocido'
-
-
-    # Obtener la información de la mascota usando .filter()
+    # Obtener la información de la mascota
     pet_response = supabase.table('Mascota').select('nombre').filter('id_mascota', 'eq', pet_id).execute()
     pet_name = pet_response.data[0]['nombre'] if pet_response.data else 'Desconocida'
 
-    # Obtener el id_domicilio del usuario usando .filter()
-    user_response = supabase.table('Usuario').select('id_domicilio').filter('id_usuario', 'eq', rut).execute()
-    user_address_id = user_response.data[0]['id_domicilio'] if user_response.data else None
+    # Obtener el correo del usuario
+    user_response = supabase.table("Usuario").select("correo, id_domicilio").filter("id_usuario", "eq", rut).single().execute()
+    correo_usuario = user_response.data['correo'] if user_response.data else None
+    user_address_id = user_response.data['id_domicilio'] if user_response.data else None
 
-    # Si el id_domicilio existe, obtener la dirección y la numeración desde la tabla Domicilio
+    # Obtener la dirección del usuario
     user_address = 'Dirección no disponible'
     if user_address_id:
-        address_response = supabase.table('Domicilio').select('direccion', 'numeracion').filter('id_domicilio', 'eq', user_address_id).execute()
+        address_response = supabase.table('Domicilio').select('direccion, numeracion').filter('id_domicilio', 'eq', user_address_id).execute()
         if address_response.data:
-            # Concatenar la dirección y la numeración
             user_address = f"{address_response.data[0]['direccion']} {address_response.data[0]['numeracion']}"
-        else:
-            user_address = 'Dirección no disponible'
 
-    # Devolver la respuesta con los datos necesarios
+    # Crear el contenido del correo
+    mensaje_correo_html = f"""
+    <html>
+    <body style="font-family: Arial, sans-serif; color: #333;">
+        <h2 style="color: #4CAF50;">¡Cita Confirmada!</h2>
+        <p>Hola,</p>
+        <p>Te confirmamos que tu cita ha sido registrada exitosamente con la siguiente información:</p>
+        <ul>
+            <li><strong>Veterinario:</strong> {doctor_name}</li>
+            <li><strong>Servicio:</strong> {service}</li>
+            <li><strong>Mascota:</strong> {pet_name}</li>
+            <li><strong>Fecha:</strong> {date}</li>
+            <li><strong>Hora:</strong> {time}</li>
+            <li><strong>Dirección:</strong> {user_address}</li>
+            <li><strong>Detalles:</strong> {details}</li>
+        </ul>
+        <p>Gracias por confiar en nuestro servicio. ¡Te esperamos!</p>
+    </body>
+    </html>
+    """
+
+    # Enviar el correo al usuario
+    try:
+        msg = Message("Resumen de tu cita veterinaria",
+                    sender=app.config['MAIL_USERNAME'],
+                    recipients=[correo_usuario])
+        msg.html = mensaje_correo_html
+        mail.send(msg)
+        print("Correo de confirmación enviado exitosamente.")
+    except Exception as e:
+        print(f"Error al enviar el correo de confirmación: {e}")
+        return jsonify({"success": True, "message": "Cita confirmada, pero no se pudo enviar el correo."}), 500
+
+    # Respuesta final
     return jsonify({
-        'message': 'Cita confirmada exitosamente!',
+        'success': True,
+        'message': 'Cita confirmada exitosamente y correo enviado.',
         'doctorName': doctor_name,
         'petName': pet_name,
         'userAddress': user_address
