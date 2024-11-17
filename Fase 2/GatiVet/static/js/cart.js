@@ -161,8 +161,15 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(() => {
                 // Mostrar el modal en lugar de una alerta
                 cartModal.classList.remove('hidden'); // Mostrar el modal
+
+                // Refrescar los campos del método de pago
+                document.getElementById('card-number-input').value = "";
+                document.getElementById('card-expiration-input').value = "";
+                document.getElementById('cvv-input').value = "";
+
                 localStorage.removeItem('cart');
                 renderCartItems([]); // Actualizar la UI con el carrito vacío
+
             })
             .catch(error => {
                 console.error("Error al procesar el stock:", error);
@@ -178,6 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
     acceptModalBtn.addEventListener('click', function() {
         cartModal.classList.add('hidden');
     });
+    
 
     const cartItemsContainer = document.getElementById('cart-items');
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -302,6 +310,11 @@ function validateEmail(email) {
     return re.test(email);
 }
 
+// Botón de pagar ahora
+const payNowBtn = document.getElementById('pay-now-btn');
+const cartModal = document.getElementById('cart-modal');
+
+// Escucha el evento de clic en el botón "Pagar ahora"
 payNowBtn.addEventListener('click', function(event) {
     event.preventDefault(); // Evita que el formulario se envíe inmediatamente
     let isValid = true;
@@ -313,7 +326,7 @@ payNowBtn.addEventListener('click', function(event) {
         return;
     }
 
-    // (Validaciones previas omitidas por brevedad...)
+    // (Puedes incluir aquí otras validaciones si es necesario...)
 
     if (isValid) {
         // Preparar los datos para enviar
@@ -349,3 +362,23 @@ payNowBtn.addEventListener('click', function(event) {
         });
     }
 });
+
+// Función para renderizar los ítems del carrito
+function renderCartItems(cart) {
+    const cartContainer = document.getElementById('cart-items'); // Asegúrate de tener un contenedor con este ID
+    cartContainer.innerHTML = ''; // Limpiar el contenido actual
+
+    if (cart.length === 0) {
+        cartContainer.innerHTML = '<p>El carrito está vacío.</p>';
+        return;
+    }
+
+    // Si hay elementos en el carrito, renderízalos
+    cart.forEach(item => {
+        const itemElement = document.createElement('div');
+        itemElement.innerHTML = `
+            <p>${item.nombre_producto} - ${item.cantidad} x $${item.precio}</p>
+        `;
+        cartContainer.appendChild(itemElement);
+    });
+}
