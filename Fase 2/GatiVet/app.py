@@ -2549,23 +2549,24 @@ def delete_foundation(foundation_id):
 
 #/// FIN CASOS FUNDACIONES ///
 
-@app.route('/api/agenda', methods=['GET']) 
+##Ruta Agenda
+@app.route('/api/agenda', methods=['GET'])
 @cross_origin()
 def get_agenda():
     print("API de agenda solicitada")
     
-    # Obtener los usuarios que son veterinarios (tipousuarioid = 2)
-    usuario_response = supabase.table('Usuario').select('*').eq('tipousuarioid', 2).execute()
-    
-    # Obtener los ids de los veterinarios
-    if usuario_response.data:
-        veterinarios_ids = [user['id_usuario'] for user in usuario_response.data]
-    else:
-        return jsonify({"error": "No se encontraron usuarios veterinarios"}), 404
-    
-    # Obtener datos de la tabla Agenda filtrados por id_usuario (solo veterinarios)
-    agenda_response = supabase.table('Agenda').select('*').in_('id_usuario', veterinarios_ids).execute()
+    # Obtener el id del veterinario de la sesión
+    user_id = str(session.get('id_usuario'))
+    if user_id is None:
+        return jsonify({"error": "No se encontró el ID de usuario en la sesión."}), 400
+
+    # Obtener las agendas filtradas por el id del veterinario
+    agenda_response = supabase.table('Agenda').select('*').filter('medico_veterinario_id', 'eq', user_id).execute()
     agenda_data = agenda_response.data
+    
+    # Obtener datos de la tabla Usuario
+    usuario_response = supabase.table('Usuario').select('*').execute()
+    usuario_data = {user['id_usuario']: user for user in usuario_response.data}
     
     # Obtener datos de la tabla Mascota
     mascota_response = supabase.table('Mascota').select('*').execute()
@@ -2578,8 +2579,9 @@ def get_agenda():
     # Preparar la respuesta combinada
     combined_data = []
     for cita in agenda_data:
+        usuario_info = usuario_data.get(cita['id_usuario'])
         mascota_info = mascota_data.get(cita['id_mascota'])
-        domicilio_info = domicilio_data.get(mascota_info['id_domicilio']) if mascota_info else None
+        domicilio_info = domicilio_data.get(usuario_info['id_domicilio']) if usuario_info else None
         
         # Combinar los datos
         combined_record = {
@@ -2589,6 +2591,7 @@ def get_agenda():
             'id_mascota': cita['id_mascota'],
             'servicio': cita['servicio'],
             'motivo': cita['motivo'],
+            'usuario': usuario_info,
             'mascota': mascota_info,
             'domicilio': domicilio_info  # Incluye el domicilio en los datos combinados
         }

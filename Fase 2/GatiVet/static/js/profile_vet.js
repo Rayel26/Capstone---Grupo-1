@@ -1272,6 +1272,7 @@ async function fetchAppointments() {
     }
 }
 
+
 fetchAppointments();
 
 function openModalWeek(appointment) {
