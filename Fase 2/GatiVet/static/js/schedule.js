@@ -631,12 +631,15 @@ function goToStep(stepId, iconId) {
     }
 }
 
-// Función para confirmar la cita
 async function confirmAppointment() {
+    // Mostrar el spinner de carga
+    document.getElementById('loading-spinner').classList.remove('hidden');
+
     // Validar que se ha seleccionado una mascota
     const selectedPet = document.getElementById('pet-select').value;
     if (!selectedPet) {
         alert('Por favor, seleccione una mascota.');
+        document.getElementById('loading-spinner').classList.add('hidden');
         return;
     }
 
@@ -644,14 +647,16 @@ async function confirmAppointment() {
     const appointmentDetails = document.getElementById('appointment-details').value;
     if (!appointmentDetails) {
         alert('Por favor, complete los detalles de la cita.');
+        document.getElementById('loading-spinner').classList.add('hidden');
         return;
     }
 
     // Obtener los detalles de la cita
     const selectedDate = document.getElementById('date-select').value;
-    const selectedTime = document.getElementById('selected-time').value; // Obtiene la hora seleccionada
+    const selectedTime = document.getElementById('selected-time').value;
     if (!selectedTime) {
         alert('Por favor, seleccione una hora.');
+        document.getElementById('loading-spinner').classList.add('hidden');
         return;
     }
 
@@ -668,13 +673,9 @@ async function confirmAppointment() {
         return `${hours}:${minutes}`;
     }
 
-    // Convertir la hora seleccionada
     const formattedTime = convertTo24HourFormat(selectedTime);
-
     const doctorId = document.getElementById('staff-select').value;
     const service = document.getElementById('service-select').value;
-
-    // Tomamos el RUT directamente formateado y validado
     const rut = document.getElementById('rut-input').value;
 
     // Enviar la información a la ruta de Flask
@@ -685,41 +686,29 @@ async function confirmAppointment() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                rut: rut, // Usamos el RUT tal cual como está
+                rut: rut,
                 doctorId: doctorId,
                 service: service,
                 date: selectedDate,
-                time: formattedTime, // Usa la hora en formato 24 horas
-                petId: selectedPet, // Verifica que aquí se está usando el ID correcto
+                time: formattedTime,
+                petId: selectedPet,
                 details: appointmentDetails
             })
-        });
-
-        // Imprimir los valores en la consola para depuración
-        console.log({
-            rut: rut,
-            doctorId: doctorId,
-            service: service,
-            date: selectedDate,
-            time: formattedTime,
-            petId: selectedPet,
-            details: appointmentDetails
         });
 
         if (!response.ok) {
             const errorText = await response.text();
             alert(`Error al confirmar la cita: ${errorText}`);
+            document.getElementById('loading-spinner').classList.add('hidden');
             return;
         }
 
-        // Manejar la respuesta de éxito
         const result = await response.json();
-        console.log('Cita confirmada:', result);
 
         // Actualizar la tarjeta de resumen de cita
         document.getElementById('summary-date').innerHTML = `<strong class="font-bold">Fecha:</strong> <span class="text-gray-700">${selectedDate}</span>`;
         document.getElementById('summary-time').innerHTML = `<strong class="font-bold">Hora:</strong> <span class="text-gray-700">${formattedTime}</span>`;
-        document.getElementById('summary-doctor').innerHTML = `<strong class="font-bold">Doctor:</strong> <span class="text-gray-700">${result.doctorName}</span>`; 
+        document.getElementById('summary-doctor').innerHTML = `<strong class="font-bold">Doctor:</strong> <span class="text-gray-700">${result.doctorName}</span>`;
         document.getElementById('summary-pet').innerHTML = `<strong class="font-bold">Mascota:</strong> <span class="text-gray-700">${result.petName}</span>`;
         document.getElementById('summary-address').innerHTML = `<strong class="font-bold">Domicilio:</strong> <span class="text-gray-700">${result.userAddress}</span>`;
 
@@ -729,6 +718,8 @@ async function confirmAppointment() {
     } catch (error) {
         console.error('Error al enviar la cita:', error);
         alert('Ocurrió un error al confirmar la cita.');
+    } finally {
+        // Ocultar el spinner de carga
+        document.getElementById('loading-spinner').classList.add('hidden');
     }
 }
-
