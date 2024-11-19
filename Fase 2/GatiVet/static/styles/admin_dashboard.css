@@ -197,10 +197,6 @@ nav ul.active li:hover {
     .pagination-controls {
         margin-top: 20px; /* Ajustar espaciado de paginación */
     }
-
-    #editProductModal {
-        width: 60%; /* Modal más grande */
-    }
 }
 
   /* Estilos generales */
