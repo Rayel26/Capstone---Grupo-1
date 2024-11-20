@@ -159,9 +159,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }))
             .then(() => {
-                // Mostrar el modal en lugar de una alerta
-                cartModal.classList.remove('hidden'); // Mostrar el modal
-
                 // Refrescar los campos del método de pago
                 document.getElementById('card-number-input').value = "";
                 document.getElementById('card-expiration-input').value = "";
@@ -311,13 +308,15 @@ function validateEmail(email) {
 }
 
 // Botón de pagar ahora
-const payNowBtn = document.getElementById('pay-now-btn');
-const cartModal = document.getElementById('cart-modal');
+const payNowBtn = document.getElementById('payNowBtn');
+const cartModal = document.getElementById('cartModal');
+const loadingSpinner = document.getElementById('loading-spinner');
 
 // Escucha el evento de clic en el botón "Pagar ahora"
 payNowBtn.addEventListener('click', function(event) {
     event.preventDefault(); // Evita que el formulario se envíe inmediatamente
     let isValid = true;
+    console.log("Botón 'Pagar ahora' clickeado");
 
     // Validar que el carrito no esté vacío
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -325,10 +324,14 @@ payNowBtn.addEventListener('click', function(event) {
         alert("El carrito está vacío.");
         return;
     }
+    console.log("Carrito no está vacío:", cart);
 
     // (Puedes incluir aquí otras validaciones si es necesario...)
 
     if (isValid) {
+        // Mostrar el spinner antes de la solicitud
+        loadingSpinner.classList.remove('hidden');
+
         // Preparar los datos para enviar
         const orderData = cart.map(item => ({
             id_producto: item.id_producto,
@@ -347,6 +350,9 @@ payNowBtn.addEventListener('click', function(event) {
         })
         .then(response => response.json())
         .then(data => {
+            // Ocultar el spinner después de la respuesta
+            loadingSpinner.classList.add('hidden');
+            
             if (data.success) {
                 // Mostrar el modal en lugar de una alerta
                 cartModal.classList.remove('hidden'); // Mostrar el modal
@@ -357,11 +363,14 @@ payNowBtn.addEventListener('click', function(event) {
             }
         })
         .catch(error => {
+            // Ocultar el spinner si hay un error
+            loadingSpinner.classList.add('hidden');
             console.error("Error al guardar la venta:", error);
             alert(`Ocurrió un error al guardar la venta: ${error.message}`);
         });
     }
 });
+
 
 // Función para renderizar los ítems del carrito
 function renderCartItems(cart) {
