@@ -665,11 +665,6 @@ function openAddUserModal() {
     document.getElementById('addUserModal').classList.remove('hidden');
 }
 
-function closeAddUserModal() {
-    document.getElementById('addUserModal').classList.add('hidden');
-    document.getElementById('addModalUserForm').reset();
-}
-
 // Mostrar el modal de confirmación
 function openConfirmModal() {
     document.getElementById('confirmModal').classList.remove('hidden');
@@ -760,7 +755,6 @@ document.getElementById('confirmBtn').addEventListener('click', async function (
             
             // Cerrar modal de confirmación y el modal de agregar usuario
             closeConfirmModal();
-            closeAddUserModal();
             // Renderizar la tabla de usuarios o actualizar la interfaz
             fetchUsers();
         } else {
@@ -1147,7 +1141,7 @@ document.getElementById('editModalTelefono').addEventListener('input', function 
 document.getElementById('editModalPassword').addEventListener('input', function () {
     const password = this.value;
     const errorMessage = document.getElementById('password-error-message');
-    const requirementsMessage = document.getElementById('password-requirements');
+    const requirementsMessage = document.getElementById('pswd_info');
 
     const hasUpperCase = /[A-Z]/.test(password);
     const hasNumber = /[0-9]/.test(password);

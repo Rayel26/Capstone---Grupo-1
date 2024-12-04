@@ -423,9 +423,6 @@
     
                         <!-- Botones -->
                         <div class="flex justify-end mt-4">
-                            <button type="button"
-                                class="mt-4 text-gray-800 py-2 px-4 rounded hover:bg-teal-500 transition duration-200 mr-5"
-                                style="background-color: #d1d5db;" onclick="clearAddUserForm()">Cancelar</button>
                             <button type="submit"
                                 class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
                                 style="background-color: #18beaa;">Guardar</button>
@@ -534,25 +531,42 @@
                 <!-- Campos de contraseña en una sola fila -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div class="relative">
-                        <label for="editModalPassword" class="block text-sm font-semibold">Contraseña:</label>
+                        <label for="editModalPassword" class="block text-sm font-semibold mb-1">Contraseña:</label>
                         <input type="password" id="editModalPassword"
-                            class="border rounded w-full py-1 px-2 text-gray-700" placeholder="Ingrese la contraseña"
-                            required>
-                        <span toggle="#editModalPassword" class="absolute inset-y-0 right-3 top-6 cursor-pointer"
+                            class="border rounded w-full py-1 px-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Ingrese la contraseña" required>
+                        <span toggle="#editModalPassword" class="absolute inset-y-0 right-3 top-6 cursor-pointer text-gray-500"
                             onclick="togglePasswordVisibility('editModalPassword', this)">
                             👁️
                         </span>
-                        <div id="pswd_info" class="hidden">
-                            <div id="password-error-message" class="hidden">
-                                <p><b>La contraseña debe tener:</b></p>
-                                <ul>
-                                    <li id="capital" class="invalid">Al menos 1 mayúscula</li>
-                                    <li id="letter" class="invalid">Al menos 1 minúscula</li>
-                                    <li id="number" class="invalid">Al menos 1 número</li>
-                                </ul>
-                            </div>
+                        <!-- Contenedor para los requisitos de la contraseña -->
+                        <div id="pswd_info" class="bg-gray-100 p-3 rounded-lg mt-2 text-sm hidden border border-gray-300">
+                            <p class="text-gray-700 font-semibold mb-2">La contraseña debe contener:</p>
+                            <ul class="space-y-1">
+                                <li class="flex items-center">
+                                    <span class="mr-2 text-red-500">✘</span> 
+                                    <span>Al menos una letra mayúscula.</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="mr-2 text-red-500">✘</span> 
+                                    <span>Al menos una letra minúscula.</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="mr-2 text-red-500">✘</span> 
+                                    <span>Al menos un número.</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="mr-2 text-red-500">✘</span> 
+                                    <span>Una longitud mínima de 8 caracteres.</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Mensaje de error -->
+                        <div id="password-error-message" class="text-red-500 text-sm mt-1 hidden">
+                            La contraseña no cumple con los requisitos.
                         </div>
                     </div>
+                    
 
                     <div class="relative">
                         <label for="editModalConfirmPassword" class="block text-sm font-semibold">Confirmar
