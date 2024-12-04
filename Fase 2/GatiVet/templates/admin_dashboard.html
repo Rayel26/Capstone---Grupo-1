@@ -226,6 +226,7 @@
                     class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
                     style="background-color: #18beaa;">Subir Producto</button>
             </form>
+        </section>
     </div>
     <!-- Fin Contenido Productos -->
     <!-- Modal para Editar Producto -->
@@ -313,12 +314,6 @@
                         </select>
                     </div>
                 </div>
-
-                <!-- Botón para abrir modal de agregar -->
-                <button class="text-white py-1 px-3 rounded hover:bg-teal-500 transition duration-200 text-sm"
-                    style="background-color: #18beaa;" onclick="openAddUserModal()">
-                    Agregar Usuario Veterinario
-                </button>
             </div>
 
             <!-- Tabla de usuarios -->
@@ -336,116 +331,110 @@
                     <!-- Aquí se mostrarán los usuarios -->
                 </tbody>
             </table>
+
+            <!-- Formulario de agregar usuario veterinario -->
+                <div id="addUserFormContainer">
+                    <h2 class="text-lg font-bold mt-4">Agregar Usuario Veterinario</h2>
+                    <form id="addModalUserForm" class="mt-2 bg-white mb-2 p-6 shadow rounded-lg text-sm">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Columna izquierda -->
+                            <div>
+                                <div class="mb-4">
+                                    <label for="addModalRut" class="block text-sm font-semibold">RUT:</label>
+                                    <input type="text" id="addModalRut" class="border rounded w-full py-1 px-2 text-gray-700"
+                                        maxlength="12" placeholder="Ingrese el RUT" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="addModalNombre" class="block text-sm font-semibold">Nombre:</label>
+                                    <input type="text" id="addModalNombre" class="border rounded w-full py-1 px-2 text-gray-700"
+                                        placeholder="Ingrese el nombre" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="modalApellido" class="block text-sm font-semibold">Apellido Paterno:</label>
+                                    <input type="text" id="modalApellido" class="border rounded w-full py-1 px-2 text-gray-700"
+                                        placeholder="Ingrese el apellido paterno" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="modalDomicilio" class="block text-sm font-semibold">Apellido Materno:</label>
+                                    <input type="text" id="modalDomicilio" class="border rounded w-full py-1 px-2 text-gray-700"
+                                        placeholder="Ingrese el apellido materno" required>
+                                </div>
+                            </div>
+    
+                            <!-- Columna derecha -->
+                            <div>
+                                <div class="mb-4">
+                                    <label for="modalEspecialidad" class="block text-sm font-semibold">Especialidad:</label>
+                                    <input type="text" id="modalEspecialidad"
+                                        class="border rounded w-full py-1 px-2 text-gray-700"
+                                        placeholder="Ingrese la especialidad" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="modalTelefono" class="block text-sm font-semibold">Teléfono:</label>
+                                    <input type="tel" id="modalTelefono" class="border rounded w-full py-1 px-2 text-gray-700"
+                                        placeholder="Ingrese el teléfono" required>
+                                    <div id="phone-error-message" class="text-red-500 text-sm hidden">Formato inválido. Use +569
+                                        xxxx yyyy</div>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="modalCorreo" class="block text-sm font-semibold">Correo Electrónico:</label>
+                                    <input type="email" id="modalCorreo" class="border rounded w-full py-1 px-2 text-gray-700"
+                                        placeholder="Ingrese el correo electrónico" required>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <!-- Campos de contraseña en una sola fila -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div class="relative">
+                                <label for="modalPassword" class="block text-sm font-semibold">Contraseña:</label>
+                                <input type="password" id="modalPassword" class="border rounded w-full py-1 px-2 text-gray-700"
+                                    placeholder="Ingrese la contraseña" required>
+                                    <span toggle="#modalPassword" class="absolute inset-y-0 right-3 top-6 cursor-pointer"
+                                    onclick="togglePasswordVisibility('modalPassword', this)">
+                                        👁️
+                                    </span>
+                                    <div id="password-error-message" class="hidden">
+                                        <p><b>La contraseña debe tener:</b></p>
+                                        <ul>
+                                            <li id="capital" class="invalid">Al menos 1 mayúscula</li>
+                                            <li id="letter" class="invalid">Al menos 1 minúscula</li>
+                                            <li id="number" class="invalid">Al menos 1 número</li>
+                                        </ul>
+                                    </div>
+                            </div>
+    
+                            <div class="relative">
+                                <label for="modalConfirmPassword" class="block text-sm font-semibold">Confirmar
+                                    Contraseña:</label>
+                                <input type="password" id="modalConfirmPassword"
+                                    class="border rounded w-full py-1 px-2 text-gray-700" placeholder="Confirme la contraseña"
+                                    required>
+                                <span toggle="#modalConfirmPassword" class="absolute inset-y-0 right-3 top-6 cursor-pointer"
+                                    onclick="togglePasswordVisibility('modalConfirmPassword', this)">
+                                    👁️
+                                </span>
+                                <div id="confirm-password-error-message" class="text-red-500 text-sm hidden">Las contraseñas no
+                                    coinciden.</div>
+                            </div>
+                        </div>
+    
+                        <input type="hidden" id="addModalTipo" value="veterinario">
+    
+                        <!-- Botones -->
+                        <div class="flex justify-end mt-4">
+                            <button type="button"
+                                class="mt-4 text-gray-800 py-2 px-4 rounded hover:bg-teal-500 transition duration-200 mr-5"
+                                style="background-color: #d1d5db;" onclick="clearAddUserForm()">Cancelar</button>
+                            <button type="submit"
+                                class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
+                                style="background-color: #18beaa;">Guardar</button>
+                        </div>
+                    </form>
+                </div>
         </section>
     </div>
     <!-- Fin Sección Gestión de Usuarios -->
-
-    <!-- Modal para agregar usuario veterinario -->
-    <div id="addUserModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
-        <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-lg md:max-w-4xl">
-            <h2 class="text-lg font-bold mb-4" id="addModalTitle">Agregar Usuario Veterinario</h2>
-            <form id="addModalUserForm">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Columna izquierda -->
-                    <div>
-                        <div class="mb-4">
-                            <label for="addModalRut" class="block text-sm font-semibold">RUT:</label>
-                            <input type="text" id="addModalRut" class="mt-1 block w-full border-gray-300 rounded-md"
-                                maxlength="12" placeholder="Ingrese el RUT" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="addModalNombre" class="block text-sm font-semibold">Nombre:</label>
-                            <input type="text" id="addModalNombre" class="mt-1 block w-full border-gray-300 rounded-md"
-                                placeholder="Ingrese el nombre" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="modalApellido" class="block text-sm font-semibold">Apellido Paterno:</label>
-                            <input type="text" id="modalApellido" class="mt-1 block w-full border-gray-300 rounded-md"
-                                placeholder="Ingrese el apellido paterno" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="modalDomicilio" class="block text-sm font-semibold">Apellido Materno:</label>
-                            <input type="text" id="modalDomicilio" class="mt-1 block w-full border-gray-300 rounded-md"
-                                placeholder="Ingrese el apellido materno" required>
-                        </div>
-                    </div>
-
-                    <!-- Columna derecha -->
-                    <div>
-                        <div class="mb-4">
-                            <label for="modalEspecialidad" class="block text-sm font-semibold">Especialidad:</label>
-                            <input type="text" id="modalEspecialidad"
-                                class="mt-1 block w-full border-gray-300 rounded-md"
-                                placeholder="Ingrese la especialidad" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="modalTelefono" class="block text-sm font-semibold">Teléfono:</label>
-                            <input type="tel" id="modalTelefono" class="mt-1 block w-full border-gray-300 rounded-md"
-                                placeholder="Ingrese el teléfono" required>
-                            <div id="phone-error-message" class="text-red-500 text-sm hidden">Formato inválido. Use +569
-                                xxxx yyyy</div>
-                        </div>
-                        <div class="mb-4">
-                            <label for="modalCorreo" class="block text-sm font-semibold">Correo Electrónico:</label>
-                            <input type="email" id="modalCorreo" class="mt-1 block w-full border-gray-300 rounded-md"
-                                placeholder="Ingrese el correo electrónico" required>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Campos de contraseña en una sola fila -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div class="relative">
-                        <label for="modalPassword" class="block text-sm font-semibold">Contraseña:</label>
-                        <input type="password" id="modalPassword" class="mt-1 block w-full border-gray-300 rounded-md"
-                            placeholder="Ingrese la contraseña" required>
-                            <span toggle="#modalPassword" class="absolute inset-y-0 right-3 top-6 cursor-pointer"
-                            onclick="togglePasswordVisibility('modalPassword', this)">
-                                👁️
-                            </span>
-                            <div id="password-error-message" class="hidden">
-                                <p><b>La contraseña debe tener:</b></p>
-                                <ul>
-                                    <li id="capital" class="invalid">Al menos 1 mayúscula</li>
-                                    <li id="letter" class="invalid">Al menos 1 minúscula</li>
-                                    <li id="number" class="invalid">Al menos 1 número</li>
-                                </ul>
-                            </div>
-                            
-
-                    </div>
-
-                    <div class="relative">
-                        <label for="modalConfirmPassword" class="block text-sm font-semibold">Confirmar
-                            Contraseña:</label>
-                        <input type="password" id="modalConfirmPassword"
-                            class="mt-1 block w-full border-gray-300 rounded-md" placeholder="Confirme la contraseña"
-                            required>
-                        <span toggle="#modalConfirmPassword" class="absolute inset-y-0 right-3 top-6 cursor-pointer"
-                            onclick="togglePasswordVisibility('modalConfirmPassword', this)">
-                            👁️
-                        </span>
-                        <div id="confirm-password-error-message" class="text-red-500 text-sm hidden">Las contraseñas no
-                            coinciden.</div>
-                        <div id="password-error-message" class="hidden">La contraseña no es válida.</div>
-                    </div>
-                </div>
-
-                <input type="hidden" id="addModalTipo" value="veterinario">
-
-                <!-- Botones -->
-                <div class="flex justify-end mt-4">
-                    <button type="button"
-                        class="mt-4 text-gray-800 py-2 px-4 rounded hover:bg-teal-500 transition duration-200 mr-5"
-                        style="background-color: #d1d5db;" onclick="closeAddUserModal()">Cancelar</button>
-                    <button type="submit"
-                        class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
-                        style="background-color: #18beaa;">Guardar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <!-- Fin del Modal de agregar -->
 
     <!-- Modal de confirmación Agregar -->
     <div id="confirmModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
@@ -490,24 +479,24 @@
                     <div>
                         <div class="mb-4">
                             <label for="editModalRut" class="block text-sm font-semibold">RUT:</label>
-                            <input type="text" id="editModalRut" class="mt-1 block w-full border-gray-300 rounded-md"
+                            <input type="text" id="editModalRut" class="border rounded w-full py-1 px-2 text-gray-700"
                                 maxlength="12" placeholder="Ingrese el RUT" required>
                         </div>
                         <div class="mb-4">
                             <label for="editModalNombre" class="block text-sm font-semibold">Nombre:</label>
-                            <input type="text" id="editModalNombre" class="mt-1 block w-full border-gray-300 rounded-md"
+                            <input type="text" id="editModalNombre" class="border rounded w-full py-1 px-2 text-gray-700"
                                 placeholder="Ingrese el nombre" required>
                         </div>
                         <div class="mb-4">
                             <label for="editModalApellido" class="block text-sm font-semibold">Apellido:</label>
                             <input type="text" id="editModalApellido"
-                                class="mt-1 block w-full border-gray-300 rounded-md" placeholder="Ingrese el apellido"
+                                class="border rounded w-full py-1 px-2 text-gray-700" placeholder="Ingrese el apellido"
                                 required>
                         </div>
                         <div class="mb-4">
                             <label for="editModalDomicilio" class="block text-sm font-semibold">Domicilio:</label>
                             <input type="text" id="editModalDomicilio"
-                                class="mt-1 block w-full border-gray-300 rounded-md" placeholder="Ingrese el domicilio">
+                                class="border rounded w-full py-1 px-2 text-gray-700" placeholder="Ingrese el domicilio">
                         </div>
                     </div>
 
@@ -516,13 +505,13 @@
                         <div class="mb-4">
                             <label for="editModalEspecialidad" class="block text-sm font-semibold">Especialidad:</label>
                             <input type="text" id="editModalEspecialidad"
-                                class="mt-1 block w-full border-gray-300 rounded-md"
+                                class="border rounded w-full py-1 px-2 text-gray-700"
                                 placeholder="Ingrese la especialidad" required>
                         </div>
                         <div class="mb-4">
                             <label for="editModalTelefono" class="block text-sm font-semibold">Teléfono:</label>
                             <input type="tel" id="editModalTelefono"
-                                class="mt-1 block w-full border-gray-300 rounded-md" placeholder="Ingrese el teléfono"
+                                class="border rounded w-full py-1 px-2 text-gray-700" placeholder="Ingrese el teléfono"
                                 required>
                             <div id="phone-error-message-edit" class="text-red-500 text-sm hidden">Formato inválido. Use
                                 +569 xxxx yyyy</div>
@@ -530,14 +519,14 @@
                         <div class="mb-4">
                             <label for="editModalCorreo" class="block text-sm font-semibold">Correo Electrónico:</label>
                             <input type="email" id="editModalCorreo"
-                                class="mt-1 block w-full border-gray-300 rounded-md"
+                                class="border rounded w-full py-1 px-2 text-gray-700"
                                 placeholder="Ingrese el correo electrónico" required>
                         </div>
                         <div class="mb-4">
                             <label for="editModalFechaNacimiento" class="block text-sm font-semibold">Fecha de
                                 Nacimiento:</label>
                             <input type="date" id="editModalFechaNacimiento"
-                                class="mt-1 block w-full border-gray-300 rounded-md">
+                                class="border rounded w-full py-1 px-2 text-gray-700">
                         </div>
                     </div>
                 </div>
@@ -547,19 +536,21 @@
                     <div class="relative">
                         <label for="editModalPassword" class="block text-sm font-semibold">Contraseña:</label>
                         <input type="password" id="editModalPassword"
-                            class="mt-1 block w-full border-gray-300 rounded-md" placeholder="Ingrese la contraseña"
+                            class="border rounded w-full py-1 px-2 text-gray-700" placeholder="Ingrese la contraseña"
                             required>
                         <span toggle="#editModalPassword" class="absolute inset-y-0 right-3 top-6 cursor-pointer"
                             onclick="togglePasswordVisibility('editModalPassword', this)">
                             👁️
                         </span>
                         <div id="pswd_info" class="hidden">
-                            <p class="pp"><b>La contraseña debe tener:</b></p>
-                            <ul>
-                                <li id="capital" class="invalid">Al menos 1 mayúscula</li>
-                                <li id="letter" class="invalid">Al menos 1 minúscula</li>
-                                <li id="number" class="invalid">Al menos 1 número</li>
-                            </ul>
+                            <div id="password-error-message" class="hidden">
+                                <p><b>La contraseña debe tener:</b></p>
+                                <ul>
+                                    <li id="capital" class="invalid">Al menos 1 mayúscula</li>
+                                    <li id="letter" class="invalid">Al menos 1 minúscula</li>
+                                    <li id="number" class="invalid">Al menos 1 número</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
 
@@ -567,7 +558,7 @@
                         <label for="editModalConfirmPassword" class="block text-sm font-semibold">Confirmar
                             Contraseña:</label>
                         <input type="password" id="editModalConfirmPassword"
-                            class="mt-1 block w-full border-gray-300 rounded-md" placeholder="Confirme la contraseña"
+                            class="border rounded w-full py-1 px-2 text-gray-700" placeholder="Confirme la contraseña"
                             required>
                         <span toggle="#editModalConfirmPassword" class="absolute inset-y-0 right-3 top-6 cursor-pointer"
                             onclick="togglePasswordVisibility('editModalConfirmPassword', this)">
@@ -945,7 +936,7 @@
                                 <option value="Clindacyn">Clindacyn</option>
                                 <option value="Synulox">Synulox</option>
                             </optgroup>
-                            <optgroup id="antiinflamatorios" label="Analgésicos y Anti-inflamatorios">
+                            <optgroup id="antiinflamatorio" label="Analgésicos y Anti-inflamatorios">
                                 <option value="Metacam">Metacam</option>
                                 <option value="Previcox">Previcox</option>
                                 <option value="Carprovet">Carprovet</option>
@@ -1083,26 +1074,65 @@
                             <label for="editMedicineBrand" class="block text-gray-700">Marca:</label>
                             <select id="editMedicineBrand"
                                 class="border border-gray-300 rounded w-full py-2 px-3 text-gray-700" required>
-                                <option value="">Seleccionar Marca</option>
-                                <optgroup label="Antiparasitarios">
+                                <option value="">Seleccione una marca</option>
+                                <optgroup id="editantiparasitario" label="Antiparasitarios">
                                     <option value="Frontline">Frontline</option>
                                     <option value="NexGard">NexGard</option>
                                     <option value="Drontal">Drontal</option>
                                     <option value="Advantage">Advantage</option>
                                     <option value="Heartgard">Heartgard</option>
                                 </optgroup>
-                                <optgroup label="Antibióticos">
+                                <optgroup id="editantibiotico" label="Antibióticos">
                                     <option value="AmoxiVet">AmoxiVet</option>
                                     <option value="Baytril">Baytril</option>
                                     <option value="Clindacyn">Clindacyn</option>
                                     <option value="Synulox">Synulox</option>
                                 </optgroup>
-                                <optgroup label="Analgésicos y Anti-inflamatorios">
+                                <optgroup id="editantiinflamatorio" label="Analgésicos y Anti-inflamatorios">
                                     <option value="Metacam">Metacam</option>
                                     <option value="Previcox">Previcox</option>
                                     <option value="Carprovet">Carprovet</option>
                                 </optgroup>
-                                <!-- Agrega más categorías según sea necesario -->
+                                <optgroup id="editvacunas" label="Vacunas">
+                                    <option value="Nobivac">Nobivac</option>
+                                    <option value="Cavium">Cavium</option>
+                                    <option value="Rabvac">Rabvac</option>
+                                </optgroup>
+                                <optgroup id="editantifúngicos" label="Antifúngicos">
+                                    <option value="Oral Fungiconazole">Oral Fungiconazole</option>
+                                    <option value="Ketoconazol">Ketoconazol</option>
+                                    <option value="Lamisil">Lamisil</option>
+                                </optgroup>
+                                <optgroup id="editreproductivos" label="Medicamentos Hormonales y Reproductivos">
+                                    <option value="Ovarelin">Ovarelin</option>
+                                    <option value="Estrumate">Estrumate</option>
+                                    <option value="Cystorelin">Cystorelin</option>
+                                </optgroup>
+                                <optgroup id="editsuplementosVitaminas" label="Suplementos y Vitaminas">
+                                    <option value="VetriScience">VetriScience</option>
+                                    <option value="Nutri-Vet">Nutri-Vet</option>
+                                    <option value="Cosequin">Cosequin</option>
+                                </optgroup>
+                                <optgroup id="editsedantesAnestésicos" label="Sedantes y Anestésicos">
+                                    <option value="Acepromazine">Acepromazine</option>
+                                    <option value="Propofol">Propofol</option>
+                                    <option value="Isoflurano">Isoflurano</option>
+                                </optgroup>
+                                <optgroup id="editoftálmicosOtológicos" label="Medicamentos Oftálmicos y Otológicos">
+                                    <option value="Tobramycin">Tobramycin</option>
+                                    <option value="Otomax">Otomax</option>
+                                    <option value="Cyclosporine A">Cyclosporine A</option>
+                                </optgroup>
+                                <optgroup id="editdigestivo" label="Medicamentos Digestivos">
+                                    <option value="Metoclopramide">Metoclopramide</option>
+                                    <option value="Omeprazol">Omeprazol</option>
+                                    <option value="Sucralfate">Sucralfate</option>
+                                </optgroup>
+                                <optgroup id="editantihistamínicos" label="Antihistamínicos y Medicamentos Antialérgicos">
+                                    <option value="Benadryl">Benadryl</option>
+                                    <option value="Zyrtec">Zyrtec</option>
+                                    <option value="Atarax">Atarax</option>
+                                </optgroup>
                             </select>
                         </div>
 

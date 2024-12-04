@@ -1085,11 +1085,11 @@ function getAppointmentColor(time) {
     // Extraemos solo la hora (primer valor antes de los dos puntos)
     const hour = parseInt(time.split(':')[0], 10); 
 
-    // Asignar colores para horas específicas
+    // Asignar colores para horas específicas en formato de 24 horas
     if (hour === 2) {
-        return '#D2F1E4'; // Verde pastel más claro para la hora 02:30:00
+        return '#D2F1E4'; // Verde pastel más claro para la hora 02:30:00 (AM)
     } else if (hour === 4) {
-        return '#D1C6FF'; // Lavanda pastel más claro para la hora 04:30:00
+        return '#D1C6FF'; // Lavanda pastel más claro para la hora 04:30:00 (AM)
     }
 
     // Asignar colores para el rango de horas general
@@ -1099,10 +1099,15 @@ function getAppointmentColor(time) {
         return '#FFE1C1'; // Durazno pastel más claro
     } else if (hour >= 12 && hour < 14) {
         return '#FFFCB3'; // Amarillo pastel más claro
+    } else if (hour >= 14 && hour < 16) {
+        return '#D1C6FF'; // Lavanda pastel más claro para la hora 14:30 (2 PM)
+    } else if (hour >= 16 && hour < 18) {
+        return '#D2F1E4'; // Verde pastel más claro para la hora 16:30 (4 PM)
     } else {
         return '#f9fafb'; // Color predeterminado para horas fuera del rango
     }
 }
+
 
 // Modificación de la función generateCalendar
 function generateCalendar(year, month, appointments = {}) {
@@ -1202,10 +1207,12 @@ function generateCalendar(year, month, appointments = {}) {
             }
         }
 
+        
         calendarDays.appendChild(dayDiv);
+
+        
     }
 }
-
 
 async function fetchAppointments() {
     try {
@@ -1298,6 +1305,7 @@ function openModalWeek(appointment) {
     // Completa los campos del modal con los datos de la cita
     document.getElementById('modalweek-type').innerText = `Cita: ${appointment.type || 'Tipo no disponible'}`;
     document.getElementById('modalweek-service').innerText = `${appointment.type || 'Servicio no disponible'}`;
+    document.getElementById('modalweek-reason').innerText = `${appointment.motivo || 'Motivo no disponible'}`;
     document.getElementById('modalweek-date').innerText = `${new Date(appointment.fecha).toLocaleDateString()}`;
 
     // Información del dueño
@@ -1322,23 +1330,27 @@ function openModalWeek(appointment) {
     // Detalles de la cita
     const startTimeInput = document.getElementById('modalweek-start-time');
     
+    // Asegurarse de que appointment.hora esté en formato 24 horas (HH:mm)
     const hora = appointment.hora || '00:00';
     const formattedHora = hora.match(/^([0-9]{2}):([0-9]{2})$/) ? hora : '00:00';
 
-    const [hours, minutes] = formattedHora.split(':');
-    let ampm = 'AM';
-    let formattedTime = `${hours}:${minutes} ${ampm}`;
-    if (parseInt(hours) >= 12) {
-        ampm = 'PM';
-        const newHours = parseInt(hours) - 12;
-        formattedTime = `${newHours}:${minutes} ${ampm}`;
-    }
+    let [hours, minutes] = formattedHora.split(':');
+    hours = parseInt(hours);  // Convertimos horas a número para manejar correctamente AM/PM
 
+    let ampm = 'AM';
+    if (hours >= 12) {
+        ampm = 'PM';
+        if (hours > 12) {
+            hours -= 12; // Convertimos las horas mayores a 12 a formato de 12 horas
+        }
+    }
+    // Formato consistente con las opciones del select (AM/PM en mayúsculas)
+    const formattedTime = `${(hours < 10 ? '0' : '') + hours}:${minutes} ${ampm}`;
+
+    // Seleccionar la opción correspondiente en el select
     const options = startTimeInput.querySelectorAll('option');
     options.forEach(option => {
-        if (option.value === formattedTime) {
-            option.selected = true;
-        }
+        option.selected = option.value === formattedTime;
     });
 
     modal.classList.remove('hidden');
@@ -1456,6 +1468,10 @@ function editAppointmentWeek() {
             if (data.message) {
                 alert(data.message);  // Mostrar un mensaje de éxito
                 console.log("Cambio realizado:", data);
+
+                // Cerrar el modal
+                closeModalWeek();
+
             } else {
                 alert(data.error);  // Mostrar un mensaje de error
             }

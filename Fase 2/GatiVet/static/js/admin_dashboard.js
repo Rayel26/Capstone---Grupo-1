@@ -2362,6 +2362,9 @@ function showEditModal(medicineId) {
                 editMedicineType.value = data.tipo_medicamento;
                 editMedicineBrand.value = data.marca;
                 editMedicineStock.value = data.stock;
+
+                // Filtrar las marcas según el tipo de medicamento
+                filterBrandsByType(data.tipo_medicamento);
             }
         })
         .catch(error => console.error('Error fetching medicine data:', error));
@@ -2370,12 +2373,36 @@ function showEditModal(medicineId) {
     modal.classList.remove('hidden');
 }
 
-
 // Función para cerrar el modal
 function closeModalMedicine() {
     const modal = document.getElementById('editMedicineModal');
     modal.classList.add('hidden');
 }
+
+// Función para filtrar las marcas según el tipo de medicamento
+function filterBrandsByType(selectedType) {
+    const allOptgroups = document.querySelectorAll('#editMedicineBrand optgroup');
+
+    // Ocultar todos los optgroups
+    allOptgroups.forEach(optgroup => {
+        optgroup.style.display = 'none';
+    });
+
+    // Mostrar solo el optgroup correspondiente al tipo seleccionado
+    if (selectedType) {
+        const selectedOptgroup = document.getElementById(`edit${selectedType}`);
+        if (selectedOptgroup) {
+            selectedOptgroup.style.display = 'block';
+        }
+    }
+}
+
+// Agregar un evento al campo de tipo de medicamento para filtrar las marcas en tiempo real
+document.getElementById('editMedicineType').addEventListener('change', function () {
+    const selectedType = this.value;
+    filterBrandsByType(selectedType);
+});
+
 
 function updateMedicine(event) {
     event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
