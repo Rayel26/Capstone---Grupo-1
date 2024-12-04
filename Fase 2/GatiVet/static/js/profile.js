@@ -828,9 +828,9 @@ function setCurrentBreed(breed, species) {
     }
 
     // Lógica para manejar el clic en el botón de eliminar
-    document.getElementById('delete-button').addEventListener('click', function() {
+    document.getElementById('delete-button').addEventListener('click', function () {
         const petId = document.getElementById('pet-select').value; // Asegúrate de que el ID de la mascota esté en el select
-    
+
         if (petId) {
             fetch(`/pets/${petId}`, {
                 method: 'DELETE',
@@ -838,20 +838,28 @@ function setCurrentBreed(breed, species) {
                     'Content-Type': 'application/json',
                 }
             })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message); // Muestra el mensaje de éxito o error
-                if (response.ok) {
-                    // Opcional: Actualiza la UI o recarga la lista de mascotas
+            .then(response => {
+                if (!response.ok) {
+                    // Lanza un error si la respuesta no fue exitosa
+                    return response.json().then(err => {
+                        throw new Error(err.message || 'Error al eliminar la mascota.');
+                    });
                 }
+                return response.json();
+            })
+            .then(data => {
+                alert(data.message); // Muestra el mensaje de éxito
+                // Opcional: Actualiza la UI o recarga la lista de mascotas
             })
             .catch(error => {
                 console.error('Error:', error);
+                alert(error.message || 'Ocurrió un error inesperado.');
             });
         } else {
             alert("Por favor, selecciona una mascota para eliminar.");
         }
     });
+
 });
 
 // Cargar mascotas
