@@ -1754,6 +1754,11 @@ async function uploadImageToCloudinaryCase() {
 async function submitCase(event) {
     event.preventDefault(); // Evitar el envío normal del formulario
 
+    const spinner = document.getElementById('cargaspinner');
+    
+    // Mostrar el spinner
+    spinner.classList.remove('hidden');
+
     const caseName = document.getElementById('caseName').value;
     const caseDescription = document.getElementById('caseDescription').value;
     const uploadedImageFile = document.getElementById('uploadImageCase').files[0]; // Archivo de imagen
@@ -1766,12 +1771,14 @@ async function submitCase(event) {
         imageUrl = await uploadImageToCloudinaryCase(); // Espera la carga de la imagen
         if (!imageUrl) {
             alert('Error al subir la imagen. Intenta nuevamente.');
+            spinner.classList.add('hidden'); // Ocultar el spinner en caso de error
             return; // Si no hay URL, no envíes el formulario
         }
     } else if (caseImageSelect) {
         imageUrl = caseImageSelect; // Asigna la URL de la imagen seleccionada
     } else {
         alert('Por favor, selecciona o sube una imagen.');
+        spinner.classList.add('hidden'); // Ocultar el spinner si no se selecciona imagen
         return; // Si no hay imagen seleccionada ni subida, cancela
     }
 
@@ -1792,7 +1799,6 @@ async function submitCase(event) {
 
         if (response.ok) {
             const jsonResponse = await response.json();
-            alert(jsonResponse.message); // Mensaje de éxito
             document.getElementById('caseForm').reset(); // Resetear el formulario
             document.getElementById('imagePreview').classList.add('hidden'); // Ocultar la vista previa
             
@@ -1805,8 +1811,12 @@ async function submitCase(event) {
     } catch (error) {
         console.error('Error al enviar los datos:', error);
         alert('Error al enviar los datos. Inténtalo de nuevo.');
+    } finally {
+        // Ocultar el spinner una vez se haya completado la operación
+        spinner.classList.add('hidden');
     }
 }
+
 
 // Función para obtener imágenes de Cloudinary y llenar el select
 async function fetchImages() {
