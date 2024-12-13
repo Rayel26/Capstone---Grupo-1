@@ -768,6 +768,18 @@
                 </tbody>
             </table>
 
+            <div id="paginationContainer" class="mt-4 flex justify-center items-center">
+                <button id="buttonPreviousFoundationPage" class="text-white py-1 px-3 rounded mr-2 text-sm" style="background-color: #18beaa;" onclick="prevFoundationPage()" disabled>
+                    &lt;&lt;
+                </button>
+                <span id="currentFoundationPageIndicator" class="text-gray-700 text-sm">Página 1</span>
+                <button id="buttonNextFoundationPage" class="text-white py-1 px-3 rounded ml-2 text-sm" style="background-color: #18beaa;" onclick="nextFoundationPage()">
+                    &gt;&gt;
+                </button>
+            </div>
+            
+            
+
             <!-- Formulario para añadir Fundaciones -->
             <form id="foundationForm" class="mt-6 bg-white p-6 shadow rounded-lg text-sm"
                 onsubmit="submitFoundation(event)">
@@ -911,14 +923,14 @@
 
 
             <!-- Controles de Paginación -->
-            <div id="paginationControls" class="mt-4 flex justify-center items-center">
-                <button id="prevPageBtn" class="text-white py-1 px-3 rounded mr-2 text-sm"
-                    style="background-color: #18beaa;" onclick="prevPage()">
+            <div id="paginationControlsMedi" class="mt-4 flex justify-center items-center">
+                <button id="prevPageBtnMedi" class="text-white py-1 px-3 rounded mr-2 text-sm"
+                    style="background-color: #18beaa;" onclick="prevPageMedi()">
                     &lt;&lt;
                 </button>
-                <span id="currentPage" class="text-gray-700 text-sm"></span>
-                <button id="nextPageBtn" class="text-white py-1 px-3 rounded ml-2 text-sm"
-                    style="background-color: #18beaa;" onclick="nextPage()">
+                <span id="currentPageMedi" class="text-gray-700 text-sm">Página 1</span>
+                <button id="nextPageBtnMedi" class="text-white py-1 px-3 rounded ml-2 text-sm"
+                    style="background-color: #18beaa;" onclick="nextPageMedi()">
                     &gt;&gt;
                 </button>
             </div>

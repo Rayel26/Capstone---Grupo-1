@@ -1884,8 +1884,13 @@ async function uploadFoundationImageToCloudinary() {
     }
 }
 
-// Función para cargar las fundaciones en la tabla
+// Fundaciones
+let foundationPage = 1; // Página actual
+const foundationsPerPage = 2; // Fundaciones por página
+
 document.addEventListener('DOMContentLoaded', loadFoundations);
+
+// Función para cargar las fundaciones en la tabla
 async function loadFoundations() {
     try {
         const response = await fetch('/api/fundaciones');
@@ -1894,20 +1899,25 @@ async function loadFoundations() {
         }
 
         const foundations = await response.json();
-        const tableBody = document.getElementById('foundationTableExt'); // Cambiado a 'foundationTableExt'
+        const tableBody = document.getElementById('foundationTableExt');
 
         // Limpia la tabla antes de llenarla
         tableBody.innerHTML = '';
 
-        // Llena la tabla con los datos de las fundaciones
-        foundations.forEach(foundationData => {
-            console.log("foundationData:", foundationData); // Verifica qué hay en foundationData
+        // Calcular los índices de inicio y fin según la página actual
+        const startIndex = (foundationPage - 1) * foundationsPerPage;
+        const endIndex = startIndex + foundationsPerPage;
 
+        // Seleccionar las fundaciones correspondientes a la página actual
+        const paginatedFoundations = foundations.slice(startIndex, endIndex);
+
+        // Llena la tabla con los datos paginados
+        paginatedFoundations.forEach(foundationData => {
             const row = tableBody.insertRow();
             const nameCell = row.insertCell(0);
             const descriptionCell = row.insertCell(1);
             const dateCell = row.insertCell(2);
-            const actionsCell = row.insertCell(3); 
+            const actionsCell = row.insertCell(3);
 
             // Asigna las clases para el estilo
             nameCell.className = 'py-2 px-4 border-b';
@@ -1924,23 +1934,55 @@ async function loadFoundations() {
             const editButton = document.createElement('button');
             editButton.textContent = 'Editar';
             editButton.className = 'text-blue-500 hover:underline';
-            editButton.onclick = () => editFoundation(foundationData.id_fundacion); // Llama a la función editFoundation
+            editButton.onclick = () => editFoundation(foundationData.id_fundacion);
 
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Eliminar';
             deleteButton.className = 'text-red-500 hover:underline ml-2';
-            deleteButton.onclick = () => {
-                console.log("ID de la fundación a eliminar:", foundationData.id_fundacion);
-                deleteFoundation(foundationData.id_fundacion);
-            };
+            deleteButton.onclick = () => deleteFoundation(foundationData.id_fundacion);
 
             actionsCell.appendChild(editButton);
             actionsCell.appendChild(deleteButton);
         });
+
+        // Actualizar el indicador de la página actual
+        document.getElementById('currentFoundationPageIndicator').textContent = `Página ${foundationPage}`;
+
+        // Actualizar los botones de paginación
+        toggleFoundationPaginationButtons(foundations.length);
+
     } catch (error) {
         console.error('Error al cargar las fundaciones:', error);
     }
 }
+
+// Función para manejar el cambio de página siguiente
+function nextFoundationPage() {
+    foundationPage++;
+    loadFoundations();
+}
+
+// Función para manejar el cambio de página anterior
+function prevFoundationPage() {
+    if (foundationPage > 1) {
+        foundationPage--;
+        loadFoundations();
+    }
+}
+
+// Función para habilitar/deshabilitar los botones de paginación
+function toggleFoundationPaginationButtons(foundationsLength) {
+    const maxPages = Math.ceil(foundationsLength / foundationsPerPage);
+
+    // Botón "Anterior"
+    const prevButton = document.getElementById('buttonPreviousFoundationPage');
+    prevButton.disabled = foundationPage <= 1;
+
+    // Botón "Siguiente"
+    const nextButton = document.getElementById('buttonNextFoundationPage');
+    nextButton.disabled = foundationPage >= maxPages;
+}
+
 
 // Abre modal edición
 function editFoundation(foundationId) {
@@ -2329,22 +2371,24 @@ function sendMedicineData(imagenUrl) {
     })
 }
 
+let medicinePage = 1; // Página actual
+const medicinesPerPage = 2; // Medicamentos por página
+
+document.addEventListener('DOMContentLoaded', fetchMedicines);
+
+
 // Función para obtener los medicamentos y llenar la tabla
 async function fetchMedicines() {
-    // Obtiene los valores de los filtros
     const medicineFilter = document.getElementById('medicineFilter').value;
 
     try {
-        // Construye la URL con el filtro de tipo de medicamento
         let url = '/api/obtener_medicamentos?';
         if (medicineFilter) {
             url += `tipo_medicamento=${medicineFilter}&`;
         }
 
-        // Elimina el último '&' si está presente
         url = url.endsWith('&') ? url.slice(0, -1) : url;
 
-        // Hace la solicitud fetch con los parámetros de filtro
         const response = await fetch(url);  
 
         if (!response.ok) {
@@ -2352,17 +2396,18 @@ async function fetchMedicines() {
             return;
         }
 
-        const medicines = await response.json();  // Convierte la respuesta a JSON
-
-        // Selecciona el tbody de la tabla
+        const medicines = await response.json();  
         const tableBody = document.getElementById('medicineTableBody');
-        tableBody.innerHTML = ''; // Limpia la tabla antes de llenarla
+        tableBody.innerHTML = ''; 
 
-        // Itera sobre cada medicamento y crea una fila en la tabla
-        medicines.forEach(medicine => {
+        const startIndex = (medicinePage - 1) * medicinesPerPage;
+        const endIndex = startIndex + medicinesPerPage;
+
+        const paginatedMedicines = medicines.slice(startIndex, endIndex);
+
+        paginatedMedicines.forEach(medicine => {
             const row = document.createElement('tr');
 
-            // Crea celdas para cada campo y añade a la fila
             row.innerHTML = ` 
                 <td class="py-1 px-2 border-b">${medicine.nombre || 'No disponible'}</td>
                 <td class="py-1 px-2 border-b">${medicine.tipo_medicamento || 'No disponible'}</td>
@@ -2370,40 +2415,55 @@ async function fetchMedicines() {
                 <td class="py-1 px-2 border-b">${medicine.stock || 0}</td>
                 <td class="py-1 px-2 border-b">${new Date(medicine.fecha_ingreso).toLocaleDateString() || 'Fecha no disponible'}</td>
                 <td class="py-1 px-2 border-b">
-                    <!-- Celda de Acción -->
+                    <button class="text-blue-500 hover:underline mr-2" onclick="showEditModal(${medicine.id_medicamento})">Editar</button>
+                    <button class="text-red-500 hover:underline" onclick="deleteMedicine(${medicine.id_medicamento})">Eliminar</button>
                 </td>
             `;
 
-            // Boton editar
-            const editButton = document.createElement('button');
-            editButton.textContent = 'Editar';
-            editButton.className = 'text-blue-500 hover:underline mr-2';  // Agregar espacio entre los botones
-            editButton.onclick = () => showEditModal(medicine.id_medicamento);
-
-            // Boton eliminar
-            const actionButton = document.createElement('button');
-            actionButton.textContent = 'Eliminar';
-            actionButton.className = 'text-red-500 hover:underline';
-            actionButton.onclick = () => {
-                if (medicine.id_medicamento) {
-                    deleteMedicine(medicine.id_medicamento);
-                } else {
-                    console.error('ID del medicamento no disponible');
-                }
-            };
-
-            // Selecciona la celda de acción y agrega los botones
-            const actionCell = row.querySelector('td:last-child');  // Seleccionar la última celda (Acción)
-            actionCell.appendChild(editButton);
-            actionCell.appendChild(actionButton);
-
-            // Añade la fila a la tabla
             tableBody.appendChild(row);
         });
+
+        // Actualiza el indicador de la página actual
+        document.getElementById('currentPageMedi').textContent = `Página ${medicinePage}`;
+
+
+        // Actualiza los botones de paginación
+        togglePaginationButtons(medicines.length);
+
     } catch (error) {
         console.error('Error al obtener medicamentos:', error);
     }
 }
+
+
+// Función para habilitar/deshabilitar los botones de paginación
+function togglePaginationButtons(medicinesLength) {
+    const maxPages = Math.ceil(medicinesLength / medicinesPerPage);
+
+    // Botón "Anterior"
+    const prevButton = document.getElementById('prevPageBtnMedi');
+    prevButton.disabled = medicinePage <= 1;
+
+    // Botón "Siguiente"
+    const nextButton = document.getElementById('nextPageBtnMedi');
+    nextButton.disabled = medicinePage >= maxPages;
+}
+
+// Función para manejar el cambio de página siguiente
+function nextPageMedi() {
+    medicinePage++;
+    fetchMedicines();  // Cargar los medicamentos de la nueva página
+}
+
+// Función para manejar el cambio de página anterior
+function prevPageMedi() {
+    if (medicinePage > 1) {
+        medicinePage--;
+        fetchMedicines();  // Cargar los medicamentos de la nueva página
+    }
+}
+
+
 
 // Llama la función cuando cambian los filtros
 function filterMedicines() {
