@@ -345,8 +345,6 @@
                 </button>
             </div>
 
-
-
             <!-- Formulario de agregar usuario veterinario -->
                 <div id="addUserFormContainer"  class="mt-6 bg-white p-6 shadow rounded-lg text-sm">
                     <h4 class="text-base font-semibold">Agregar Usuario Veterinario</h4>
@@ -655,6 +653,17 @@
                 </tbody>
             </table>
 
+            <div id="paginationContainer" class="mt-4 flex justify-center items-center">
+                <button id="buttonPreviousItemPage" class="text-white py-1 px-3 rounded mr-2 text-sm" style="background-color: #18beaa;" onclick="prevItemPage()">
+                    &lt;&lt;
+                </button>
+                <span id="currentItemPageIndicator" class="text-gray-700 text-sm">Página 1</span>
+                <button id="buttonNextItemPage" class="text-white py-1 px-3 rounded ml-2 text-sm" style="background-color: #18beaa;" onclick="nextItemPage()">
+                    &gt;&gt;
+                </button>
+            </div>
+            
+            
             <!-- Formulario para subir Casos de Animales -->
             <form id="caseForm" class="mt-6 bg-white p-6 shadow rounded-lg text-sm" onsubmit="submitCase(event)"
                 enctype="multipart/form-data">
