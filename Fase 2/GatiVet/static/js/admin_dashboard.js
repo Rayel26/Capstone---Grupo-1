@@ -1894,6 +1894,7 @@ async function uploadFoundationImageToCloudinary() {
 
 // Fundaciones
 let foundationPage = 1; // Página actual
+let totalFoundationPages = 1; // Número total de páginas
 const foundationsPerPage = 2; // Fundaciones por página
 
 document.addEventListener('DOMContentLoaded', loadFoundations);
@@ -1954,7 +1955,7 @@ async function loadFoundations() {
         });
 
         // Actualizar el indicador de la página actual
-        document.getElementById('currentFoundationPageIndicator').textContent = `Página ${foundationPage}`;
+        document.getElementById('currentFoundationPageIndicator').textContent = `Página ${foundationPage} de ${totalFoundationPages}`;
 
         // Actualizar los botones de paginación
         toggleFoundationPaginationButtons(foundations.length);
@@ -1966,8 +1967,10 @@ async function loadFoundations() {
 
 // Función para manejar el cambio de página siguiente
 function nextFoundationPage() {
-    foundationPage++;
-    loadFoundations();
+    if (foundationPage < totalFoundationPages) {
+        foundationPage++;
+        loadFoundations();
+    }
 }
 
 // Función para manejar el cambio de página anterior
@@ -1980,16 +1983,17 @@ function prevFoundationPage() {
 
 // Función para habilitar/deshabilitar los botones de paginación
 function toggleFoundationPaginationButtons(foundationsLength) {
-    const maxPages = Math.ceil(foundationsLength / foundationsPerPage);
-
-    // Botón "Anterior"
+    totalFoundationPages = Math.ceil(foundationsLength / foundationsPerPage);
     const prevButton = document.getElementById('buttonPreviousFoundationPage');
+    const nextButton = document.getElementById('buttonNextFoundationPage');
+
+    // Deshabilitar el botón "Anterior" si estamos en la primera página
     prevButton.disabled = foundationPage <= 1;
 
-    // Botón "Siguiente"
-    const nextButton = document.getElementById('buttonNextFoundationPage');
-    nextButton.disabled = foundationPage >= maxPages;
+    // Deshabilitar el botón "Siguiente" si estamos en la última página
+    nextButton.disabled = foundationPage >= totalFoundationPages;
 }
+
 
 
 // Abre modal edición
@@ -2115,8 +2119,7 @@ async function submitFoundation(event) {
         });
 
         if (response.ok) {
-            const jsonResponse = await response.json();
-            alert(jsonResponse.message);
+            // No se muestra la alerta de éxito
             document.getElementById('foundationForm').reset();
             document.getElementById('imagePreviewFoundation').classList.add('hidden');
             loadFoundations();
@@ -2126,11 +2129,13 @@ async function submitFoundation(event) {
         }
     } catch (error) {
         console.error('Error al enviar los datos:', error);
+        alert('Error al enviar los datos. Inténtalo de nuevo.');
     } finally {
         // Ocultar el spinner una vez se haya completado la solicitud
         document.getElementById('loadspinner').classList.add('hidden');
     }
 }
+
 
 //Eliminar fundaciones
 async function deleteFoundation(foundationId) {
