@@ -1480,6 +1480,7 @@ window.onload = loadImages;
 // Casos:
 let paginationContainer = 1; // Página actual
 const itemsPerPage = 2; // Casos por página
+let totalCasePages = 1; // Total de páginas
 
 // Función para cargar los casos en la tabla
 async function loadCases() {
@@ -1537,8 +1538,11 @@ async function loadCases() {
             actionsCell.appendChild(deleteButton);
         });
 
+        // Actualizar el total de páginas
+        totalCasePages = Math.ceil(cases.length / itemsPerPage);
+
         // Actualizar el indicador de la página actual
-        document.getElementById('currentItemPageIndicator').textContent = `Página ${paginationContainer}`;
+        document.getElementById('currentItemPageIndicator').textContent = `Página ${paginationContainer} de ${totalCasePages}`;
 
         // Actualizar los botones de paginación
         togglePaginationButtons(cases.length);
@@ -1547,6 +1551,35 @@ async function loadCases() {
         console.error('Error al cargar los casos:', error);
     }
 }
+
+// Función para manejar el cambio de página siguiente
+function nextPage() {
+    if (paginationContainer < totalCasePages) {
+        paginationContainer++;
+        loadCases();
+    }
+}
+
+// Función para manejar el cambio de página anterior
+function prevPage() {
+    if (paginationContainer > 1) {
+        paginationContainer--;
+        loadCases();
+    }
+}
+
+// Función para habilitar/deshabilitar los botones de paginación
+function togglePaginationButtons(casesLength) {
+    const prevButton = document.getElementById('buttonPreviousPage');
+    const nextButton = document.getElementById('buttonNextPage');
+
+    // Deshabilitar el botón "Anterior" si estamos en la primera página
+    prevButton.disabled = paginationContainer <= 1;
+
+    // Deshabilitar el botón "Siguiente" si estamos en la última página
+    nextButton.disabled = paginationContainer >= totalCasePages;
+}
+
 
 // Función para manejar el cambio de página siguiente
 function nextItemPage() {
