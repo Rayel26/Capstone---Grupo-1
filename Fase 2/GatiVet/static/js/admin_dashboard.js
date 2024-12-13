@@ -1479,8 +1479,8 @@ window.onload = loadImages;
 
 // Casos:
 let paginationContainer = 1; // Página actual
+let totalCasePages = 1; // Número total de páginas
 const itemsPerPage = 2; // Casos por página
-let totalCasePages = 1; // Total de páginas
 
 // Función para cargar los casos en la tabla
 async function loadCases() {
@@ -1495,6 +1495,9 @@ async function loadCases() {
 
         // Limpia la tabla antes de llenarla
         tableBody.innerHTML = '';
+
+        // Calcular el número total de páginas
+        totalCasePages = Math.ceil(cases.length / itemsPerPage);
 
         // Calcular los índices de inicio y fin según la página actual
         const startIndex = (paginationContainer - 1) * itemsPerPage;
@@ -1538,9 +1541,6 @@ async function loadCases() {
             actionsCell.appendChild(deleteButton);
         });
 
-        // Actualizar el total de páginas
-        totalCasePages = Math.ceil(cases.length / itemsPerPage);
-
         // Actualizar el indicador de la página actual
         document.getElementById('currentItemPageIndicator').textContent = `Página ${paginationContainer} de ${totalCasePages}`;
 
@@ -1553,38 +1553,11 @@ async function loadCases() {
 }
 
 // Función para manejar el cambio de página siguiente
-function nextPage() {
+function nextItemPage() {
     if (paginationContainer < totalCasePages) {
         paginationContainer++;
         loadCases();
     }
-}
-
-// Función para manejar el cambio de página anterior
-function prevPage() {
-    if (paginationContainer > 1) {
-        paginationContainer--;
-        loadCases();
-    }
-}
-
-// Función para habilitar/deshabilitar los botones de paginación
-function togglePaginationButtons(casesLength) {
-    const prevButton = document.getElementById('buttonPreviousPage');
-    const nextButton = document.getElementById('buttonNextPage');
-
-    // Deshabilitar el botón "Anterior" si estamos en la primera página
-    prevButton.disabled = paginationContainer <= 1;
-
-    // Deshabilitar el botón "Siguiente" si estamos en la última página
-    nextButton.disabled = paginationContainer >= totalCasePages;
-}
-
-
-// Función para manejar el cambio de página siguiente
-function nextItemPage() {
-    paginationContainer++;
-    loadCases();
 }
 
 // Función para manejar el cambio de página anterior
@@ -1603,11 +1576,8 @@ function togglePaginationButtons(casesLength) {
     // Deshabilitar el botón "Anterior" si estamos en la primera página
     prevButton.disabled = paginationContainer <= 1;
 
-    // Calcular el número máximo de páginas
-    const maxPages = Math.ceil(casesLength / itemsPerPage);
-
     // Deshabilitar el botón "Siguiente" si estamos en la última página
-    nextButton.disabled = paginationContainer >= maxPages;
+    nextButton.disabled = paginationContainer >= totalCasePages;
 }
 
 // Cargar los casos iniciales
@@ -1754,11 +1724,6 @@ async function uploadImageToCloudinaryCase() {
 async function submitCase(event) {
     event.preventDefault(); // Evitar el envío normal del formulario
 
-    const spinner = document.getElementById('cargaspinner');
-    
-    // Mostrar el spinner
-    spinner.classList.remove('hidden');
-
     const caseName = document.getElementById('caseName').value;
     const caseDescription = document.getElementById('caseDescription').value;
     const uploadedImageFile = document.getElementById('uploadImageCase').files[0]; // Archivo de imagen
@@ -1771,14 +1736,12 @@ async function submitCase(event) {
         imageUrl = await uploadImageToCloudinaryCase(); // Espera la carga de la imagen
         if (!imageUrl) {
             alert('Error al subir la imagen. Intenta nuevamente.');
-            spinner.classList.add('hidden'); // Ocultar el spinner en caso de error
             return; // Si no hay URL, no envíes el formulario
         }
     } else if (caseImageSelect) {
         imageUrl = caseImageSelect; // Asigna la URL de la imagen seleccionada
     } else {
         alert('Por favor, selecciona o sube una imagen.');
-        spinner.classList.add('hidden'); // Ocultar el spinner si no se selecciona imagen
         return; // Si no hay imagen seleccionada ni subida, cancela
     }
 
@@ -1799,6 +1762,7 @@ async function submitCase(event) {
 
         if (response.ok) {
             const jsonResponse = await response.json();
+            alert(jsonResponse.message); // Mensaje de éxito
             document.getElementById('caseForm').reset(); // Resetear el formulario
             document.getElementById('imagePreview').classList.add('hidden'); // Ocultar la vista previa
             
@@ -1811,12 +1775,8 @@ async function submitCase(event) {
     } catch (error) {
         console.error('Error al enviar los datos:', error);
         alert('Error al enviar los datos. Inténtalo de nuevo.');
-    } finally {
-        // Ocultar el spinner una vez se haya completado la operación
-        spinner.classList.add('hidden');
     }
 }
-
 
 // Función para obtener imágenes de Cloudinary y llenar el select
 async function fetchImages() {
@@ -1937,7 +1897,6 @@ async function uploadFoundationImageToCloudinary() {
 
 // Fundaciones
 let foundationPage = 1; // Página actual
-let totalFoundationPages = 1; // Número total de páginas
 const foundationsPerPage = 2; // Fundaciones por página
 
 document.addEventListener('DOMContentLoaded', loadFoundations);
@@ -1998,7 +1957,7 @@ async function loadFoundations() {
         });
 
         // Actualizar el indicador de la página actual
-        document.getElementById('currentFoundationPageIndicator').textContent = `Página ${foundationPage} de ${totalFoundationPages}`;
+        document.getElementById('currentFoundationPageIndicator').textContent = `Página ${foundationPage}`;
 
         // Actualizar los botones de paginación
         toggleFoundationPaginationButtons(foundations.length);
@@ -2010,10 +1969,8 @@ async function loadFoundations() {
 
 // Función para manejar el cambio de página siguiente
 function nextFoundationPage() {
-    if (foundationPage < totalFoundationPages) {
-        foundationPage++;
-        loadFoundations();
-    }
+    foundationPage++;
+    loadFoundations();
 }
 
 // Función para manejar el cambio de página anterior
@@ -2026,17 +1983,16 @@ function prevFoundationPage() {
 
 // Función para habilitar/deshabilitar los botones de paginación
 function toggleFoundationPaginationButtons(foundationsLength) {
-    totalFoundationPages = Math.ceil(foundationsLength / foundationsPerPage);
-    const prevButton = document.getElementById('buttonPreviousFoundationPage');
-    const nextButton = document.getElementById('buttonNextFoundationPage');
+    const maxPages = Math.ceil(foundationsLength / foundationsPerPage);
 
-    // Deshabilitar el botón "Anterior" si estamos en la primera página
+    // Botón "Anterior"
+    const prevButton = document.getElementById('buttonPreviousFoundationPage');
     prevButton.disabled = foundationPage <= 1;
 
-    // Deshabilitar el botón "Siguiente" si estamos en la última página
-    nextButton.disabled = foundationPage >= totalFoundationPages;
+    // Botón "Siguiente"
+    const nextButton = document.getElementById('buttonNextFoundationPage');
+    nextButton.disabled = foundationPage >= maxPages;
 }
-
 
 
 // Abre modal edición
@@ -2162,7 +2118,8 @@ async function submitFoundation(event) {
         });
 
         if (response.ok) {
-            // No se muestra la alerta de éxito
+            const jsonResponse = await response.json();
+            alert(jsonResponse.message);
             document.getElementById('foundationForm').reset();
             document.getElementById('imagePreviewFoundation').classList.add('hidden');
             loadFoundations();
@@ -2178,7 +2135,6 @@ async function submitFoundation(event) {
         document.getElementById('loadspinner').classList.add('hidden');
     }
 }
-
 
 //Eliminar fundaciones
 async function deleteFoundation(foundationId) {

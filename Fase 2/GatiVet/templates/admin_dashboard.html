@@ -226,15 +226,27 @@
                     class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
                     style="background-color: #18beaa;">Subir Producto</button>
             </form>
-
-            <!-- Spinner de carga -->
-            <div id="load-spinner" class="hidden fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center z-50">
-                <div class="spinner-border animate-spin border-4 border-t-4 border-[#18beaa] w-16 h-16 rounded-full"></div>
-            </div>
-
         </section>
     </div>
     <!-- Fin Contenido Productos -->
+
+    <!-- Modal de confirmación Producto Agregado -->
+    <div id="productAddedModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
+        <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md w-full max-w-md">
+            <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">¡Producto Agregado Exitosamente!</h2>
+            <p class="text-gray-700 dark:text-white mb-6">
+                El producto ha sido agregado exitosamente.
+                <a href="/products" class="text-[#18beaa] hover:underline">Ver productos</a>
+            </p>
+            <div class="flex justify-end">
+                <button id="closeProductModalButton" class="text-white py-2 px-4 rounded hover:bg-teal-500"
+                    style="background-color: #18beaa;">Cerrar</button>
+            </div>
+        </div>
+    </div>
+    <!-- Fin Modal de Producto Agregado -->
+
+    
     <!-- Modal para Editar Producto -->
     <div id="editProductModal"
         class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden flex items-center justify-center z-50">
