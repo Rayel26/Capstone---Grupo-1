@@ -2057,6 +2057,9 @@ function closeModalFoundation() {
 async function submitFoundation(event) {
     event.preventDefault();
 
+    // Mostrar el spinner
+    document.getElementById('loadspinner').classList.remove('hidden');
+
     // Elementos del formulario
     const foundationName = document.getElementById('foundationName');
     const foundationDescription = document.getElementById('foundationDes'); // ID corregido
@@ -2066,6 +2069,8 @@ async function submitFoundation(event) {
     // Verificar si los elementos existen
     if (!foundationName || !foundationDescription || !uploadedImageFile || !foundationImageSelect) {
         console.error("Uno o más elementos del formulario no se encontraron.");
+        // Ocultar el spinner en caso de error
+        document.getElementById('loadspinner').classList.add('hidden');
         return;
     }
 
@@ -2081,12 +2086,16 @@ async function submitFoundation(event) {
         imageUrl = await uploadFoundationImageToCloudinary();
         if (!imageUrl) {
             alert('Error al subir la imagen. Intenta nuevamente.');
+            // Ocultar el spinner en caso de error
+            document.getElementById('loadspinner').classList.add('hidden');
             return;
         }
     } else if (foundationImageSelectValue) {
         imageUrl = foundationImageSelectValue;
     } else {
         alert('Por favor, selecciona o sube una imagen.');
+        // Ocultar el spinner en caso de error
+        document.getElementById('loadspinner').classList.add('hidden');
         return;
     }
 
@@ -2117,7 +2126,9 @@ async function submitFoundation(event) {
         }
     } catch (error) {
         console.error('Error al enviar los datos:', error);
-        alert('Error al enviar los datos. Inténtalo de nuevo.');
+    } finally {
+        // Ocultar el spinner una vez se haya completado la solicitud
+        document.getElementById('loadspinner').classList.add('hidden');
     }
 }
 
