@@ -140,6 +140,10 @@ document.getElementById('productForm').addEventListener('submit', async function
     // Limpiar mensajes de error
     document.querySelectorAll('.error').forEach(error => error.classList.add('hidden'));
 
+    // Mostrar spinner
+    const spinner = document.getElementById('load-spinner');
+    spinner.classList.remove('hidden');
+
     // Obtener valores del formulario
     const name = document.getElementById('productName').value.trim();
     const type = document.getElementById('productType').value;
@@ -215,7 +219,7 @@ document.getElementById('productForm').addEventListener('submit', async function
             };
 
             // Enviar los datos del producto al servidor
-            try {
+                        try {
                 const response = await fetch('/create_product', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -227,14 +231,18 @@ document.getElementById('productForm').addEventListener('submit', async function
                     throw new Error(`Error al crear el producto: ${errorData.error || response.statusText}`);
                 }
 
-                // Restablecer el formulario y recargar productos
                 document.getElementById('productForm').reset();
                 loadProducts(); // Recargar productos después de añadir
             } catch (error) {
                 console.error('Error en el proceso:', error);
                 alert(`Error al crear el producto: ${error.message}`);
+            } finally {
+                spinner.classList.add('hidden'); // Ocultar spinner al finalizar
             }
         }
+    } else {
+        spinner.classList.add('hidden'); // Ocultar spinner si el formulario no es válido
+    
     }
 });
 
@@ -2372,7 +2380,7 @@ function sendMedicineData(imagenUrl) {
 }
 
 let medicinePage = 1; // Página actual
-const medicinesPerPage = 2; // Medicamentos por página
+const medicinesPerPage = 10; // Medicamentos por página
 
 document.addEventListener('DOMContentLoaded', fetchMedicines);
 
