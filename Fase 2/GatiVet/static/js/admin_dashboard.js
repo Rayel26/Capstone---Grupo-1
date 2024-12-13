@@ -128,7 +128,7 @@ function formatCurrency(input) {
 
 let products = []; // Aquí se almacenarán los productos ingresados
 let filteredProducts = []; // Productos filtrados
-let productsPerPage = 20;
+let productsPerPage = 10;
 let currentPage = 1;
 let totalPages = 1;
 
@@ -1469,9 +1469,9 @@ function updateImagePreview() {
 window.onload = loadImages;
 
 
-//Casos:
-let paginationContainer = 1;  // Página actual
-const itemsPerPage = 2;  // Casos por página
+// Casos:
+let paginationContainer = 1; // Página actual
+const itemsPerPage = 2; // Casos por página
 
 // Función para cargar los casos en la tabla
 async function loadCases() {
@@ -1487,9 +1487,15 @@ async function loadCases() {
         // Limpia la tabla antes de llenarla
         tableBody.innerHTML = '';
 
-        // Llena la tabla con los datos de los casos
-        cases.forEach(caseData => {
+        // Calcular los índices de inicio y fin según la página actual
+        const startIndex = (paginationContainer - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
 
+        // Seleccionar solo los casos correspondientes a la página actual
+        const paginatedCases = cases.slice(startIndex, endIndex);
+
+        // Llena la tabla con los datos de los casos paginados
+        paginatedCases.forEach(caseData => {
             const row = tableBody.insertRow();
             const nameCell = row.insertCell(0);
             const descriptionCell = row.insertCell(1);
@@ -1508,70 +1514,63 @@ async function loadCases() {
             dateCell.textContent = new Date(caseData.fecha_ingreso).toLocaleDateString();
 
             // Botones de acción
-            // Edición
             const editButton = document.createElement('button');
             editButton.textContent = 'Editar';
             editButton.className = 'text-blue-500 hover:underline';
-            editButton.onclick = () => editCase(caseData.id_caso); // Asegúrate de usar el nombre correcto
+            editButton.onclick = () => editCase(caseData.id_caso);
 
-            // Eliminar
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Eliminar';
             deleteButton.className = 'text-red-500 hover:underline ml-2';
-            deleteButton.onclick = () => {
-                console.log("ID del caso a eliminar:", caseData.id_caso); // Verifica el ID correcto
-                deleteCase(caseData.id_caso); // Usa el nombre correcto aquí
-            };
+            deleteButton.onclick = () => deleteCase(caseData.id_caso);
 
             // Agrega los botones de acción a la celda
             actionsCell.appendChild(editButton);
             actionsCell.appendChild(deleteButton);
         });
+
         // Actualizar el indicador de la página actual
         document.getElementById('currentItemPageIndicator').textContent = `Página ${paginationContainer}`;
+
+        // Actualizar los botones de paginación
         togglePaginationButtons(cases.length);
 
     } catch (error) {
         console.error('Error al cargar los casos:', error);
     }
 }
+
 // Función para manejar el cambio de página siguiente
 function nextItemPage() {
     paginationContainer++;
-    loadCases(paginationContainer);
+    loadCases();
 }
 
 // Función para manejar el cambio de página anterior
 function prevItemPage() {
     if (paginationContainer > 1) {
         paginationContainer--;
-        loadCases(paginationContainer);
+        loadCases();
     }
 }
 
 // Función para habilitar/deshabilitar los botones de paginación
 function togglePaginationButtons(casesLength) {
-    // Deshabilitar el botón "Anterior" si estamos en la primera página
     const prevButton = document.getElementById('buttonPreviousItemPage');
-    if (paginationContainer <= 1) {
-        prevButton.disabled = true;
-    } else {
-        prevButton.disabled = false;
-    }
-
-    // Deshabilitar el botón "Siguiente" si no hay más casos para cargar
     const nextButton = document.getElementById('buttonNextItemPage');
-    if (casesLength < itemsPerPage) {
-        nextButton.disabled = true;
-    } else {
-        nextButton.disabled = false;
-    }
+
+    // Deshabilitar el botón "Anterior" si estamos en la primera página
+    prevButton.disabled = paginationContainer <= 1;
+
+    // Calcular el número máximo de páginas
+    const maxPages = Math.ceil(casesLength / itemsPerPage);
+
+    // Deshabilitar el botón "Siguiente" si estamos en la última página
+    nextButton.disabled = paginationContainer >= maxPages;
 }
 
 // Cargar los casos iniciales
-loadCases(paginationContainer);
-// Función para editar un caso (esto debe estar implementado)
-
+loadCases();
 
 function editCase(caseId) {
     // Aquí puedes agregar la lógica para redirigir a una página de edición o mostrar un formulario
