@@ -737,6 +737,9 @@ document.getElementById('saveButton').addEventListener('click', async function()
         id_usuario: id_usuario
     };
 
+    // Mostrar el spinner
+    document.getElementById('loading-spinner-clinical-record').classList.remove('hidden');
+
     try {
         const response = await fetch('http://127.0.0.1:5000/api/insertar_historial', {
             method: 'POST',
@@ -748,6 +751,9 @@ document.getElementById('saveButton').addEventListener('click', async function()
 
         const result = await response.json();
 
+        // Ocultar el spinner
+        document.getElementById('loading-spinner-clinical-record').classList.add('hidden');
+
         if (response.ok) {
             alert("Ficha guardada correctamente!");
             document.getElementById('anamnesisForm').reset();
@@ -755,10 +761,13 @@ document.getElementById('saveButton').addEventListener('click', async function()
             alert("Error al guardar la ficha: " + result.error);
         }
     } catch (error) {
+        // Ocultar el spinner en caso de error
+        document.getElementById('loading-spinner-clinical-record').classList.add('hidden');
         console.error('Error al enviar los datos:', error);
         alert("Hubo un problema al enviar la solicitud. Intenta nuevamente más tarde.");
     }
 });
+
 
 
 
@@ -849,6 +858,12 @@ function showDetailModal(historialId) {
 
 function exportToPDF() {
     const { jsPDF } = window.jspdf;
+
+    // Mostrar el spinner de carga
+    const spinner = document.getElementById("loading-spinner");
+    spinner.classList.remove("hidden"); // Mostrar el spinner
+
+    setTimeout(() => {
 
     const doc = new jsPDF({
         orientation: "portrait", // Orientación vertical
@@ -1017,9 +1032,17 @@ function exportToPDF() {
             doc.text("Firma y Timbre del Veterinario", pageWidth / 2 - 70, 20);
         }
 
-        // Guardar el archivo PDF
-        doc.save("historial_clinico.pdf");
+        // Simulando un retraso para mostrar el spinner mientras se genera el PDF
+        setTimeout(function() {
+            // Terminar la generación del PDF
+            doc.save("historial-clinico.pdf");
+
+            // Ocultar el spinner después de la generación del PDF
+            spinner.classList.add("hidden"); // Ocultar el spinner
+        }, 1000); // Micro retraso para permitir que el navegador renderice el spinner
     }
+}
+)
 }
 
 
@@ -1532,7 +1555,6 @@ function closeModal() {
     modal.classList.add('hidden');
 }
 
-// Función para agregar vacuna
 async function addVaccine() {
     const fecha = document.getElementById('vacunaFecha').value;
     const proxFecha = document.getElementById('vacunaProxFecha').value;
@@ -1541,16 +1563,23 @@ async function addVaccine() {
     const veterinario = document.getElementById('vacunaVeterinario').value;
     const id_mascota = document.getElementById("pet-select").value;
 
+    // Mostrar el spinner y asegurarse de que está en el frente
+    const spinner = document.getElementById("vacuna-loading-spinner");
+    spinner.classList.remove("hidden");
+    spinner.style.zIndex = "9999"; // Asegura que el spinner esté delante de todo
+
     // Validación de campos vacíos
     if (!fecha || !proxFecha || !nombre || !dosis || !veterinario) {
         alert('Por favor, completa todos los campos.');
+        // Ocultar el spinner si hay error
+        spinner.classList.add("hidden");
         return;
     }
 
     // Crear un nuevo objeto de vacuna
     const nuevaVacuna = {
         fecha: fecha,
-        prox_fecha: proxFecha,  // Enviar la fecha de la próxima vacuna
+        prox_fecha: proxFecha,
         nombre_vacuna: nombre,
         dosis: dosis,
         nombre_veterinario: veterinario,
@@ -1571,6 +1600,8 @@ async function addVaccine() {
             const errorData = await response.json();
             console.error('Error al agregar la vacuna:', errorData);
             alert('Error al agregar la vacuna. Inténtalo de nuevo.');
+            // Ocultar el spinner en caso de error
+            spinner.classList.add("hidden");
             return;
         }
 
@@ -1592,9 +1623,13 @@ async function addVaccine() {
         // Cerrar el modal y resetear el formulario
         closeModal();
         document.getElementById('addVaccineForm').reset();
+        // Ocultar el spinner después de la acción
+        spinner.classList.add("hidden");
     } catch (error) {
         console.error('Error al procesar la solicitud:', error);
         alert('Error al procesar la solicitud. Inténtalo de nuevo.');
+        // Ocultar el spinner en caso de error
+        spinner.classList.add("hidden");
     }
 }
 
@@ -1685,6 +1720,11 @@ async function addDewormer() {
         return;
     }
 
+    // Mostrar el spinner y asegurarse de que esté en el frente
+    const spinner = document.getElementById("desparacitacion-loading-spinner");
+    spinner.classList.remove("hidden");
+    spinner.style.zIndex = "9999"; // Asegura que el spinner esté delante de todo
+
     // Crear un nuevo objeto de desparacitación
     const nuevaDesparasitacion = {
         fecha: fecha,
@@ -1709,6 +1749,8 @@ async function addDewormer() {
             const errorData = await response.json();
             console.error('Error al agregar la desparacitación:', errorData);
             alert('Error al agregar la desparacitación. Inténtalo de nuevo.');
+            // Ocultar el spinner en caso de error
+            spinner.classList.add("hidden");
             return;
         }
 
@@ -1723,8 +1765,12 @@ async function addDewormer() {
     } catch (error) {
         console.error('Error al procesar la solicitud:', error);
         alert('Error al procesar la solicitud. Inténtalo de nuevo.');
+    } finally {
+        // Ocultar el spinner después de la acción, haya o no habido error
+        spinner.classList.add("hidden");
     }
 }
+
 
 // Función para obtener desparasitaciones de la mascota seleccionada
 function fetchDewormersByPetId(petId) {
@@ -1783,5 +1829,3 @@ document.getElementById("pet-select").addEventListener("change", function() {
     // Mostrar datos de desparasitaciones de la mascota seleccionada
     fetchDewormersByPetId(selectedPetId); // Llama a la función para obtener las desparasitaciones
 });
-
-

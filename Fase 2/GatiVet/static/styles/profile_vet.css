@@ -1,8 +1,28 @@
+/* Spinner de carga */
+.spinner-border {
+    border-top-color: #18beaa; /* Color del borde superior */
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    animation: spin 1s linear infinite; /* Animación para girar */
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 /* Tab Button */
 #editModal .tab-button {
     background-color: #18beaa !important;
     color: white !important;
 }
+
+
 
 .btn-custom {
     background-color: #18beaa !important; /* Color de fondo */
