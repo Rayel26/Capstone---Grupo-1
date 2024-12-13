@@ -2311,7 +2311,7 @@ document.getElementById('medicationFile').addEventListener('change', async funct
 });
 
 
-// Función para enviar el medicamento
+// Función para enviar el medicamento 
 function submitMedicine(event) {
     event.preventDefault();
 
@@ -2335,6 +2335,9 @@ function submitMedicine(event) {
         alert("Por favor selecciona o sube una imagen.");
         return;
     }
+
+    // Mostrar el spinner
+    document.getElementById('loadingspinner').classList.remove('hidden');
 
     sendMedicineData(imageUrl);
 }
@@ -2368,22 +2371,43 @@ function sendMedicineData(imagenUrl) {
     .then(response => response.json())
     .then(data => {
         console.log("Respuesta de la API:", data);
+
         if (data.success) {
-            alert('Medicamento guardado exitosamente');
+            // Detener el spinner
+            document.getElementById('loadingspinner').classList.add('hidden');
+
+            // Mostrar mensaje de éxito
+            const successMessage = document.getElementById('successMessage');
+            successMessage.classList.remove('hidden');
+
+            // Ocultar el mensaje después de 3 segundos
+            setTimeout(() => {
+                successMessage.classList.add('hidden');
+            }, 3000);
+
+            // Reiniciar formulario y limpiar previsualización
             document.getElementById('medicineForm').reset();
             document.getElementById('medicationImagePreview').classList.add('hidden');
             imageUrl = '';
         } else {
+            document.getElementById('loadingspinner').classList.add('hidden');
             alert('Error al guardar el medicamento: ' + data.message);
         }
     })
+    .catch(error => {
+        console.error("Error en la API:", error);
+
+        // Detener el spinner en caso de error
+        document.getElementById('loadingspinner').classList.add('hidden');
+        alert('Ocurrió un error al guardar el medicamento. Por favor, inténtalo nuevamente.');
+    });
 }
 
-let medicinePage = 1; // Página actual
-const medicinesPerPage = 10; // Medicamentos por página
+let currentMedicinePage = 1; // Página actual
+let totalMedicinePages = 1; // Número total de páginas
+const medicinesPerPage = 15; // Medicamentos por página
 
 document.addEventListener('DOMContentLoaded', fetchMedicines);
-
 
 // Función para obtener los medicamentos y llenar la tabla
 async function fetchMedicines() {
@@ -2397,18 +2421,19 @@ async function fetchMedicines() {
 
         url = url.endsWith('&') ? url.slice(0, -1) : url;
 
-        const response = await fetch(url);  
+        const response = await fetch(url);
 
         if (!response.ok) {
             console.error('Error al obtener medicamentos:', response.status, response.statusText);
             return;
         }
 
-        const medicines = await response.json();  
+        const medicines = await response.json();
         const tableBody = document.getElementById('medicineTableBody');
-        tableBody.innerHTML = ''; 
+        tableBody.innerHTML = '';
 
-        const startIndex = (medicinePage - 1) * medicinesPerPage;
+        totalMedicinePages = Math.ceil(medicines.length / medicinesPerPage);
+        const startIndex = (currentMedicinePage - 1) * medicinesPerPage;
         const endIndex = startIndex + medicinesPerPage;
 
         const paginatedMedicines = medicines.slice(startIndex, endIndex);
@@ -2416,7 +2441,7 @@ async function fetchMedicines() {
         paginatedMedicines.forEach(medicine => {
             const row = document.createElement('tr');
 
-            row.innerHTML = ` 
+            row.innerHTML = `
                 <td class="py-1 px-2 border-b">${medicine.nombre || 'No disponible'}</td>
                 <td class="py-1 px-2 border-b">${medicine.tipo_medicamento || 'No disponible'}</td>
                 <td class="py-1 px-2 border-b">${medicine.marca || 'No disponible'}</td>
@@ -2432,8 +2457,7 @@ async function fetchMedicines() {
         });
 
         // Actualiza el indicador de la página actual
-        document.getElementById('currentPageMedi').textContent = `Página ${medicinePage}`;
-
+        document.getElementById('currentPageMedicines').textContent = `Página ${currentMedicinePage} de ${totalMedicinePages}`;
 
         // Actualiza los botones de paginación
         togglePaginationButtons(medicines.length);
@@ -2443,35 +2467,33 @@ async function fetchMedicines() {
     }
 }
 
-
-// Función para habilitar/deshabilitar los botones de paginación
+// Función para actualizar los controles de la paginación
 function togglePaginationButtons(medicinesLength) {
-    const maxPages = Math.ceil(medicinesLength / medicinesPerPage);
+    const prevButton = document.getElementById('prevPageBtnMedicines');
+    const nextButton = document.getElementById('nextPageBtnMedicines');
 
-    // Botón "Anterior"
-    const prevButton = document.getElementById('prevPageBtnMedi');
-    prevButton.disabled = medicinePage <= 1;
+    // Deshabilitar el botón "Anterior" si estamos en la primera página
+    prevButton.disabled = currentMedicinePage <= 1;
 
-    // Botón "Siguiente"
-    const nextButton = document.getElementById('nextPageBtnMedi');
-    nextButton.disabled = medicinePage >= maxPages;
+    // Deshabilitar el botón "Siguiente" si estamos en la última página
+    nextButton.disabled = currentMedicinePage >= totalMedicinePages;
 }
 
 // Función para manejar el cambio de página siguiente
-function nextPageMedi() {
-    medicinePage++;
-    fetchMedicines();  // Cargar los medicamentos de la nueva página
-}
-
-// Función para manejar el cambio de página anterior
-function prevPageMedi() {
-    if (medicinePage > 1) {
-        medicinePage--;
+function nextPageMedicines() {
+    if (currentMedicinePage < totalMedicinePages) {
+        currentMedicinePage++;
         fetchMedicines();  // Cargar los medicamentos de la nueva página
     }
 }
 
-
+// Función para manejar el cambio de página anterior
+function prevPageMedicines() {
+    if (currentMedicinePage > 1) {
+        currentMedicinePage--;
+        fetchMedicines();  // Cargar los medicamentos de la nueva página
+    }
+}
 
 // Llama la función cuando cambian los filtros
 function filterMedicines() {
