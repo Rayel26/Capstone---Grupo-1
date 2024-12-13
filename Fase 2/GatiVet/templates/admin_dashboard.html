@@ -333,29 +333,29 @@
             </table>
 
             <!-- Formulario de agregar usuario veterinario -->
-                <div id="addUserFormContainer">
-                    <h2 class="text-lg font-bold mt-4">Agregar Usuario Veterinario</h2>
+                <div id="addUserFormContainer"  class="mt-6 bg-white p-6 shadow rounded-lg text-sm">
+                    <h4 class="text-base font-semibold">Agregar Usuario Veterinario</h4>
                     <form id="addModalUserForm" class="mt-2 bg-white mb-2 p-6 shadow rounded-lg text-sm">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <!-- Columna izquierda -->
                             <div>
                                 <div class="mb-4">
-                                    <label for="addModalRut" class="block text-sm font-semibold">RUT:</label>
+                                    <label for="addModalRut" class="block text-gray-700">RUT:</label>
                                     <input type="text" id="addModalRut" class="border rounded w-full py-1 px-2 text-gray-700"
                                         maxlength="12" placeholder="Ingrese el RUT" required>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="addModalNombre" class="block text-sm font-semibold">Nombre:</label>
+                                    <label for="addModalNombre" class="block text-gray-700">Nombre:</label>
                                     <input type="text" id="addModalNombre" class="border rounded w-full py-1 px-2 text-gray-700"
                                         placeholder="Ingrese el nombre" required>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="modalApellido" class="block text-sm font-semibold">Apellido Paterno:</label>
+                                    <label for="modalApellido" class="block text-gray-700">Apellido Paterno:</label>
                                     <input type="text" id="modalApellido" class="border rounded w-full py-1 px-2 text-gray-700"
                                         placeholder="Ingrese el apellido paterno" required>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="modalDomicilio" class="block text-sm font-semibold">Apellido Materno:</label>
+                                    <label for="modalDomicilio" class="block text-gray-700">Apellido Materno:</label>
                                     <input type="text" id="modalDomicilio" class="border rounded w-full py-1 px-2 text-gray-700"
                                         placeholder="Ingrese el apellido materno" required>
                                 </div>
@@ -364,20 +364,20 @@
                             <!-- Columna derecha -->
                             <div>
                                 <div class="mb-4">
-                                    <label for="modalEspecialidad" class="block text-sm font-semibold">Especialidad:</label>
+                                    <label for="modalEspecialidad" class="block text-gray-700">Especialidad:</label>
                                     <input type="text" id="modalEspecialidad"
                                         class="border rounded w-full py-1 px-2 text-gray-700"
                                         placeholder="Ingrese la especialidad" required>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="modalTelefono" class="block text-sm font-semibold">Teléfono:</label>
+                                    <label for="modalTelefono" class="block text-gray-700">Teléfono:</label>
                                     <input type="tel" id="modalTelefono" class="border rounded w-full py-1 px-2 text-gray-700"
                                         placeholder="Ingrese el teléfono" required>
                                     <div id="phone-error-message" class="text-red-500 text-sm hidden">Formato inválido. Use +569
                                         xxxx yyyy</div>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="modalCorreo" class="block text-sm font-semibold">Correo Electrónico:</label>
+                                    <label for="modalCorreo" class="block text-gray-700">Correo Electrónico:</label>
                                     <input type="email" id="modalCorreo" class="border rounded w-full py-1 px-2 text-gray-700"
                                         placeholder="Ingrese el correo electrónico" required>
                                 </div>
@@ -387,7 +387,7 @@
                         <!-- Campos de contraseña en una sola fila -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <div class="relative">
-                                <label for="modalPassword" class="block text-sm font-semibold">Contraseña:</label>
+                                <label for="modalPassword" class="block text-gray-700">Contraseña:</label>
                                 <input type="password" id="modalPassword" class="border rounded w-full py-1 px-2 text-gray-700"
                                     placeholder="Ingrese la contraseña" required>
                                     <span toggle="#modalPassword" class="absolute inset-y-0 right-3 top-6 cursor-pointer"
@@ -405,7 +405,7 @@
                             </div>
     
                             <div class="relative">
-                                <label for="modalConfirmPassword" class="block text-sm font-semibold">Confirmar
+                                <label for="modalConfirmPassword" class="block text-gray-700">Confirmar
                                     Contraseña:</label>
                                 <input type="password" id="modalConfirmPassword"
                                     class="border rounded w-full py-1 px-2 text-gray-700" placeholder="Confirme la contraseña"
@@ -421,8 +421,8 @@
     
                         <input type="hidden" id="addModalTipo" value="veterinario">
     
-                        <!-- Botones -->
-                        <div class="flex justify-end mt-4">
+                        <!-- Boton -->
+                        <div class="flex mt-4">
                             <button type="submit"
                                 class="mt-4 text-white py-2 px-4 rounded hover:bg-teal-500 transition duration-200"
                                 style="background-color: #18beaa;">Guardar</button>
