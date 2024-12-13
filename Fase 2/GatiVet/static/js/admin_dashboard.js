@@ -581,7 +581,10 @@ function filterProducts() {
 
 let users = []; // Variable global para almacenar usuarios
 let usersfilter = []; // Variable para almacenar usuarios filtrados
+let currentUserPage = 1; // Página actual de usuarios
+const itemsPerUserPage = 5; // Número de elementos por página
 
+// Función para cargar los usuarios
 async function fetchUsers() {
     try {
         const response = await fetch('/api/get_users');
@@ -592,12 +595,13 @@ async function fetchUsers() {
 
         users = await response.json(); // Almacena los usuarios en la variable global
         console.log("Datos de usuarios:", users);
-        populateUserTable(users); // Llenar la tabla inicialmente
+        renderUserTable(); // Llenar la tabla inicialmente
     } catch (error) {
         console.error("Error al cargar usuarios:", error);
     }
 }
 
+// Función para filtrar y mostrar los usuarios según la página actual
 function renderUserTable() {
     const searchTerm = document.getElementById('search').value.toLowerCase(); // Obtener término de búsqueda
     const selectedType = document.getElementById('filter').value; // Obtener tipo de usuario seleccionado
@@ -609,14 +613,22 @@ function renderUserTable() {
         return matchesSearch && matchesType;
     });
 
-    populateUserTable(usersfilter); // Llenar la tabla con usuarios filtrados
+    // Llenar la tabla con los usuarios filtrados
+    populateUserTable(usersfilter);
 }
 
+// Función para llenar la tabla de usuarios con la paginación aplicada
 function populateUserTable(usersToDisplay) {
     const userTableBody = document.getElementById('userTable'); // Asegúrate de que este ID es correcto
     userTableBody.innerHTML = ''; // Limpiar la tabla antes de llenarla
 
-    usersToDisplay.forEach(user => {
+    // Paginación
+    const startIndex = (currentUserPage - 1) * itemsPerUserPage; // Índice de inicio
+    const endIndex = startIndex + itemsPerUserPage; // Índice final
+    const usersPage = usersToDisplay.slice(startIndex, endIndex); // Obtener solo los usuarios de la página actual
+
+    // Crear las filas de la tabla
+    usersPage.forEach(user => {
         const row = document.createElement('tr');
 
         // Asignar el rol en función del tipousuarioid
@@ -648,17 +660,46 @@ function populateUserTable(usersToDisplay) {
 
         userTableBody.appendChild(row);
     });
+
+    // Actualizar la paginación
+    updateUserPagination(usersToDisplay.length);
+}
+
+// Funciones de navegación de páginas
+function nextUserPage() {
+    const totalPages = Math.ceil(usersfilter.length / itemsPerUserPage);
+    if (currentUserPage < totalPages) {
+        currentUserPage++;
+        renderUserTable();
+    }
+}
+
+function prevUserPage() {
+    if (currentUserPage > 1) {
+        currentUserPage--;
+        renderUserTable();
+    }
+}
+
+// Función para actualizar los controles de paginación
+function updateUserPagination(totalItems) {
+    const totalPages = Math.ceil(totalItems / itemsPerUserPage); // Calcular el número total de páginas
+    const currentPageIndicator = document.getElementById('currentUserPageIndicator');
+    currentPageIndicator.textContent = `Página ${currentUserPage} de ${totalPages}`;
+
+    // Habilitar/deshabilitar botones de paginación
+    document.getElementById('buttonPreviousUserPage').disabled = currentUserPage === 1;
+    document.getElementById('buttonNextUserPage').disabled = currentUserPage === totalPages;
 }
 
 // Llamar a la función para cargar los usuarios al inicio
 fetchUsers();
 
-
-
 // Obtención de elementos del DOM
 const userTable = document.getElementById('userTable');
 const searchInput = document.getElementById('search');
 const filterSelect = document.getElementById('filter');
+
 
 // Funciones para abrir y cerrar modales de agregar usuario
 function openAddUserModal() {
@@ -774,7 +815,6 @@ document.getElementById('confirmBtn').addEventListener('click', async function (
 document.getElementById('closeModalButton').addEventListener('click', function () {
     document.getElementById('accountCreatedModal').classList.add('hidden');
 });
-
 
 //Formato Rut
 document.getElementById('addModalRut').addEventListener('input', function (event) {
@@ -981,8 +1021,6 @@ function showError() {
 function hideError() {
     document.getElementById('password-error-message').classList.add('hidden');
 }
-
-
 
 // Funciones para abrir y cerrar modales de editar usuario
 // Función para abrir el modal de edición

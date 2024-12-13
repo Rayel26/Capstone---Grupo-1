@@ -332,6 +332,21 @@
                 </tbody>
             </table>
 
+            <!-- Controles de Paginación -->
+            <div id="paginationContainer" class="mt-4 flex justify-center items-center">
+                <button id="buttonPreviousUserPage" class="text-white py-1 px-3 rounded mr-2 text-sm"
+                    style="background-color: #18beaa;" onclick="prevUserPage()">
+                    &lt;&lt;
+                </button>
+                <span id="currentUserPageIndicator" class="text-gray-700 text-sm"></span>
+                <button id="buttonNextUserPage" class="text-white py-1 px-3 rounded ml-2 text-sm"
+                    style="background-color: #18beaa;" onclick="nextUserPage()">
+                    &gt;&gt;
+                </button>
+            </div>
+
+
+
             <!-- Formulario de agregar usuario veterinario -->
                 <div id="addUserFormContainer"  class="mt-6 bg-white p-6 shadow rounded-lg text-sm">
                     <h4 class="text-base font-semibold">Agregar Usuario Veterinario</h4>
