@@ -1956,8 +1956,11 @@ async function loadFoundations() {
             actionsCell.appendChild(deleteButton);
         });
 
-        // Actualizar el indicador de la página actual
-        document.getElementById('currentFoundationPageIndicator').textContent = `Página ${foundationPage}`;
+        // Calcular el total de páginas
+        const totalPages = Math.ceil(foundations.length / foundationsPerPage);
+
+        // Actualizar el indicador de la página actual con el total de páginas
+        document.getElementById('currentFoundationPageIndicator').textContent = `Página ${foundationPage} de ${totalPages}`;
 
         // Actualizar los botones de paginación
         toggleFoundationPaginationButtons(foundations.length);
