@@ -200,7 +200,7 @@ nav ul.active li:hover {
 }
 
   /* Estilos generales */
-  table {
+table {
     width: 100%;
     table-layout: fixed;
 }
