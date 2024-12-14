@@ -229,19 +229,12 @@
         </section>
     </div>
 
-    <!-- Spinner de carga -->
-    <div id="load-spinner" class="hidden fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center z-50">
-        <div class="spinner-border animate-spin border-4 border-t-4 border-[#18beaa] w-16 h-16 rounded-full"></div>
-    </div>
-    <!-- Fin Contenido Productos -->
-
-    <!-- Modal de confirmación Producto Agregado -->
-    <div id="productAddedModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
-        <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md w-full max-w-md">
-            <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">¡Producto Agregado Exitosamente!</h2>
+    <!-- Modal de Confirmación de Producto Creado -->
+    <div id="productCreatedModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white dark:bg-gray-700 p-6 rounded-lg">
+            <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">¡Producto creado exitosamente!</h2>
             <p class="text-gray-700 dark:text-white mb-6">
-                El producto ha sido agregado exitosamente.
-                <a href="/products" class="text-[#18beaa] hover:underline">Ver productos</a>
+                El producto ha sido agregado a tu inventario correctamente.
             </p>
             <div class="flex justify-end">
                 <button id="closeProductModalButton" class="text-white py-2 px-4 rounded hover:bg-teal-500"
@@ -249,7 +242,15 @@
             </div>
         </div>
     </div>
-    <!-- Fin Modal de Producto Agregado -->
+    <!-- Fin Modal -->
+
+
+    <!-- Spinner de carga -->
+    <div id="load-spinner" class="hidden fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center z-50">
+        <div class="spinner-border animate-spin border-4 border-t-4 border-[#18beaa] w-16 h-16 rounded-full"></div>
+    </div>
+    <!-- Fin Contenido Productos -->
+
 
     
     <!-- Modal para Editar Producto -->
@@ -734,6 +735,22 @@
                 <div class="spinner-border animate-spin border-4 border-t-4 border-[#18beaa] w-16 h-16 rounded-full"></div>
             </div>
 
+            <!-- Modal de Confirmación de Caso Creado -->
+            <div id="caseCreatedModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+                <div class="bg-white dark:bg-gray-700 p-6 rounded-lg">
+                    <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">¡Caso creado exitosamente!</h2>
+                    <p class="text-gray-700 dark:text-white mb-6">
+                        El caso ha sido registrado correctamente.
+                    </p>
+                    <div class="flex justify-end">
+                        <button id="closeCaseModalButton" class="text-white py-2 px-4 rounded hover:bg-teal-500"
+                            style="background-color: #18beaa;">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Fin Modal -->
+
+
             <!-- Modal para editar Casos de Animales -->
             <div id="editCaseModal"
                 class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden flex items-center justify-center z-50">
@@ -860,6 +877,23 @@
             <div id="loadspinner" class="hidden fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center z-50">
                 <div class="spinner-border animate-spin border-4 border-t-4 border-[#18beaa] w-16 h-16 rounded-full"></div>
             </div>
+
+            <!-- Modal de Confirmación de Fundación Creada -->
+            <div id="foundationCreatedModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+                <div class="bg-white dark:bg-gray-700 p-6 rounded-lg">
+                    <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">¡Fundación creada exitosamente!</h2>
+                    <p class="text-gray-700 dark:text-white mb-6">
+                        La fundación ha sido registrada con éxito.
+                        <span class="text-[#18beaa]">¡Gracias por contribuir con esta causa!</span>
+                    </p>
+                    <div class="flex justify-end">
+                        <button id="closeFoundationModal" class="text-white py-2 px-4 rounded hover:bg-teal-500"
+                            style="background-color: #18beaa;">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Fin Modal Fundación Creada -->
+
 
             <!-- Modal para editar Fundaciones -->
             <div id="editFoundationModal"
@@ -1116,6 +1150,22 @@
             <div id="loadingspinner" class="hidden fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center z-50">
                 <div class="spinner-border animate-spin border-4 border-t-4 border-[#18beaa] w-16 h-16 rounded-full"></div>
             </div>
+
+            <!-- Modal de Confirmación de Medicamento Creado -->
+            <div id="medicineCreatedModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+                <div class="bg-white dark:bg-gray-700 p-6 rounded-lg">
+                    <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">¡Medicamento agregado exitosamente!</h2>
+                    <p class="text-gray-700 dark:text-white mb-6">
+                        El medicamento ha sido agregado correctamente a tu inventario.
+                    </p>
+                    <div class="flex justify-end">
+                        <button id="closeMedicineModalButton" class="text-white py-2 px-4 rounded hover:bg-teal-500"
+                            style="background-color: #18beaa;">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Fin Modal -->
+
 
             <!-- Modal para editar Medicamentos -->
             <div id="editMedicineModal"

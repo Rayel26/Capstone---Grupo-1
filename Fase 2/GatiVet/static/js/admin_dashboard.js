@@ -219,32 +219,51 @@ document.getElementById('productForm').addEventListener('submit', async function
             };
 
             // Enviar los datos del producto al servidor
-                        try {
+            try {
                 const response = await fetch('/create_product', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(productData)
                 });
-
+            
                 if (!response.ok) {
                     const errorData = await response.json();
                     throw new Error(`Error al crear el producto: ${errorData.error || response.statusText}`);
                 }
-
+            
                 document.getElementById('productForm').reset();
                 loadProducts(); // Recargar productos después de añadir
+            
+                // Mostrar el modal de éxito
+                showProductCreatedModal();
             } catch (error) {
                 console.error('Error en el proceso:', error);
                 alert(`Error al crear el producto: ${error.message}`);
             } finally {
                 spinner.classList.add('hidden'); // Ocultar spinner al finalizar
-            }
+            }            
         }
     } else {
         spinner.classList.add('hidden'); // Ocultar spinner si el formulario no es válido
     
     }
 });
+
+// Función para mostrar el modal
+function showProductCreatedModal() {
+    const modal = document.getElementById('productCreatedModal');
+    modal.classList.remove('hidden');
+}
+
+// Función para ocultar el modal
+function closeProductCreatedModal() {
+    const modal = document.getElementById('productCreatedModal');
+    modal.classList.add('hidden');
+}
+
+// Agregar evento al botón de cerrar el modal
+document.getElementById('closeProductModalButton').addEventListener('click', closeProductCreatedModal);
+
 
 // Función para filtrar por mes
 function filterByMonth() {
@@ -1762,12 +1781,14 @@ async function submitCase(event) {
 
         if (response.ok) {
             const jsonResponse = await response.json();
-            alert(jsonResponse.message); // Mensaje de éxito
             document.getElementById('caseForm').reset(); // Resetear el formulario
             document.getElementById('imagePreview').classList.add('hidden'); // Ocultar la vista previa
             
             // Llama a loadCases() para actualizar la tabla inmediatamente
             loadCases();
+
+            // Mostrar el modal de éxito
+            showCaseCreatedModal();
         } else {
             const errorResponse = await response.json();
             alert(`Error: ${errorResponse.error}`);
@@ -1777,6 +1798,23 @@ async function submitCase(event) {
         alert('Error al enviar los datos. Inténtalo de nuevo.');
     }
 }
+
+
+// Función para mostrar el modal
+function showCaseCreatedModal() {
+    const modal = document.getElementById('caseCreatedModal');
+    modal.classList.remove('hidden');
+}
+
+// Función para ocultar el modal
+function closeCaseCreatedModal() {
+    const modal = document.getElementById('caseCreatedModal');
+    modal.classList.add('hidden');
+}
+
+// Evento para cerrar el modal al hacer clic en el botón de cerrar
+document.getElementById('closeCaseModalButton').addEventListener('click', closeCaseCreatedModal);
+
 
 // Función para obtener imágenes de Cloudinary y llenar el select
 async function fetchImages() {
@@ -2059,7 +2097,7 @@ function closeModalFoundation() {
     document.getElementById('editFoundationModal').classList.add('hidden');
 }
 
-// Función para enviar el formulario de fundaciones
+// Función para enviar el formulario de fundaciones con Modal de confirmación
 async function submitFoundation(event) {
     event.preventDefault();
 
@@ -2068,31 +2106,26 @@ async function submitFoundation(event) {
 
     // Elementos del formulario
     const foundationName = document.getElementById('foundationName');
-    const foundationDescription = document.getElementById('foundationDes'); // ID corregido
+    const foundationDescription = document.getElementById('foundationDes');
     const uploadedImageFile = document.getElementById('uploadImageFund');
     const foundationImageSelect = document.getElementById('FundationImage');
 
-    // Verificar si los elementos existen
     if (!foundationName || !foundationDescription || !uploadedImageFile || !foundationImageSelect) {
         console.error("Uno o más elementos del formulario no se encontraron.");
-        // Ocultar el spinner en caso de error
         document.getElementById('loadspinner').classList.add('hidden');
         return;
     }
 
-    // Obtener los valores del formulario
     const foundationNameValue = foundationName.value;
     const foundationDescriptionValue = foundationDescription.value;
     const foundationImageSelectValue = foundationImageSelect.value;
 
     let imageUrl = '';
 
-    // Verificar si hay imagen subida o seleccionada
     if (uploadedImageFile.files[0]) {
         imageUrl = await uploadFoundationImageToCloudinary();
         if (!imageUrl) {
             alert('Error al subir la imagen. Intenta nuevamente.');
-            // Ocultar el spinner en caso de error
             document.getElementById('loadspinner').classList.add('hidden');
             return;
         }
@@ -2100,7 +2133,6 @@ async function submitFoundation(event) {
         imageUrl = foundationImageSelectValue;
     } else {
         alert('Por favor, selecciona o sube una imagen.');
-        // Ocultar el spinner en caso de error
         document.getElementById('loadspinner').classList.add('hidden');
         return;
     }
@@ -2122,10 +2154,18 @@ async function submitFoundation(event) {
 
         if (response.ok) {
             const jsonResponse = await response.json();
-            alert(jsonResponse.message);
             document.getElementById('foundationForm').reset();
             document.getElementById('imagePreviewFoundation').classList.add('hidden');
             loadFoundations();
+
+            // Mostrar el modal de éxito
+            const modal = document.getElementById('foundationCreatedModal');
+            modal.classList.remove('hidden');
+
+            // Cerrar el modal al hacer clic en el botón
+            document.getElementById('closeFoundationModal').addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
         } else {
             const errorResponse = await response.json();
             alert(`Error: ${errorResponse.error}`);
@@ -2134,10 +2174,90 @@ async function submitFoundation(event) {
         console.error('Error al enviar los datos:', error);
         alert('Error al enviar los datos. Inténtalo de nuevo.');
     } finally {
-        // Ocultar el spinner una vez se haya completado la solicitud
         document.getElementById('loadspinner').classList.add('hidden');
     }
 }
+// Función para enviar el formulario de fundaciones con Modal de confirmación
+async function submitFoundation(event) {
+    event.preventDefault();
+
+    // Mostrar el spinner
+    document.getElementById('loadspinner').classList.remove('hidden');
+
+    // Elementos del formulario
+    const foundationName = document.getElementById('foundationName');
+    const foundationDescription = document.getElementById('foundationDes');
+    const uploadedImageFile = document.getElementById('uploadImageFund');
+    const foundationImageSelect = document.getElementById('FundationImage');
+
+    if (!foundationName || !foundationDescription || !uploadedImageFile || !foundationImageSelect) {
+        console.error("Uno o más elementos del formulario no se encontraron.");
+        document.getElementById('loadspinner').classList.add('hidden');
+        return;
+    }
+
+    const foundationNameValue = foundationName.value;
+    const foundationDescriptionValue = foundationDescription.value;
+    const foundationImageSelectValue = foundationImageSelect.value;
+
+    let imageUrl = '';
+
+    if (uploadedImageFile.files[0]) {
+        imageUrl = await uploadFoundationImageToCloudinary();
+        if (!imageUrl) {
+            alert('Error al subir la imagen. Intenta nuevamente.');
+            document.getElementById('loadspinner').classList.add('hidden');
+            return;
+        }
+    } else if (foundationImageSelectValue) {
+        imageUrl = foundationImageSelectValue;
+    } else {
+        alert('Por favor, selecciona o sube una imagen.');
+        document.getElementById('loadspinner').classList.add('hidden');
+        return;
+    }
+
+    const foundationData = {
+        nombre_fundacion: foundationNameValue,
+        descripcion: foundationDescriptionValue,
+        foto_url: imageUrl,
+    };
+
+    try {
+        const response = await fetch('/api/fundaciones', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(foundationData),
+        });
+
+        if (response.ok) {
+            const jsonResponse = await response.json();
+            document.getElementById('foundationForm').reset();
+            document.getElementById('imagePreviewFoundation').classList.add('hidden');
+            loadFoundations();
+
+            // Mostrar el modal de éxito
+            const modal = document.getElementById('foundationCreatedModal');
+            modal.classList.remove('hidden');
+
+            // Cerrar el modal al hacer clic en el botón
+            document.getElementById('closeFoundationModal').addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+        } else {
+            const errorResponse = await response.json();
+            alert(`Error: ${errorResponse.error}`);
+        }
+    } catch (error) {
+        console.error('Error al enviar los datos:', error);
+        alert('Error al enviar los datos. Inténtalo de nuevo.');
+    } finally {
+        document.getElementById('loadspinner').classList.add('hidden');
+    }
+}
+
 
 //Eliminar fundaciones
 async function deleteFoundation(foundationId) {
@@ -2394,13 +2514,12 @@ function sendMedicineData(imagenUrl) {
             // Detener el spinner
             document.getElementById('loadingspinner').classList.add('hidden');
 
-            // Mostrar mensaje de éxito
-            const successMessage = document.getElementById('successMessage');
-            successMessage.classList.remove('hidden');
+            // Mostrar el modal de éxito
+            document.getElementById('medicineCreatedModal').classList.remove('hidden');
 
-            // Ocultar el mensaje después de 3 segundos
+            // Ocultar el modal después de 3 segundos
             setTimeout(() => {
-                successMessage.classList.add('hidden');
+                document.getElementById('medicineCreatedModal').classList.add('hidden');
             }, 3000);
 
             // Reiniciar formulario y limpiar previsualización
@@ -2420,6 +2539,12 @@ function sendMedicineData(imagenUrl) {
         alert('Ocurrió un error al guardar el medicamento. Por favor, inténtalo nuevamente.');
     });
 }
+
+// Cerrar el modal cuando se hace clic en el botón "Cerrar"
+document.getElementById('closeMedicineModalButton').addEventListener('click', () => {
+    document.getElementById('medicineCreatedModal').classList.add('hidden');
+});
+
 
 let currentMedicinePage = 1; // Página actual
 let totalMedicinePages = 1; // Número total de páginas
