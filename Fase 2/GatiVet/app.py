@@ -17,6 +17,10 @@ import pytz
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from cloudinary.api import resources
+import logging
+
+#Configuración de logging para depuración
+logging.basicConfig(level=logging.DEBUG)
 
 # Configuración de APScheduler
 scheduler = BackgroundScheduler()
@@ -2130,13 +2134,7 @@ def enviar_recordatorios():
 
 # Programar la tarea para que se ejecute todos los días a las 12:00 PM
 scheduler = BackgroundScheduler()
-scheduler.add_job(enviar_recordatorios, 'cron', hour=12, minute=0)  # Ejecutar a las 12:00 PM cada día
-scheduler.start()
-
-
-# Programar la tarea para que se ejecute todos los días a las 12:00 PM
-scheduler = BackgroundScheduler()
-scheduler.add_job(enviar_recordatorios, 'cron', hour=12, minute=0)  # Ejecutar a las 12:00 PM cada día
+scheduler.add_job(enviar_recordatorios, 'cron', hour=0, minute=1)  # Ejecutar a las 12:00 PM cada día
 scheduler.start()
 
 # Ruta guardar ficha
