@@ -5,8 +5,8 @@
   <meta name="google-site-verification" content="IC_tSHAi9i7XdU--fS7NuYfqOkFhBc0gx9VQaCCLVBg" />  <!-- Meta Data -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta description="animalitosbebé">
-  <title>Gativet</title>
+  <title>GatiVet | Servicios Veterinarios a Domicilio</title>
+  <meta name="description" content="En GatiVet, ofrecemos servicios veterinarios a domicilio para cuidar y tratar a tus mascotas con amor y profesionalismo. ¡Contáctanos hoy mismo!" />
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/Logo.png') }}">
   <!-- CSS Interno -->
@@ -310,6 +310,23 @@
 
 
 <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "GatiVet",
+    "url": "https://gativ3t.vercel.app",
+    "logo": "https://gativ3t.vercel.app/static/img/Logo.png",
+    "description": "Servicios veterinarios a domicilio para el cuidado y tratamiento de tus mascotas.",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+569121212",
+      "contactType": "Customer Service"
+    }
+  }
+</script>
+  
 
 </body>
 </html>
