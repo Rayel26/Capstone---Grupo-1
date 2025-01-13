@@ -43,64 +43,6 @@
         <nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center">
           <a href="{{ url_for('home') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Inicio</a>
           <a href="{{ url_for('products') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Productos</a>
-        
-          <!-- Menú desplegable para Servicios -->
-          <div class="relative group">
-            <a class="mr-5 text-gray-900 underline-animated cursor-pointer">Servicios</a>
-            <div class="absolute left-0 mt-2 hidden group-hover:block bg-white shadow-lg border border-gray-200 rounded-md z-10 w-[800px]">
-              <div class="p-4 grid grid-cols-3 gap-6">
-                <!-- Columna 1 -->
-                <div>
-                  <h3 class="font-bold text-gray-700 text-lg mb-2">Vacunas a domicilio</h3>
-                  <ul class="text-gray-600 space-y-1">
-                    <li href="{{ url_for('schedule') }}">Vacunas anuales Perros</li>
-                    <li>Vacunas anuales Gatos</li>
-                    <li>Vacunas cachorros</li>
-                    <li>Vacuna KC (tos perruna)</li>
-                    <li>Vacuna Leucemia Felina</li>
-                  </ul>
-                  <h3 class="font-bold text-gray-700 text-lg mt-4 mb-2">Procedimientos</h3>
-                  <ul class="text-gray-600 space-y-1">
-                    <li>Toma de muestras</li>
-                    <li>Limpiezas no quirúrgicas</li>
-                  </ul>
-                </div>
-            
-                <!-- Columna 2 -->
-                <div>
-                  <h3 class="font-bold text-gray-700 text-lg mb-2">Exámenes a domicilio</h3>
-                  <ul class="text-gray-600 space-y-1">
-                    <li>Exámenes de sangre</li>
-                    <li>Control Gati Sano</li>
-                    <li>Exámenes Gati Preventivos</li>
-                    <li></li>
-                    <li>Exámenes de orina</li>
-                  </ul>
-                </div>
-            
-                <!-- Columna 3 -->
-                <div>
-                  <h3 class="font-bold text-gray-700 text-lg mb-2">Especialidades</h3>
-                  <ul class="text-gray-600 space-y-1">
-                    <li>Consulta por enfermedad</li>
-                    <li>Medicina Felina</li>
-                    <li>Cardiología</li>
-                    <li>Oftalmología</li>
-                    <li>Etología y comportamiento</li>
-                    <li>Dermatología</li>
-                    <li>Oncología</li>
-                    <li>Geriatría</li>
-                    <li>Gastroenterología</li>
-                    <li>Endocrinología</li>
-                    <li>Odontología</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            
-            
-          </div>
-        
           <a href="{{ url_for('help') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Nuestro Refugio</a>
           <a href="{{ url_for('contact') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Contáctenos</a>
         </nav>
