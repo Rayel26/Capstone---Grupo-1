@@ -186,19 +186,19 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Obtenemos el botón que va a activar el menú y el propio menú
-const toggleButton = document.getElementById('toggleMenu');
-const menu = document.getElementById('menu');
+  // Obtenemos el botón que va a activar el menú y el propio menú
+  const toggleButton = document.getElementById('toggleMenu');
+  const menu = document.getElementById('menu');
 
-// Añadimos un event listener al botón para que al hacer click cambie la visibilidad del menú
-toggleButton.addEventListener('click', function() {
-// Alternamos la clase 'hidden' para mostrar o esconder el menú
-menu.classList.toggle('hidden');
-});
+  // Añadimos un event listener al botón para que al hacer click cambie la visibilidad del menú
+  toggleButton.addEventListener('click', function() {
+    // Alternamos la clase 'hidden' para mostrar o esconder el menú
+    menu.classList.toggle('hidden');
+  });
 
-// Si se hace clic fuera del menú, el menú se oculta
-window.addEventListener('click', function(event) {
-if (!event.target.closest('#toggleMenu') && !event.target.closest('#menu')) {
-    menu.classList.add('hidden');
-}
-});
+  // Si se hace clic fuera del menú, el menú se oculta
+  window.addEventListener('click', function(event) {
+    if (!event.target.closest('#toggleMenu') && !event.target.closest('#menu')) {
+      menu.classList.add('hidden');
+    }
+  });
