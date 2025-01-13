@@ -43,12 +43,71 @@
         <nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center">
           <a href="{{ url_for('home') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Inicio</a>
           <a href="{{ url_for('products') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Productos</a>
+        <!-- Menú desplegable para Servicios -->
+        <div class="relative">
+          <a class="mr-5 text-gray-900 underline-animated cursor-pointer" id="toggleMenu">Servicios</a>
+          <div id="menu" class="absolute left-0 mt-2 hidden bg-white shadow-lg border border-gray-200 rounded-md z-10 w-[800px]">
+            <div class="p-4 grid grid-cols-3 gap-6">
+              <!-- Columna 1 -->
+              <div>
+                <h3 class="font-bold text-gray-700 text-lg mb-2">Vacunas a domicilio</h3>
+                <ul class="text-gray-600 space-y-1">
+                  <li><a href="{{ url_for('schedule') }}">Vacunas anuales Perros</a></li>
+                  <li><a href="#">Vacunas anuales Gatos</a></li>
+                  <li><a href="#">Vacunas cachorros</a></li>
+                  <li><a href="#">Vacuna KC (tos perruna)</a></li>
+                  <li><a href="#">Vacuna Leucemia Felina</a></li>
+                  <li><a href="#">Vacuna Antigordura</a></li>
+                </ul>
+                <h3 class="font-bold text-gray-700 text-lg mt-4 mb-2">Procedimientos</h3>
+                <ul class="text-gray-600 space-y-1">
+                  <li><a href="#">Destartraje</a></li>
+                  <li><a href="#">Extracción de dientesitos chiquitos</a></li>
+                  <li><a href="#">Zeus caprichoso</a></li>
+                </ul>
+              </div>
+          
+              <!-- Columna 2 -->
+              <div>
+                <h3 class="font-bold text-gray-700 text-lg mb-2">Exámenes a domicilio</h3>
+                <ul class="text-gray-600 space-y-1">
+                  <li><a href="#">Exámenes de sangre</a></li>
+                  <li><a href="#">Chequeo completo senior</a></li>
+                  <li><a href="#">Exámenes preventivos</a></li>
+                  <li><a href="#">Exámenes de tiroides</a></li>
+                  <li><a href="#">Exámenes retrovirales</a></li>
+                  <li><a href="#">Ecografía abdominal</a></li>
+                  <li><a href="#">Ecografía tiroides</a></li>
+                  <li><a href="#">Ecografía de cuello</a></li>
+                  <li><a href="#">Exámenes de orina</a></li>
+                </ul>
+              </div>
+          
+              <!-- Columna 3 -->
+              <div>
+                <h3 class="font-bold text-gray-700 text-lg mb-2">Especialidades</h3>
+                <ul class="text-gray-600 space-y-1">
+                  <li><a href="#">Consulta por enfermedad</a></li>
+                  <li><a href="#">Medicina Felina</a></li>
+                  <li><a href="#">Cardiología</a></li>
+                  <li><a href="#">Oftalmología</a></li>
+                  <li><a href="#">Etología y comportamiento</a></li>
+                  <li><a href="#">Dermatología</a></li>
+                  <li><a href="#">Oncología</a></li>
+                  <li><a href="#">Geriatría</a></li>
+                  <li><a href="#">Gastroenterología</a></li>
+                  <li><a href="#">Endocrinología</a></li>
+                  <li><a href="#">Odontología</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
           <a href="{{ url_for('help') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Nuestro Refugio</a>
           <a href="{{ url_for('contact') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Contáctenos</a>
         </nav>
-        
-        
-
+    
         <!-- Ícono de carrito -->
         <a href="{{ url_for('cart') }}" class="relative mr-5 mt-2 text-gray-600 underline-animated cursor-pointer">
           <i class="fas fa-shopping-cart fa-lg"></i>
@@ -56,8 +115,6 @@
               0  <!-- Esto se actualizará dinámicamente -->
           </span>
         </a>
-
-
 
         {% if session.get('is_logged_in') %}
 
