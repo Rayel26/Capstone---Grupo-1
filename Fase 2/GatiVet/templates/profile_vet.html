@@ -23,8 +23,8 @@
         </a>
         <button
             class="tab-button bg-[#18beaa] text-white border border-gray-300 py-1 px-2 mr-2 focus:outline-none hover:bg-[#16a89a] transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer"
-            style="background-color: #18beaa; color: white;" onclick="showSection('doctor-info', this)">Datos del
-            Doctor</button>
+            style="background-color: #18beaa; color: white;" onclick="showSection('doctor-info', this)">Datos del Médico
+            </button>
         <button
             class="tab-button bg-[#18beaa] text-white border border-gray-300 py-1 px-2 mr-2 focus:outline-none hover:bg-[#16a89a] transition-transform transform-gpu hover:-translate-y-1 hover:shadow-lg cursor-pointer"
             style="background-color: #18beaa; color: white;" onclick="showSection('clinical-records', this)">Fichas
@@ -36,7 +36,7 @@
     <!-- Fin Steps -->
 
 
-    <!-- Datos del Doctor -->
+    <!-- Datos del Médico -->
     <!-- Modal para editar información -->
     <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center hidden">
         <div class="bg-white p-4 rounded-lg shadow-lg w-3/4 md:w-1/3">
@@ -203,10 +203,10 @@
             </form>
         </div>
     </div>
-    <!-- Formulario del Doctor -->
+    <!-- Formulario del Médico -->
     <div class="container mx-auto flex items-start justify-center pt-10" id="doctor-info">
         <section class="p-4 w-full max-w-3xl bg-white shadow-md rounded-lg">
-            <h2 class="text-2xl font-bold">Información del Veterinario</h2>
+            <h2 class="text-2xl font-bold">Información del Médico Veterinario</h2>
             <div class="card bg-gray-100 p-4 rounded-md shadow">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="md:col-span-2">
@@ -267,7 +267,7 @@
                             <div class="w-48 h-48 border rounded-md overflow-hidden mb-2">
                                 <img id="profile-picture"
                                     src="{{ vet.imagen if vet.imagen else 'default_image_url.jpg' }}"
-                                    alt="Foto del Doctor" class="w-full h-full object-cover">
+                                    alt="Foto del Médico" class="w-full h-full object-cover">
                             </div>
                             <!-- Formulario para la subida de la imagen -->
                             <form id="upload-form" action="/upload_photo_vet" method="POST"
@@ -289,7 +289,7 @@
 
         </section>
     </div>
-    <!-- Datos del Doctor -->
+    <!-- Datos del Médico -->
 
 
     <!-- Fichas Clínicas -->
@@ -297,7 +297,7 @@
         <section class="p-4 w-full max-w-3xl bg-white shadow-md rounded-lg">
             <h2 class="text-xl font-semibold text-center">Fichas Clínicas</h2>
 
-            <!-- Formulario de búsqueda por RUT y selección de mascota -->
+            <!-- Formulario de búsqueda por RUT y selección de peludo -->
             <form class="flex flex-col space-y-4 items-center mt-2 w-full md:flex-row md:space-y-0 md:space-x-4"
                 onsubmit="return false;">
                 <div class="relative w-full md:w-1/4">
@@ -309,12 +309,12 @@
                 </div>
                 <button type="button" onclick="searchPetByUserId()"
                     class="mt-4 p-2 text-white rounded-md w-full md:w-auto flex items-center justify-center"
-                    style="background-color: #69d9cd; hover: background-color: #18beaa;">
+                    style="background-color: #69d9cd; hover: background-color; #18beaa;">
                     <i class="fas fa-search" style="font-size: 14px;"></i>
                 </button>
-                <!-- Select para elegir mascota -->
+                <!-- Select para elegir peludo -->
                 <div class="relative w-full md:w-1/4">
-                    <label for="pet-select" class="block text-gray-700 text-xs">Seleccionar Mascota:</label>
+                    <label for="pet-select" class="block text-gray-700 text-xs">Seleccionar Peludo:</label>
                     <select id="pet-select"
                         class="mt-1 block w-full border border-gray-300 rounded-md text-xs py-1 px-2">
                         <!-- Las opciones se llenarán dinámicamente -->
@@ -325,27 +325,27 @@
             <!-- Contenido del paciente después de la búsqueda -->
             <div id="pet-data" class="flex justify-center mt-4 hidden">
                 <div class="w-full max-w-md">
-                    <h2 class="text-lg font-bold text-center text-green-600 mb-4">Datos del Dueño</h2>
+                    <h2 class="text-lg font-bold text-center text-green-600 mb-4">Datos del Tutor</h2>
                     <div class="border border-blue-300 p-6 rounded-lg shadow-lg bg-white">
                         <p class="text-gray-700 text-sm mb-2">
                             <strong>Nombre:</strong> <span id="owner-name" class="text-gray-600">Nombre del
-                                Dueño</span>
+                                Tutor</span>
                         </p>
                         <p class="text-gray-700 text-sm mb-2">
                             <strong>Rut:</strong> <span id="owner-rut" class="text-gray-600">Rut del
-                                Dueño</span>
+                                Tutor</span>
                         </p>
                         <p class="text-gray-700 text-sm mb-2">
                             <strong>Dirección:</strong> <span id="owner-address" class="text-gray-600">Dirección del
-                                Dueño</span>
+                                Tutor</span>
                         </p>
                         <p class="text-gray-700 text-sm mb-2">
                             <strong>Teléfono:</strong> <span id="owner-phone" class="text-gray-600">Teléfono
-                                del Dueño</span>
+                                del Tutor</span>
                         </p>
                         <p class="text-gray-700 text-sm mb-4">
                             <strong>Correo:</strong> <span id="owner-email" class="text-gray-600">Correo Electrónico del
-                                Dueño</span>
+                                Tutor</span>
                         </p>
                     </div>
                 </div>
@@ -396,11 +396,11 @@
                         <div class="md:col-span-2">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label for="pet-name" class="block text-gray-600 text-sm">Nombre de la
-                                        Mascota:</label>
+                                    <label for="pet-name" class="block text-gray-600 text-sm">Nombre del 
+                                        Peludo:</label>
                                     <input type="text" id="pet-name" name="pet-name" disabled
                                         class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                        value="Nombre de la Mascota">
+                                        value="Nombre del Peludo">
                                 </div>
                                 <div>
                                     <label for="birth-date" class="block text-gray-600 text-sm">Fecha de
@@ -462,7 +462,7 @@
                                 <label class="block text-gray-600 text-sm">Foto de perfil:</label>
                                 <div class="w-48 h-48 border rounded-md overflow-hidden mb-2">
                                     <img id="profile-picture-mas" src="https://via.placeholder.com/150"
-                                        alt="Foto de la Mascota" class="w-full h-full object-cover">
+                                        alt="Foto del Peludito" class="w-full h-full object-cover">
                                 </div>
                                 <input type="file" id="upload-photo" class="hidden">
                                 <div id="status-info" class="mt-4 text-gray-600 text-sm"></div>
@@ -508,11 +508,11 @@
             </div>
             <!-- Fin Contenido Datos del Paciente -->
 
-            <!-- Modal de edición de mascota -->
+            <!-- Modal de edición de peludo -->
             <div id="modal-edit-pet" class="hidden fixed z-10 inset-0 overflow-y-auto" style="background-color: rgba(0, 0, 0, 0.5);">
                 <div class="flex items-center justify-center min-h-screen" style="overflow: hidden; position: fixed; top: 0; left: 0; right: 0; bottom: 0;">
                     <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-                        <h2 class="text-2xl font-bold text-center text-gray-900 mb-6">Editar Información de Mascota</h2>
+                        <h2 class="text-2xl font-bold text-center text-gray-900 mb-6">Editar Información del Peludo</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Nombre -->
                             <div class="relative mb-4">
@@ -973,7 +973,7 @@
                     </span>
                 </div>
 
-                <!-- Información del dueño -->
+                <!-- Información del tutor -->
                 <div class="mb-4 border-b border-gray-300 pb-2">
                     <p class="text-lg font-semibold" id="modalweek-owner"></p>
                     <p class="text-sm text-gray-600">
@@ -993,10 +993,10 @@
                 </div>
 
 
-                <!-- Información de la mascota -->
+                <!-- Información del peludo -->
                 <div class="flex items-center mb-4 border-b border-gray-300 pb-2">
                     <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mr-4 overflow-hidden">
-                        <img id="modalweek-pet-icon" class="w-full h-full object-cover" alt="Foto de mascota">
+                        <img id="modalweek-pet-icon" class="w-full h-full object-cover" alt="Foto del peludito">
                     </div>
                     <div>
                         <p class="text-lg font-semibold" id="modalweek-pet"></p>

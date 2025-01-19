@@ -1,4 +1,4 @@
-{% extends "base_producto.html" %}
+<img src="https://res.cloudinary.com/dqeideoyd/image/upload/v1731891698/Fundaciones/d7do8u2hkndv3klp89vo.jpg" class="object-cover w-full h-full rounded-lg">{% extends "base_producto.html" %}
 
 {% block title %}Donación{% endblock %}
 
@@ -44,10 +44,10 @@
                         </div>
                         <!-- Name Option -->
                         <div class="mt-8">
-                            <h3 class="text-lg font-semibold text-gray-800">Selecciona Caso o Fundación a donar</h3>
+                            <h3 class="text-lg font-semibold text-gray-800">Selecciona el destino de tu donación</h3>
                             <select id="nameOption"
                                 class="w-full mt-4 px-4 py-3 bg-white text-gray-800 rounded-md border focus:outline-blue-600">
-                                <option value="" disabled selected>Selecciona un Caso o Fundación</option>
+                                <option value="" disabled selected>Selecciona a qué deseas que se destine tu donación</option>
 
                                 <!-- Grupo de Casos -->
                                 <optgroup label="Casos">
@@ -68,7 +68,7 @@
 
                         <!-- Donation Option -->
                         <div class="mt-8">
-                            <h3 class="text-lg font-semibold text-gray-800">¿Monto de la donación?</h3>
+                            <h3 class="text-lg font-semibold text-gray-800">¿Con qué monto deseas apoyarnos?</h3>
                             <select id="donationOption"
                                 class="w-full mt-4 px-4 py-3 bg-white text-gray-800 rounded-md border focus:outline-blue-600">
                                 <option value="0">Selecciona un monto</option>
@@ -135,8 +135,8 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M5 13l4 4L19 7" />
             </svg>
-            <h2 class="text-lg font-semibold mb-4 text-teal-600">Donación completada con éxito</h2>
-            <p class="text-gray-700 mb-6">¡Gracias por donar, el resumen de tu pedido se ha enviado a tu correo!</p>
+            <h2 class="text-lg font-semibold mb-4 text-teal-600">Donación realizada con éxito</h2>
+            <p class="text-gray-700 mb-6">¡Gracias por tu apoyo, con tu aporte podemos ayudar a muchos peluditos!</p>
             <button id="acceptModalBtn"
                 class="text-white bg-teal-600 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm inline-flex items-center px-4 py-2 text-center">
                 Aceptar
