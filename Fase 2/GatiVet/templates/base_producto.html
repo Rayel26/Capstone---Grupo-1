@@ -47,63 +47,60 @@
         <nav class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400 flex flex-wrap items-center text-base justify-center">
           <a href="{{ url_for('home') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Inicio</a>
           <a href="{{ url_for('products') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Productos</a>
-<!-- Menú desplegable para Servicios -->
-<div class="relative">
-  <a class="mr-5 text-gray-900 cursor-pointer" id="toggleMenu">Servicios</a>
-  <div id="menu" class="absolute left-0 mt-2 hidden bg-white shadow-lg border border-gray-200 rounded-md z-10 w-[800px]">
-    <div class="p-4 grid grid-cols-3 gap-6">
-      <!-- Columna 1 -->
-      <div>
-        <h3 class="font-bold text-gray-700 text-lg mb-2">
-                      <i class="fas fa-paw text-gray-700 mr-2"></i>Especialidades
-          </h3>
-          <ul class="text-gray-600 space-y-1">
-            <li><a href="#" class="service-link">Consulta General Caninos</a></li>
-            <li><a href="#" class="service-link">Medicina Felina</a></li>
-            <h3 class="font-bold text-gray-700 text-lg mb-2">
-          <ul class="text-gray-600 space-y-1"></ul>
-                      <i class="fas fa-paw text-gray-700 mr-2"></i>Vacunación a domicilio
-            </h3>        
-        <ul class="text-gray-600 space-y-1">
-          <li><a href="#" class="service-link">Gati Vacunación anual</a></li>
-          <li><a href="#" class="service-link">Gati Vacuna de Leucemia Felina</a></li>
-          <li><a href="#" class="service-link">Perri Vacunación anual</a></li>
-          <li><a href="#" class="service-link">Perri Vacunación KC</a></li>
-                  </ul>
+          <!-- Menú desplegable para Servicios -->
+          <div class="relative">
+            <a class="mr-5 text-gray-900 cursor-pointer" id="toggleMenu">Servicios</a>
+            <div id="menu" class="absolute left-0 mt-2 hidden bg-white shadow-lg border border-gray-200 rounded-md z-10 w-[800px]">
+<div class="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <!-- Columna 1 -->
+  <div>
+    <h3 class="font-bold text-gray-700 text-lg mb-2">
+      <i class="fas fa-paw text-gray-700 mr-2"></i>Especialidades
+    </h3>
+    <ul class="text-gray-600 space-y-1">
+      <li><a href="#" class="service-link">Consulta General Caninos</a></li>
+      <li><a href="#" class="service-link">Medicina Felina</a></li>
+    </ul>
+    <h3 class="font-bold text-gray-700 text-lg mb-2 mt-4">
+      <i class="fas fa-paw text-gray-700 mr-2"></i>Vacunación a domicilio
+    </h3>
+    <ul class="text-gray-600 space-y-1">
+      <li><a href="#" class="service-link">Gati Vacunación anual</a></li>
+      <li><a href="#" class="service-link">Gati Vacuna de Leucemia Felina</a></li>
+      <li><a href="#" class="service-link">Perri Vacunación anual</a></li>
+      <li><a href="#" class="service-link">Perri Vacunación KC</a></li>
+    </ul>
+  </div>
 
-        </ul>
-      </div>
+  <!-- Columna 2 -->
+  <div>
+    <h3 class="font-bold text-gray-700 text-lg mb-2">
+      <i class="fas fa-paw text-gray-700 mr-2"></i>Exámenes a domicilio
+    </h3>
+    <ul class="text-gray-600 space-y-1">
+      <li><a href="#" class="service-link">Exámenes de sangre</a></li>
+      <li><a href="#" class="service-link">Exámenes de orina</a></li>
+      <li><a href="#" class="service-link">Test rápido de retrovirales</a></li>
+      <li><a href="#" class="service-link">Control Gati Preventivos</a></li>
+      <li><a href="#" class="service-link">Control Gati Senior</a></li>
+    </ul>
+  </div>
 
-      <!-- Columna 2 -->
-      <div>
-        <h3 class="font-bold text-gray-700 text-lg mb-2">
-          <i class="fas fa-paw text-gray-700 mr-2"></i>Exámenes a domicilio
-        </h3>
-        <ul class="text-gray-600 space-y-1">
-          <li><a href="#" class="service-link">Exámenes de sangre</a></li>
-          <li><a href="#" class="service-link">Exámenes de orina</a></li>
-          <li><a href="#" class="service-link">Test rápido de retrovirales</a></li>
-          <li><a href="#" class="service-link">Control Gati Preventivos</a></li>
-          <li><a href="#" class="service-link">Control Gati Senior</a></li>
-        </ul>
-      </div>
-
-      <!-- Columna 3 -->
-      <div>
-        <h3 class="font-bold text-gray-700 text-lg mb-2">
-          <i class="fas fa-paw text-gray-700 mr-2"></i>Otros
-          </h3>
-          <ul class="text-gray-600 space-y-1">
-            <li><a href="#" class="service-link">Limpieza no quirúrgica de heridas</a></li>
-            <li><a href="#" class="service-link">Corte de uñas</a></li>
-            <li><a href="#" class="service-link">Administración de Inyectables</a></li>
-        </ul>
-      </div>
-    </div>
+  <!-- Columna 3 -->
+  <div>
+    <h3 class="font-bold text-gray-700 text-lg mb-2">
+      <i class="fas fa-paw text-gray-700 mr-2"></i>Otros
+    </h3>
+    <ul class="text-gray-600 space-y-1">
+      <li><a href="#" class="service-link">Limpieza no quirúrgica de heridas</a></li>
+      <li><a href="#" class="service-link">Corte de uñas</a></li>
+      <li><a href="#" class="service-link">Administración de Inyectables</a></li>
+    </ul>
   </div>
 </div>
 
-
+            </div>
+          </div>
 
           <a href="{{ url_for('help') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Nuestro Refugio</a>
           <a href="{{ url_for('contact') }}" class="mr-5 text-gray-900 underline-animated cursor-pointer">Contáctenos</a>

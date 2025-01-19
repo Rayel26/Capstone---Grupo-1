@@ -251,8 +251,8 @@ table {
     }
 }
 
-  /* Estilo base */
-  #filterContainer {
+/* Estilo base */
+#filterContainer {
     display: flex;
     justify-content: space-between;
     margin-bottom: 1rem;
@@ -341,7 +341,7 @@ table {
 }
 
   /* Estilo base */
-  #filterContainer {
+#filterContainer {
     display: flex;
     justify-content: space-between;
     margin-bottom: 1rem;
@@ -436,4 +436,45 @@ table {
     border-bottom-color: transparent;
     border-left-color: transparent;
     animation: spin 1s linear infinite; /* Animación para girar */
+}
+
+/* Estilo general para pantallas grandes */
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Estilo para pantallas medianas (tablets y móviles grandes) */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Estilo para pantallas pequeñas (móviles pequeños) */
+@media (max-width: 460px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .text-lg {
+    font-size: 1rem; /* Reduce el tamaño del texto */
+  }
+
+  .mr-2 {
+    margin-right: 0.5rem; /* Ajusta el margen entre ícono y texto */
+  }
+}
+
+/* Estilo para pantallas muy pequeñas */
+@media (max-width: 360px) {
+  .text-lg {
+    font-size: 0.875rem; /* Más pequeño aún */
+  }
+
+  .p-4 {
+    padding: 1rem; /* Reduce el padding general */
+  }
 }
