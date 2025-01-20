@@ -834,7 +834,7 @@
                                         min="09:00" max="18:00" required>
                                 </label>
                                 <label class="block">
-                                    Temperatura del animal (°C):
+                                    Temperatura (°C):
                                     <input type="number" id="animalTemperature"
                                         class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
                                         placeholder="Temperatura en grados Celsius" step="0.1" min="32" max="41">
@@ -859,6 +859,12 @@
                                 <label class="block">
                                     Peso a última fecha (en kg):
                                     <input type="number" id="patientWeight"
+                                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
+                                            value="0" min="0" max="999" step="1">
+                                </label>
+                                <label class="block">
+                                    PAM:
+                                    <input type="number" id="patientAPressure"
                                             class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
                                             value="0" min="0" max="999" step="1">
                                 </label>
