@@ -857,7 +857,7 @@
                                         placeholder="Respiraciones por minuto" step="1" min="10" max="60">
                                 </label>
                                 <label class="block">
-                                    Peso a última fecha (en kg):
+                                    Peso (kg):
                                     <input type="number" id="patientWeight"
                                             class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
                                             value="0" min="0" max="999" step="1">
@@ -866,9 +866,14 @@
                                     PAM:
                                     <input type="number" id="patientAPressure"
                                             class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
-                                            value="0" min="0" max="999" step="1">
+                                            placeholder="Presión Arterial Media" min="0" max="999" step="1">
                                 </label>
-                                
+                                <label class="block">
+                                    Glicemia:
+                                    <input type="number" id="patientBS"
+                                            class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
+                                            placeholder="Glucosa en sangre" min="0" max="1500" step="1">
+                                </label>
                             </div>
 
                             <!-- Campos de texto en ancho completo -->
