@@ -236,7 +236,7 @@
                                     value="{{ vet.especialidad if vet.especialidad else 'Especialidad' }}">
                             </div>
                             <div>
-                                <label for="domicilio" class="block text-gray-600 text-sm">Direccion:</label>
+                                <label for="domicilio" class="block text-gray-600 text-sm">Dirección:</label>
                                 <input type="text" id="domicilio" name="domicilio" disabled
                                     class="mt-1 block w-full border border-gray-300 rounded-md p-1 text-sm"
                                     value="{{ vet.domicilio if vet.domicilio else 'Av. Siempre viva' }}">
@@ -475,15 +475,19 @@
                     <div class="card bg-gray-100 p-4 rounded-md shadow">
                         <div class="flex items-center">
                             <input type="checkbox" id="reproducer" class="mr-2">
-                            <label for="reproducer" class="text-gray-600 text-sm">Reproductor</label>
+                            <label for="reproducer" class="text-gray-600 text-sm">Esterilizado</label>
                         </div>
                         <div class="flex items-center">
                             <input type="checkbox" id="treatment" class="mr-2">
-                            <label for="treatment" class="text-gray-600 text-sm">En Tratamiento anticonceptivo</label>
+                            <label for="treatment" class="text-gray-600 text-sm">Requiere pre-medicación</label>
                         </div>
                         <div class="flex items-center">
                             <input type="checkbox" id="sterilized" class="mr-2">
-                            <label for="sterilized" class="text-gray-600 text-sm">Esterilizado/Castrado</label>
+                            <label for="sterilized" class="text-gray-600 text-sm">Positivo a FeLV</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="sterilized" class="mr-2">
+                            <label for="sterilized" class="text-gray-600 text-sm">Positivo a FIV</label>
                         </div>
                     </div>
 
@@ -676,7 +680,7 @@
                                 <th class="border border-gray-300 px-2 py-1 text-left rounded-tl-lg rounded-tr-lg">Fecha
                                 </th>
                                 <th class="border border-gray-300 px-2 py-1 text-left">Vacuna</th>
-                                <th class="border border-gray-300 px-2 py-1 text-left">Fecha Proxima</th>                                <th class="border border-gray-300 px-2 py-1 text-left">Dosis</th>
+                                <th class="border border-gray-300 px-2 py-1 text-left">Próxima inoculación</th>                                <th class="border border-gray-300 px-2 py-1 text-left">Dosis</th>
                                 <th class="border border-gray-300 px-2 py-1 text-left">Veterinario</th>
                             </tr>
                         </thead>
